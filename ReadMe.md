@@ -13,8 +13,9 @@ Note: Compiling the project requires at least MS Visual Studio 11 Express for De
 
 1. Fork this project (see: https://help.github.com/articles/fork-a-repo)
 2. Download language data files for tesseract 3.02 from http://code.google.com/p/tesseract-ocr/
-3. Copy language files into BaseApiTester\bin\[config]\tessdata
-4. Run BaseApi for example (work in progress)
+3. Build BaseApiTester project
+4. Copy language files into ``BaseApiTester\bin\[config]\tessdata``
+5. Run BaseApiTester for example (work in progress)
 
 ## To-do
 
