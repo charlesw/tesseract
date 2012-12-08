@@ -1,0 +1,13 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="Tesseract\bin\Debug\Tesseract.dll" />
+    <assembly path="Tesseract.Tests\bin\Debug\Tesseract.Tests.dll" />
+    <assembly path="BaseApiTester\bin\Debug\BaseApiTester.exe" />
+  </Config>
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="Tesseract\bin\Release\Tesseract.dll" />
+    <assembly path="Tesseract.Tests\bin\Release\Tesseract.Tests.dll" />
+    <assembly path="BaseApiTester\bin\Release\BaseApiTester.exe" />
+  </Config>
+</NUnitProject>
