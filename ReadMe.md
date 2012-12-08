@@ -18,7 +18,7 @@ Note: Compiling the project requires at least MS Visual Studio 11 Express for De
 
 ## To-do
 
-Please help your selves to one of the following tasks (or create a new one). Please leave a comment in the corresponding task to
+Please help yourselves to one of the following tasks (or create a new one). Please leave a comment in the corresponding task to
 avoid duplication of work.
 
 Task Num	| Task													| Status
