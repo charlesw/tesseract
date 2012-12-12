@@ -15,7 +15,7 @@ namespace Tesseract
     {
         protected readonly IntPtr handle;
 
-        public PageIterator(IntPtr handle)
+        internal PageIterator(IntPtr handle)
         {
             this.handle = handle;
         }

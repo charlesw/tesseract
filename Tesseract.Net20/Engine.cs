@@ -7,18 +7,23 @@ namespace Tesseract
 	/// <summary>
 	/// Description of Engine.
 	/// </summary>
-	public class Engine : DisposableBase
+	public class TesseractEngine : DisposableBase
 	{
 		private IntPtr handle;
         private int processCount = 0;
 				
-		public Engine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
-		{
+		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
+        {
+            DefaultPageSegMode = PageSegMode.Auto;
 			handle = Interop.TessApi.BaseApiCreate();
 			
 			Initialise(datapath, language, engineMode);
 		}
-		
+
+        public IntPtr Handle
+        {
+            get { return handle; }
+        }
 		
 		public string Version
 		{
@@ -63,7 +68,12 @@ namespace Tesseract
 		{
             return Interop.TessApi.BaseApiGetVariableAsString(handle, name, out value) != 0;
 		}
-		
+
+        public PageSegMode DefaultPageSegMode
+        {
+            get;
+            set;
+        }
 		
 		#endregion
 		
@@ -79,9 +89,9 @@ namespace Tesseract
 			}
 		}
 
-        public ResultIterator Process(IPix image)
+        public Page Process(IPix image, PageSegMode? pageSegMode = null)
         {
-            return Process(image, new Rect(0, 0, image.Width, image.Height));
+            return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
         }
 
         /// <summary>
@@ -93,25 +103,22 @@ namespace Tesseract
         /// <param name="image">The image to process.</param>
         /// <param name="region">The image region to process.</param>
         /// <returns>A result iterator</returns>
-        public ResultIterator Process(IPix image, Rect region)
+        public Page Process(IPix image, Rect region, PageSegMode? pageSegMode = null)
         {
             if (image == null) throw new ArgumentNullException("image");
             if (region.X1 < 0 || region.Y1 < 0 || region.X2 > image.Width || region.Y2 > image.Height)
                 throw new ArgumentException("The image region to be processed must be within the image bounds.", "region");
-            if (processCount > 0) throw new InvalidOperationException("Only one image can be processed at once. Please make sure you dispose of the result iterator once your finished with it.");
+            if (processCount > 0) throw new InvalidOperationException("Only one image can be processed at once. Please make sure you dispose of the page once your finished with it.");
 
             processCount++;
 
+            Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
             Interop.TessApi.BaseApiSetImage(handle, image.Handle);
             Interop.TessApi.BaseApiSetRectangle(handle, region.X1, region.Y1, region.Width, region.Height);
-            if (Interop.TessApi.BaseApiRecognize(handle, IntPtr.Zero) != 0) {
-                throw new InvalidOperationException("failed to process document.");
-            }
 
-            var iteratorHandle = Interop.TessApi.BaseApiGetIterator(handle);
-            var iterator = new ResultIterator(iteratorHandle);
-            iterator.Disposed += OnIteratorDisposed;
-            return iterator;
+            var page = new Page(this);
+            page.Disposed += OnIteratorDisposed;
+            return page;
         }
 
         protected override void Dispose(bool disposing)

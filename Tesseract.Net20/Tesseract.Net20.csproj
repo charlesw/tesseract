@@ -68,9 +68,11 @@
     <Compile Include="Interop\PixColormap.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Orientation.cs" />
+    <Compile Include="Page.cs" />
     <Compile Include="PageIterator.cs" />
     <Compile Include="PageIteratorLevel.cs" />
     <Compile Include="ElementProperties.cs" />
+    <Compile Include="PageSegMode.cs" />
     <Compile Include="Pix.cs" />
     <Compile Include="PolyBlockType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

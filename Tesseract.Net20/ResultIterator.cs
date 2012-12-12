@@ -4,7 +4,7 @@ namespace Tesseract
 {
     public sealed class ResultIterator : PageIterator
     {
-        public ResultIterator(IntPtr handle)
+        internal ResultIterator(IntPtr handle)
             : base(handle)
         {
         }

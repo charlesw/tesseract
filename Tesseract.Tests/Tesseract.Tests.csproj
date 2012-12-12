@@ -72,5 +72,11 @@
     <Content Include="ProfilingSessions\Session20121124_192424.sdps" />
     <Content Include="ProfilingSessions\Session20121124_192603.sdps" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tesseract.Net45\Tesseract.Net45.csproj">
+      <Project>{1868cac0-d64c-4092-9108-59d562321056}</Project>
+      <Name>Tesseract.Net45</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

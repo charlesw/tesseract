@@ -10,7 +10,7 @@ namespace Tesseract.Tests
 		[Test]
 		public void Initialise_ShouldStartEngine()
 		{
-			using(var engine = new Engine(@"./tessdata", "eng", EngineMode.Default)) {
+			using(var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
 				
 				
 			}
@@ -19,14 +19,12 @@ namespace Tesseract.Tests
         [Test]
         public void CanParseText()
         {
-            using (var engine = new Engine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
                 using(var img = Pix.LoadFromFile("./phototest.tiff")) {
-                    using(var iter = engine.Process(img)) {
-                        var paraText = iter.GetText(PageIteratorLevel.Para);
-                        var blockText = iter.GetText(PageIteratorLevel.Block);
-                        var lineText = iter.GetText(PageIteratorLevel.TextLine);
-                        var wordText = iter.GetText(PageIteratorLevel.Word);
-                        var symbol = iter.GetText(PageIteratorLevel.Symbol);
+                    using(var page = engine.Process(img)) {
+                        var text = page.GetText();
+
+                        Assert.That(text, Is.EqualTo(""));
 
 
                     }

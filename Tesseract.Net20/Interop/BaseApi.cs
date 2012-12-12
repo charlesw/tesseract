@@ -80,6 +80,13 @@ namespace Tesseract.Interop
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIGetStringVariable")]
 		public static extern int BaseApiGetVariableAsString(IntPtr handle, string name, out string val);
 
+        
+		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPISetPageSegMode")]
+        public static extern void BaseAPISetPageSegMode(IntPtr handle, PageSegMode mode);
+
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetPageSegMode")]
+        public static extern PageSegMode BaseAPIGetPageSegMode(IntPtr handle);
+
         // image analysis        
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage2")]
         public static extern void BaseApiSetImage(IntPtr handle, IntPtr pixHandle);
@@ -89,10 +96,34 @@ namespace Tesseract.Interop
                 
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIRecognize")]
         public static extern int BaseApiRecognize(IntPtr handle, IntPtr monitor);
-
+        
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIAnalyseLayout")]
+        public static extern IntPtr BaseAPIAnalyseLayout(IntPtr handle);
 
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetIterator")]
         public static extern IntPtr BaseApiGetIterator(IntPtr handle);
+
+        public static string BaseAPIGetUTF8Text(IntPtr handle)
+        {
+            IntPtr txtHandle = BaseAPIGetUTF8TextInternal(handle);
+            if (txtHandle != IntPtr.Zero) {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.DeleteText(txtHandle);
+                return result;
+            } else {
+                return null;
+            }
+        }
+
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUTF8Text")]
+        private static extern IntPtr BaseAPIGetUTF8TextInternal(IntPtr handle);
+
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIMeanTextConf")]
+        public static extern int BaseAPIMeanTextConf(IntPtr handle);
+        
+        
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIClear")]
+        public static extern void BaseAPIClear(IntPtr handle);
 
         // result iterator
 

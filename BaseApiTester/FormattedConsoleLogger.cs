@@ -9,6 +9,7 @@ namespace BaseApiTester
 {
     public class FormattedConsoleLogger
     {
+        const string Tab = "    ";
         private class Scope : DisposableBase
         {
             private int indentLevel;
@@ -21,15 +22,38 @@ namespace BaseApiTester
                 this.indentLevel = indentLevel;
                 StringBuilder indent = new StringBuilder();
                 for (int i = 0; i < indentLevel; i++) {
-                    indent.Append('\t');
+                    indent.Append(Tab);
                 }
                 this.indent = indent.ToString();
             }
 
             public void Log(string format, object[] args)
             {
-                var line = String.Format(format, args);
-                Console.WriteLine(indent + line);
+                var message = String.Format(format, args);
+                StringBuilder indentedMessage = new StringBuilder(message.Length + indent.Length * 10);
+                int i=0;
+                bool isNewLine = true;
+                while(i < message.Length) {
+                    if (message.Length > i && message[i] == '\r' && message[i + 1] == '\n') {
+                        indentedMessage.AppendLine();
+                        isNewLine = true;
+                        i+=2;
+                    } else if (message[i] == '\r' || message[i] == '\n') {
+                        indentedMessage.AppendLine();
+                        isNewLine = true;
+                        i++;
+                    } else {
+                        if (isNewLine) {
+                            indentedMessage.Append(indent);
+                            isNewLine = false;
+                        }
+                        indentedMessage.Append(message[i]);
+                        i++;
+                    }
+                }
+
+                Console.WriteLine(indentedMessage.ToString());
+                
             }
 
             public Scope Begin()
