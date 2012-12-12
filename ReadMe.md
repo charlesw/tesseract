@@ -23,9 +23,10 @@ Please help yourselves to one of the following tasks (or create a new one). Plea
 avoid duplication of work.
 
 Task Num	| Task													| Status
-------------|-------------------------------------------------------|------------------------------------------
-			| Tesseract - Regression test infrastructure			| Pending
-			| Leptonica - Scanned image preparation functions		| Pending
-			| Tesseract - API Cleanup and improvements				| Pending
-			| Tesseract - Create sample app							| Pending
-			| Tesseract - Dictionary lookup [not sure about this]	| Pending
+--------|-------------------------------------------------------|------------------------------------------
+	| Tesseract - Core Apis 				| Active
+	| Tesseract - Regression test infrastructure		| Pending
+	| Leptonica - Scanned image preparation functions	| Pending
+	| Tesseract - API Cleanup and improvements		| Pending
+	| Tesseract - Create sample app				| Pending
+	| Tesseract - Dictionary lookup [not sure about this]	| Pending
