@@ -23,10 +23,12 @@ Please help yourselves to one of the following tasks (or create a new one). Plea
 avoid duplication of work.
 
 Task Num	| Task													| Status
---------|-------------------------------------------------------|------------------------------------------
-	| Tesseract - Core Apis 				| Active
-	| Tesseract - Regression test infrastructure		| Pending
-	| Leptonica - Scanned image preparation functions	| Pending
-	| Tesseract - API Cleanup and improvements		| Pending
-	| Tesseract - Create sample app				| Pending
-	| Tesseract - Dictionary lookup [not sure about this]	| Pending
+--------|---------------------------------------------------------------|------------------------------------------
+#2	| Leptonica - Support colour images				| Active
+#1	| Leptonica - Support System.Drawing.Image to Pix conversion	| Pending
+	| Tesseract - Core Apis 					| Hold
+	| Tesseract - Regression test infrastructure			| Pending
+	| Leptonica - Scanned image preparation functions		| Pending
+	| Tesseract - API Cleanup and improvements			| Pending
+	| Tesseract - Create sample app					| Pending
+	| Tesseract - Dictionary lookup [not sure about this]		| Pending
