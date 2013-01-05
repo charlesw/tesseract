@@ -7,116 +7,54 @@ using NUnit.Framework;
 namespace Tesseract.Tests.Leptonica
 {
     [TestFixture]
-    public class DataAccessTests
+    public unsafe class DataAccessTests
     {
-        const int Width = 3308, Height = 4676;
-              
-        [Test]
-        public void CanReadAndWrite1BitData()
-        {
-            const int depth = 1;
-            const int length = Width * Height;
-
-            uint sum = 0;
-            using (var pix = (Pix1Bit)Pix.Create(Width, Height, depth)) {
-                for (int i = 0; i < length; i++) {
-                    uint val = (uint)(i % (1 << depth));
-                    pix[i] = val;
-                    var readVal = pix[i];
-                    sum += readVal;
-                }
-            }
-           // Assert.That(readVal, Is.EqualTo(val));
-        }
+        const int Width = 59, Height = 53;
+         
 
         [Test]
-        public void CanReadAndWrite2BitData()
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(4)]
+        [TestCase(8)]
+        [TestCase(16)]
+        [TestCase(32)]
+        public void CanReadAndWriteData(int depth)
         {
-            const int depth = 2;
-            const int length = Width * Height;
+            using (var pix = Pix.Create(Width, Height, depth)) {
+                var pixData = pix.GetData();
 
-            uint sum = 0;
-            using (var pix = (Pix2Bit)Pix.Create(Width, Height, depth)) {
-                for (int i = 0; i < length; i++) {
-                    uint val = (uint)(i % (1 << depth));
-                    pix[i] = val;
-                    var readVal = pix[i];
-                    sum += readVal;
+                for (int y = 0; y < Height; y++) {
+                    uint* line = (uint*)pixData.Data + (y * pixData.WordsPerLine);
+                    for (int x = 0; x < Width; x++) {
+                        uint val = (uint)((y * Width + x) % (1 << depth));
+                        uint readVal;
+                        if (depth == 1) {
+                            PixData.SetDataBit(line, x, val);
+                            readVal = PixData.GetDataBit(line, x);
+                        } else if (depth == 2) {
+                            PixData.SetDataDIBit(line, x, val);
+                            readVal = PixData.GetDataDIBit(line, x);
+                        } else if (depth == 4) {
+                            PixData.SetDataQBit(line, x, val);
+                            readVal = PixData.GetDataQBit(line, x);
+                        } else if (depth == 8) {
+                            PixData.SetDataByte(line, x, val);
+                            readVal = PixData.GetDataByte(line, x);
+                        } else if (depth == 16) {
+                            PixData.SetDataTwoByte(line, x, val);
+                            readVal = PixData.GetDataTwoByte(line, x);
+                        } else if (depth == 32) {
+                            PixData.SetDataFourByte(line, x, val);
+                            readVal = PixData.GetDataFourByte(line, x);
+                        } else {
+                            throw new NotSupportedException();
+                        }
+
+                        Assert.That(readVal, Is.EqualTo(val));
+                    }
                 }
             }
-            // Assert.That(readVal, Is.EqualTo(val));
-        }
-
-        [Test]
-        public void CanReadAndWrite4BitData()
-        {
-            const int depth = 4;
-            const int length = Width * Height;
-
-            uint sum = 0;
-            using (var pix = (Pix4Bit)Pix.Create(Width, Height, depth)) {
-                for (int i = 0; i < length; i++) {
-                    uint val = (uint)(i % (1 << depth));
-                    pix[i] = val;
-                    var readVal = pix[i];
-                    sum += readVal;
-                }
-            }
-            // Assert.That(readVal, Is.EqualTo(val));
-        }
-
-        [Test]
-        public void CanReadAndWrite8BitData()
-        {
-            const int depth = 8;
-            const int length = Width * Height;
-
-            uint sum = 0;
-            using (var pix = (Pix8Bit)Pix.Create(Width, Height, depth)) {
-                for (int i = 0; i < length; i++) {
-                    byte val = (byte)(i % (1 << depth));
-                    pix[i] = val;
-                    var readVal = pix[i];
-                    sum += readVal;
-                }
-            }
-            // Assert.That(readVal, Is.EqualTo(val));
-        }
-
-        [Test]
-        public void CanReadAndWrite16BitData()
-        {
-            const int depth = 16;
-            const int length = Width * Height;
-
-            uint sum = 0;
-            using (var pix = (Pix16Bit)Pix.Create(Width, Height, depth)) {
-                for (int i = 0; i < length; i++) {
-                    ushort val = (ushort)(i % (1 << depth));
-                    pix[i] = val;
-                    var readVal = pix[i];
-                    sum += readVal;
-                }
-            }
-            // Assert.That(readVal, Is.EqualTo(val));
-        }
-
-        [Test]
-        public void CanReadAndWrite32BitData()
-        {
-            const int depth = 32;
-            const int length = Width * Height;
-
-            uint sum = 0;
-            using (var pix = (Pix32Bit)Pix.Create(Width, Height, depth)) {
-                for (int i = 0; i < length; i++) {
-                    uint val = (uint)(i % (1 << depth));
-                    pix[i] = val;
-                    var readVal = pix[i];
-                    sum += readVal;
-                }
-            }
-            // Assert.That(readVal, Is.EqualTo(val));
         }
     }
 }

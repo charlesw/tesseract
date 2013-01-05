@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +51,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Tesseract.Net20\BitmapHelper.cs">
+      <Link>BitmapHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\BitmapToPixConverter.cs">
+      <Link>BitmapToPixConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\Color.cs">
+      <Link>Color.cs</Link>
+    </Compile>
     <Compile Include="..\Tesseract.Net20\DisposableBase.cs">
       <Link>DisposableBase.cs</Link>
     </Compile>
@@ -83,9 +93,6 @@
     <Compile Include="..\Tesseract.Net20\Interop\MarshalHelper.cs">
       <Link>Interop\MarshalHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Tesseract.Net20\Interop\PixColormap.cs">
-      <Link>Interop\PixColormap.cs</Link>
-    </Compile>
     <Compile Include="..\Tesseract.Net20\MathHelper.cs">
       <Link>MathHelper.cs</Link>
     </Compile>
@@ -106,6 +113,12 @@
     </Compile>
     <Compile Include="..\Tesseract.Net20\Pix.cs">
       <Link>Pix.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\PixConverter.cs">
+      <Link>PixConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\PixData.cs">
+      <Link>PixData.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\PolyBlockType.cs">
       <Link>PolyBlockType.cs</Link>

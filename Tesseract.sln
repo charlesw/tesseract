@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Net20", "Tesserac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Net40", "Tesseract.Net40\Tesseract.Net40.csproj", "{E0784105-00D8-4692-BD2E-0645440D4D09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Tests.Console", "Tesseract.Tests.Console\Tesseract.Tests.Console.csproj", "{4D635942-9F51-45C6-BAB0-23AD2E42C99F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,16 @@ Global
 		{E0784105-00D8-4692-BD2E-0645440D4D09}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E0784105-00D8-4692-BD2E-0645440D4D09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E0784105-00D8-4692-BD2E-0645440D4D09}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

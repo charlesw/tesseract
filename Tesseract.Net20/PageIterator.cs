@@ -86,12 +86,12 @@ namespace Tesseract
             get { return Interop.TessApi.PageIteratorBlockType(handle); }
         }
 
-        public IPix GetBinaryImage(PageIteratorLevel level)
+        public Pix GetBinaryImage(PageIteratorLevel level)
         {
             return Pix.Create(Interop.TessApi.PageIteratorGetBinaryImage(handle, level));
         }
 
-        public IPix GetImage(PageIteratorLevel level, int padding, out int x, out int y)
+        public Pix GetImage(PageIteratorLevel level, int padding, out int x, out int y)
         {
             return Pix.Create(Interop.TessApi.PageIteratorGetImage(handle, level, padding, out x, out y));
         }

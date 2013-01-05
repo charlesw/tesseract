@@ -89,7 +89,7 @@ namespace Tesseract
 			}
 		}
 
-        public Page Process(IPix image, PageSegMode? pageSegMode = null)
+        public Page Process(Pix image, PageSegMode? pageSegMode = null)
         {
             return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
         }
@@ -103,7 +103,7 @@ namespace Tesseract
         /// <param name="image">The image to process.</param>
         /// <param name="region">The image region to process.</param>
         /// <returns>A result iterator</returns>
-        public Page Process(IPix image, Rect region, PageSegMode? pageSegMode = null)
+        public Page Process(Pix image, Rect region, PageSegMode? pageSegMode = null)
         {
             if (image == null) throw new ArgumentNullException("image");
             if (region.X1 < 0 || region.Y1 < 0 || region.X2 > image.Width || region.Y2 > image.Height)
