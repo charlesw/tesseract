@@ -4,7 +4,14 @@ using System.Text;
 
 namespace Tesseract
 {
-    public sealed class PixColormap : DisposableBase
+    /// <summary>
+    /// Represents a colormap.
+    /// </summary>
+    /// <remarks>
+    /// Once the colormap is assigned to a pix it is owned by that pix and will be disposed off automatically 
+    /// when the pix is disposed off.
+    /// </remarks>
+    public sealed class PixColormap : IDisposable
     {
         private IntPtr handle;
 
@@ -15,7 +22,7 @@ namespace Tesseract
 
         public static PixColormap Create(int depth)
         {
-            if (depth != 2 || depth != 4 || depth != 8) {
+            if (!(depth == 2 || depth == 4 || depth == 8)) {
                 throw new ArgumentOutOfRangeException("depth", "Depth must be 2, 4, or 8 bpp.");
             }
 
@@ -28,7 +35,7 @@ namespace Tesseract
         
         public static PixColormap CreateLinear(int depth, int levels)
         {
-            if (depth != 2 || depth != 4 || depth != 8) {
+            if (!(depth == 2 || depth == 4 || depth == 8)) {
                 throw new ArgumentOutOfRangeException("depth", "Depth must be 2, 4, or 8 bpp.");
             }
             if (levels < 2 || levels > (2 << depth))
@@ -43,7 +50,7 @@ namespace Tesseract
 
         public static PixColormap CreateLinear(int depth, bool firstIsBlack, bool lastIsWhite)
         {
-            if (depth != 2 || depth != 4 || depth != 8) {
+            if (!(depth == 2 || depth == 4 || depth == 8)) {
                 throw new ArgumentOutOfRangeException("depth", "Depth must be 2, 4, or 8 bpp.");
             }
 
@@ -105,14 +112,14 @@ namespace Tesseract
             if (Interop.LeptonicaApi.pixcmapUsableColor(handle, color.Red, color.Green, color.Blue, out usable) == 0) {
                 return usable == 1;
             } else {
-                throw new LeptonicaException("Failed to detect if color was usable or not.");
+                throw new InvalidOperationException("Failed to detect if color was usable or not.");
             }
         }
 
         public void Clear()
         {
             if (Interop.LeptonicaApi.pixcmapClear(handle) != 0) {
-                throw new LeptonicaException("Failed to clear color map.");                
+                throw new InvalidOperationException("Failed to clear color map.");                
             }
         }
 
@@ -124,18 +131,18 @@ namespace Tesseract
                 if (Interop.LeptonicaApi.pixcmapGetColor(handle, index, out red, out green, out blue) == 0) {
                     return new Color((byte)red, (byte)green, (byte)blue);
                 } else {
-                    throw new LeptonicaException("Failed to retrieve color.");
+                    throw new InvalidOperationException("Failed to retrieve color.");
                 } 
             }
             set
             {
                 if (Interop.LeptonicaApi.pixcmapResetColor(handle, index, value.Red, value.Green, value.Blue) != 0) {
-                    throw new LeptonicaException("Failed to reset color.");                    
+                    throw new InvalidOperationException("Failed to reset color.");                    
                 }
             }
         }
 
-        protected override void Dispose(bool disposing)
+        public void Dispose()
         {
             Interop.LeptonicaApi.pixcmapDestroy(ref handle);
         }

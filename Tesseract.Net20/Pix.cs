@@ -9,6 +9,7 @@ namespace Tesseract
         private static readonly List<int> AllowedDepths = new List<int> { 1, 2, 4, 8, 16, 32 };
 
         private IntPtr handle;
+        private PixColormap colormap;
         private readonly int width;
         private readonly int height;
         private readonly int depth;
@@ -43,6 +44,23 @@ namespace Tesseract
             return Create(pixHandle);
         }
 
+        public PixColormap Colormap
+        {
+            get { return colormap; }
+            set
+            {
+                if (value != null) {
+                    if (Interop.LeptonicaApi.pixSetColormap(Handle, value.Handle) == 0) {
+                        colormap = value;
+                    }
+                } else {
+                    if (Interop.LeptonicaApi.pixDestroyColormap(Handle) == 0) {
+                        colormap = null;
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Creates a new pix instance using an existing handle to a pix structure.
@@ -57,7 +75,12 @@ namespace Tesseract
             this.handle = handle;
             this.width = Interop.LeptonicaApi.pixGetWidth(handle);
             this.height = Interop.LeptonicaApi.pixGetHeight(handle);
-            this.depth = Interop.LeptonicaApi.pixGetHeight(handle);
+            this.depth = Interop.LeptonicaApi.pixGetDepth(handle);
+
+            var colorMapHandle = Interop.LeptonicaApi.pixGetColormap(handle);
+            if (colorMapHandle != IntPtr.Zero) {
+                this.colormap = new PixColormap(colorMapHandle);
+            }
         }
 
 

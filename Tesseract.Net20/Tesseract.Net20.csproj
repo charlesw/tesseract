@@ -79,6 +79,7 @@
     <Compile Include="ElementProperties.cs" />
     <Compile Include="PageSegMode.cs" />
     <Compile Include="Pix.cs" />
+    <Compile Include="PixColormap.cs" />
     <Compile Include="PixConverter.cs" />
     <Compile Include="PixData.cs" />
     <Compile Include="PolyBlockType.cs" />

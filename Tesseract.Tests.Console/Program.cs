@@ -11,7 +11,7 @@ namespace Tesseract.Tests.Console
         static void Main(string[] args)
         {
             var testFixture = new Tesseract.Tests.Leptonica.ConvertBitmapToPixTests();
-            testFixture.Convert_BitmapToPix("photo_8.png");
+            testFixture.Convert_BitmapToPix("photo.gif");
         }
     }
 }

@@ -17,14 +17,14 @@ namespace Tesseract.Tests.Leptonica
         [Test]
         [TestCase("photo.jpg")]
         [TestCase("photo.bmp")]
-        [TestCase("photo_8.bmp", Ignore=true, IgnoreReason="PixelFormat 8bppIndex is not currently supported (no color map support)")]
+        [TestCase("photo_8.bmp")]
         [TestCase("photo_24.bmp")]
         [TestCase("photo.png")]
         [TestCase("photo_8.png")]
         [TestCase("photo_24.png")]
         [TestCase("photo_32.png")]
         [TestCase("photo.tif")]
-        [TestCase("photo.gif", Ignore = true, IgnoreReason = "PixelFormat 8bppIndex is not currently supported (no color map support)")]
+        [TestCase("photo.gif")]
         public unsafe void Convert_BitmapToPix(string sourceFile)
         {
             var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
@@ -64,8 +64,14 @@ namespace Tesseract.Tests.Leptonica
         {
             var pixData = pix.GetData();
 
-            var pixLine = (uint*)pixData.Data + pixData.WordsPerLine * y;
-            return Color.FromRgba(pixLine[x]);
+            if (pix.Colormap != null) {
+                var pixLine = (uint*)pixData.Data + pixData.WordsPerLine * y;
+                var pixValue = (int)PixData.GetDataByte(pixLine, x);
+                return pix.Colormap[pixValue];
+            } else {
+                var pixLine = (uint*)pixData.Data + pixData.WordsPerLine * y;
+                return Color.FromRgba(pixLine[x]);
+            }
         }
     }
 }

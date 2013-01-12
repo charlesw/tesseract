@@ -76,7 +76,15 @@ namespace Tesseract.Interop
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixWrite")]
         public static extern int pixWrite(string filename, IntPtr handle, ImageFormat format);
+        
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetColormap")]
+        public static extern IntPtr pixGetColormap(IntPtr pix);
 
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSetColormap")]
+        public static extern int pixSetColormap(IntPtr pix, IntPtr pixCmap);
+        
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroyColormap")]
+        public static extern int pixDestroyColormap(IntPtr pix);
 
         #endregion
 
