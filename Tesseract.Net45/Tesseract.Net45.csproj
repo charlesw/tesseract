@@ -123,6 +123,9 @@
     <Compile Include="..\Tesseract.Net20\PixData.cs">
       <Link>PixData.cs</Link>
     </Compile>
+    <Compile Include="..\Tesseract.Net20\PixToBitmapConverter.cs">
+      <Link>PixToBitmapConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Tesseract.Net20\PolyBlockType.cs">
       <Link>PolyBlockType.cs</Link>
     </Compile>

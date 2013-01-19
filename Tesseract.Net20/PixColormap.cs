@@ -127,9 +127,9 @@ namespace Tesseract
         {
             get
             {
-                int red, green, blue;
-                if (Interop.LeptonicaApi.pixcmapGetColor(handle, index, out red, out green, out blue) == 0) {
-                    return new Color((byte)red, (byte)green, (byte)blue);
+                int color;
+                if (Interop.LeptonicaApi.pixcmapGetColor32(handle, index, out color) == 0) {
+                    return Color.FromRgb((uint)color);
                 } else {
                     throw new InvalidOperationException("Failed to retrieve color.");
                 } 

@@ -67,7 +67,6 @@ namespace Tesseract
                 pixColormap.Dispose();
                 throw;
             }
-
         }
 
         private int GetPixDepth(PixelFormat pixelFormat)

@@ -64,6 +64,7 @@
     <Compile Include="BaseApiTests.cs" />
     <Compile Include="EngineTests.cs" />
     <Compile Include="Leptonica\BitmapHelperTests.cs" />
+    <Compile Include="Leptonica\ColorTests.cs" />
     <Compile Include="Leptonica\ConvertBitmapToPixTests.cs" />
     <Compile Include="Leptonica\LoadFromFileTests.cs" />
     <Compile Include="Leptonica\PixDataAccessTests.cs" />
@@ -104,9 +105,6 @@
     <Content Include="Data\Conversion\photo_8.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ProfilingSessions\Session20121124_192229.sdps" />
-    <Content Include="ProfilingSessions\Session20121124_192424.sdps" />
-    <Content Include="ProfilingSessions\Session20121124_192603.sdps" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tesseract.Net45\Tesseract.Net45.csproj">

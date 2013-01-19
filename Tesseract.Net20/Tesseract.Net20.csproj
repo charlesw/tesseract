@@ -82,6 +82,7 @@
     <Compile Include="PixColormap.cs" />
     <Compile Include="PixConverter.cs" />
     <Compile Include="PixData.cs" />
+    <Compile Include="PixToBitmapConverter.cs" />
     <Compile Include="PolyBlockType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />

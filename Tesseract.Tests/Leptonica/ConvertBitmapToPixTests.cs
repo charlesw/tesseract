@@ -15,32 +15,41 @@ namespace Tesseract.Tests.Leptonica
         const string DataDirectory = @"Data\Conversion\";
 
         [Test]
-        [TestCase("photo.jpg")]
-        [TestCase("photo.bmp")]
-        [TestCase("photo_8.bmp")]
-        [TestCase("photo_24.bmp")]
-        [TestCase("photo.png")]
-        [TestCase("photo_8.png")]
-        [TestCase("photo_24.png")]
-        [TestCase("photo_32.png")]
-        [TestCase("photo.tif")]
-        [TestCase("photo.gif")]
-        public unsafe void Convert_BitmapToPix(string sourceFile)
+        public unsafe void Convert_BitmapToPix(
+            [Values("photo.jpg", "photo.bmp", "photo_8.bmp", "photo_24.bmp", "photo.png", "photo_8.png", "photo_24.png", "photo_32.png", "photo.tif", "photo.gif")]
+            string sourceFile)
         {
             var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFilePath)) {
-                //Console.WriteLine("Img format: {0}", img.PixelFormat);
                 using (var dest = bitmapConverter.Convert(source)) {
-                    AssertAreEquivalent(source, dest);
+                    AssertAreEquivalent(source, dest, true);
 
                     //dest.Save("converted_img.bmp");
                 }
             }
         }
 
+        [Test]
+        public unsafe void Convert_PixToBitmap(
+            [Values("photo.jpg", "photo.bmp", "photo_8.bmp", "photo_24.bmp", "photo.png", "photo_8.png", "photo_24.png", "photo_32.png", "photo.tif", "photo.gif")]
+            string sourceFile,
+            [Values(true, false)]
+            bool includeAlpha)
+        {
+            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var converter = new PixToBitmapConverter();
+            using (var source = Pix.LoadFromFile(sourceFilePath)) {
+                using (var dest = converter.Convert(source, includeAlpha)) {
+                    AssertAreEquivalent(dest, source, includeAlpha);
 
-        private void AssertAreEquivalent(Bitmap bmp, Pix pix)
+                   // dest.Save("converted_pix.bmp");
+                }
+            }
+        }
+
+
+        private void AssertAreEquivalent(Bitmap bmp, Pix pix, bool checkAlpha)
         {
             // verify img metadata
             Assert.That(pix.Width, Is.EqualTo(bmp.Width));
@@ -55,7 +64,11 @@ namespace Tesseract.Tests.Leptonica
                 for (int x = 0; x < width; x += width / 4) {
                     Color sourcePixel = (Color)bmp.GetPixel(x, y);
                     Color destPixel = GetPixel(pix, x, y);
-                    Assert.That(destPixel, Is.EqualTo(sourcePixel), "Expected pixel at <{0},{1}> to be same in both source and dest.");
+                    if (checkAlpha) {
+                        Assert.That(destPixel, Is.EqualTo(sourcePixel), "Expected pixel at <{0},{1}> to be same in both source and dest.", x, y);
+                    } else {
+                        Assert.That(destPixel, Is.EqualTo(sourcePixel).Using<Color>((c1, c2) => (c1.Red == c2.Red && c1.Blue == c2.Blue && c1.Green == c2.Green) ? 0 : 1), "Expected pixel at <{0},{1}> to be same in both source and dest.", x, y);
+                    }
                 }
             }
         }

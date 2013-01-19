@@ -35,6 +35,15 @@ namespace Tesseract
                (byte)(value & 0xFF));
         }
 
+        public static Color FromRgb(uint value)
+        {
+            return new Color(
+               (byte)((value >> 24) & 0xFF),
+               (byte)((value >> 16) & 0xFF),
+               (byte)((value >> 8) & 0xFF),
+               (byte)0xFF);
+        }
+
         public uint ToRGBA()
         {
             return BitmapHelper.EncodeAsRGBA(red, green, blue, alpha);
