@@ -24,9 +24,7 @@ avoid duplication of work.
 
 Task Num	| Task													| Status
 --------|---------------------------------------------------------------|------------------------------------------
-#2	| Leptonica - Support colour images				| Active
-#1	| Leptonica - Support System.Drawing.Image to Pix conversion	| Pending
-	| Tesseract - Core Apis 					| Hold
+	| Tesseract - Core Apis 					| Active
 	| Tesseract - Regression test infrastructure			| Pending
 	| Leptonica - Scanned image preparation functions		| Pending
 	| Tesseract - API Cleanup and improvements			| Pending
