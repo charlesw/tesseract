@@ -59,9 +59,9 @@
     <Compile Include="AddNewColorStatus.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
-    <Compile Include="Color.cs" />
+    <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
-    <Compile Include="Engine.cs" />
+    <Compile Include="TesseractEngine.cs" />
     <Compile Include="EngineConfig.cs" />
     <Compile Include="EngineMode.cs" />
     <Compile Include="ImageFormat.cs" />

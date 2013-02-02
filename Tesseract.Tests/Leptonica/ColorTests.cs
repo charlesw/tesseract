@@ -13,7 +13,7 @@ namespace Tesseract.Tests.Leptonica
         [TestCase]
         public void Color_CastColorToNetColor()
         {
-            var color = new Color(100, 150, 200);
+            var color = new PixColor(100, 150, 200);
             var castColor = (System.Drawing.Color)color;
             Assert.That(castColor.R, Is.EqualTo(color.Red));
             Assert.That(castColor.G, Is.EqualTo(color.Green));

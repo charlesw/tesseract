@@ -57,17 +57,11 @@
     <Compile Include="..\Tesseract.Net20\BitmapToPixConverter.cs">
       <Link>BitmapToPixConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Tesseract.Net20\Color.cs">
-      <Link>Color.cs</Link>
-    </Compile>
     <Compile Include="..\Tesseract.Net20\DisposableBase.cs">
       <Link>DisposableBase.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\ElementProperties.cs">
       <Link>ElementProperties.cs</Link>
-    </Compile>
-    <Compile Include="..\Tesseract.Net20\Engine.cs">
-      <Link>Engine.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\EngineConfig.cs">
       <Link>EngineConfig.cs</Link>
@@ -114,6 +108,9 @@
     <Compile Include="..\Tesseract.Net20\Pix.cs">
       <Link>Pix.cs</Link>
     </Compile>
+    <Compile Include="..\Tesseract.Net20\PixColor.cs">
+      <Link>PixColor.cs</Link>
+    </Compile>
     <Compile Include="..\Tesseract.Net20\PixColormap.cs">
       <Link>PixColormap.cs</Link>
     </Compile>
@@ -137,6 +134,9 @@
     </Compile>
     <Compile Include="..\Tesseract.Net20\ResultIterator.cs">
       <Link>ResultIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\TesseractEngine.cs">
+      <Link>TesseractEngine.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\TesseractException.cs">
       <Link>TesseractException.cs</Link>

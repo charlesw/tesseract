@@ -57,7 +57,7 @@ namespace Tesseract
                 uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
 
                 for (int x = 0; x < width; x++) {
-                    var pixVal = Color.FromRgba(pixLine[x]);
+                    var pixVal = PixColor.FromRgba(pixLine[x]);
 
                     byte* pixelPtr = imgLine + (x << 2);
                     pixelPtr[0] = pixVal.Blue;

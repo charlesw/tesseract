@@ -81,17 +81,17 @@ namespace Tesseract
             get { return Interop.LeptonicaApi.pixcmapGetFreeCount(handle); }
         }
 
-        public bool AddColor(Color color)
+        public bool AddColor(PixColor color)
         {
             return Interop.LeptonicaApi.pixcmapAddColor(handle, color.Red, color.Green, color.Blue) == 0;
         }
 
-        public bool AddNewColor(Color color, out int index)
+        public bool AddNewColor(PixColor color, out int index)
         {
             return Interop.LeptonicaApi.pixcmapAddNewColor(handle, color.Red, color.Green, color.Blue, out index) == 0;
         }
 
-        public bool AddNearestColor(Color color, out int index)
+        public bool AddNearestColor(PixColor color, out int index)
         {
             return Interop.LeptonicaApi.pixcmapAddNearestColor(handle, color.Red, color.Green, color.Blue, out index) == 0;
         }
@@ -106,7 +106,7 @@ namespace Tesseract
             return Interop.LeptonicaApi.pixcmapSetBlackAndWhite(handle, setBlack ? 1 : 0, setWhite ? 1 : 0) == 0;
         }
 
-        public bool IsUsableColor(Color color)
+        public bool IsUsableColor(PixColor color)
         {
             int usable;
             if (Interop.LeptonicaApi.pixcmapUsableColor(handle, color.Red, color.Green, color.Blue, out usable) == 0) {
@@ -123,13 +123,13 @@ namespace Tesseract
             }
         }
 
-        public Color this[int index]
+        public PixColor this[int index]
         {
             get
             {
                 int color;
                 if (Interop.LeptonicaApi.pixcmapGetColor32(handle, index, out color) == 0) {
-                    return Color.FromRgb((uint)color);
+                    return PixColor.FromRgb((uint)color);
                 } else {
                     throw new InvalidOperationException("Failed to retrieve color.");
                 } 

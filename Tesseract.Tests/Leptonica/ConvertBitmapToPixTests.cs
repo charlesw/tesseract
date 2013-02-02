@@ -62,18 +62,18 @@ namespace Tesseract.Tests.Leptonica
             var width = pix.Width;
             for (int y = 0; y < height; y += height / 4) {
                 for (int x = 0; x < width; x += width / 4) {
-                    Color sourcePixel = (Color)bmp.GetPixel(x, y);
-                    Color destPixel = GetPixel(pix, x, y);
+                    PixColor sourcePixel = (PixColor)bmp.GetPixel(x, y);
+                    PixColor destPixel = GetPixel(pix, x, y);
                     if (checkAlpha) {
                         Assert.That(destPixel, Is.EqualTo(sourcePixel), "Expected pixel at <{0},{1}> to be same in both source and dest.", x, y);
                     } else {
-                        Assert.That(destPixel, Is.EqualTo(sourcePixel).Using<Color>((c1, c2) => (c1.Red == c2.Red && c1.Blue == c2.Blue && c1.Green == c2.Green) ? 0 : 1), "Expected pixel at <{0},{1}> to be same in both source and dest.", x, y);
+                        Assert.That(destPixel, Is.EqualTo(sourcePixel).Using<PixColor>((c1, c2) => (c1.Red == c2.Red && c1.Blue == c2.Blue && c1.Green == c2.Green) ? 0 : 1), "Expected pixel at <{0},{1}> to be same in both source and dest.", x, y);
                     }
                 }
             }
         }
         
-        private unsafe Color GetPixel(Pix pix, int x, int y)
+        private unsafe PixColor GetPixel(Pix pix, int x, int y)
         {
             var pixData = pix.GetData();
 
@@ -83,7 +83,7 @@ namespace Tesseract.Tests.Leptonica
                 return pix.Colormap[pixValue];
             } else {
                 var pixLine = (uint*)pixData.Data + pixData.WordsPerLine * y;
-                return Color.FromRgba(pixLine[x]);
+                return PixColor.FromRgba(pixLine[x]);
             }
         }
     }
