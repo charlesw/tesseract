@@ -39,16 +39,6 @@ namespace Tesseract
         {
             Interop.LeptonicaApi.pixEndianByteSwap(Pix.Handle);
         }
-		
-#if Net45
-      	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-		public static uint GetDataBit(uint* data, int index)
-		{
-			return (*(data + ((index) >> 5)) >> (31 - ((index) & 31))) & 1;			
-		}
-
-
 
 #if Net45
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -60,6 +50,14 @@ namespace Tesseract
                 (blue << 8) |
                 alpha);
         }
+
+#if Net45
+      	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public static uint GetDataBit(uint* data, int index)
+		{
+			return (*(data + ((index) >> 5)) >> (31 - ((index) & 31))) & 1;			
+		}
 
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]

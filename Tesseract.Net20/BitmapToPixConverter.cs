@@ -38,6 +38,8 @@ namespace Tesseract
                     TransferDataFormat24bppRgb(imgData, pixData);
                 } else if (imgData.PixelFormat == PixelFormat.Format8bppIndexed) {
                     TransferDataFormat8bppIndexed(imgData, pixData);
+                } else if (imgData.PixelFormat == PixelFormat.Format1bppIndexed) {
+                    TransferDataFormat1bppIndexed(imgData, pixData);
                 }
                 return pix;
             } catch (Exception) {
@@ -135,6 +137,21 @@ namespace Tesseract
                 for (int x = 0; x < width; x++) {
                     byte pixelVal = *(imgLine + x);
                     PixData.SetDataByte(pixLine, x, pixelVal);
+                }
+            }
+        }
+
+        private unsafe void TransferDataFormat1bppIndexed(BitmapData imgData, PixData pixData)
+        {
+            var height = imgData.Height;
+            var width = imgData.Width;
+            for (int y = 0; y < height; y++) {
+                byte* imgLine = (byte*)imgData.Scan0 + (y * imgData.Stride);
+                uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
+
+                for (int x = 0; x < width; x++) {
+                    byte pixelVal = BitmapHelper.GetDataBit(imgLine, x);
+                    PixData.SetDataBit(pixLine, x, pixelVal);
                 }
             }
         }
