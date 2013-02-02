@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace Tesseract
@@ -119,6 +120,41 @@ namespace Tesseract
             var page = new Page(this);
             page.Disposed += OnIteratorDisposed;
             return page;
+        }
+
+        /// <summary>
+        /// Process the specified bitmap image.
+        /// </summary>
+        /// <remarks>
+        /// Please consider <see cref="Process(Pix image,PageSegMode? pageSegMode)"/> instead. This is because
+        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
+        /// Leptonica also supports a large number of image pre-processing functions as well.
+        /// </remarks>
+        /// <param name="image">The image to process.</param>
+        /// <param name="pageSegMode">The page segmentation mode.</param>
+        /// <returns></returns>
+        public Page Process(Bitmap image, PageSegMode? pageSegMode = null)
+        {
+            return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+        }
+
+        /// <summary>
+        /// Process the specified bitmap image.
+        /// </summary>
+        /// <remarks>
+        /// Please consider <see cref="Process(Pix image, Rect region, PageSegMode? pageSegMode)"/> instead. This is because
+        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
+        /// Leptonica also supports a large number of image pre-processing functions as well.
+        /// </remarks>
+        /// <param name="image">The image to process.</param>
+        /// <param name="region">The region of the image to process.</param>
+        /// <param name="pageSegMode">The page segmentation mode.</param>
+        /// <returns></returns>
+        public Page Process(Bitmap image, Rect region, PageSegMode? pageSegMode = null)
+        {
+            using (var pix = PixConverter.ToPix(image)) {
+                return Process(pix, region, pageSegMode);
+            }
         }
 
         protected override void Dispose(bool disposing)
