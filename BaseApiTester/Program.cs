@@ -13,11 +13,16 @@ namespace BaseApiTester
 	{
 		public static void Main(string[] args)
 		{
+            var testImagePath = "./phototest.tif";
+            if (args.Length > 0) {
+                testImagePath = args[0];
+            }
+
 			try {
                 var logger = new FormattedConsoleLogger();
                 var resultPrinter = new ResultPrinter(logger);
                 using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
-                    using (var img = Pix.LoadFromFile("./phototest.tif")) {
+                    using (var img = Pix.LoadFromFile(testImagePath)) {
                         using (logger.Begin("Process image")) {
                             var i = 1;
                             using (var page = engine.Process(img)) {
