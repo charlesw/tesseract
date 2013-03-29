@@ -61,6 +61,8 @@
     <Compile Include="BitmapToPixConverter.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
+    <Compile Include="Scew.cs" />
+    <Compile Include="ScewSweep.cs" />
     <Compile Include="TesseractEngine.cs" />
     <Compile Include="EngineConfig.cs" />
     <Compile Include="EngineMode.cs" />

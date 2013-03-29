@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace Tesseract.Tests.Leptonica
+namespace Tesseract.Tests.Leptonica.PixTests
 {
     [TestFixture]
     public unsafe class DataAccessTests

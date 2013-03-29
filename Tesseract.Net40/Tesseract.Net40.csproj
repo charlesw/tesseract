@@ -135,6 +135,12 @@
     <Compile Include="..\Tesseract.Net20\ResultIterator.cs">
       <Link>ResultIterator.cs</Link>
     </Compile>
+    <Compile Include="..\Tesseract.Net20\Scew.cs">
+      <Link>Scew.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\ScewSweep.cs">
+      <Link>ScewSweep.cs</Link>
+    </Compile>
     <Compile Include="..\Tesseract.Net20\TesseractEngine.cs">
       <Link>TesseractEngine.cs</Link>
     </Compile>
