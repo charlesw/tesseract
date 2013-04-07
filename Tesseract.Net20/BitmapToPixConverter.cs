@@ -74,6 +74,8 @@ namespace Tesseract
         private int GetPixDepth(PixelFormat pixelFormat)
         {
             switch (pixelFormat) {
+                case PixelFormat.Format1bppIndexed:
+                    return 1;
                 case PixelFormat.Format8bppIndexed:
                     return 8;
                 case PixelFormat.Format32bppArgb:
@@ -144,14 +146,14 @@ namespace Tesseract
         private unsafe void TransferDataFormat1bppIndexed(BitmapData imgData, PixData pixData)
         {
             var height = imgData.Height;
-            var width = imgData.Width;
+            var width = imgData.Width/8;
             for (int y = 0; y < height; y++) {
                 byte* imgLine = (byte*)imgData.Scan0 + (y * imgData.Stride);
                 uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
 
                 for (int x = 0; x < width; x++) {
-                    byte pixelVal = BitmapHelper.GetDataBit(imgLine, x);
-                    PixData.SetDataBit(pixLine, x, pixelVal);
+                    byte pixelVal = BitmapHelper.GetDataByte(imgLine, x);
+                    PixData.SetDataByte(pixLine, x, pixelVal);
                 }
             }
         }

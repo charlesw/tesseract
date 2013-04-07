@@ -34,6 +34,8 @@ namespace Tesseract
                     TransferData16(pixData, imgData);
                 } else if (depth == 8) {
                     TransferData8(pixData, imgData);
+                } else if (depth == 1) {
+                    TransferData1(pixData, imgData);
                 }
                 return img;
             } catch (Exception) {
@@ -104,10 +106,29 @@ namespace Tesseract
             }
         }
 
+        private unsafe void TransferData1(PixData pixData, BitmapData imgData)
+        {
+            var imgFormat = imgData.PixelFormat;
+            var height = imgData.Height;
+            var width = imgData.Width/8;
+
+            for (int y = 0; y < height; y++) {
+                uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
+                byte* imgLine = (byte*)imgData.Scan0 + (y * imgData.Stride);
+
+                for (int x = 0; x < width; x++) {
+                    byte pixVal = (byte)PixData.GetDataByte(pixLine, x);
+
+                    imgLine[x] = pixVal;
+                }
+            }
+        }
+
         private void TransferPalette(Pix pix, Bitmap img)
         {
             var pallete = img.Palette;
             var maxColors = pallete.Entries.Length;
+            var lastColor = maxColors - 1;
             var colormap = pix.Colormap;
             if (colormap != null && colormap.Count <= maxColors) {
                 var colormapCount = colormap.Count;
@@ -116,7 +137,7 @@ namespace Tesseract
                 }
             } else {
                 for (int i = 0; i < maxColors; i++) {
-                    var value = (byte)(i % maxColors);
+                    var value = (byte)(i * 255 / lastColor);
                     pallete.Entries[i] = SD.Color.FromArgb(value, value, value);
                 }
             }
@@ -128,9 +149,9 @@ namespace Tesseract
         private PixelFormat GetPixelFormat(Pix pix)
         {
             switch (pix.Depth) {
-                //case 1: return PixelFormat.Format1bppIndexed;
+                case 1: return PixelFormat.Format1bppIndexed;
                 //case 2: return PixelFormat.Format4bppIndexed;
-               // case 4: return PixelFormat.Format4bppIndexed;
+                //case 4: return PixelFormat.Format4bppIndexed;
                 case 8: return PixelFormat.Format8bppIndexed;
                 case 16: return PixelFormat.Format16bppGrayScale;
                 case 32: return PixelFormat.Format32bppArgb;
