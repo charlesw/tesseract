@@ -10,11 +10,8 @@ namespace Tesseract.Tests.Console
     {
         static void Main(string[] args)
         {
-            //var testFixture = new Tesseract.Tests.Leptonica.ConvertBitmapToPixTests();
-            //testFixture.Convert_PixToBitmap("photo_8.bmp", true);
-
-            var testFixture = new Tesseract.Tests.Leptonica.PixTests.ScewTests();
-            testFixture.DescewTest();
+            var testFixture = new Tesseract.Tests.Leptonica.ConvertBitmapToPixTests();
+            testFixture.Convert_BitmapToPix(1);
         }
     }
 }

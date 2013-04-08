@@ -51,6 +51,9 @@ namespace Tesseract
                 alpha);
         }
 
+        /// <summary>
+        /// Gets the pixel value for a 1bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -59,6 +62,10 @@ namespace Tesseract
 			return (*(data + ((index) >> 5)) >> (31 - ((index) & 31))) & 1;			
 		}
 
+
+        /// <summary>
+        /// Sets the pixel value for a 1bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -68,7 +75,11 @@ namespace Tesseract
             *wordPtr &= ~(0x80000000 >> ((index) & 31));
             *wordPtr |= (value << (31 - ((index) & 31)));		
 		}
-		
+
+
+        /// <summary>
+        /// Gets the pixel value for a 2bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -76,9 +87,12 @@ namespace Tesseract
 		{
 			return (*(data + ((index) >> 4)) >> (2 * (15 - ((index) & 15)))) & 3;	
 		}
-		
-		
-				
+
+
+
+        /// <summary>
+        /// Sets the pixel value for a 2bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -88,7 +102,11 @@ namespace Tesseract
             *wordPtr &= ~(0xc0000000 >> (2 * ((index) & 15)));
             *wordPtr |= (((value) & 3) << (30 - 2 * ((index) & 15)));			
 		}
-		
+
+
+        /// <summary>
+        /// Gets the pixel value for a 4bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -96,8 +114,11 @@ namespace Tesseract
 		{
 			return (*(data + ((index) >> 3)) >> (4 * (7 - ((index) & 7)))) & 0xf;			
 		}
-		
-		
+
+
+        /// <summary>
+        /// Sets the pixel value for a 4bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -107,8 +128,11 @@ namespace Tesseract
             *wordPtr &= ~(0xf0000000 >> (4 * ((index) & 7)));
             *wordPtr |= (((value) & 15) << (28 - 4 * ((index) & 7)));		
 		}
-		
-		
+
+
+        /// <summary>
+        /// Gets the pixel value for a 8bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -124,8 +148,11 @@ namespace Tesseract
             return *((byte*)data + index);  
 #endif		
 		}
-		
-		
+
+
+        /// <summary>
+        /// Sets the pixel value for a 8bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -141,8 +168,11 @@ namespace Tesseract
 			*((byte*)data + index) =  (byte)value;
 #endif	
 		}
-		
-		
+
+
+        /// <summary>
+        /// Gets the pixel value for a 16bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -158,8 +188,11 @@ namespace Tesseract
                 return *((ushort*)data + index);
 #endif
 		}
-		
-		
+
+
+        /// <summary>
+        /// Sets the pixel value for a 16bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -175,7 +208,11 @@ namespace Tesseract
             *((ushort*)data + index) = (ushort)value;
 #endif	
 		}
-				
+
+
+        /// <summary>
+        /// Gets the pixel value for a 32bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -183,8 +220,11 @@ namespace Tesseract
 		{
          	return *(data + index);		
 		}
-		
-		
+
+
+        /// <summary>
+        /// Sets the pixel value for a 32bpp image.
+        /// </summary>
 #if Net45
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
