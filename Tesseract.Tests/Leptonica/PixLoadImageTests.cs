@@ -18,7 +18,7 @@ namespace Tesseract.Tests.Leptonica
 
         [Test]
         public void CanLoadFromDisk(
-            [Values("photo.jpg", "photo.bmp", "photo_8.bmp", "photo_24.bmp", "photo.png", "photo_8.png", "photo_24.png", "photo_32.png", "photo.tif", "photo.gif")]
+            [Values("photo_grayscale_1bpp.tif")]
             string sourcefile)
         {
             using (var image = new Bitmap(Path.Combine(DataDirectory, sourcefile)))
@@ -31,7 +31,7 @@ namespace Tesseract.Tests.Leptonica
 
         [Test]
         public void CanLoadFromByteArray(
-            [Values("photo.jpg", "photo.bmp", "photo_8.bmp", "photo_24.bmp", "photo.png", "photo_8.png", "photo_24.png", "photo_32.png", "photo.tif", "photo.gif")]
+            [Values("photo_grayscale_1bpp.tif")]
             string sourcefile)
         {
             var bytes = File.ReadAllBytes(Path.Combine(DataDirectory, sourcefile));
@@ -39,9 +39,8 @@ namespace Tesseract.Tests.Leptonica
             using (var pix = Pix.LoadFromByteArray(bytes))
             {
                 Assert.AreEqual(image.Width, pix.Width);
-                Assert.AreEqual(image.Height, pix.Height);            
+                Assert.AreEqual(image.Height, pix.Height);
             }
-
         }
 
     }
