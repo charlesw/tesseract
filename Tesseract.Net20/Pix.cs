@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 
 namespace Tesseract
 {
     public unsafe sealed class Pix : DisposableBase
     {
+
         #region Constants
 
         // Skew Defaults
@@ -25,7 +27,6 @@ namespace Tesseract
         private readonly int depth;
 
         #endregion
-
 
         #region Create\Load methods
 
@@ -50,6 +51,11 @@ namespace Tesseract
             return new Pix(handle);
         }
 
+        /// <summary>
+        /// Load image from disk.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static Pix LoadFromFile(string filename)
         {
             var pixHandle = Interop.LeptonicaApi.pixRead(filename);
@@ -57,6 +63,18 @@ namespace Tesseract
                 throw new IOException(String.Format("Failed to load image '{0}'.", filename));
             }
             return Create(pixHandle);
+        }
+
+        /// <summary>
+        /// Load image from an byte array. 
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static Pix LoadFromByteArray(byte[] bytes)
+        {
+            IoTempPath = Path.GetTempFileName();
+            File.WriteAllBytes(IoTempPath, bytes);
+            return LoadFromFile(IoTempPath);
         }
         
         /// <summary>
@@ -124,6 +142,11 @@ namespace Tesseract
         public IntPtr Handle
         {
             get { return handle; }
+        }
+
+        public ImageFormat ImageFormat
+        {
+            get { return Interop.LeptonicaApi.pixGetInputFormat(handle); }
         }
 
         #endregion
