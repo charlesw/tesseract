@@ -69,12 +69,18 @@
     <Compile Include="Leptonica\ColorTests.cs" />
     <Compile Include="Leptonica\ConvertBitmapToPixTests.cs" />
     <Compile Include="Leptonica\LoadFromFileTests.cs" />
+    <Compile Include="Leptonica\PixTests\ImageManipulationTests.cs" />
     <Compile Include="Leptonica\PixTests\PixDataAccessTests.cs" />
-    <Compile Include="Leptonica\PixTests\ScewTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TesseractResultSet.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\Binarization\neo-32bit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Binarization\neo-8bit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Conversion\photo_grayscale_1bpp.tif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
