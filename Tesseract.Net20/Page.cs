@@ -36,6 +36,11 @@ namespace Tesseract
             return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
         }
 
+        public string GetHOCRText(int pageNum)
+        {
+            Recognize();
+            return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
+        }
 
         public float GetMeanConfidence()
         {
