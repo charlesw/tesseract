@@ -57,7 +57,7 @@ namespace Tesseract.Interop
                     var dllPath = Path.Combine(directoryName, dllName);
 
                     // make sure the file hasn't yet been copied over.
-                    if (!File.Exists(dllName)) {
+                    if (!File.Exists(dllPath)) {
                         using (var resourceStream = assembly.GetManifestResourceStream(resourceName)) {
                             try {
                                 using (var fileStream = File.Create(dllPath)) {

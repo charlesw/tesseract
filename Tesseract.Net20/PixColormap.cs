@@ -22,8 +22,8 @@ namespace Tesseract
 
         public static PixColormap Create(int depth)
         {
-            if (!(depth == 2 || depth == 4 || depth == 8)) {
-                throw new ArgumentOutOfRangeException("depth", "Depth must be 2, 4, or 8 bpp.");
+            if (!(depth == 1 || depth == 2 || depth == 4 || depth == 8)) {
+                throw new ArgumentOutOfRangeException("depth", "Depth must be 1, 2, 4, or 8 bpp.");
             }
 
             var handle = Interop.LeptonicaApi.pixcmapCreate(depth);
@@ -35,8 +35,8 @@ namespace Tesseract
         
         public static PixColormap CreateLinear(int depth, int levels)
         {
-            if (!(depth == 2 || depth == 4 || depth == 8)) {
-                throw new ArgumentOutOfRangeException("depth", "Depth must be 2, 4, or 8 bpp.");
+            if (!(depth == 1 || depth == 2 || depth == 4 || depth == 8)) {
+                throw new ArgumentOutOfRangeException("depth", "Depth must be 1, 2, 4, or 8 bpp.");
             }
             if (levels < 2 || levels > (2 << depth))
                 throw new ArgumentOutOfRangeException("levels", "Depth must be 2 and 2^depth (inclusive).");
@@ -50,8 +50,8 @@ namespace Tesseract
 
         public static PixColormap CreateLinear(int depth, bool firstIsBlack, bool lastIsWhite)
         {
-            if (!(depth == 2 || depth == 4 || depth == 8)) {
-                throw new ArgumentOutOfRangeException("depth", "Depth must be 2, 4, or 8 bpp.");
+            if (!(depth == 1 || depth == 2 || depth == 4 || depth == 8)) {
+                throw new ArgumentOutOfRangeException("depth", "Depth must be 1, 2, 4, or 8 bpp.");
             }
 
             var handle = Interop.LeptonicaApi.pixcmapCreateRandom(depth, firstIsBlack ? 1 : 0, lastIsWhite ? 1 : 0);

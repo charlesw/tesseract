@@ -13,37 +13,70 @@ namespace Tesseract.Tests.Leptonica
     public class ConvertBitmapToPixTests
     {
         const string DataDirectory = @"Data\Conversion\";
+        const string ResultsDirectory = @"Results\Conversion\";
 
         [Test]
-        public unsafe void Convert_BitmapToPix(
-            [Values("photo.jpg", "photo.bmp", "photo_8.bmp", "photo_24.bmp", "photo.png", "photo_8.png", "photo_24.png", "photo_32.png", "photo.tif", "photo.gif")]
-            string sourceFile)
+        [TestCase(1)] // Note: 1bpp will not save pixmap when writing out the result, this is a limitation of leptonica (see pixWriteToTiffStream)
+        [TestCase(4, Ignore = true, Reason = "4bpp images not supported.")]
+        [TestCase(8)]
+        [TestCase(32)]
+        public unsafe void Convert_BitmapToPix(int depth)
         {
+            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
+
+            string pixType;
+            if (depth < 16) pixType = "palette";
+            else if (depth == 16) pixType = "grayscale";
+            else pixType = "rgb";
+
+            var sourceFile = String.Format("photo_{0}_{1}bpp.tif", pixType, depth);
             var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFilePath)) {
+                Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(depth));
                 using (var dest = bitmapConverter.Convert(source)) {
-                    AssertAreEquivalent(source, dest, true);
+                    var destFilename = String.Format("BitmapToPix_{0}_{1}bpp.tif", pixType, depth);
+                    dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
 
-                    //dest.Save("converted_img.bmp");
+                    AssertAreEquivalent(source, dest, true);
                 }
             }
         }
 
         [Test]
-        public unsafe void Convert_PixToBitmap(
-            [Values("photo.jpg", "photo.bmp", "photo_8.bmp", "photo_24.bmp", "photo.png", "photo_8.png", "photo_24.png", "photo_32.png", "photo.tif", "photo.gif")]
-            string sourceFile,
-            [Values(true, false)]
-            bool includeAlpha)
+        [TestCase(1, true, false)]
+        [TestCase(1, false, false)]
+        [TestCase(4, false, false, Ignore = true, Reason = "4bpp images not supported.")]
+        [TestCase(4, true, false, Ignore = true, Reason = "4bpp images not supported.")]
+        [TestCase(8, false, false)]
+        [TestCase(8, true, false, Ignore = true, Reason = "Haven't yet created a 8bpp grayscale test image.")]
+        [TestCase(32, false, true)]
+        [TestCase(32, false, false)]
+        public unsafe void Convert_PixToBitmap(int depth, bool isGrayscale, bool includeAlpha)
         {
+            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
+
+            bool hasPalette = depth < 16 && !isGrayscale;
+            string pixType;
+            if (isGrayscale) pixType = "grayscale";
+            else if (hasPalette) pixType = "palette";
+            else pixType = "rgb";
+
+            var sourceFile = String.Format("photo_{0}_{1}bpp.tif", pixType, depth);
             var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
             var converter = new PixToBitmapConverter();
             using (var source = Pix.LoadFromFile(sourceFilePath)) {
+                Assert.That(source.Depth, Is.EqualTo(depth));
+                if (hasPalette) {
+                    Assert.That(source.Colormap, Is.Not.Null, "Expected source image to have color map\\palette.");
+                } else {
+                    Assert.That(source.Colormap, Is.Null, "Expected source image to be grayscale.");
+                }
                 using (var dest = converter.Convert(source, includeAlpha)) {
-                    AssertAreEquivalent(dest, source, includeAlpha);
+                    var destFilename = String.Format("PixToBitmap_{0}_{1}bpp.tif", pixType, depth);
+                    dest.Save(Path.Combine(ResultsDirectory, destFilename), System.Drawing.Imaging.ImageFormat.Tiff);
 
-                   // dest.Save("converted_pix.bmp");
+                    AssertAreEquivalent(dest, source, includeAlpha);
                 }
             }
         }
@@ -60,8 +93,8 @@ namespace Tesseract.Tests.Leptonica
             // do some random sampling over image
             var height = pix.Height;
             var width = pix.Width;
-            for (int y = 0; y < height; y += height / 4) {
-                for (int x = 0; x < width; x += width / 4) {
+            for (int y = 0; y < height; y += height) {
+                for (int x = 0; x < width; x += width) {
                     PixColor sourcePixel = (PixColor)bmp.GetPixel(x, y);
                     PixColor destPixel = GetPixel(pix, x, y);
                     if (checkAlpha) {
@@ -75,15 +108,31 @@ namespace Tesseract.Tests.Leptonica
         
         private unsafe PixColor GetPixel(Pix pix, int x, int y)
         {
+            var pixDepth = pix.Depth;
             var pixData = pix.GetData();
+            var pixLine = (uint*)pixData.Data + pixData.WordsPerLine * y;
+            uint pixValue;
+            if (pixDepth == 1) {
+                pixValue = PixData.GetDataBit(pixLine, x);
+            } else if (pixDepth == 4) {
+                pixValue = PixData.GetDataQBit(pixLine, x);
+            } else if (pixDepth == 8) {
+                pixValue = PixData.GetDataByte(pixLine, x);
+            } else if (pixDepth == 32) {
+                pixValue = PixData.GetDataFourByte(pixLine, x);
+            } else {
+                throw new ArgumentException(String.Format("Bit depth of {0} is not supported.", pix.Depth), "pix");
+            }
 
             if (pix.Colormap != null) {
-                var pixLine = (uint*)pixData.Data + pixData.WordsPerLine * y;
-                var pixValue = (int)PixData.GetDataByte(pixLine, x);
-                return pix.Colormap[pixValue];
+                return pix.Colormap[(int)pixValue];
             } else {
-                var pixLine = (uint*)pixData.Data + pixData.WordsPerLine * y;
-                return PixColor.FromRgba(pixLine[x]);
+                if (pixDepth == 32) {
+                    return PixColor.FromRgba(pixValue);
+                } else {
+                    byte grayscale = (byte)(pixValue * 255 / ((1 << 16) - 1));
+                    return new PixColor(grayscale, grayscale, grayscale);
+                }
             }
         }
     }

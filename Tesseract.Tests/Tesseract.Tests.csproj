@@ -44,6 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
@@ -61,48 +62,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyseResultTests.cs" />
     <Compile Include="BaseApiTests.cs" />
     <Compile Include="EngineTests.cs" />
     <Compile Include="Leptonica\BitmapHelperTests.cs" />
     <Compile Include="Leptonica\ColorTests.cs" />
     <Compile Include="Leptonica\ConvertBitmapToPixTests.cs" />
     <Compile Include="Leptonica\LoadFromFileTests.cs" />
-    <Compile Include="Leptonica\PixDataAccessTests.cs" />
+    <Compile Include="Leptonica\PixTests\ImageManipulationTests.cs" />
+    <Compile Include="Leptonica\PixTests\PixDataAccessTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TesseractResultSet.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Conversion\photo.bmp">
+    <Content Include="Data\Binarization\neo-32bit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Conversion\photo.gif">
+    <Content Include="Data\Binarization\neo-8bit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Conversion\photo.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Data\Conversion\photo_grayscale_1bpp.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Conversion\photo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Data\Conversion\photo_grayscale_4bpp.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Conversion\photo.tif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Data\Conversion\photo_palette_1bpp.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Conversion\photo_24.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Data\Conversion\photo_palette_4bpp.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Conversion\photo_8.bmp">
+    <Content Include="Data\Conversion\photo_palette_8bpp.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Conversion\photo_rgb_32bpp.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Scew\scewed-phototest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="phototest.tif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Conversion\photo_24.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Conversion\photo_32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\Conversion\photo_8.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

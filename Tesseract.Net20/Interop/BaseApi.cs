@@ -7,6 +7,16 @@ namespace Tesseract.Interop
 {
 	public static class TessApi
 	{
+        public const string htmlBeginTag =
+            "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
+            + " \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+            + "<html>\n<head>\n<title></title>\n"
+            + "<meta http-equiv=\"Content-Type\" content=\"text/html;"
+            + "charset=utf-8\" />\n<meta name='ocr-system' content='tesseract'/>\n"
+            + "</head>\n<body>\n";
+
+        public const string htmlEndTag = "</body>\n</html>\n";
+
         static TessApi()
         {
             var type = typeof(TessApi);
@@ -115,8 +125,26 @@ namespace Tesseract.Interop
             }
         }
 
+        public static string BaseAPIGetHOCRText(IntPtr handle, int pageNum)
+        {
+            IntPtr txtHandle = BaseAPIGetHOCRTextInternal(handle, pageNum);
+            if (txtHandle != IntPtr.Zero)
+            {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.DeleteText(txtHandle);
+                return htmlBeginTag + result + htmlEndTag;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUTF8Text")]
         private static extern IntPtr BaseAPIGetUTF8TextInternal(IntPtr handle);
+
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetHOCRText")]
+        private static extern IntPtr BaseAPIGetHOCRTextInternal(IntPtr handle, int pageNum);
 
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIMeanTextConf")]
         public static extern int BaseAPIMeanTextConf(IntPtr handle);
