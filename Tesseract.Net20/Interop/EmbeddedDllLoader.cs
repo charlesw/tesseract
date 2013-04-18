@@ -12,6 +12,8 @@ namespace Tesseract.Interop
     /// </summary>
     public class EmbeddedDllLoader
     {
+        private static readonly string InvalidDirectoryNameChars = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+
         #region Singleton pattern
 
         private static readonly EmbeddedDllLoader instance = new EmbeddedDllLoader();
@@ -33,7 +35,16 @@ namespace Tesseract.Interop
         {
             var process =  System.Diagnostics.Process.GetCurrentProcess().MainModule;
             var processName =  Path.GetFileNameWithoutExtension(process.FileName);
-            directoryName = Path.Combine(Path.GetTempPath(), String.Format("{0}_{1}", processName, process.FileVersionInfo.FileVersion));
+            
+            // Make sure to avoid accidentally generating an invalid path
+            var processComponent = String.Format("{0}_{1}", processName, process.FileVersionInfo.FileVersion);
+            var cleanedProcessComponent = processComponent;
+            foreach (var invalidChar in InvalidDirectoryNameChars)
+            {
+                cleanedProcessComponent = cleanedProcessComponent.Replace(invalidChar.ToString(), string.Empty);
+            }
+
+            directoryName = Path.Combine(Path.GetTempPath(), cleanedProcessComponent);
 
             Directory.CreateDirectory(directoryName);
         }
