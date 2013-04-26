@@ -7,6 +7,10 @@ Site Content License (Documentation etc): [Creative Commons Attribution 3.0 Unpo
 
 This is currently prerelease software as such the public API is subject to change.
 
+## Request for comment
+
+I've been considering splitting Tesseract and Leptonica into two seperate projects\dlls, please comment on [Issue #22](https://github.com/charlesw/tesseract/issues/22).
+
 ## Getting started quickly
 
 Note: Compiling the project requires at least MS Visual Studio 11 Express for Desktop or SharpDevelop 4.2.
