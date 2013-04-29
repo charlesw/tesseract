@@ -231,6 +231,23 @@ namespace Tesseract
             return new Pix(resultPixHandle);
         }
 
+        /// <summary>
+        /// Binarization of the input image based on the passed parameters and the Otsu method
+        /// </summary>
+        /// <param name="sx"> sizeX Desired tile X dimension; actual size may vary.</param>
+        /// <param name="sy"> sizeY Desired tile Y dimension; actual size may vary.</param>
+        /// <param name="smoothx"> smoothX Half-width of convolution kernel applied to threshold array: use 0 for no smoothing.</param>
+        /// <param name="smoothy"> smoothY Half-height of convolution kernel applied to threshold array: use 0 for no smoothing.</param>
+        /// <param name="scorefract"> scoreFraction Fraction of the max Otsu score; typ. 0.1 (use 0.0 for standard Otsu).</param>
+        /// <returns> ppixd is a pointer to the thresholded PIX image.</returns>
+        public Pix BinarizeOtsuAdaptiveThreshold(int sx, int sy, int smoothx, int smoothy, float scorefract)
+        {
+            IntPtr ppixth, ppixd;
+            int result = Interop.LeptonicaApi.pixOtsuAdaptiveThreshold(handle, sx, sy, smoothx, smoothy, scorefract, out ppixth, out ppixd);
+            if (result == 1) throw new TesseractException("Failed to binarize image.");
+            return new Pix(ppixd);
+        }
+
         protected override void Dispose(bool disposing)
         {
             Interop.LeptonicaApi.pixDestroy(ref handle);
