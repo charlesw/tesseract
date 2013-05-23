@@ -7,9 +7,10 @@ Site Content License (Documentation etc): [Creative Commons Attribution 3.0 Unpo
 
 This is currently prerelease software as such the public API is subject to change.
 
-## Request for comment
+## Warning - Requires Visual Studio 2008 x86 runtime 
 
-I've been considering splitting Tesseract and Leptonica into two seperate projects\dlls, please comment on [Issue #22](https://github.com/charlesw/tesseract/issues/22).
+Since tesseract and leptonica binaries are compiled with Visual Studio 2008 you'll need to ensure you have the 
+Visual Studio 2008 Runtime installed. This can be found (here)[http://www.microsoft.com/en-au/download/details.aspx?id=29]
 
 ## Getting started quickly
 
