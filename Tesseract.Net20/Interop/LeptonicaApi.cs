@@ -9,11 +9,10 @@ namespace Tesseract.Interop
     {
         static LeptonicaApi()
         {
-            var type = typeof(LeptonicaApi);
             // This may have already been loaded by tesseract but that's fine (EmbeddedDllLoader won't try and load the dll again).
-            EmbeddedDllLoader.Instance.LoadEmbeddedDll(type.Assembly, type.Namespace, "liblept168.dll");
-
+            WindowsLibraryLoader.Instance.LoadLibrary("liblept168.dll");
         }
+
 
         #region Pix
 

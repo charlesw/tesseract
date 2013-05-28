@@ -19,11 +19,10 @@ namespace Tesseract.Interop
 
         static TessApi()
         {
-            var type = typeof(TessApi);
             // first load liblept as tesseract depends on it.
-            EmbeddedDllLoader.Instance.LoadEmbeddedDll(type.Assembly, type.Namespace, "liblept168.dll");
+            WindowsLibraryLoader.Instance.LoadLibrary(Constants.LeptonicaDllName);
             // now load unmanaged tesseract dll.
-            EmbeddedDllLoader.Instance.LoadEmbeddedDll(type.Assembly, type.Namespace, "libtesseract302.dll");
+            WindowsLibraryLoader.Instance.LoadLibrary(Constants.TesseractDllName);
         }
 
 		// Helper functions

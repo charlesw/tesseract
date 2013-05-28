@@ -40,6 +40,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <Prefer32Bit>false</Prefer32Bit>
@@ -68,6 +69,14 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\lib\TesseractOcr\liblept168.dll">
+      <Link>x86\liblept168.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\libtesseract302.dll">
+      <Link>x86\libtesseract302.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="phototest.tif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

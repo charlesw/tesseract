@@ -36,7 +36,7 @@ namespace Tesseract
 
             if (width <= 0) throw new ArgumentException("Width must be greater than zero", "width");
             if (height <= 0) throw new ArgumentException("Height must be greater than zero", "height");
-
+            
             var handle = Interop.LeptonicaApi.pixCreate(width, height, depth);
             if (handle == IntPtr.Zero) throw new InvalidOperationException("Failed to create pix, this normally occurs because the requested image size is too large, please check Standard Error Output.");
 
@@ -69,6 +69,7 @@ namespace Tesseract
         private Pix(IntPtr handle)
         {
             if (handle == IntPtr.Zero) throw new ArgumentNullException("handle");
+
             this.handle = handle;
             this.width = Interop.LeptonicaApi.pixGetWidth(handle);
             this.height = Interop.LeptonicaApi.pixGetHeight(handle);

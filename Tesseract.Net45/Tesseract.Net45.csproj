@@ -18,7 +18,7 @@
     <DefineConstants>TRACE;DEBUG;LittleEndian,Net45</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -27,7 +27,7 @@
     <DefineConstants>TRACE;LittleEndian,Net45</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -43,12 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\lib\TesseractOcr\liblept168.dll">
-      <Link>Interop\liblept168.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\lib\TesseractOcr\libtesseract302.dll">
-      <Link>Interop\libtesseract302.dll</Link>
-    </EmbeddedResource>
+    <Content Include="..\lib\TesseractOcr\liblept168.dll">
+      <Link>x86\liblept168.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\libtesseract302.dll">
+      <Link>x86\libtesseract302.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Tesseract.Net20\BitmapHelper.cs">
@@ -78,14 +80,17 @@
     <Compile Include="..\Tesseract.Net20\Interop\Constants.cs">
       <Link>Interop\Constants.cs</Link>
     </Compile>
-    <Compile Include="..\Tesseract.Net20\Interop\EmbeddedDllLoader.cs">
-      <Link>Interop\EmbeddedDllLoader.cs</Link>
-    </Compile>
     <Compile Include="..\Tesseract.Net20\Interop\LeptonicaApi.cs">
       <Link>Interop\LeptonicaApi.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\Interop\MarshalHelper.cs">
       <Link>Interop\MarshalHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\Interop\WindowsLibraryLoader.cs">
+      <Link>Interop\WindowsLibraryLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\LoadLibraryException.cs">
+      <Link>LoadLibraryException.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\MathHelper.cs">
       <Link>MathHelper.cs</Link>

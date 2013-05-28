@@ -14,7 +14,7 @@ namespace Tesseract
 		~DisposableBase() 
 		{
 			Dispose(false);
-			Debug.Fail(String.Format("{0} was not disposed off.", this));
+			Trace.TraceWarning(String.Format("{0} was not disposed off.", this));
 		}
 		
 		

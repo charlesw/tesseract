@@ -42,13 +42,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
     <DefineConstants>TRACE;DEBUG;LittleEndian,Net20</DefineConstants>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
     <DefineConstants>TRACE;LittleEndian,Net20</DefineConstants>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -59,6 +59,7 @@
     <Compile Include="AddNewColorStatus.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
+    <Compile Include="LoadLibraryException.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
     <Compile Include="Scew.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="ImageFormat.cs" />
     <Compile Include="Interop\BaseApi.cs" />
     <Compile Include="Interop\Constants.cs" />
-    <Compile Include="Interop\EmbeddedDllLoader.cs" />
+    <Compile Include="Interop\WindowsLibraryLoader.cs" />
     <Compile Include="Interop\LeptonicaApi.cs" />
     <Compile Include="Interop\MarshalHelper.cs" />
     <Compile Include="LeptonicaException.cs" />
@@ -95,12 +96,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="..\lib\TesseractOcr\liblept168.dll">
-      <Link>Interop\liblept168.dll</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\lib\TesseractOcr\libtesseract302.dll">
-      <Link>Interop\libtesseract302.dll</Link>
-    </EmbeddedResource>
+    <Content Include="..\lib\TesseractOcr\liblept168.dll">
+      <Link>x86\liblept168.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\libtesseract302.dll">
+      <Link>x86\libtesseract302.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
