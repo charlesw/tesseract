@@ -88,43 +88,51 @@ namespace Tesseract.Interop
                 return loadedAssemblies.Contains(dllName);
             }
         }
+
+        public bool IsCurrentPlatformSupported()
+        {
+            return Environment.OSVersion.Platform == PlatformID.Win32NT ||
+                Environment.OSVersion.Platform == PlatformID.Win32Windows;
+        }
       
         public void LoadLibrary(string dllName)
         {
-            try {
-                lock (syncLock) {
-                    if (!loadedAssemblies.Contains(dllName)) {
-                        var processArch = GetProcessArchitecture();
-                        IntPtr dllHandle;
-                        string baseDirectory;
+            if (IsCurrentPlatformSupported()) {
+                try {
+                    lock (syncLock) {
+                        if (!loadedAssemblies.Contains(dllName)) {
+                            var processArch = GetProcessArchitecture();
+                            IntPtr dllHandle;
+                            string baseDirectory;
 
-                        // Try loading from executing assembly domain
-                        var executingAssembly = Assembly.GetExecutingAssembly();
-                        baseDirectory = Path.GetDirectoryName(executingAssembly.Location);
-                        dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
-                        if (dllHandle != IntPtr.Zero) return;
+                            // Try loading from executing assembly domain
+                            var executingAssembly = Assembly.GetExecutingAssembly();
+                            baseDirectory = Path.GetDirectoryName(executingAssembly.Location);
+                            dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
+                            if (dllHandle != IntPtr.Zero) return;
 
-                        // Fallback to current app domain
-                        baseDirectory = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
-                        dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
-                        if (dllHandle != IntPtr.Zero) return;
+                            // Fallback to current app domain
+                            baseDirectory = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+                            dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
+                            if (dllHandle != IntPtr.Zero) return;
 
-                        // Finally try the working directory
-                        baseDirectory = Path.GetFullPath(Environment.CurrentDirectory);
-                        dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
-                        if (dllHandle != IntPtr.Zero) return;
+                            // Finally try the working directory
+                            baseDirectory = Path.GetFullPath(Environment.CurrentDirectory);
+                            dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
+                            if (dllHandle != IntPtr.Zero) return;
 
-                        StringBuilder errorMessage = new StringBuilder();
-                        errorMessage.AppendFormat("Failed to find dll \"{0}\", for processor architecture {1}.", dllName, processArch.Architecture);
-                        if (processArch.HasWarnings) {
-                            // include process detection warnings
-                            errorMessage.AppendFormat("\r\nWarnings: \r\n{0}", processArch.WarningText());
+                            StringBuilder errorMessage = new StringBuilder();
+                            errorMessage.AppendFormat("Failed to find dll \"{0}\", for processor architecture {1}.", dllName, processArch.Architecture);
+                            if (processArch.HasWarnings) {
+                                // include process detection warnings
+                                errorMessage.AppendFormat("\r\nWarnings: \r\n{0}", processArch.WarningText());
+                            }
+                            throw new LoadLibraryException(errorMessage.ToString());
                         }
-                        throw new LoadLibraryException(errorMessage.ToString());
                     }
+                } catch (LoadLibraryException e) {
+                    Trace.TraceError(e.Message);
                 }
-            } catch (LoadLibraryException e) {
-                Trace.TraceError(e.Message);
             }
         }
 
