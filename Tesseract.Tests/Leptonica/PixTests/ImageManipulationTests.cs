@@ -46,5 +46,16 @@ namespace Tesseract.Tests.Leptonica.PixTests
                 }
             }
         }
+
+        [Test]
+        public void ConvertRGBToGrayTest()
+        {
+            using (var sourcePix = Pix.LoadFromFile(@".\Data\Conversion\photo_rgb_32bpp.tif"))
+            using (var grayscaleImage = sourcePix.ConvertRGBToGray(1.0F, 1.0F, 1.0F))
+            {
+                Assert.That(grayscaleImage.Depth, Is.EqualTo(8));
+                grayscaleImage.Save("grayscaleImage.bmp");
+            }
+        }
     }
 }

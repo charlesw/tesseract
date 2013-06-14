@@ -226,6 +226,20 @@ namespace Tesseract
             return new Pix(ppixd);
         }
 
+        /// <summary>
+        /// Conversion from RBG to 8bpp grayscale.
+        /// </summary>
+        /// <param name="rwt">Red weight</param>
+        /// <param name="gwt">Green weight</param>
+        /// <param name="bwt">Blue weight</param>
+        /// <returns></returns>
+        public Pix ConvertRGBToGray(float rwt, float gwt, float bwt)
+        {
+            var resultPixHandle = Interop.LeptonicaApi.pixConvertRGBToGray(handle, rwt, gwt, bwt);
+            if (resultPixHandle == IntPtr.Zero) throw new TesseractException("Failed to convert to grayscale.");
+            return new Pix(resultPixHandle);
+        }
+
         protected override void Dispose(bool disposing)
         {
             Interop.LeptonicaApi.pixDestroy(ref handle);
