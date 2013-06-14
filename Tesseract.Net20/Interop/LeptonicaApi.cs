@@ -85,6 +85,12 @@ namespace Tesseract.Interop
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroyColormap")]
         public static extern int pixDestroyColormap(IntPtr pix);
 
+        // pixconv.h functions
+
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixConvertRGBToGray")]
+        public static extern IntPtr pixConvertRGBToGray(IntPtr pix, float rwt, float gwt, float bwt);
+
+
         // image analysis and manipulation functions
 
         // skew
