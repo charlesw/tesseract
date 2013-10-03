@@ -1,6 +1,8 @@
 # http://docs.myget.org/docs/reference/build-services-build.bat-examples
 # http://blog.myget.org/post/2013/03/22/Whats-new-in-Build-Services.aspx
 
+# updated version is always available at: https://gist.github.com/peters/6812859
+
 param(
 
     [string]$packageVersion = $null,
