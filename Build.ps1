@@ -288,7 +288,7 @@ $projects = @(
     "$rootFolder\Tesseract.Net20\Tesseract.Net20.csproj", # 3.5
     "$rootFolder\Tesseract.Net40\Tesseract.Net40.csproj",
     "$rootFolder\Tesseract.Net45\Tesseract.Net45.csproj",
-    "$rootFolder\Tesseract.Net45\Tesseract.Net45.csproj"
+    "$rootFolder\Tesseract.Net45\Tesseract.Net45.csproj"  # 4.5.1
 )
 
 $useFramework = @(
