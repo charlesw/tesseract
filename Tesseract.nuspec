@@ -4,17 +4,13 @@
     <id>Tesseract</id>
     <version>$version$</version>
     <title>A .Net wrapper for tesseract-ocr</title>
-    <authors>charlesw</authors>
-    <owners>charlesw</owners>
+    <authors>Charles Weld</authors>
+    <owners>Charles Weld</owners>
 	<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
 	<projectUrl>https://github.com/charlesw/tesseract</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Tesseract is probably the most accurate open source OCR engine available. 
-	Combined with the Leptonica Image Processing Library it can read a wide variety of image formats 
-	and convert them to text in over 60 languages. It was one of the top 3 engines in the 1995 UNLV Accuracy test. 
-	Between 1995 and 2006 it had little work done on it, but since then it has been improved extensively by Google. 
-	It is released under the Apache License 2.0.</description>
-    <copyright>Copyright 2013 charlesw</copyright>
+    <description>Tesseract is probably the most accurate open source OCR engine available. Combined with the Leptonica Image Processing Library it can read a wide variety of image formats and convert them to text in over 60 languages. It was one of the top 3 engines in the 1995 UNLV Accuracy test. Between 1995 and 2006 it had little work done on it, but since then it has been improved extensively by Google. It is released under the Apache License 2.0.</description>
+    <copyright>Copyright 2013 Charles Weld</copyright>
     <tags>Tesseract Ocr</tags>
   </metadata>
   <files>
@@ -25,6 +21,7 @@
 	 <file src="$bin$\v4.5.1\Tesseract.dll" target="lib\net451" />
 	 
 	 <file src="$currentfolder$\lib\TesseractOcr\libtesseract302.dll" target="content\x86" />
-	 <file src="$currentfolder$\lib\TesseractOcr\liblept168.dll" target="content\x86" />
+	 <file src="$currentfolder$\lib\TesseractOcr\liblept168.dll" target="content\x86" />	 
+	 <file src="install.ps1" target="tools\install.ps1" />
   </files>
 </package>

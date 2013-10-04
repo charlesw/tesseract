@@ -1,6 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 4.3
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Tests", "Tesseract.Tests\Tesseract.Tests.csproj", "{ABF7DBF7-2358-47C5-9E42-6F1C04E658A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseApiTester", "BaseApiTester\BaseApiTester.csproj", "{07B09DF6-19B0-477A-A8CE-5D7146EEBDFD}"
