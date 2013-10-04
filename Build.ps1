@@ -161,7 +161,9 @@ function Build-Project {
         [string]$config = $(throw "-config is required."),
         [string]$target = $(throw "-target is required."),
         [string[]]$targetFrameworks = $(throw "-targetFrameworks is required."),
-        [string[]]$platform = $(throw "-platform is required.")
+        [string[]]$platform = $(throw "-platform is required."),
+
+        [bool]$MSBuildAllowUnsafeBlocks = $false
     )
 
     $projectPath = [System.IO.Path]::GetFullPath($project)
@@ -190,11 +192,12 @@ function Build-Project {
             /p:OutputPath=$platformOutputFolder `
             /p:TargetFrameworkVersion=$targetFramework `
             /p:Platform=$platform `
+            /p:AllowUnsafeBlocks=$MSBuildAllowUnsafeBlocks `
             /m `
             /v:M `
             /fl `
             /flp:LogFile=$platformOutputFolder\msbuild.log `
-            /nr:false
+            /nr:false 
 
         if($LASTEXITCODE -ne 0) {
             Die("Build failed: $projectName ($Config - $targetFramework)")
@@ -305,7 +308,7 @@ $projects | ForEach-Object {
 
     $project = $_
     $targetFramework = $useFramework[$i]
-   
+  
     $platforms | ForEach-Object {
         $platform = $_
 
@@ -317,7 +320,8 @@ $projects | ForEach-Object {
             -config $config `
             -target $target `
             -targetFrameworks $targetFramework `
-            -platform $platform
+            -platform $platform `
+            -MSBuildAllowUnsafeBlocks $true
 
     }
 
