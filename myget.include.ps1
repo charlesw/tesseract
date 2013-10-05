@@ -241,10 +241,10 @@ function MyGet-Build-Nupkg {
             MyGet-Create-Folder $mygetBuildFolder
 
             MyGet-Grep $outputFolder -recursive $false -pattern ".nupkg$" | ForEach-Object {
-                $filename = $_
-                $fullPath = $_.FullPath
-
-                Copy-Item $fullPath -Destination $mygetBuildFolder\$filename
+                $filename = $_.Name
+                $fullpath = $_.FullName
+		
+		cp $fullpath $mygetBuildFolder\$filename
             }
 
         }
@@ -320,7 +320,7 @@ function MyGet-Build-Project {
         if($msbuildPlatform -eq "AnyCpu") {
             $msbuildPlatform = "Any CPU"
         }
-		
+
         # http://msdn.microsoft.com/en-us/library/vstudio/ms164311.aspx
         & "$(Get-Content env:windir)\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe" `
             $projectPath `
