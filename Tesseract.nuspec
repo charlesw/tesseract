@@ -14,14 +14,14 @@
     <tags>Tesseract Ocr</tags>
   </metadata>
   <files>
-	 <file src="$bin$\v2.0\Tesseract.dll" target="lib\net20" />
-	 <file src="$bin$\v3.5\Tesseract.dll" target="lib\net35" />
-	 <file src="$bin$\v4.0\Tesseract.dll" target="lib\net40" />
-	 <file src="$bin$\v4.5\Tesseract.dll" target="lib\net45" />
-	 <file src="$bin$\v4.5.1\Tesseract.dll" target="lib\net451" />
+	 <file src="$outputfolder$\v2.0\Tesseract.dll" target="lib\net20" />
+	 <file src="$outputfolder$\v3.5\Tesseract.dll" target="lib\net35" />
+	 <file src="$outputfolder$\v4.0\Tesseract.dll" target="lib\net40" />
+	 <file src="$outputfolder$\v4.5\Tesseract.dll" target="lib\net45" />
+	 <file src="$outputfolder$\v4.5.1\Tesseract.dll" target="lib\net451" />
 	 
-	 <file src="$currentfolder$\lib\TesseractOcr\libtesseract302.dll" target="content\x86" />
-	 <file src="$currentfolder$\lib\TesseractOcr\liblept168.dll" target="content\x86" />	 
+	 <file src="$nuspecfolder$\lib\TesseractOcr\libtesseract302.dll" target="content\x86" />
+	 <file src="$nuspecfolder$\lib\TesseractOcr\liblept168.dll" target="content\x86" />	 
 	 <file src="install.ps1" target="tools\install.ps1" />
   </files>
 </package>
