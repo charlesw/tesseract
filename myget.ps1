@@ -65,6 +65,8 @@ $projects | ForEach-Object {
             -target $target `
             -targetFrameworks $targetFramework `
             -platform $platform `
+			-version $packageVersion `
+			-verbosity $verbosity `
             -MSBuildCustomProperties "/property:AllowUnsafeBlocks=true"
 			
     }
@@ -75,7 +77,7 @@ $projects | ForEach-Object {
 $platforms | ForEach-Object {
     $platform = $_
 	
-	$buildOutputFolder = Join-Path $outputFolder "$platform\$config"
+	$buildOutputFolder = Join-Path $outputFolder "$packageVersion\$platform\$config"
 	
     MyGet-Build-Nupkg -project $project `
         -rootFolder $rootFolder `
