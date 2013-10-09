@@ -13,7 +13,7 @@ Visual Studio 2008 SP1 Runtime installed. This can be found [here](http://www.mi
 
 ## Getting started quickly
 
-Note: Compiling the project requires at least MS Visual Studio 11 Express for Desktop or SharpDevelop 4.2.
+Note: Compiling the project requires at least MS Visual Studio 11 Express for Desktop or SharpDevelop 4.4.
 
 1. Fork this project (see: https://help.github.com/articles/fork-a-repo)
 2. Ensure you have Visual Studio 2008 SP1 x86 runtime installed (see note above).
