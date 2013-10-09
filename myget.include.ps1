@@ -1,9 +1,20 @@
+# MIT LICENSE
+
 # You can always find an updated version @ https://raw.github.com/peters/myget/master/myget.include.ps1
+
+# Heavily inspired by https://github.com/github/Shimmer
+
+# Prerequisites (should add .buildrunnertools to your .(git|hg)ignore)
+$buildRunnerToolsFolder = Split-Path $MyInvocation.MyCommand.Path
+$buildRunnerToolsFolder = Join-Path $buildRunnerToolsFolder ".buildtools"
 
 # Miscellaneous
 
 function MyGet-Write-Diagnostic {
-    param([string]$message)
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$message
+    )
 
     Write-Host
     Write-Host $message -ForegroundColor Green
@@ -12,8 +23,13 @@ function MyGet-Write-Diagnostic {
 
 function MyGet-Die {
     param(
+        [parameter(Position = 0, ValueFromPipeline = $true)]
         [string]$message,
+
+        [parameter(Position = 1, ValueFromPipeline = $true)]
         [object[]]$output,
+
+        [parameter(Position = 2, ValueFromPipeline = $true)]
         [int]$exitCode = 1
     )
 
@@ -29,19 +45,25 @@ function MyGet-Die {
 
 function MyGet-Create-Folder {
     param(
-        [string]$folder = $(throw "-folder is required.")
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$folder
     )
      
     if(-not (Test-Path $folder)) {
-        [System.IO.Directory]::CreateDirectory($folder)
+        New-Item -ItemType Directory -Path $folder
     }
     
 }
 
 function MyGet-Grep {
     param(
-        [string]$folder = $(throw "-folder is required."),
-        [string]$pattern = $(throw "-pattern is required."),
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$folder,
+
+        [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$pattern,
+
+        [parameter(Position = 2, ValueFromPipeline = $true)]
         [bool]$recursive = $true
     )
 
@@ -52,12 +74,32 @@ function MyGet-Grep {
     return Get-ChildItem $folder | Where-Object { $_.FullName -match $pattern } 
 }
 
+function MyGet-EnvironmentVariable {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$name
+    )
+
+    return [Environment]::GetEnvironmentVariable($name)
+}
+
+function MyGet-Set-EnvironmentVariable {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$name,
+        [parameter(Position = 1, ValueFromPipeline = $true)]
+        [string]$value
+    )
+
+    [Environment]::SetEnvironmentVariable($name, $value)
+}
+
 function MyGet-BuildRunner {
+    
+    $buildRunner = MyGet-EnvironmentVariable "BuildRunner"
 
-    $buildRunner = ""
-
-    if(Test-Path env:BuildRunner) {
-        $buildRunner = Get-Content env:BuildRunner
+    if([String]::IsNullOrEmpty($buildRunner)) {
+        return ""
     }
 
     return $buildRunner.tolower()
@@ -66,53 +108,96 @@ function MyGet-BuildRunner {
 
 function MyGet-Package-Version {
     param(
-        $packageVersion = $(throw "-packageVersion is required.")
+        [string]$packageVersion = ""
     )
 
-    if(Test-Path env:PackageVersion) { 
-        $packageVersion = Get-Content env:PackageVersion 
+    $semverRegex = "^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$"
+
+    $buildRunner = MyGet-BuildRunner
+    if([String]::IsNullOrEmpty($buildRunner)) {
+        if(-not ($packageVersion -match $semverRegex)) {
+            Write-Error "Invalid package version input value"
+        }
+        return $packageVersion
     }
 
-    if($packageVersion -eq "") {
-        MyGet-Die "Invalid package version"
+    $envPackageVersion = MyGet-EnvironmentVariable "PackageVersion"
+    if([String]::IsNullOrEmpty($envPackageVersion)) {
+        return $packageVersion
     }
 
-    return $packageVersion
+    if(-not ($envPackageVersion -match $semverRegex)) {
+        Write-Error "Invalid package version value recieved from BuildRunner"
+    }
+
+    return $envPackageVersion
+
 }
 
 function MyGet-NugetExe-Path {
+    param(
+        [ValidateSet("2.5", "2.6", "2.7", "latest")]
+        [string] $version = "latest"
+    )
 
-    if(Test-Path env:NuGet) { 
-        return Get-Content env:NuGet 
+    # Test environment variable
+    if((MyGet-BuildRunner -eq "myget") -and (Test-Path env:nuget)) {
+        return $env:nuget
     }
-    
-    return "nuget.exe"
+
+    $nuget = Join-Path $buildRunnerToolsFolder "tools\nuget\$version\nuget.exe"
+    if (Test-Path $nuget) {
+        return $nuget
+    }
+
+    MyGet-Die "Could not find nuget executable: $nuget"
 }
 
 function MyGet-NunitExe-Path {
-    
-    if(Test-Path env:Nunit) { 
-       return Get-Content env:NunitPath
+    param(
+        [ValidateSet("2.6.2", "latest")]
+        [string] $version = "latest"
+    )
+
+    $nunit = Join-Path $buildRunnerToolsFolder "tools\nunit\$version\nunit-console.exe"
+    if (Test-Path $nunit) {
+        return $nunit
     }
-    
-    return "nunit-console.exe"
+ 
 }
 
 function MyGet-XunitExe-Path {
     param(
-        [ValidateSet("x86", "x64", "AnyCpu")]
-        [string]$platform,
-        [ValidateSet("v2.0","v3.5", "v4.0", "v4.5", "v4.5.1")]
-        [string]$targetFramework
+        [ValidateSet("1.9.2", "latest")]
+        [string] $version = "latest"
     )
 
-    MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
+    $xunit = Join-Path $buildRunnerToolsFolder "tools\xunit\$version\xunit.console.clr4.x86.exe"
+    if (Test-Path $xunit) {
+        return $xunit
+    }
+
+    MyGet-Die "Could not find xunit executable"
+
 }
+
+function MyGet-Normalize-Path {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$path
+    )
+
+    return [System.IO.Path]::GetFullPath($path)
+}
+
 
 function MyGet-Normalize-Paths {
     param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
         [string]$basePath,
-        [string[]]$paths
+
+        [parameter(Position = 1, ValueFromPipeline = $true)]
+        [string[]]$paths = @()
     )
 
     if($paths -isnot [System.Array]) {
@@ -125,8 +210,36 @@ function MyGet-Normalize-Paths {
         $i++;
     }
 
-    return $paths
+}
 
+function MyGet-TargetFramework-To-Clr {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateSet("v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1")]
+        [string]$targetFramework
+    )
+
+    $clr = $null
+
+    switch -Exact ($targetFramework.ToLower()) {
+        "v2.0" {
+            $clr = "net20"
+        }
+        "v3.5" {
+            $clr = "net35"
+        } 
+        "v4.0" {
+            $clr = "net40"
+        }
+        "v4.5" {
+            $clr = "net45"
+        }
+        "v4.5.1" {
+            $clr = "net451"
+        }
+    }
+
+    return $clr
 }
 
 # Build
@@ -141,7 +254,9 @@ function MyGet-Build-Success {
 
 function MyGet-Build-Clean {
 	param(
-	    [string]$rootFolder = $(throw "-rootFolder is required."),
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+	    [string]$rootFolder,
+        [parameter(Position = 1, ValueFromPipeline=$true)]
         [string]$folders = "bin,obj"
     )
 
@@ -155,7 +270,8 @@ function MyGet-Build-Clean {
 
 function MyGet-Build-Bootstrap {
     param(
-        [string]$project = $(throw "-solutionFile is required.")
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$project
     )
 
     MyGet-Write-Diagnostic "Build: Bootstrap"
@@ -176,26 +292,37 @@ function MyGet-Build-Bootstrap {
 }
 
 function MyGet-Build-Nupkg {
-    # http://docs.nuget.org/docs/reference/command-line-reference#Pack_Command
-
     param(
-        [string]$rootFolder = $(throw "-rootFolder is required."),
-        [string]$outputFolder = $(throw "-outputFolder is required."),
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$rootFolder,
 
+        [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$outputFolder,
+
+        [parameter(Position = 2, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern(".(sln|csproj)$")]
-        [string]$project = $(throw "-project is required."),
+        [string]$project,
 
-        [string]$nuspec = "",
-
-        [string]$config = $(throw "-config is required."),
+        [parameter(Position = 3, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$config,
         
+        [parameter(Position = 4, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
         [string]$version,
 
+        [parameter(Position = 5, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateSet("x86", "x64", "AnyCpu")]
-        [string]$platform = $(throw "-platform is required."),
+        [string]$platform,
 
-        [string]$nugetProperties = ""
+        [parameter(Position = 6, ValueFromPipeline = $true)]
+        [string]$nuspec = $null,
+
+        [parameter(Position = 7, ValueFromPipeline = $true)]
+        [string]$nugetProperties = $null,
+
+        # http://docs.nuget.org/docs/reference/command-line-reference#Pack_Command
+        [parameter(Position = 8, ValueFromPipeline = $true)]
+        [string]$nugetPackOptions = $null
     )
     
     if(-not (Test-Path $project)) {
@@ -210,6 +337,10 @@ function MyGet-Build-Nupkg {
         MyGet-Die "Could not find nuspec: $nuspec"
     }
 
+    $rootFolder = MyGet-Normalize-Path $rootFolder
+    $outputFolder = MyGet-Normalize-Path $outputFolder
+    $nuspec = MyGet-Normalize-Path $nuspec
+	
     $projectName = [System.IO.Path]::GetFileName($project) -ireplace ".(sln|csproj)$", ""
 
     # Nuget
@@ -226,7 +357,7 @@ function MyGet-Build-Nupkg {
     MyGet-Write-Diagnostic "Nupkg: $projectName ($platform / $config)"
     
     . $nugetExe pack $nuspec -OutputDirectory $outputFolder -Symbols -NonInteractive `
-        -Properties "$nugetProperties" -Version $version
+        -Properties "$nugetProperties" -Version $version "$nugetPackOptions"
     
     if($LASTEXITCODE -ne 0) {
         MyGet-Die "Build failed: $projectName" -exitCode $LASTEXITCODE
@@ -244,7 +375,7 @@ function MyGet-Build-Nupkg {
                 $filename = $_.Name
                 $fullpath = $_.FullName
 		
-		cp $fullpath $mygetBuildFolder\$filename
+		        cp $fullpath $mygetBuildFolder\$filename
             }
 
         }
@@ -254,33 +385,42 @@ function MyGet-Build-Nupkg {
 
 function MyGet-Build-Project {
     param(
-        [string]$rootFolder = $(throw "-rootFolder is required."),
-        [string]$outputFolder = $(throw "-outputFolder is required."),
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$rootFolder,
 
+        [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$outputFolder,
+
+        [parameter(Position = 2, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern(".(sln|csproj)$")]
-        [string]$project = $(throw "-project is required."),
+        [string]$project,
 
-        [string]$config = $(throw "-config is required."),
+        [parameter(Position = 3, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$config,
 
+        [parameter(Position = 4, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateSet("rebuild", "build")]
-        [string]$target = $(throw "-target is required."),
+        [string]$target,
 
+        [parameter(Position = 5, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
         [string]$version,
-
+        
+        [parameter(Position = 6, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateSet("v1.1", "v2.0", "v3.5", "v4.0", "v4.5", "v4.5.1")]
-        [string[]]$targetFrameworks = $(throw "-targetFrameworks is required."),
+        [string[]]$targetFrameworks,
 
+        [parameter(Position = 7, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateSet("x86", "x64", "AnyCpu")]
-        [string]$platform = $(throw "-platform is required."),
+        [string]$platform,
 
-        [ValidateSet("quiet", "minimal", "normal", "detailed", "diagnostic")]
-        [string]$verbosity = "minimal",
+        [parameter(Position = 8, Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateSet("Quiet", "Minimal", "Normal", "Detailed", "Diagnostic")]
+        [string]$verbosity = "Minimal",
 
-        [string]$MSBuildCustomProperties = ""
+        [parameter(Position = 9, ValueFromPipeline = $true)]
+        [string]$MSBuildCustomProperties = $null
     )
-
-    $nugetExe = MyGet-NugetExe-Path
 
     $projectOutputPath = Join-Path $outputFolder "$version\$platform\$config"
     $projectPath = [System.IO.Path]::Combine($rootFolder, $project)
@@ -347,48 +487,63 @@ function MyGet-Build-Project {
 
 function MyGet-Build-Solution {
     param(
-        [string]$rootFolder = $(throw "-rootFolder is required."),
-        [string]$outputFolder = $(throw "-outputFolder is required."),
-
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern(".sln$")]
-        [string]$sln = $(throw "-sln is required."),
+        [string]$sln,
 
+        [parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$rootFolder,
+
+        [parameter(Position = 2, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$outputFolder,
+
+        [parameter(Position = 3, Mandatory = $true, ValueFromPipeline = $true)]
         [ValidatePattern("^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$")]
         [string]$version,
 
-        [string]$config = $(throw "-config is required."),
-        [string]$target = $(throw "-target is required."),
+        [parameter(Position = 4, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$config,
 
-        [string]$verbosity = "quiet",
+        [parameter(Position = 5, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$target,
 
+        [parameter(Position = 6, ValueFromPipeline = $true)]
         [string[]]$projects = @(),
-        [string[]]$targetFrameworks = $(throw "-targetFrameworks is required."),
-        [string[]]$platforms = $(throw "-platforms is required."),
 
+        [parameter(Position = 7, Mandatory = $true, ValueFromPipeline = $true)]
+        [string[]]$targetFrameworks,
+
+        [parameter(Position = 8, Mandatory = $true, ValueFromPipeline = $true)]
+        [string[]]$platforms,
+
+        [parameter(Position = 9, ValueFromPipeline = $true)]
+        [string]$verbosity = "Minimal",
+        
+        [parameter(Position = 10, ValueFromPipeline = $true)]
         [string[]]$excludeNupkgProjects = @(),
 
+        [parameter(Position = 11, ValueFromPipeline = $true)]
         [string]$nuspec = $null,
 
-        [string]$MSBuildCustomProperties = ""
+        [parameter(Position = 12, ValueFromPipeline = $true)]
+        [string]$MSBuildCustomProperties = $null
     )
 
     if(-not (Test-Path $sln)) {
         MyGet-Die "Could not find solution: $sln"
     }
 
-    $nugetExe = MyGet-NugetExe-Path
+    $excludeNupkgProjects = MyGet-Normalize-Paths $rootFolder $excludeNupkgProjects
     $projectName = [System.IO.Path]::GetFileName($sln) -ireplace ".sln$", ""
-    
-    $excludeNupkgProjects = MyGet-Normalize-Paths $rootFolder, $excludeNupkgProjects
 
     # Building a solution
     if($projects.Count -eq 0) {
         $projects = @($sln)
     # Building projects within a solution
     } else {
-        $projects = MyGet-Normalize-Paths $rootFolder, $projects
+        $projects = MyGet-Normalize-Paths $rootFolder $projects
     }
- 
+
     $projects | ForEach-Object {
 
         $project = $_
@@ -398,9 +553,10 @@ function MyGet-Build-Solution {
             $platform = $_
             $finalBuildOutputFolder = Join-Path $outputFolder "$version\$platform\$config"
         
-            MyGet-Build-Project -rootFolder $solutionFolder -project $project -outputFolder $outputFolder `
+            MyGet-Build-Project -rootFolder $rootFolder -project $project -outputFolder $outputFolder `
                 -target $target -config $config -targetFrameworks $targetFrameworks `
-                -version $version -platform $platform -verbosity $verbosity
+                -version $version -platform $platform -verbosity $verbosity `
+                -MSBuildCustomProperties $MSBuildCustomProperties
     
             if(-not ($excludeNupkgProjects -contains $project)) {
                 MyGet-Build-Nupkg -rootFolder $rootFolder -project $project -nuspec $nuspec -outputFolder $finalBuildOutputFolder `
@@ -412,12 +568,64 @@ function MyGet-Build-Solution {
     }
 }
 
+# Nuget 
+
+function MyGet-NuGet-Get-PackagesPath {
+    # https://github.com/github/Shimmer/blob/master/src/CreateReleasePackage/tools/utilities.psm1#L199
+    param(
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string]$folder
+    )
+
+    $cfg = Get-ChildItem -Path $folder -Filter nuget.config | Select-Object -first 1
+    if($cfg) {
+        [xml]$config = Get-Content $cfg.FullName
+        $path = $config.configuration.config.add | ?{ $_.key -eq "repositorypath" } | select value
+        # Found nuget.config but it don't has repositorypath attribute
+        if($path) {
+            return $path.value.Replace("$", $folder)
+        }
+    }
+
+    $parent = Split-Path $folder
+
+    if(-not $parent) {
+        return $null
+    }
+
+    return MyGet-NuGet-PackagesPath($parent)
+}
+
 # Test runners
 
 function MyGet-TestRunner-Nunit {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string[]]$projects
+    )
+
+    # see: https://github.com/github/Shimmer/blob/bfda6f3e13ab962ad63d81c661d43208070593e8/script/Run-UnitTests.ps1#L5
+
     MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
 }
 
 function MyGet-TestRunner-Xunit {
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+        [string[]]$projects
+    ) 
+    
+    # see: https://github.com/github/Shimmer/blob/bfda6f3e13ab962ad63d81c661d43208070593e8/script/Run-UnitTests.ps1#L5
+
     MyGet-Die "Not implemented. Please contribute a PR @ https://www.github/peters/myget"
+}
+
+if(-not (Test-Path $buildRunnerToolsFolder)) {
+
+    MyGet-Write-Diagnostic "Downloading prerequisites"
+
+	git clone --depth=1 https://github.com/myget/BuildTools.git $buildRunnerToolsFolder
+
+    $(Get-Item $buildRunnerToolsFolder).Attributes = ‘Hidden’
+
 }
