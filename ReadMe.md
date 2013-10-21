@@ -22,21 +22,6 @@ Note: Compiling the project requires at least MS Visual Studio 11 Express for De
 4. Copy language files into ``BaseApiTester\bin\[config]\tessdata``
 5. Run BaseApiTester for example (work in progress)
 
-## To-do
-
-Please help yourselves to one of the following tasks (or create a new one). Please leave a comment in the corresponding task to
-avoid duplication of work.
-
-Task Num	| Task													| Status
---------|---------------------------------------------------------------|------------------------------------------
-	| Tesseract - Core Apis 					| Active
-	| Tesseract - Regression test infrastructure			| Pending
-	| Leptonica - Scanned image preparation functions		| Pending
-	| Tesseract - API Cleanup and improvements			| Pending
-	| Tesseract - Create sample app					| Pending
-	| Tesseract - Dictionary lookup [not sure about this]		| Pending
-
-	
 ## License
 
 Copyright 2012 Charles Weld.
@@ -51,5 +36,18 @@ Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
+
+## Core Team
+
+* [charlesw](https://github.com/charlesw) (Charles Weld)
+
+## Contributors
+
+A big thanks to GitHub and all of Tesseract's contributors:
+
+* [peters](https://github.com/peters)
+* [nguyenq](https://github.com/nguyenq)
+* [Sojin1989](https://github.com/Sojin1989)
+* [jeschergui](https://github.com/jeschergui)
 
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
