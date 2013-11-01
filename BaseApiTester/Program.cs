@@ -13,6 +13,9 @@ namespace BaseApiTester
 	{
 		public static void Main(string[] args)
 		{
+			var is64Bit = IntPtr.Size == sizeof (long);
+			Console.WriteLine("Architecture: {0}", is64Bit ? "x64" : "x86");
+
             var testImagePath = "./phototest.tif";
             if (args.Length > 0) {
                 testImagePath = args[0];

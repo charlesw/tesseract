@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,101 +7,166 @@ namespace Tesseract.Interop
 {
     public unsafe static class LeptonicaApi
     {
-        static LeptonicaApi()
-        {
-            // This may have already been loaded by tesseract but that's fine (EmbeddedDllLoader won't try and load the dll again).
-            WindowsLibraryLoader.Instance.LoadLibrary("liblept168.dll");
-        }
+	    static LeptonicaApi()
+	    {
+		    Initialize(TessApi.Is64bit);
+	    }
 
+	    private static LeptonicaImplementation _implementation;
+	    internal static void Initialize(bool is64Bit)
+	    {
+		    if (_implementation != null)
+		    {
+			    return;
+		    }
 
+			if (is64Bit)
+			{
+				_implementation = LeptonicaImports64.Initialize();
+			}
+			else
+			{
+				_implementation = LeptonicaImports32.Initialize();
+			}		    
+	    }
         #region Pix
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCreate")]
-        public static unsafe extern IntPtr pixCreate(int width, int height, int depth);
+        public static IntPtr pixCreate(int width, int height, int depth)
+		{
+			return _implementation.pixCreate(width, height, depth);
+		}
         
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroy")]
-        public static extern void pixDestroy(ref IntPtr pix);
+        public static void pixDestroy(ref IntPtr pix)
+		{
+			_implementation.pixDestroy(ref pix);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetWidth")]
-        public static extern int pixGetWidth(IntPtr pix);
+        public static int pixGetWidth(IntPtr pix)
+		{
+			return _implementation.pixGetWidth(pix);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetHeight")]
-        public static extern int pixGetHeight(IntPtr pix);
+        public static int pixGetHeight(IntPtr pix)
+		{
+			return _implementation.pixGetHeight(pix);
+		}
 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetDepth")]
-        public static extern int pixGetDepth(IntPtr pix);
+        public static int pixGetDepth(IntPtr pix)
+		{
+			return _implementation.pixGetDepth(pix);
+		}
                 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetXRes")]
-        public static extern int pixGetXRes(IntPtr pix);
+        public static int pixGetXRes(IntPtr pix)
+		{
+			return _implementation.pixGetXRes(pix);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetYRes")]
-        public static extern int pixGetYRes(IntPtr pix);
+        public static int pixGetYRes(IntPtr pix)
+		{
+			return _implementation.pixGetYRes(pix);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetResolution")]
-        public static extern int pixGetResolution(IntPtr pix, out int xres, out int yres);
+        public static int pixGetResolution(IntPtr pix, out int xres, out int yres)
+		{
+			return _implementation.pixGetResolution(pix, out xres, out yres);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetWpl")]
-        public static extern int pixGetWpl(IntPtr pix);
+        public static int pixGetWpl(IntPtr pix)
+		{
+			return _implementation.pixGetWpl(pix);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSetXRes")]
-        public static extern int pixSetXRes(IntPtr pix, int xres);
+        public static int pixSetXRes(IntPtr pix, int xres)
+		{
+			return _implementation.pixSetXRes(pix, xres);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSetYRes")]
-        public static extern int pixSetYRes(IntPtr pix, int yres);
+        public static int pixSetYRes(IntPtr pix, int yres)
+		{
+			return _implementation.pixSetYRes(pix, yres);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSetResolution")]
-        public static extern int pixSetResolution(IntPtr pix, int xres, int yres);
-
-
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixScaleResolution")]
-        public static extern int pixScaleResolution(IntPtr pix, float xscale, float yscale);
-
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetData")]
-        public static extern IntPtr pixGetData(IntPtr pix);
+        public static int pixSetResolution(IntPtr pix, int xres, int yres)
+		{
+			return _implementation.pixSetResolution(pix, xres, yres);
+		}
 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetInputFormat")]
-        public static extern ImageFormat pixGetInputFormat(IntPtr pix);
+        public static int pixScaleResolution(IntPtr pix, float xscale, float yscale)
+		{
+			return _implementation.pixScaleResolution(pix, xscale, yscale);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSetInputFormat")]
-        public static extern int pixSetInputFormat(IntPtr pix, ImageFormat inputFormat);
+        public static IntPtr pixGetData(IntPtr pix)
+		{
+			return _implementation.pixGetData(pix);
+		}
+
+
+        public static ImageFormat pixGetInputFormat(IntPtr pix)
+		{
+			return _implementation.pixGetInputFormat(pix);
+		}
+
+        public static int pixSetInputFormat(IntPtr pix, ImageFormat inputFormat)
+		{
+			return _implementation.pixSetInputFormat(pix, inputFormat);
+		}
         
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixEndianByteSwap")]
-        public static extern int pixEndianByteSwap(IntPtr pix);
+        public static int pixEndianByteSwap(IntPtr pix)
+		{
+			return _implementation.pixEndianByteSwap(pix);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRead")]
-        public static extern IntPtr pixRead(string filename);
+        public static IntPtr pixRead(string filename)
+		{
+			return _implementation.pixRead(filename);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixWrite")]
-        public static extern int pixWrite(string filename, IntPtr handle, ImageFormat format);
+        public static int pixWrite(string filename, IntPtr handle, ImageFormat format)
+		{
+			return _implementation.pixWrite(filename, handle, format);
+		}
         
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetColormap")]
-        public static extern IntPtr pixGetColormap(IntPtr pix);
+        public static IntPtr pixGetColormap(IntPtr pix)
+		{
+			return _implementation.pixGetColormap(pix);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSetColormap")]
-        public static extern int pixSetColormap(IntPtr pix, IntPtr pixCmap);
+        public static int pixSetColormap(IntPtr pix, IntPtr pixCmap)
+		{
+			return _implementation.pixSetColormap(pix, pixCmap);
+		}
         
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroyColormap")]
-        public static extern int pixDestroyColormap(IntPtr pix);
+        public static int pixDestroyColormap(IntPtr pix)
+		{
+			return _implementation.pixDestroyColormap(pix);
+		}
 
         // pixconv.h functions
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixConvertRGBToGray")]
-        public static extern IntPtr pixConvertRGBToGray(IntPtr pix, float rwt, float gwt, float bwt);
+        public static IntPtr pixConvertRGBToGray(IntPtr pix, float rwt, float gwt, float bwt)
+		{
+			return _implementation.pixConvertRGBToGray(pix, rwt, gwt, bwt);
+		}
 
 
         // image analysis and manipulation functions
 
         // skew
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDeskewGeneral")]
-        public static extern IntPtr pixDeskewGeneral(IntPtr pix, int redSweep, float sweepRange, float sweepDelta, int redSearch, int thresh, out float pAngle, out float pConf);
+        public static IntPtr pixDeskewGeneral(IntPtr pix, int redSweep, float sweepRange, float sweepDelta, int redSearch, int thresh, out float pAngle, out float pConf)
+		{
+			return _implementation.pixDeskewGeneral(pix, redSweep, sweepRange, sweepDelta, redSearch, thresh, out pAngle, out pConf);
+		}
         
         // Binarization - src/binarize.c
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOtsuAdaptiveThreshold")]
-        public static extern int pixOtsuAdaptiveThreshold(IntPtr pix, int sx, float sy, float smoothx, int smoothy, float scorefract, out IntPtr ppixth, out IntPtr ppixd);
+        public static int pixOtsuAdaptiveThreshold(IntPtr pix, int sx, float sy, float smoothx, int smoothy, float scorefract, out IntPtr ppixth, out IntPtr ppixd)
+		{
+			return _implementation.pixOtsuAdaptiveThreshold(pix, sx, sy, smoothx, smoothy, scorefract, out ppixth, out ppixd);
+		}
 
         #endregion
 
@@ -114,8 +179,10 @@ namespace Tesseract.Interop
         /// </summary>
         /// <param name="depth">The depth of the pix in bpp, can be 2, 4, or 8</param>
         /// <returns>The pointer to the color map, or null on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapCreate")]
-        public static extern IntPtr pixcmapCreate(int depth);
+        public static IntPtr pixcmapCreate(int depth)
+		{
+			return _implementation.pixcmapCreate(depth);
+		}
 
         /// <summary>
         /// Creates a new colormap of the specified <paramref name="depth"/> with random colors where the first color can optionally be set to black, and the last optionally set to white.
@@ -124,8 +191,10 @@ namespace Tesseract.Interop
         /// <param name="hasBlack">If set to 1 the first color will be black.</param>
         /// <param name="hasWhite">If set to 1 the last color will be white.</param>
         /// <returns>The pointer to the color map, or null on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapCreateRandom")]
-        public static extern IntPtr pixcmapCreateRandom(int depth, int hasBlack, int hasWhite);
+        public static IntPtr pixcmapCreateRandom(int depth, int hasBlack, int hasWhite)
+		{
+			return _implementation.pixcmapCreateRandom(depth, hasBlack, hasWhite);
+		}
         
         /// <summary>
         /// Creates a new colormap of the specified <paramref name="depth"/> with equally spaced gray color values. 
@@ -133,23 +202,29 @@ namespace Tesseract.Interop
         /// <param name="depth">The depth of the pix in bpp, can be 2, 4, or 8</param>
         /// <param name="levels">The number of levels (must be between 2 and 2^<paramref name="depth"/></param>
         /// <returns>The pointer to the colormap, or null on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapCreateLinear")]
-        public static extern IntPtr pixcmapCreateLinear(int depth, int levels);
+        public static IntPtr pixcmapCreateLinear(int depth, int levels)
+		{
+			return _implementation.pixcmapCreateLinear(depth, levels);
+		}
 
         /// <summary>
         /// Performs a deep copy of the color map.
         /// </summary>
         /// <param name="cmap">The pointer to the colormap instance.</param>
         /// <returns>The pointer to the colormap, or null on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapCopy")]
-        public static extern IntPtr pixcmapCopy(IntPtr cmaps);
+        public static IntPtr pixcmapCopy(IntPtr cmaps)
+		{
+			return _implementation.pixcmapCopy(cmaps);
+		}
 
         /// <summary>
         /// Destorys and cleans up any memory used by the color map.
         /// </summary>
         /// <param name="cmap">The pointer to the colormap instance, set to null on success.</param>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapDestroy")]
-        public static extern void pixcmapDestroy(ref IntPtr cmap);
+        public static void pixcmapDestroy(ref IntPtr cmap)
+		{
+			_implementation.pixcmapDestroy(ref cmap);
+		}
         
         // colormap metadata (depth, count, etc)
 
@@ -158,21 +233,27 @@ namespace Tesseract.Interop
         /// </summary>
         /// <param name="cmap">The pointer to the colormap instance.</param>
         /// <returns>Returns the number of color entries in the color map, or 0 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetCount")]
-        public static extern int pixcmapGetCount(IntPtr cmap);
+        public static int pixcmapGetCount(IntPtr cmap)
+		{
+			return _implementation.pixcmapGetCount(cmap);
+		}
 
         /// <summary>
         /// Gets the number of free color entries in the color map.
         /// </summary>
         /// <param name="cmap">The pointer to the colormap instance.</param>
         /// <returns>Returns the number of free color entries in the color map, or 0 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetFreeCount")]
-        public static extern int pixcmapGetFreeCount(IntPtr cmap);
+        public static int pixcmapGetFreeCount(IntPtr cmap)
+		{
+			return _implementation.pixcmapGetFreeCount(cmap);
+		}
         
 
         /// <returns>Returns color maps depth, or 0 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetDepth")]
-        public static extern int pixcmapGetDepth(IntPtr cmap);
+        public static int pixcmapGetDepth(IntPtr cmap)
+		{
+			return _implementation.pixcmapGetDepth(cmap);
+		}
 
         /// <summary>
         /// Gets the minimum pix depth required to support the color map.
@@ -180,8 +261,10 @@ namespace Tesseract.Interop
         /// <param name="cmap">The pointer to the colormap instance.</param>
         /// <param name="minDepth">Returns the minimum depth to support the colormap</param>
         /// <returns>Returns 0 if OK, 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetMinDepth")]
-        public static extern int pixcmapGetMinDepth(IntPtr cmap, out int minDepth);
+        public static int pixcmapGetMinDepth(IntPtr cmap, out int minDepth)
+		{
+			return _implementation.pixcmapGetMinDepth(cmap, out minDepth);
+		}
         
         // colormap - color addition\clearing
 
@@ -190,15 +273,19 @@ namespace Tesseract.Interop
         /// </summary>
         /// <param name="cmap">The pointer to the colormap instance.</param>
         /// <returns>Returns 0 if OK, 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapClear")]
-        public static extern int pixcmapClear(IntPtr cmap);
+        public static int pixcmapClear(IntPtr cmap)
+		{
+			return _implementation.pixcmapClear(cmap);
+		}
 
         /// <summary>
         /// Adds the color to the pix color map if their is room.
         /// </summary>
         /// <returns>Returns 0 if OK, 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapAddColor")]
-        public static extern int pixcmapAddColor(IntPtr cmap, int redValue, int greenValue, int blueValue);
+        public static int pixcmapAddColor(IntPtr cmap, int redValue, int greenValue, int blueValue)
+		{
+			return _implementation.pixcmapAddColor(cmap, redValue, greenValue, blueValue);
+		}
 
         /// <summary>
         /// Adds the specified color if it doesn't already exist, returning the colors index in the data array.
@@ -209,8 +296,10 @@ namespace Tesseract.Interop
         /// <param name="blueValue">The blue value</param>
         /// <param name="colorIndex">The index of the new color if it was added, or the existing color if it already existed.</param>
         /// <returns>Returns 0 for success, 1 for error, 2 for not enough space.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapAddNewColor")]
-        public static extern int pixcmapAddNewColor(IntPtr cmap, int redValue, int greenValue, int blueValue, out int colorIndex);
+        public static int pixcmapAddNewColor(IntPtr cmap, int redValue, int greenValue, int blueValue, out int colorIndex)
+		{
+			return _implementation.pixcmapAddNewColor(cmap, redValue, greenValue, blueValue, out colorIndex);
+		}
 
         /// <summary>
         /// Adds the specified color if it doesn't already exist, returning the color's index in the data array.
@@ -224,8 +313,10 @@ namespace Tesseract.Interop
         /// <param name="blueValue">The blue value</param>
         /// <param name="colorIndex">The index of the new color if it was added, or the existing color if it already existed.</param>
         /// <returns>Returns 0 for success, 1 for error, 2 for not enough space.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapAddNearestColor")]
-        public static extern int pixcmapAddNearestColor(IntPtr cmap, int redValue, int greenValue, int blueValue, out int colorIndex);
+        public static int pixcmapAddNearestColor(IntPtr cmap, int redValue, int greenValue, int blueValue, out int colorIndex)
+		{
+			return _implementation.pixcmapAddNearestColor(cmap, redValue, greenValue, blueValue, out colorIndex);
+		}
 
         /// <summary>
         /// Checks if the color already exists or if their is enough room to add it.
@@ -236,8 +327,10 @@ namespace Tesseract.Interop
         /// <param name="blueValue">The blue value</param>
         /// <param name="usable">Returns 1 if usable; 0 if not.</param>
         /// <returns>Returns 0 if OK, 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapUsableColor")]
-        public static extern int pixcmapUsableColor(IntPtr cmap, int redValue, int greenValue, int blueValue, out int usable);
+        public static int pixcmapUsableColor(IntPtr cmap, int redValue, int greenValue, int blueValue, out int usable)
+		{
+			return _implementation.pixcmapUsableColor(cmap, redValue, greenValue, blueValue, out usable);
+		}
 
         /// <summary>
         /// Adds a color (black\white) if not already there returning it's index through <paramref name="index"/>.
@@ -246,8 +339,10 @@ namespace Tesseract.Interop
         /// <param name="color">The color to add (0 for black; 1 for white)</param>
         /// <param name="index">The index of the color.</param>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapAddBlackOrWhite")]
-        public static extern int pixcmapAddBlackOrWhite(IntPtr cmap, int color, out int index);
+        public static int pixcmapAddBlackOrWhite(IntPtr cmap, int color, out int index)
+		{
+			return _implementation.pixcmapAddBlackOrWhite(cmap, color, out index);
+		}
 
         /// <summary>
         /// Sets the darkest color in the colormap to black, if <paramref name="setBlack"/> is 1. 
@@ -257,8 +352,10 @@ namespace Tesseract.Interop
         /// <param name="setBlack">0 for no operation; 1 to set darket color to black</param>
         /// <param name="setBlack">0 for no operation; 1 to set lightest color to white</param>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapSetBlackAndWhite")]
-        public static extern int pixcmapSetBlackAndWhite(IntPtr cmap, int setBlack, int setWhite);
+        public static int pixcmapSetBlackAndWhite(IntPtr cmap, int setBlack, int setWhite)
+		{
+			return _implementation.pixcmapSetBlackAndWhite(cmap, setBlack, setWhite);
+		}
 
         // color access - color entry access
 
@@ -271,8 +368,10 @@ namespace Tesseract.Interop
         /// <param name="blueValue">The color entry's blue value.</param>
         /// <param name="greenValue">The color entry's green value.</param>
         /// <returns>Returns 0 if OK; 1 if not accessable (caller should check).</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetColor")]
-        public static extern int pixcmapGetColor(IntPtr cmap, int index, out int redValue, out int blueValue, out int greenValue);
+        public static int pixcmapGetColor(IntPtr cmap, int index, out int redValue, out int blueValue, out int greenValue)
+		{
+			return _implementation.pixcmapGetColor(cmap, index, out redValue, out blueValue, out greenValue);
+		}
 
         /// <summary>
         /// Gets the color at the specified index.
@@ -284,8 +383,10 @@ namespace Tesseract.Interop
         /// <param name="index">The index of the color entry.</param>
         /// <param name="color">The color entry as 32 bit value</param>
         /// <returns>Returns 0 if OK; 1 if not accessable (caller should check).</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetColor32")]
-        public static extern int pixcmapGetColor32(IntPtr cmap, int index, out int color);
+        public static int pixcmapGetColor32(IntPtr cmap, int index, out int color)
+		{
+			return _implementation.pixcmapGetColor32(cmap, index, out color);
+		}
 
         /// <summary>
         /// Sets a previously allocated color entry.
@@ -296,45 +397,57 @@ namespace Tesseract.Interop
         /// <param name="blueValue"></param>
         /// <param name="greenValue"></param>
         /// <returns>Returns 0 if OK; 1 if not accessable (caller should check).</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapResetColor")]
-        public static extern int pixcmapResetColor(IntPtr cmap, int index, int redValue, int blueValue, int greenValue);
+        public static int pixcmapResetColor(IntPtr cmap, int index, int redValue, int blueValue, int greenValue)
+		{
+			return _implementation.pixcmapResetColor(cmap, index, redValue, blueValue, greenValue);
+		}
 
         /// <summary>
         /// Gets the index of the color entry with the specified color, return 0 if found; 1 if not.
         /// </summary>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetIndex")]
-        public static extern int pixcmapGetIndex(IntPtr cmap, int redValue, int blueValue, int greenValue, out int index);
+        public static int pixcmapGetIndex(IntPtr cmap, int redValue, int blueValue, int greenValue, out int index)
+		{
+			return _implementation.pixcmapGetIndex(cmap, redValue, blueValue, greenValue, out index);
+		}
 
 
         /// <summary>
         /// Returns 0 if the color exists in the color map; otherwise 1.
         /// </summary>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapHasColor")]
-        public static extern int pixcmapHasColor(IntPtr cmap, int color);
+        public static int pixcmapHasColor(IntPtr cmap, int color)
+		{
+			return _implementation.pixcmapHasColor(cmap, color);
+		}
 
 
         /// <summary>
         /// Returns the number of unique grey colors including black and white.
         /// </summary>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapCountGrayColors")]
-        public static extern int pixcmapCountGrayColors(IntPtr cmap, out int ngray);
+        public static int pixcmapCountGrayColors(IntPtr cmap, out int ngray)
+		{
+			return _implementation.pixcmapCountGrayColors(cmap, out ngray);
+		}
         
         /// <summary>
         /// Finds the index of the color entry with the rank intensity.
         /// </summary>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapCountGrayColors")]
-        public static extern int pixcmapGetRankIntensity(IntPtr cmap, float rankVal, out int index);
+        public static int pixcmapGetRankIntensity(IntPtr cmap, float rankVal, out int index)
+		{
+			return _implementation.pixcmapGetRankIntensity(cmap, rankVal, out index);
+		}
 
 
         /// <summary>
         /// Finds the index of the color entry closest to the specified color.
         /// </summary>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetNearestIndex")]
-        public static extern int pixcmapGetNearestIndex(IntPtr cmap, int rVal, int bVal, int gVal, out int index);
+        public static int pixcmapGetNearestIndex(IntPtr cmap, int rVal, int bVal, int gVal, out int index)
+		{
+			return _implementation.pixcmapGetNearestIndex(cmap, rVal, bVal, gVal, out index);
+		}
 
         /// <summary>
         /// Finds the index of the color entry closest to the specified color.
@@ -343,52 +456,76 @@ namespace Tesseract.Interop
         /// Should only be used on gray colormaps.
         /// </remarks>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetNearestGrayIndex")]
-        public static extern int pixcmapGetNearestGrayIndex(IntPtr cmap, int val, out int index);
+        public static int pixcmapGetNearestGrayIndex(IntPtr cmap, int val, out int index)
+		{
+			return _implementation.pixcmapGetNearestGrayIndex(cmap, val, out index);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetComponentRange")]
-        public static extern int pixcmapGetComponentRange(IntPtr cmap, int component, out int minVal, out int maxVal);
+        public static int pixcmapGetComponentRange(IntPtr cmap, int component, out int minVal, out int maxVal)
+		{
+			return _implementation.pixcmapGetComponentRange(cmap, component, out minVal, out maxVal);
+		}
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetExtremeValue")]
-        public static extern int pixcmapGetExtremeValue(IntPtr cmap, int type, out int rVal, out int gVal, out int bVal);
+        public static int pixcmapGetExtremeValue(IntPtr cmap, int type, out int rVal, out int gVal, out int bVal)
+		{
+			return _implementation.pixcmapGetExtremeValue(cmap, type, out rVal, out gVal, out bVal);
+		}
 
         // color map conversion
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGrayToColor")]
-        public static extern IntPtr pixcmapGrayToColor(int color);
+        public static IntPtr pixcmapGrayToColor(int color)
+		{
+			return _implementation.pixcmapGrayToColor(color);
+		}
 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapColorToGray")]
-        public static extern IntPtr pixcmapColorToGray(IntPtr cmaps, float redWeight, float greenWeight, float blueWeight);
+        public static IntPtr pixcmapColorToGray(IntPtr cmaps, float redWeight, float greenWeight, float blueWeight)
+		{
+			return _implementation.pixcmapColorToGray(cmaps, redWeight, greenWeight, blueWeight);
+		}
 
         // colormap serialization
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapColorToGray")]
-        public static extern int pixcmapToArrays(IntPtr cmap,  out IntPtr redMap, out IntPtr blueMap, out IntPtr greenMap);
+        public static int pixcmapToArrays(IntPtr cmap,  out IntPtr redMap, out IntPtr blueMap, out IntPtr greenMap)
+		{
+			return _implementation.pixcmapToArrays(cmap, out redMap, out blueMap, out greenMap);
+		}
 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapToRGBTable")]
-        public static extern int pixcmapToRGBTable(IntPtr cmap, out IntPtr colorTable, out int colorCount);
+        public static int pixcmapToRGBTable(IntPtr cmap, out IntPtr colorTable, out int colorCount)
+		{
+			return _implementation.pixcmapToRGBTable(cmap, out colorTable, out colorCount);
+		}
 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapSerializeToMemory")]
-        public static extern int pixcmapSerializeToMemory(IntPtr cmap, out int components, out int colorCount, out IntPtr colorData, out int colorDataLength);
+        public static int pixcmapSerializeToMemory(IntPtr cmap, out int components, out int colorCount, out IntPtr colorData, out int colorDataLength)
+		{
+			return _implementation.pixcmapSerializeToMemory(cmap, out components, out colorCount, out colorData, out colorDataLength);
+		}
 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapSerializeToMemory")]
-        public static extern IntPtr pixcmapSerializeToMemory(IntPtr colorData, int colorCount, int colorDataLength);
+        public static IntPtr pixcmapSerializeToMemory(IntPtr colorData, int colorCount, int colorDataLength)
+		{
+			return _implementation.pixcmapSerializeToMemory2(colorData, colorCount, colorDataLength);
+		}
         
         // colormap transformations 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGammaTRC")]
-        public static extern int pixcmapGammaTRC(IntPtr cmap, float gamma, int minVal, int maxVal);
+        public static int pixcmapGammaTRC(IntPtr cmap, float gamma, int minVal, int maxVal)
+		{
+			return _implementation.pixcmapGammaTRC(cmap, gamma, minVal, maxVal);
+		}
 
 
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapContrastTRC")]
-        public static extern int pixcmapContrastTRC(IntPtr cmap, float factor);
+        public static int pixcmapContrastTRC(IntPtr cmap, float factor)
+		{
+			return _implementation.pixcmapContrastTRC(cmap, factor);
+		}
                         
-        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapShiftIntensity")]
-        public static extern int pixcmapShiftIntensity(IntPtr cmap, float fraction);
+        public static int pixcmapShiftIntensity(IntPtr cmap, float fraction)
+		{
+			return _implementation.pixcmapShiftIntensity(cmap, fraction);
+		}
 
 
         #endregion
