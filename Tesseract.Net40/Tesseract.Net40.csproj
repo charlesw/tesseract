@@ -13,9 +13,9 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;LittleEndian,Net40</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>full</DebugType>
@@ -23,8 +23,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;LittleEndian,Net40</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -43,17 +43,25 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\lib\TesseractOcr\liblept168.dll">
-      <Link>x86\liblept168.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\lib\TesseractOcr\libtesseract302.dll">
-      <Link>x86\libtesseract302.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+	<ItemGroup>
+		<Content Include="..\lib\TesseractOcr2012\liblept168-32.dll">
+			<Link>x86\liblept168-32.dll</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\lib\TesseractOcr2012\liblept168-64.dll">
+			<Link>x64\liblept168-64.dll</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\lib\TesseractOcr2012\libtesseract302-32.dll">
+			<Link>x86\libtesseract302-32.dll</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\lib\TesseractOcr2012\libtesseract302-64.dll">
+			<Link>x64\libtesseract302-64.dll</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
     <Compile Include="..\Tesseract.Net20\BitmapHelper.cs">
       <Link>BitmapHelper.cs</Link>
     </Compile>
@@ -84,8 +92,26 @@
     <Compile Include="..\Tesseract.Net20\Interop\LeptonicaApi.cs">
       <Link>Interop\LeptonicaApi.cs</Link>
     </Compile>
+    <Compile Include="..\Tesseract.Net20\Interop\LeptonicaImplementation.cs">
+      <Link>Interop\LeptonicaImplementation.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\Interop\LeptonicaImports32.cs">
+      <Link>Interop\LeptonicaImports32.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\Interop\LeptonicaImports64.cs">
+      <Link>Interop\LeptonicaImports64.cs</Link>
+    </Compile>
     <Compile Include="..\Tesseract.Net20\Interop\MarshalHelper.cs">
       <Link>Interop\MarshalHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\Interop\TesseractImplementation.cs">
+      <Link>Interop\TesseractImplementation.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\Interop\TessImports32.cs">
+      <Link>Interop\TessImports32.cs</Link>
+    </Compile>
+    <Compile Include="..\Tesseract.Net20\Interop\TessImports64.cs">
+      <Link>Interop\TessImports64.cs</Link>
     </Compile>
     <Compile Include="..\Tesseract.Net20\Interop\WindowsLibraryLoader.cs">
       <Link>Interop\WindowsLibraryLoader.cs</Link>
