@@ -6,17 +6,17 @@ This is currently prerelease software as such the public API is subject to chang
 
 ## Dependencies
 
-### Visual Studio 2008 SP1 x86 Runtime 
+### Visual Studio 2012 x86 and x64 Runtimes 
 
-Since tesseract and leptonica binaries are compiled with Visual Studio 2008 SP1 you'll need to ensure you have the 
-Visual Studio 2008 SP1 Runtime installed. This can be found [here](http://www.microsoft.com/en-au/download/details.aspx?id=5582).
+Since tesseract and leptonica binaries are compiled with Visual Studio 2012 you'll need to ensure you have the 
+Visual Studio 2012 Runtime installed. This can be found [here](http://www.microsoft.com/en-us/download/details.aspx?id=30679).
 
 ## Getting started quickly
 
 Note: Compiling the project requires at least MS Visual Studio 11 Express for Desktop or SharpDevelop 4.4.
 
 1. Fork this project (see: https://help.github.com/articles/fork-a-repo)
-2. Ensure you have Visual Studio 2008 SP1 x86 runtime installed (see note above).
+2. Ensure you have Visual Studio 2012 x86 & x64 runtimes installed (see note above).
 2. Download language data files for tesseract 3.02 from http://code.google.com/p/tesseract-ocr/
 3. Build BaseApiTester project
 4. Copy language files into ``BaseApiTester\bin\[config]\tessdata``
@@ -45,6 +45,7 @@ specific language governing permissions and limitations under the License.
 
 A big thanks to GitHub and all of Tesseract's contributors:
 
+* [jakesays](https://github.com/jakesays)
 * [peters](https://github.com/peters)
 * [nguyenq](https://github.com/nguyenq)
 * [Sojin1989](https://github.com/Sojin1989)
