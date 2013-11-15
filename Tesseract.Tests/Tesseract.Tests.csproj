@@ -98,15 +98,19 @@
   <ItemGroup>
     <Content Include="..\lib\TesseractOcr\x64\liblept168.dll">
       <Link>x64\liblept168.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\lib\TesseractOcr\x64\libtesseract302.dll">
       <Link>x64\libtesseract302.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\lib\TesseractOcr\x86\liblept168.dll">
       <Link>x86\liblept168.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\lib\TesseractOcr\x86\libtesseract302.dll">
       <Link>x86\libtesseract302.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Binarization\neo-32bit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
