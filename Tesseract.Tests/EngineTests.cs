@@ -32,5 +32,83 @@ namespace Tesseract.Tests
                 }
             }
         }
+        
+        #region Variable set\get
+        
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public void CanSetBooleanVariable(bool variableValue)
+        {
+        	const string VariableName = "classify_enable_learning";
+        	using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+        		var variableWasSet = engine.SetVariable(VariableName, variableValue);
+        		Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", VariableName);
+        		bool result;
+        		if(engine.TryGetBoolVariable(VariableName, out result)) {
+        			Assert.That(result, Is.EqualTo(variableValue));
+        		} else {
+        			Assert.Fail("Failed to retrieve value for '{0}'.", VariableName);
+        		}
+        	}
+        }
+        
+        [Test]
+        [TestCase("edges_children_count_limit", 45)]
+        [TestCase("edges_children_count_limit", 20)]
+        [TestCase("textord_testregion_left", 20)]
+        [TestCase("textord_testregion_left", -20)]
+        public void CanSetIntegerVariable(string variableName, int variableValue)
+        {
+        	using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+        		var variableWasSet = engine.SetVariable(variableName, variableValue);
+        		Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", variableName);
+        		int result;
+        		if(engine.TryGetIntVariable(variableName, out result)) {
+        			Assert.That(result, Is.EqualTo(variableValue));
+        		} else {
+        			Assert.Fail("Failed to retrieve value for '{0}'.", variableName);
+        		}
+        	}
+        }
+                
+        [Test]
+        [TestCase("edges_boxarea", 0.875)]
+        [TestCase("edges_boxarea", 0.9)]
+        [TestCase("edges_boxarea", -0.9)]
+        public void CanSetDoubleVariable(string variableName, double variableValue)
+        {
+        	using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+        		var variableWasSet = engine.SetVariable(variableName, variableValue);
+        		Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", variableName);
+        		double result;
+        		if(engine.TryGetDoubleVariable(variableName, out result)) {
+        			Assert.That(result, Is.EqualTo(variableValue));
+        		} else {
+        			Assert.Fail("Failed to retrieve value for '{0}'.", variableName);
+        		}
+        	}
+        }
+        
+                
+        [Test]
+        [TestCase("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+        [TestCase("tessedit_char_whitelist", "")]
+        [TestCase("tessedit_char_whitelist", "Test")]
+        public void CanSetStringVariable(string variableName, string variableValue)
+        {
+        	using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+        		var variableWasSet = engine.SetVariable(variableName, variableValue);
+        		Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", variableName);
+        		string result;
+        		if(engine.TryGetStringVariable(variableName, out result)) {
+        			Assert.That(result, Is.EqualTo(variableValue));
+        		} else {
+        			Assert.Fail("Failed to retrieve value for '{0}'.", variableName);
+        		}
+        	}
+        }
+        
+        #endregion
 	}
 }

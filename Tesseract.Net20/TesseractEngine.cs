@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace Tesseract
@@ -33,9 +34,51 @@ namespace Tesseract
 		
 		#region Config
 		
+		/// <summary>
+		/// Sets the value of a string variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The new value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool SetVariable(string name, string value)
 		{
             return Interop.TessApi.BaseApiSetVariable(handle, name, value) != 0;
+		}
+		
+		/// <summary>
+		/// Sets the value of a boolean variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The new value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
+		public bool SetVariable(string name, bool value)
+		{
+			var strEncodedValue = value ? "TRUE" : "FALSE";
+            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+		}
+				
+		/// <summary>
+		/// Sets the value of a integer variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The new value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
+		public bool SetVariable(string name, int value)
+		{
+			var strEncodedValue = value.ToString("D", CultureInfo.InvariantCulture.NumberFormat);
+            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+		}
+		
+		/// <summary>
+		/// Sets the value of a double variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The new value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
+		public bool SetVariable(string name, double value)
+		{
+			var strEncodedValue = value.ToString("R", CultureInfo.InvariantCulture.NumberFormat);
+            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
 		}
 		
 		public bool SetDebugVariable(string name, string value)
@@ -43,10 +86,16 @@ namespace Tesseract
             return Interop.TessApi.BaseApiSetDebugVariable(handle, name, value) != 0;
 		}
 		
+		/// <summary>
+		/// Attempts to retrieve the value for a boolean variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The current value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool TryGetBoolVariable(string name, out bool value)
 		{
 			int val;
-            if (Interop.TessApi.BaseApiGetIntVariable(handle, name, out val) != 0) {
+            if (Interop.TessApi.BaseApiGetBoolVariable(handle, name, out val) != 0) {
 				value = (val != 0);
 				return true;
 			} else {
@@ -55,21 +104,43 @@ namespace Tesseract
 			}
 		}
 		
+		/// <summary>
+		/// Attempts to retrieve the value for an integer variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The current value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool TryGetIntVariable(string name, out int value)
 		{
 			return Interop.TessApi.BaseApiGetIntVariable(handle, name, out value) != 0;
 		}
 		
+		/// <summary>
+		/// Attempts to retrieve the value for a double variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The current value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool TryGetDoubleVariable(string name, out double value)
 		{
             return Interop.TessApi.BaseApiGetDoubleVariable(handle, name, out value) != 0;
 		}	
 		
+		/// <summary>
+		/// Attempts to retrieve the value for a string variable.
+		/// </summary>
+		/// <param name="name">The name of the variable.</param>
+		/// <param name="value">The current value of the variable.</param>
+		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool TryGetStringVariable(string name, out string value)
 		{
-            return Interop.TessApi.BaseApiGetVariableAsString(handle, name, out value) != 0;
+			value = Interop.TessApi.BaseApiGetStringVariable(handle, name);
+			return value != null;
 		}
 
+		/// <summary>
+		/// The default page segmentation mode used by <see cref="Tesseract.TesseractEngine.Process" />.
+		/// </summary>
         public PageSegMode DefaultPageSegMode
         {
             get;

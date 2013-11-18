@@ -83,13 +83,16 @@ namespace Tesseract.Interop
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIGetDoubleVariable")]
 		public static extern int BaseApiGetDoubleVariable(IntPtr handle, string name, out double value);
 		
+		public static string BaseApiGetStringVariable(IntPtr handle, string name)
+		{
+			var resultHandle = BaseApiGetStringVariableInternal(handle, name);
+			
+			return Marshal.PtrToStringAnsi(resultHandle);
+		}
+		
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIGetStringVariable")]
-		public static extern string BaseApiGetStringVariable(IntPtr handle, string name);
+		public static extern IntPtr BaseApiGetStringVariableInternal(IntPtr handle, string name);
 				
-		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIGetStringVariable")]
-		public static extern int BaseApiGetVariableAsString(IntPtr handle, string name, out string val);
-
-        
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPISetPageSegMode")]
         public static extern void BaseAPISetPageSegMode(IntPtr handle, PageSegMode mode);
 
@@ -217,6 +220,6 @@ namespace Tesseract.Interop
         public static extern int PageIteratorBaseline(IntPtr handle, PageIteratorLevel level, out int x1, out int y1, out int x2, out int y2);
 
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorOrientation")]
-        public static extern void PageIteratorOrientation(IntPtr handle, out Orientation orientation, out WritingDirection writing_direction, out TextLineOrder textLineOrder, out float deskew_angle);
+        public static extern void PageIteratorOrientation(IntPtr handle, out Orientation orientation, out WritingDirection writing_direction, out TextLineOrder textLineOrder, out float deskew_angle);		
 	}
 }
