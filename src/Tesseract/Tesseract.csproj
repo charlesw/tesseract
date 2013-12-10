@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{DA780CA0-2606-4259-91C4-3F38C5C90592}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug45</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Tesseract</RootNamespace>
+    <AssemblyName>Tesseract</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile />
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
+  <!-- Dummy config\platform declaration section. This is so the supported configs show up in the ide -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug451|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release451|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug45|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release45|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug20|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release20|AnyCPU' ">
+  </PropertyGroup>
+  <!-- Load the common target, this does the real work for supporting multiple builds -->
+  <Import Project="..\Common.targets" />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="AddNewColorStatus.cs" />
+    <Compile Include="BitmapHelper.cs" />
+    <Compile Include="BitmapToPixConverter.cs" />
+    <Compile Include="LoadLibraryException.cs" />
+    <Compile Include="PixColor.cs" />
+    <Compile Include="DisposableBase.cs" />
+    <Compile Include="Scew.cs" />
+    <Compile Include="ScewSweep.cs" />
+    <Compile Include="TesseractEngine.cs" />
+    <Compile Include="EngineConfig.cs" />
+    <Compile Include="EngineMode.cs" />
+    <Compile Include="ImageFormat.cs" />
+    <Compile Include="Interop\BaseApi.cs" />
+    <Compile Include="Interop\Constants.cs" />
+    <Compile Include="Interop\WindowsLibraryLoader.cs" />
+    <Compile Include="Interop\LeptonicaApi.cs" />
+    <Compile Include="Interop\MarshalHelper.cs" />
+    <Compile Include="LeptonicaException.cs" />
+    <Compile Include="MathHelper.cs" />
+    <Compile Include="Orientation.cs" />
+    <Compile Include="Page.cs" />
+    <Compile Include="PageIterator.cs" />
+    <Compile Include="PageIteratorLevel.cs" />
+    <Compile Include="ElementProperties.cs" />
+    <Compile Include="PageSegMode.cs" />
+    <Compile Include="Pix.cs" />
+    <Compile Include="PixColormap.cs" />
+    <Compile Include="PixConverter.cs" />
+    <Compile Include="PixData.cs" />
+    <Compile Include="PixToBitmapConverter.cs" />
+    <Compile Include="PolyBlockType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rect.cs" />
+    <Compile Include="ResultIterator.cs" />
+    <Compile Include="TesseractException.cs" />
+    <Compile Include="TextLineOrder.cs" />
+    <Compile Include="WritingDirection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\install.ps1">
+      <Link>install.ps1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
