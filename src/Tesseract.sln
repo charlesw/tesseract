@@ -12,19 +12,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\ReadMe.md = ..\ReadMe.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Tests", "Tesseract.Tests\Tesseract.Tests.csproj", "{ABF7DBF7-2358-47C5-9E42-6F1C04E658A5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseApiTester", "BaseApiTester\BaseApiTester.csproj", "{07B09DF6-19B0-477A-A8CE-5D7146EEBDFD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Tests.Console", "Tesseract.Tests.Console\Tesseract.Tests.Console.csproj", "{4D635942-9F51-45C6-BAB0-23AD2E42C99F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract", "Tesseract\Tesseract.csproj", "{DA780CA0-2606-4259-91C4-3F38C5C90592}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8599BCF5-EB0D-4308-9D0D-369928B56A87}"
 	ProjectSection(SolutionItems) = postProject
 		Tesseract.nuspec = Tesseract.nuspec
 		install.ps1 = install.ps1
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{CF53C9F8-1617-47A9-97E0-B0C68F8029D7}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseApiTester", "BaseApiTester\BaseApiTester.csproj", "{07B09DF6-19B0-477A-A8CE-5D7146EEBDFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.WebDemo", "Tesseract.WebDemo\Tesseract.WebDemo.csproj", "{CD9EB9DA-01E8-48CD-B886-C19A229745D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{D8814461-FB10-489F-83CE-8968987784F5}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract", "Tesseract\Tesseract.csproj", "{DA780CA0-2606-4259-91C4-3F38C5C90592}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Tests", "Tesseract.Tests\Tesseract.Tests.csproj", "{ABF7DBF7-2358-47C5-9E42-6F1C04E658A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.Tests.Console", "Tesseract.Tests.Console\Tesseract.Tests.Console.csproj", "{4D635942-9F51-45C6-BAB0-23AD2E42C99F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -136,8 +146,35 @@ Global
 		{07B09DF6-19B0-477A-A8CE-5D7146EEBDFD}.Release35|Any CPU.ActiveCfg = Release35|Any CPU
 		{ABF7DBF7-2358-47C5-9E42-6F1C04E658A5}.Release35|Any CPU.Build.0 = Debug20|Any CPU
 		{ABF7DBF7-2358-47C5-9E42-6F1C04E658A5}.Release35|Any CPU.ActiveCfg = Release35|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug45|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug45|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release45|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release45|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug40|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug40|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release40|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release40|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug20|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug20|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release20|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release20|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug451|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug451|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release451|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release451|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug35|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Debug35|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release35|Any CPU.Build.0 = Debug|Any CPU
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8}.Release35|Any CPU.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07B09DF6-19B0-477A-A8CE-5D7146EEBDFD} = {CF53C9F8-1617-47A9-97E0-B0C68F8029D7}
+		{CD9EB9DA-01E8-48CD-B886-C19A229745D8} = {CF53C9F8-1617-47A9-97E0-B0C68F8029D7}
+		{DA780CA0-2606-4259-91C4-3F38C5C90592} = {D8814461-FB10-489F-83CE-8968987784F5}
+		{ABF7DBF7-2358-47C5-9E42-6F1C04E658A5} = {D8814461-FB10-489F-83CE-8968987784F5}
+		{4D635942-9F51-45C6-BAB0-23AD2E42C99F} = {D8814461-FB10-489F-83CE-8968987784F5}
 	EndGlobalSection
 EndGlobal
