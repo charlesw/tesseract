@@ -2,7 +2,7 @@
 goto DefineLogFiles
 
 :DefineLogFiles
-	set TemporaryLog=Build.Log.txt
+	set TemporaryLog=clean.Log
 	set SuccessLog=Success.%TemporaryLog%
 	set ErrorLog=Error.%TemporaryLog%
 	goto RemoveLogs

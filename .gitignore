@@ -184,3 +184,5 @@ pip-log.txt
 ###############
 
 /src/AssemblyVersionInfo.cs
+
+/*.Log
