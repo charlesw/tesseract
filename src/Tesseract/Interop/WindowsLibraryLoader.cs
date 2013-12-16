@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Web;
 
 namespace Tesseract.Interop
 {
@@ -120,7 +121,15 @@ namespace Tesseract.Interop
                             baseDirectory = Path.GetFullPath(Environment.CurrentDirectory);
                             dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
                             if (dllHandle != IntPtr.Zero) return;
-
+                            
+                            // ASP.NET hack, requires an active context
+                            if(HttpContext.Current != null) {
+                            	var server = HttpContext.Current.Server;
+                            	baseDirectory = Path.GetFullPath(server.MapPath("bin"));
+	                            dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
+	                            if (dllHandle != IntPtr.Zero) return;	                            
+                            }
+                            
                             StringBuilder errorMessage = new StringBuilder();
                             errorMessage.AppendFormat("Failed to find dll \"{0}\", for processor architecture {1}.", dllName, processArch.Architecture);
                             if (processArch.HasWarnings) {
