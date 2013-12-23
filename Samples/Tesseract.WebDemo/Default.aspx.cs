@@ -47,32 +47,25 @@ namespace Tesseract.WebDemo
 		{
             if (imageFile.PostedFile != null && imageFile.PostedFile.ContentLength > 0)
             {
-                try
+            	// for now just fail hard if there's any error however in a propper app I would expect a full demo.
+            	
+                using (var engine = new TesseractEngine(Server.MapPath(@"./tessdata"), "eng", EngineMode.Default))
                 {
-                    using (var engine = new TesseractEngine(Server.MapPath(@"./tessdata"), "eng", EngineMode.Default))
+                    // have to load Pix via a bitmap since Pix doesn't support loading a stream.
+                    using (var image = new System.Drawing.Bitmap(imageFile.PostedFile.InputStream))
                     {
-                        // have to load Pix via a bitmap since Pix doesn't support loading a stream.
-                        using (var image = new System.Drawing.Bitmap(imageFile.PostedFile.InputStream))
+                        using (var pix = PixConverter.ToPix(image))
                         {
-                            using (var pix = PixConverter.ToPix(image))
+                            using (var page = engine.Process(pix))
                             {
-                                using (var page = engine.Process(pix))
-                                {
-                                    meanConfidenceLabel.InnerText = String.Format("{0:P}", page.GetMeanConfidence());
-                                    resultText.InnerText = page.GetText();
-                                }
+                                meanConfidenceLabel.InnerText = String.Format("{0:P}", page.GetMeanConfidence());
+                                resultText.InnerText = page.GetText();
                             }
                         }
                     }
-                    inputPanel.Visible = false;
-                    resultPanel.Visible = true;
                 }
-                catch (Exception e)
-                {
-                    Trace.Warn("Error", "Failed to ocr image, please see error", e);
-                    
-                    // TODO: display error message on UI
-                }
+                inputPanel.Visible = false;
+                resultPanel.Visible = true;
             }
 		}
 

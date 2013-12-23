@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Tesseract;
 
-namespace BaseApiTester
+namespace Tesseract.ConsoleDemo
 {
-    public class FormattedConsoleLogger
+	 public class FormattedConsoleLogger
     {
         const string Tab = "    ";
         private class Scope : DisposableBase
