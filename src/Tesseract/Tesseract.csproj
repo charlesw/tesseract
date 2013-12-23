@@ -93,6 +93,26 @@
       <Link>install.ps1</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\lib\TesseractOcr\x64\liblept168.dll">
+      <Link>x64\liblept168.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\TesseractOcr\x64\libtesseract302.dll">
+      <Link>x64\libtesseract302.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\TesseractOcr\x86\liblept168.dll">
+      <Link>x86\liblept168.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\TesseractOcr\x86\libtesseract302.dll">
+      <Link>x86\libtesseract302.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="x64" />
+    <Folder Include="x86" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

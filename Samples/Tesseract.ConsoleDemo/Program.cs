@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using Tesseract;
 
-namespace BaseApiTester
+namespace Tesseract.ConsoleDemo
 {
 	class Program
 	{
