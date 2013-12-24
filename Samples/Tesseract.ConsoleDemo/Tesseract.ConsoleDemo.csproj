@@ -7,8 +7,9 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Tesseract.ConsoleDemo</RootNamespace>
     <AssemblyName>Tesseract.ConsoleDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,7 +46,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Tesseract">
-      <HintPath>..\Tesseract.WebDemo\packages\Tesseract.1.0.5\lib\net451\Tesseract.dll</HintPath>
+      <HintPath>..\packages\Tesseract.1.0.5\lib\net40\Tesseract.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
