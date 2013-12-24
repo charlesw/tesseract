@@ -14,6 +14,7 @@
     <NoWin32Manifest>False</NoWin32Manifest>
     <DebugType>Full</DebugType>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <NoStdLib>False</NoStdLib>
   </PropertyGroup>
   <!-- Dummy config\platform declaration section. This is so the supported configs show up in the ide -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug451|AnyCPU' ">
@@ -63,6 +64,7 @@
     <Compile Include="Leptonica\BitmapHelperTests.cs" />
     <Compile Include="Leptonica\ColorTests.cs" />
     <Compile Include="Leptonica\ConvertBitmapToPixTests.cs" />
+    <Compile Include="Leptonica\LeptonicaPerformanceTests.cs" />
     <Compile Include="Leptonica\LoadFromFileTests.cs" />
     <Compile Include="Leptonica\PixTests\ImageManipulationTests.cs" />
     <Compile Include="Leptonica\PixTests\PixDataAccessTests.cs" />

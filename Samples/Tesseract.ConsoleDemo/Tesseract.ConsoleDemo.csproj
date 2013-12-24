@@ -46,7 +46,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Tesseract">
-      <HintPath>..\packages\Tesseract.1.0.5\lib\net40\Tesseract.dll</HintPath>
+      <HintPath>..\packages\Tesseract.1.0.6\lib\net40\Tesseract.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using Tesseract.Interop;
 
 namespace Tesseract
 {
@@ -138,15 +139,14 @@ namespace Tesseract
 #endif
 		public static uint GetDataByte(uint* data, int index)
 		{
-#if LittleEndian
-    #if X64
-        	return *((byte*)((ulong)((byte*)data + index) ^ 3));
-    #else
-            return *((byte*)((uint)((byte*)data + index) ^ 3));
-    #endif
-#else
-            return *((byte*)data + index);  
-#endif		
+			// Must do direct size comparison to detect x64 process, since in this will be jited out and results in a lot faster code (e.g. 6x faster for image conversion)
+			if(IntPtr.Size == 8) {
+        		return *((byte*)((ulong)((byte*)data + index) ^ 3));
+			} else {
+            	return *((byte*)((uint)((byte*)data + index) ^ 3));
+			}
+			// Architecture types that are NOT little edian are not currently supported
+            //return *((byte*)data + index);  
 		}
 
 
@@ -157,16 +157,16 @@ namespace Tesseract
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static void SetDataByte(uint* data, int index, uint value)
-		{
-#if LittleEndian
-    #if X64
-    		*(byte*)((ulong)((byte*)data + index) ^ 3) = (byte)value;
-    #else
-            *(byte*)((uint)((byte*)data + index) ^ 3) = (byte)value;
-    #endif
-#else
-			*((byte*)data + index) =  (byte)value;
-#endif	
+		{			
+			// Must do direct size comparison to detect x64 process, since in this will be jited out and results in a lot faster code (e.g. 6x faster for image conversion)
+			if(IntPtr.Size == 8) {
+				*(byte*)((ulong)((byte*)data + index) ^ 3) = (byte)value;
+			} else {
+			 	*(byte*)((uint)((byte*)data + index) ^ 3) = (byte)value;
+			}
+			
+			// Architecture types that are NOT little edian are not currently supported
+			// *((byte*)data + index) =  (byte)value;
 		}
 
 
@@ -177,16 +177,15 @@ namespace Tesseract
       	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static uint GetDataTwoByte(uint* data, int index)
-		{
-#if LittleEndian
-    #if X64
+		{	
+			// Must do direct size comparison to detect x64 process, since in this will be jited out and results in a lot faster code (e.g. 6x faster for image conversion)
+			if(IntPtr.Size == 8) {
                 return *(ushort*)((ulong)((ushort*)data + index) ^ 2);
-    #else
+			} else {
                 return *(ushort*)((uint)((ushort*)data + index) ^ 2);
-    #endif
-#else
-                return *((ushort*)data + index);
-#endif
+			}
+			// Architecture types that are NOT little edian are not currently supported
+            // return *((ushort*)data + index);
 		}
 
 
@@ -198,15 +197,14 @@ namespace Tesseract
 #endif
 		public static void SetDataTwoByte(uint* data, int index, uint value)
 		{
-#if LittleEndian
-    #if X64
-    		*(ushort*)((ulong)((ushort*)data + index) ^ 2) = (ushort)value;
-    #else
-            *(ushort*)((uint)((ushort*)data + index) ^ 2) = (ushort)value;
-    #endif
-#else
-            *((ushort*)data + index) = (ushort)value;
-#endif	
+			// Must do direct size comparison to detect x64 process, since in this will be jited out and results in a lot faster code (e.g. 6x faster for image conversion)
+			if(IntPtr.Size == 8) {
+    			*(ushort*)((ulong)((ushort*)data + index) ^ 2) = (ushort)value;
+			} else {
+           		*(ushort*)((uint)((ushort*)data + index) ^ 2) = (ushort)value;
+			}
+			// Architecture types that are NOT little edian are not currently supported
+            //*((ushort*)data + index) = (ushort)value;
 		}
 
 
