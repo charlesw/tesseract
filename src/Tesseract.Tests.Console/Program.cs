@@ -10,8 +10,16 @@ namespace Tesseract.Tests.Console
     {
         static void Main(string[] args)
         {
-            var testFixture = new Tesseract.Tests.Leptonica.ConvertBitmapToPixTests();
-            testFixture.Convert_BitmapToPix(1);
+        	System.Console.WriteLine("Is 64bit process: {0}", Environment.Is64BitProcess);
+        	
+        	try {
+            var testFixture = new Tesseract.Tests.Leptonica.LeptonicaPerformanceTests();
+            testFixture.ConvertToBitmap();
+        	} catch (Exception e) {
+        		System.Console.WriteLine("Unhandled exception occured: \r\n{0}", e);
+        	}
+            System.Console.WriteLine("Press any key to exit.");
+            System.Console.ReadKey();
         }
     }
 }

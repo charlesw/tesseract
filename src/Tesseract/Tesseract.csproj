@@ -53,6 +53,7 @@
     <Compile Include="AddNewColorStatus.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
+    <Compile Include="Interop\HostProcessInfo.cs" />
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
