@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Tesseract.Internal;
 
 namespace Tesseract
 {
@@ -157,7 +158,7 @@ namespace Tesseract
 				handle = IntPtr.Zero;
 				GC.SuppressFinalize(this);
 				
-				throw new TesseractException("Failed to initialise tesseract engine.");
+				throw new TesseractException(ErrorMessage.Format(1, "Failed to initialise tesseract engine."));
 			}
 		}
 

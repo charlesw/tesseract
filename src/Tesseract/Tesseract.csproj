@@ -53,6 +53,7 @@
     <Compile Include="AddNewColorStatus.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
+    <Compile Include="Internal\ErrorMessage.cs" />
     <Compile Include="Interop\HostProcessInfo.cs" />
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="PixColor.cs" />
@@ -112,6 +113,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Internal" />
     <Folder Include="x64" />
     <Folder Include="x86" />
   </ItemGroup>
