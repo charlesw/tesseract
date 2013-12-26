@@ -15,6 +15,17 @@ namespace Tesseract.Tests
 				
 			}
 		}
+		
+		[Test]
+		public void Initialise_ShouldThrowErrorIfDatapathNotCorrect()
+		{
+			Assert.That(() => {
+				using(var engine = new TesseractEngine(@"./IDontExist", "eng", EngineMode.Default)) {
+					
+					
+				}			            
+			}, Throws.InstanceOf(typeof(TesseractException)));
+		}
 
         [Test]
         public void CanParseText()
