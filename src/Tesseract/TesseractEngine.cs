@@ -140,7 +140,7 @@ namespace Tesseract
 		}
 
 		/// <summary>
-		/// The default page segmentation mode used by <see cref="Tesseract.TesseractEngine.Process" />.
+		/// Gets or sets default <see cref="PageSegMode" /> mode used by <see cref="Tesseract.TesseractEngine.Process" />.
 		/// </summary>
         public PageSegMode DefaultPageSegMode
         {
@@ -162,11 +162,6 @@ namespace Tesseract
 			}
 		}
 
-        public Page Process(Pix image, PageSegMode? pageSegMode = null)
-        {
-            return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
-        }
-
         /// <summary>
         /// Processes the specific image.
         /// </summary>
@@ -174,7 +169,21 @@ namespace Tesseract
         /// You can only have one result iterator open at any one time.
         /// </remarks>
         /// <param name="image">The image to process.</param>
+        /// <param name="pageSegMode">The page layout analyasis method to use.</param>
+        public Page Process(Pix image, PageSegMode? pageSegMode = null)
+        {
+            return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+        }
+
+        /// <summary>
+        /// Processes a specified region in the image using the specified page layout analysis mode.
+        /// </summary>
+        /// <remarks>
+        /// You can only have one result iterator open at any one time.
+        /// </remarks>
+        /// <param name="image">The image to process.</param>
         /// <param name="region">The image region to process.</param>
+        /// <param name="pageSegMode">The page layout analyasis method to use.</param>
         /// <returns>A result iterator</returns>
         public Page Process(Pix image, Rect region, PageSegMode? pageSegMode = null)
         {
