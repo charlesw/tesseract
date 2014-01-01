@@ -12,18 +12,18 @@ namespace Tesseract
 	/// </summary>
 	public class TesseractEngine : DisposableBase
 	{
-		private IntPtr handle;
+		private HandleRef handle;
         private int processCount = 0;
 				
 		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
         {
             DefaultPageSegMode = PageSegMode.Auto;
-			handle = Interop.TessApi.BaseApiCreate();
+            handle = new HandleRef(this, Interop.TessApi.BaseApiCreate());
 			
 			Initialise(datapath, language, engineMode);
 		}
 
-        public IntPtr Handle
+        public HandleRef Handle
         {
             get { return handle; }
         }
@@ -155,7 +155,7 @@ namespace Tesseract
             if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
-				handle = IntPtr.Zero;
+				handle = new HandleRef(this, IntPtr.Zero);
 				GC.SuppressFinalize(this);
 				
 				throw new TesseractException(ErrorMessage.Format(1, "Failed to initialise tesseract engine."));
@@ -240,9 +240,9 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            if (handle != IntPtr.Zero) {
+            if (handle.Handle != IntPtr.Zero) {
                 Interop.TessApi.BaseApiDelete(handle);
-                handle = IntPtr.Zero;
+                handle = new HandleRef(this, IntPtr.Zero);
             }
         }
 

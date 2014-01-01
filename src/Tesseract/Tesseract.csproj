@@ -58,6 +58,8 @@
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
+    <Compile Include="RotationFill.cs" />
+    <Compile Include="RotationMethod.cs" />
     <Compile Include="Scew.cs" />
     <Compile Include="ScewSweep.cs" />
     <Compile Include="TesseractEngine.cs" />
