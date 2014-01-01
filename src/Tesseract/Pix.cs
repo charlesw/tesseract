@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Tesseract
 {
@@ -12,20 +13,34 @@ namespace Tesseract
         public const int DefaultBinarySearchReduction = 2; // binary search part
         public const int DefaultBinaryThreshold = 130;
 
+
+        private static readonly List<int> AllowedDepths = new List<int> { 1, 2, 4, 8, 16, 32 };
+        
+    	/// <summary>
+    	/// Used to lookup image formats by extension.
+    	/// </summary>
+    	private static readonly Dictionary<string, ImageFormat> imageFomatLookup = new Dictionary<string, ImageFormat>
+    		{
+    			{ ".jpg", ImageFormat.JfifJpeg },
+    			{ ".jpeg", ImageFormat.JfifJpeg },
+    			{ ".gif", ImageFormat.Gif },
+    			{ ".tif", ImageFormat.Tiff },
+    			{ ".tiff", ImageFormat.Tiff },
+    			{ ".png", ImageFormat.Png },
+    			{ ".bmp", ImageFormat.Bmp }
+    		};
+    	
         #endregion
 
         #region Fields
 
-        private static readonly List<int> AllowedDepths = new List<int> { 1, 2, 4, 8, 16, 32 };
-
-        private IntPtr handle;
+        private HandleRef handle;
         private PixColormap colormap;
         private readonly int width;
         private readonly int height;
         private readonly int depth;
 
         #endregion
-
 
         #region Create\Load methods
 
@@ -70,12 +85,12 @@ namespace Tesseract
         {
             if (handle == IntPtr.Zero) throw new ArgumentNullException("handle");
 
-            this.handle = handle;
-            this.width = Interop.LeptonicaApi.pixGetWidth(handle);
-            this.height = Interop.LeptonicaApi.pixGetHeight(handle);
-            this.depth = Interop.LeptonicaApi.pixGetDepth(handle);
+            this.handle = new HandleRef(this, handle);
+            this.width = Interop.LeptonicaApi.pixGetWidth(this.handle);
+            this.height = Interop.LeptonicaApi.pixGetHeight(this.handle);
+            this.depth = Interop.LeptonicaApi.pixGetDepth(this.handle);
 
-            var colorMapHandle = Interop.LeptonicaApi.pixGetColormap(handle);
+            var colorMapHandle = Interop.LeptonicaApi.pixGetColormap(this.handle);
             if (colorMapHandle != IntPtr.Zero) {
                 this.colormap = new PixColormap(colorMapHandle);
             }
@@ -122,24 +137,43 @@ namespace Tesseract
             return new PixData(this);
         }
 
-        public IntPtr Handle
+        public HandleRef Handle
         {
             get { return handle; }
         }
 
         #endregion
 
-        #region Methods
+        #region Save methods
 
 
-        public void Save(string filename, ImageFormat format = ImageFormat.Default)
+        /// <summary>
+        /// Saves the image to the specified file.
+        /// </summary>
+        /// <param name="filename">The path to the file.</param>
+        /// <param name="format">The format to use when saving the image, if not specified the file extension is used to guess the format.</param>
+        public void Save(string filename, ImageFormat? format = null)
         {
-            if (Interop.LeptonicaApi.pixWrite(filename, handle, format) != 0) {
+        	ImageFormat actualFormat;
+        	if(!format.HasValue) {
+        		var extension = Path.GetExtension(filename).ToLowerInvariant();
+        		if(!imageFomatLookup.TryGetValue(extension, out actualFormat)) {
+        			// couldn't find matching format, perhaps there is no extension or it's not recognised, fallback to default.
+        			actualFormat = ImageFormat.Default;
+        		}
+        	} else {        		
+        		actualFormat = format.Value;
+        	}
+        	
+        	
+            if (Interop.LeptonicaApi.pixWrite(filename, handle, actualFormat) != 0) {
                 throw new IOException(String.Format("Failed to save image '{0}'.", filename));
             }
         }
 
-        // image manipulation
+        #endregion
+        
+        #region Image manipulation
 
         /// <summary>
         /// Determines the scew angle and if confidence is high enough returns the descewed image as the result, otherwise returns clone of original image.
@@ -239,13 +273,59 @@ namespace Tesseract
             if (resultPixHandle == IntPtr.Zero) throw new TesseractException("Failed to convert to grayscale.");
             return new Pix(resultPixHandle);
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            Interop.LeptonicaApi.pixDestroy(ref handle);
-        }
+        
+		/// <summary>
+		/// Creates a new image by rotating this image about it's centre.
+		/// </summary>
+		/// <remarks>
+		/// Please note the following:
+		/// <list type="bullet">
+		/// <item>
+		/// Rotation will bring in either white or black pixels, as specified by <see cref="fillColor" /> from
+		/// the outside as required.
+		/// </item>
+		/// <item>Above 20 degrees, sampling rotation will be used if shear was requested.</item>
+		/// <item>Colormaps are removed for rotation by area map and shear.</item>
+		/// <item>
+		/// The resulting image can be expanded so that no image pixels are lost. To invoke expansion,
+		/// input the original width and height. For repeated rotation, use of the original width and heigh allows
+		/// expansion to stop at the maximum required size which is a square of side = sqrt(w*w + h*h).
+		/// </item>
+		/// </list>
+		/// <para>
+		/// Please note there is an implicit assumption about RGB component ordering.
+		/// </para>
+		/// </remarks>
+		/// <param name="angle">The angle to rotate by, in radians; clockwise is positive.</param>
+		/// <param name="method">The rotation method to use.</param>
+		/// <param name="fillColor">The fill color to use for pixels that are brought in from the outside.</param>
+		/// <param name="width">The original width; use 0 to avoid embedding</param>
+		/// <param name="height">The original height; use 0 to avoid embedding</param>
+		/// <returns>The image rotated around it's centre.</returns>
+		public Pix Rotate(float angle, RotationMethod method = RotationMethod.AreaMap, RotationFill fillColor = RotationFill.White, int? width = null, int? height = null)
+		{
+			if(width == null) width = this.Width;
+			if(height == null) height = this.Height;
+			var handle = Interop.LeptonicaApi.pixRotate(Handle, angle, method, fillColor, width.Value, height.Value);
+			if(handle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around it's centre.");
+			
+			return new Pix(handle);
+		}
 
         #endregion
+        
+        #region Disposal
+        
+        
+        protected override void Dispose(bool disposing)
+        {
+        	var handle = Handle.Handle;
+            Interop.LeptonicaApi.pixDestroy(ref handle);
+            this.handle = new HandleRef(this, IntPtr.Zero);
+        }
+        
+        #endregion
+        
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Tesseract
@@ -55,7 +56,7 @@ namespace Tesseract
         private void Recognize()
         {            
             if (!runRecognitionPhase) {
-                if (Interop.TessApi.BaseApiRecognize(Engine.Handle, IntPtr.Zero) != 0) {
+        		if (Interop.TessApi.BaseApiRecognize(Engine.Handle, new HandleRef(this, IntPtr.Zero)) != 0) {
                     throw new InvalidOperationException("Recognition of image failed.");
                 }
                 runRecognitionPhase = true;

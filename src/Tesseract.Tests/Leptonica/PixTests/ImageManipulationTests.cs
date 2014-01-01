@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace Tesseract.Tests.Leptonica.PixTests
     [TestFixture]
     public class ImageManipulationTests
     {
+        const string ResultsDirectory = @"Results\ImageManipulation\";
+        
         [Test]
         public void DescewTest()
         {
@@ -20,8 +23,8 @@ namespace Tesseract.Tests.Leptonica.PixTests
                 {
                     Assert.That(scew.Angle, Is.EqualTo(-9.953125F).Within(0.00001));
                     Assert.That(scew.Confidence, Is.EqualTo(3.782913F).Within(0.00001));
-                    Console.Write("Test");
-                    descewedImage.Save("descewedImage.bmp");
+                    
+                    SaveResult(descewedImage, "descewedImage.png");
                 }
             }
         }
@@ -35,14 +38,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
                 {
                     Assert.That(binarizedImage, Is.Not.Null);
                     Assert.That(binarizedImage.Handle, Is.Not.EqualTo(IntPtr.Zero));
-                    binarizedImage.Save("binarizedImage.bmp");
-                }
-
-                using (var binarizedImage = sourcePix.BinarizeOtsuAdaptiveThreshold(200, 200, 10, 10, 0.1F))
-                {
-                    Assert.That(binarizedImage, Is.Not.Null);
-                    Assert.That(binarizedImage.Handle, Is.Not.EqualTo(IntPtr.Zero));
-                    binarizedImage.Save("binarizedImage.bmp");
+                    SaveResult(binarizedImage, "binarizedImage.png");
                 }
             }
         }
@@ -54,8 +50,32 @@ namespace Tesseract.Tests.Leptonica.PixTests
             using (var grayscaleImage = sourcePix.ConvertRGBToGray(1.0F, 1.0F, 1.0F))
             {
                 Assert.That(grayscaleImage.Depth, Is.EqualTo(8));
-                grayscaleImage.Save("grayscaleImage.bmp");
+        		SaveResult(grayscaleImage, "grayscaleImage.jpg");
             }
+        }
+        
+        
+        [Test]
+        [TestCase(45)]
+        public void Rotate_ShouldBeAbleToRotateImageByXDegrees(float angle)
+        {
+        	const string FileNameFormat = "rotation_{0}degrees.jpg";
+        	float angleAsRadians = (float)(angle * Math.PI / 180.0f);
+        	using (var sourcePix = Pix.LoadFromFile(@".\Data\Conversion\photo_rgb_32bpp.tif")) {
+        		using (var result = sourcePix.Rotate(angleAsRadians))
+	            {
+        			// TODO: Visualy confirm successful rotation and then setup an assertion to compare that result is the same.
+        			var filename = String.Format(FileNameFormat, angle);
+        			SaveResult(result, filename);
+	            }
+        	}
+        }
+        
+        private void SaveResult(Pix result, string filename)
+        {
+            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
+        	
+        	result.Save(Path.Combine(ResultsDirectory, filename));
         }
     }
 }
