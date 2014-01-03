@@ -123,13 +123,14 @@ namespace Tesseract.Interop
                             if (dllHandle != IntPtr.Zero) return;
                             
                             // ASP.NET hack, requires an active context
+                            #if !ClientProfile
                             if(HttpContext.Current != null) {
                             	var server = HttpContext.Current.Server;
                             	baseDirectory = Path.GetFullPath(server.MapPath("bin"));
 	                            dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
 	                            if (dllHandle != IntPtr.Zero) return;	                            
                             }
-                            
+                            #endif
                             StringBuilder errorMessage = new StringBuilder();
                             errorMessage.AppendFormat("Failed to find dll \"{0}\", for processor architecture {1}.", dllName, processArch.Architecture);
                             if (processArch.HasWarnings) {

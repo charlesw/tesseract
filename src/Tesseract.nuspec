@@ -17,6 +17,7 @@
 	 <file src="Release20\Tesseract.dll" target="lib\net20" />
 	 <file src="Release35\Tesseract.dll" target="lib\net35" />
 	 <file src="Release40\Tesseract.dll" target="lib\net40" />
+	 <file src="Release40Client\Tesseract.dll" target="lib\net40-client" />
 	 <file src="Release45\Tesseract.dll" target="lib\net45" />
 	 <file src="Release451\Tesseract.dll" target="lib\net451" />
 	 
