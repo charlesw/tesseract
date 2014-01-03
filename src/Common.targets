@@ -48,6 +48,16 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net40</BuildTarget>
+  </PropertyGroup>	
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40Client|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>Net40Client</BuildTarget>
+  </PropertyGroup>
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40Client|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>Net40Client</BuildTarget>
   </PropertyGroup>
 	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
@@ -95,6 +105,14 @@
 	<SupportNet35>True</SupportNet35>
   </PropertyGroup>
 	
+  <PropertyGroup Condition=" '$(BuildTarget)' == 'Net40Client' ">
+    <DefineConstants>$(DefineConstants)ClientProfile;Net40;Net35;Net20</DefineConstants>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR40CLIENT</BuildFlavor>
+	<SupportNet35>True</SupportNet35>
+  </PropertyGroup>
 	
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net35' ">
     <DefineConstants>$(DefineConstants);Net35;Net20</DefineConstants>

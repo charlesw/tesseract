@@ -30,6 +30,10 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40Client|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40Client|AnyCPU' ">
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
@@ -43,7 +47,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Web" Condition=" '$(TargetFrameworkProfile)' != 'Client' "/>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
