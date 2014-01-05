@@ -1,7 +1,7 @@
 ﻿<%@ Page
     Language="C#"
     AutoEventWireup="false"
-    Inherits="Tesseract.WebDemo.Default"
+    Inherits="Tesseract.WebDemo.DefaultPage"
     ValidateRequest="false"
     EnableSessionState="false" %>
 
