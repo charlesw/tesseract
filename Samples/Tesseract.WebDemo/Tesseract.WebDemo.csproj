@@ -67,9 +67,6 @@
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\bootstrap-theme.css" />
@@ -81,7 +78,6 @@
     <None Include="fonts\glyphicons-halflings-regular.svg" />
     <None Include="fonts\glyphicons-halflings-regular.ttf" />
     <None Include="fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Global.asax" />
     <None Include="packages.config" />
     <None Include="Scripts\bootstrap.js" />
     <None Include="Scripts\bootstrap.min.js" />
