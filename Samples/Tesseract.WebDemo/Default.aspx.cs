@@ -22,7 +22,7 @@ namespace Tesseract.WebDemo
 	/// <summary>
 	/// Description of MainForm.
 	/// </summary>
-	public class Default : System.Web.UI.Page
+	public class DefaultPage : System.Web.UI.Page
 	{	
 		#region Data
 
