@@ -145,8 +145,8 @@ namespace Tesseract
 
         public void Dispose()
         {
-        	IntPtr handle = Handle.Handle;
-            Interop.LeptonicaApi.pixcmapDestroy(ref handle);
+        	IntPtr tmpHandle = Handle.Handle;
+            Interop.LeptonicaApi.pixcmapDestroy(ref tmpHandle);
             this.handle = new HandleRef(this, IntPtr.Zero);
         }
     }

@@ -139,6 +139,9 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);$(BuildPlatform);$(BuildFlavor);TRACE;LittleEndian</DefineConstants>
     <OutputPath>.\bin\$(BuildConfig)\$(BuildTarget)</OutputPath>
+  	<!--Remove 1591 from NoWarn to get warnings for missing comments -->
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>

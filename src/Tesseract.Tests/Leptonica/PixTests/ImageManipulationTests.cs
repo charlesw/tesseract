@@ -57,12 +57,16 @@ namespace Tesseract.Tests.Leptonica.PixTests
         
         [Test]
         [TestCase(45)]
+        [TestCase(80)]
+        [TestCase(90)]
+        [TestCase(180)]
+        [TestCase(270)]
         public void Rotate_ShouldBeAbleToRotateImageByXDegrees(float angle)
         {
         	const string FileNameFormat = "rotation_{0}degrees.jpg";
         	float angleAsRadians = (float)(angle * Math.PI / 180.0f);
         	using (var sourcePix = Pix.LoadFromFile(@".\Data\Conversion\photo_rgb_32bpp.tif")) {
-        		using (var result = sourcePix.Rotate(angleAsRadians))
+        		using (var result = sourcePix.Rotate(angleAsRadians, RotationMethod.AreaMap))
 	            {
         			// TODO: Visualy confirm successful rotation and then setup an assertion to compare that result is the same.
         			var filename = String.Format(FileNameFormat, angle);
@@ -70,12 +74,12 @@ namespace Tesseract.Tests.Leptonica.PixTests
 	            }
         	}
         }
-        
+                      
         private void SaveResult(Pix result, string filename)
         {
             if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
         	
-        	result.Save(Path.Combine(ResultsDirectory, filename));
+            result.Save(Path.Combine(ResultsDirectory, filename));
         }
     }
 }
