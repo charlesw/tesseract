@@ -15,11 +15,17 @@
   </metadata>
   <files>
 	 <file src="Release20\Tesseract.dll" target="lib\net20" />
+	 <file src="Release20\Tesseract.xml" target="lib\net20" />
 	 <file src="Release35\Tesseract.dll" target="lib\net35" />
+	 <file src="Release35\Tesseract.xml" target="lib\net35" />
 	 <file src="Release40\Tesseract.dll" target="lib\net40" />
+	 <file src="Release40\Tesseract.xml" target="lib\net40" />
 	 <file src="Release40Client\Tesseract.dll" target="lib\net40-client" />
+	 <file src="Release40Client\Tesseract.xml" target="lib\net40-client" />
 	 <file src="Release45\Tesseract.dll" target="lib\net45" />
+	 <file src="Release45\Tesseract.xml" target="lib\net45" />
 	 <file src="Release451\Tesseract.dll" target="lib\net451" />
+	 <file src="Release451\Tesseract.xml" target="lib\net451" />
 	 
 	 <file src="\Release20\x86\libtesseract302.dll" target="content\x86" />
 	 <file src="\Release20\x86\liblept168.dll" target="content\x86" />	

@@ -12,7 +12,11 @@ namespace Tesseract
         // Skew Defaults
         public const int DefaultBinarySearchReduction = 2; // binary search part
         public const int DefaultBinaryThreshold = 130;
-
+		
+        /// <summary>
+        /// A small angle, in radians, for threshold checking. Equal to about 0.06 degrees.
+        /// </summary>
+        private const float VerySmallAngle = 0.001F;
 
         private static readonly List<int> AllowedDepths = new List<int> { 1, 2, 4, 8, 16, 32 };
         
@@ -106,11 +110,11 @@ namespace Tesseract
             set
             {
                 if (value != null) {
-                    if (Interop.LeptonicaApi.pixSetColormap(Handle, value.Handle) == 0) {
+                    if (Interop.LeptonicaApi.pixSetColormap(handle, value.Handle) == 0) {
                         colormap = value;
                     }
                 } else {
-                    if (Interop.LeptonicaApi.pixDestroyColormap(Handle) == 0) {
+                    if (Interop.LeptonicaApi.pixDestroyColormap(handle) == 0) {
                         colormap = null;
                     }
                 }
@@ -171,6 +175,34 @@ namespace Tesseract
             }
         }
 
+        #endregion
+        
+        #region Clone
+      
+        /// <summary>
+        /// Increments this pix's reference count and returns a reference to the same pix data.
+        /// </summary>
+        /// <remarks>
+        /// A "clone" is simply a reference to an existing pix. It is implemented this way because
+        /// image can be large and hence expensive to copy and extra handles need to be made with a simple
+        /// policy to avoid double frees and memory leaks.
+        /// 
+        /// The general usage protocol is:
+        /// <list type="number">
+        /// 	<item>Whenever you want a new reference to an existing <see cref="Pix" /> call <see cref="Pix.Clone" />.</item>
+        ///     <item>
+        /// 		Always call <see cref="Pix.Dispose" /> on all references. This decrements the reference count and
+        /// 		will destroy the pix when the reference count reaches zero.
+        /// 	</item>
+        /// </list>
+        /// </remarks>
+        /// <returns>The pix with it's reference count incremented.</returns>
+        public Pix Clone()
+		{
+			var clonedHandle = Interop.LeptonicaApi.pixClone(handle);
+			return new Pix(clonedHandle);
+        }
+        
         #endregion
         
         #region Image manipulation
@@ -281,7 +313,7 @@ namespace Tesseract
 		/// Please note the following:
 		/// <list type="bullet">
 		/// <item>
-		/// Rotation will bring in either white or black pixels, as specified by <see cref="fillColor" /> from
+		/// Rotation will bring in either white or black pixels, as specified by <paramref name="fillColor" /> from
 		/// the outside as required.
 		/// </item>
 		/// <item>Above 20 degrees, sampling rotation will be used if shear was requested.</item>
@@ -303,15 +335,28 @@ namespace Tesseract
 		/// <param name="height">The original height; use 0 to avoid embedding</param>
 		/// <returns>The image rotated around it's centre.</returns>
 		public Pix Rotate(float angle, RotationMethod method = RotationMethod.AreaMap, RotationFill fillColor = RotationFill.White, int? width = null, int? height = null)
-		{
+		{			
 			if(width == null) width = this.Width;
 			if(height == null) height = this.Height;
-			var handle = Interop.LeptonicaApi.pixRotate(Handle, angle, method, fillColor, width.Value, height.Value);
-			if(handle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around it's centre.");
 			
-			return new Pix(handle);
+			if(Math.Abs(angle) < VerySmallAngle) return this.Clone();
+			
+			IntPtr resultHandle;
+			
+			var rotations = 2 * angle / Math.PI;
+			if(Math.Abs(rotations - Math.Floor(rotations)) < VerySmallAngle) {
+				// handle special case of orthoganal rotations (90, 180, 270)
+				resultHandle = Interop.LeptonicaApi.pixRotateOrth(handle, (int)rotations);
+			} else {
+				// handle general case			
+				resultHandle = Interop.LeptonicaApi.pixRotate(handle, angle, method, fillColor, width.Value, height.Value);
+			}
+			
+			if(resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around it's centre.");
+			
+			return new Pix(resultHandle);
 		}
-
+		
         #endregion
         
         #region Disposal
@@ -319,8 +364,8 @@ namespace Tesseract
         
         protected override void Dispose(bool disposing)
         {
-        	var handle = Handle.Handle;
-            Interop.LeptonicaApi.pixDestroy(ref handle);
+        	var tmpHandle = handle.Handle;
+            Interop.LeptonicaApi.pixDestroy(ref tmpHandle);
             this.handle = new HandleRef(this, IntPtr.Zero);
         }
         

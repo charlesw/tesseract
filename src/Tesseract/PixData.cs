@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Tesseract.Interop;
 
 namespace Tesseract
 {
 	public unsafe class PixData
 	{
-     
-        public delegate uint Getter(uint* data, int index);
-        public delegate uint Setter(uint* data, int index);
+		public Pix Pix { get; private set; }
 
-        public Pix Pix { get; private set; }
-
+		
 		internal PixData(Pix pix)
-		{
+		{		
             Pix = pix;
-            Data = Interop.LeptonicaApi.pixGetData(pix.Handle);
-            WordsPerLine = Interop.LeptonicaApi.pixGetWpl(pix.Handle);
+            Data = Interop.LeptonicaApi.pixGetData(Pix.Handle);
+            WordsPerLine = Interop.LeptonicaApi.pixGetWpl(Pix.Handle);
 		}
 		
 		/// <summary>
@@ -34,7 +32,7 @@ namespace Tesseract
         /// </summary>
         /// <remarks>
         /// This is required for little-endians in situations where we convert from a serialized byte order that is in raster order, 
-        /// as one typically has in file formats, to one with MSB-to-the-left in each 32-bit word, or v.v. See <seealso cref="http://www.leptonica.com/byte-addressing.html"/>
+        /// as one typically has in file formats, to one with MSB-to-the-left in each 32-bit word, or v.v. See <seealso href="http://www.leptonica.com/byte-addressing.html"/>
         /// </remarks>
         public void EndianByteSwap()
         {

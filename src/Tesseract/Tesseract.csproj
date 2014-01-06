@@ -47,7 +47,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" Condition=" '$(TargetFrameworkProfile)' != 'Client' "/>
+    <Reference Include="System.Web" Condition=" '$(TargetFrameworkProfile)' != 'Client' " />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +58,7 @@
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
     <Compile Include="Internal\ErrorMessage.cs" />
+    <Compile Include="Internal\Guard.cs" />
     <Compile Include="Interop\HostProcessInfo.cs" />
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="PixColor.cs" />

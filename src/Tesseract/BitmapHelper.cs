@@ -11,7 +11,7 @@ namespace Tesseract
         /// <summary>
         /// gets the number of Bits Per Pixel (BPP)
         /// </summary>
-        /// <param name="source"></param>
+        /// <param name="bitmap"></param>
         /// <returns></returns>
         public static int GetBPP(System.Drawing.Bitmap bitmap)
         {

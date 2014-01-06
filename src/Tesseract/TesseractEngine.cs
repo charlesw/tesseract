@@ -140,7 +140,7 @@ namespace Tesseract
 		}
 
 		/// <summary>
-		/// Gets or sets default <see cref="PageSegMode" /> mode used by <see cref="Tesseract.TesseractEngine.Process" />.
+		/// Gets or sets default <see cref="PageSegMode" /> mode used by <see cref="Tesseract.TesseractEngine.Process(Pix, Rect, PageSegMode?)" />.
 		/// </summary>
         public PageSegMode DefaultPageSegMode
         {
@@ -207,7 +207,7 @@ namespace Tesseract
         /// Process the specified bitmap image.
         /// </summary>
         /// <remarks>
-        /// Please consider <see cref="Process(Pix image,PageSegMode? pageSegMode)"/> instead. This is because
+        /// Please consider <see cref="Process(Pix, PageSegMode?)"/> instead. This is because
         /// this method must convert the bitmap to a pix for processing which will add additional overhead.
         /// Leptonica also supports a large number of image pre-processing functions as well.
         /// </remarks>
@@ -223,7 +223,7 @@ namespace Tesseract
         /// Process the specified bitmap image.
         /// </summary>
         /// <remarks>
-        /// Please consider <see cref="Process(Pix image, Rect region, PageSegMode? pageSegMode)"/> instead. This is because
+        /// Please consider <see cref="TesseractEngine.Process(Pix, Rect, PageSegMode?)"/> instead. This is because
         /// this method must convert the bitmap to a pix for processing which will add additional overhead.
         /// Leptonica also supports a large number of image pre-processing functions as well.
         /// </remarks>

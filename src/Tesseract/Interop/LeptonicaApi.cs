@@ -18,6 +18,10 @@ namespace Tesseract.Interop
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCreate")]
         public static unsafe extern IntPtr pixCreate(int width, int height, int depth);
+                
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixClone")]
+        public static unsafe extern IntPtr pixClone(HandleRef pix);
+        
         
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroy")]
         public static extern void pixDestroy(ref IntPtr pix);
@@ -99,9 +103,13 @@ namespace Tesseract.Interop
         public static extern IntPtr pixDeskewGeneral(HandleRef pix, int redSweep, float sweepRange, float sweepDelta, int redSearch, int thresh, out float pAngle, out float pConf);
         
         // rotation
+        
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRotate")]
         public static extern IntPtr pixRotate(HandleRef pixs, float angle, RotationMethod type, RotationFill fillColor, int width, int heigh);
     
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRotateOrth")]
+        public static extern IntPtr pixRotateOrth(HandleRef pixs, int quads);
+            
         // Binarization - src/binarize.c
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOtsuAdaptiveThreshold")]
@@ -143,7 +151,7 @@ namespace Tesseract.Interop
         /// <summary>
         /// Performs a deep copy of the color map.
         /// </summary>
-        /// <param name="cmap">The pointer to the colormap instance.</param>
+        /// <param name="cmaps">The pointer to the colormap instance.</param>
         /// <returns>The pointer to the colormap, or null on error.</returns>
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapCopy")]
         public static extern IntPtr pixcmapCopy(HandleRef cmaps);
@@ -259,7 +267,7 @@ namespace Tesseract.Interop
         /// </summary>
         /// <param name="cmap">The pointer to the colormap instance.</param>
         /// <param name="setBlack">0 for no operation; 1 to set darket color to black</param>
-        /// <param name="setBlack">0 for no operation; 1 to set lightest color to white</param>
+        /// <param name="setWhite">0 for no operation; 1 to set lightest color to white</param>
         /// <returns>Returns 0 if OK; 1 on error.</returns>
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapSetBlackAndWhite")]
         public static extern int pixcmapSetBlackAndWhite(HandleRef cmap, int setBlack, int setWhite);
