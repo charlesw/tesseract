@@ -19,7 +19,7 @@ You will also need to download the language data files for tesseract 3.02 from [
    ensure 'Copy to output directory' is set to Always.
 4. Check out the Samples solution ``~/Samples/Tesseract.Samples.sln`` for a working example
 
-If you run into any issues please check out [this](https://github.com/charlesw/tesseract/wiki/Errors) wiki page which details the common errors or issues encountered before filing a issue.
+If you run into any issues please check out [this](https://github.com/charlesw/tesseract/wiki/Errors) wiki page which details a number common issues and some potential solutions.
 
 ## License
 
