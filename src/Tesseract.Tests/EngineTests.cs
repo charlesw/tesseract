@@ -16,6 +16,14 @@ namespace Tesseract.Tests
 			}
 		}
 		
+		[Test, Ignore("Missing russian language data")]
+		public void Initialise_Rus_ShouldStartEngine()
+		{
+			using(var engine = new TesseractEngine(@"./tessdata", "rus", EngineMode.Default)) {
+				
+				
+			}
+		}
 		[Test]
 		public void Initialise_ShouldThrowErrorIfDatapathNotCorrect()
 		{
