@@ -114,8 +114,8 @@
       <Link>x86\liblept168.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\lib\TesseractOcr\x86\libtesseract302.dll">
-      <Link>x86\libtesseract302.dll</Link>
+    <None Include="..\lib\TesseractOcr\x86\libtesseract303.dll">
+      <Link>x86\libtesseract303.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

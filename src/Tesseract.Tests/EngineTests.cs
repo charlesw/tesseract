@@ -128,6 +128,27 @@ namespace Tesseract.Tests
         	}
         }
         
+        /// <summary>
+        /// As per Bug #52 setting 'classify_bln_numeric_mode' variable to '1' causes the engine to fail on processing.
+        /// </summary>
+        [Test]
+        public void CanSetClassifyBlnNumericModeVariable()
+        {
+        	using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+        		engine.SetVariable("classify_bln_numeric_mode", 1);
+        		
+        		using(var img = Pix.LoadFromFile("./Data/processing/numbers.png")) {
+                    using(var page = engine.Process(img)) {
+                        var text = page.GetText();
+
+                        const string expectedText = "1234567890\n\n";
+
+                        Assert.That(text, Is.EqualTo(expectedText));
+                    }
+                }
+        	}
+        }
+        
         #endregion
 	}
 }
