@@ -152,10 +152,9 @@ namespace Tesseract.Interop
         /// <returns></returns>
         private ProcessArchitectureInfo GetProcessArchitecture()
         {
-            ProcessArchitectureInfo processInfo = new ProcessArchitectureInfo();
-
             // BUGBUG: Will this always be reliable?
             string processArchitecture = Environment.GetEnvironmentVariable(PROCESSOR_ARCHITECTURE);
+            var processInfo = new ProcessArchitectureInfo();
             if (!String.IsNullOrEmpty(processArchitecture)) {
                 // Sanity check
                 processInfo.Architecture = processArchitecture;
@@ -166,8 +165,16 @@ namespace Tesseract.Interop
 
 
             var addressWidth = processorArchitectureAddressWidthPlatforms[processInfo.Architecture];
-            if (addressWidth != IntPtr.Size) {
-                processInfo.Warnings.Add(String.Format("Expected the detected processing architecture of {0} to have an address width of {1} Bytes but was {2} Bytes.", processInfo.Architecture, addressWidth, IntPtr.Size));
+            if (addressWidth != IntPtr.Size) {                
+            	if(String.Equals(processInfo.Architecture, "AMD64", StringComparison.OrdinalIgnoreCase) && IntPtr.Size == 4) {
+                	// fall back to x86 if detected x64 but has an address width of 32 bits.
+            		processInfo.Architecture = "x86";
+                	processInfo.Warnings.Add(String.Format("Expected the detected processing architecture of {0} to have an address width of {1} Bytes but was {2} Bytes, falling back to x86.", processInfo.Architecture, addressWidth, IntPtr.Size));
+            	} else {
+            		// no fallback possible
+                	processInfo.Warnings.Add(String.Format("Expected the detected processing architecture of {0} to have an address width of {1} Bytes but was {2} Bytes.", processInfo.Architecture, addressWidth, IntPtr.Size));
+                	
+                }
             }
 
             return processInfo;

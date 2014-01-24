@@ -27,60 +27,60 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug451|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug451' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>Net451</BuildTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release451|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release451' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net451</BuildTarget>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug45|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug45' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>Net45</BuildTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release45|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release45' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net45</BuildTarget>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug40' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>Net40</BuildTarget>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release40' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net40</BuildTarget>
   </PropertyGroup>	
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40Client|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug40Client' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>Net40Client</BuildTarget>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40Client|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release40Client' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net40Client</BuildTarget>
   </PropertyGroup>	
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug35' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>Net35</BuildTarget>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release35' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net35</BuildTarget>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug20|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug20' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>Net20</BuildTarget>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release20|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release20' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net20</BuildTarget>
   </PropertyGroup>
@@ -171,6 +171,14 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
     <BaseAddress>4194304</BaseAddress>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>False</Prefer32Bit>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+	
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>True</Prefer32Bit>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
