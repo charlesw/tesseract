@@ -113,7 +113,7 @@ namespace Tesseract.Interop
         // Binarization - src/binarize.c
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOtsuAdaptiveThreshold")]
-        public static extern int pixOtsuAdaptiveThreshold(HandleRef pix, int sx, float sy, float smoothx, int smoothy, float scorefract, out IntPtr ppixth, out IntPtr ppixd);
+        public static extern int pixOtsuAdaptiveThreshold(HandleRef pix, int sx, int sy, int smoothx, int smoothy, float scorefract, out IntPtr ppixth, out IntPtr ppixd);
 
         #endregion
 
