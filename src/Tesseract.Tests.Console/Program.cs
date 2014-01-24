@@ -13,8 +13,8 @@ namespace Tesseract.Tests.Console
         	System.Console.WriteLine("Is 64bit process: {0}", Environment.Is64BitProcess);
         	
         	try {
-            var testFixture = new Tesseract.Tests.Leptonica.LeptonicaPerformanceTests();
-            testFixture.ConvertToBitmap();
+            var testFixture = new Tesseract.Tests.Leptonica.PixTests.ImageManipulationTests();
+            testFixture.OtsuBinarizationTest();
         	} catch (Exception e) {
         		System.Console.WriteLine("Unhandled exception occured: \r\n{0}", e);
         	}
