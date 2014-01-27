@@ -104,6 +104,10 @@ namespace Tesseract.Interop
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage2")]
         public static extern void BaseApiSetImage(HandleRef handle, HandleRef pixHandle);
 
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetInputName")]
+        public static extern void BaseApiSetInputName(HandleRef handle, string value);
+
+        
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetRectangle")]
         public static extern void  BaseApiSetRectangle(HandleRef handle, int left, int top, int width, int height);
                 
