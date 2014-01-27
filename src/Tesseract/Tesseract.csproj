@@ -118,6 +118,7 @@
       <Link>x86\libtesseract302.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="ChangeLog.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Internal" />
