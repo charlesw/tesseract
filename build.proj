@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<Version>1.0.8</Version>
+		<Version>1.0.10</Version>
 		<SourceDir>$(MSBuildProjectDirectory)\src</SourceDir>
 		<BuildDir>$(MSBuildProjectDirectory)\bin</BuildDir>
 		<ReleaseDir>$(MSBuildProjectDirectory)\release</ReleaseDir>

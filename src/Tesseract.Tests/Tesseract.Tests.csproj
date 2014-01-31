@@ -124,6 +124,7 @@
   <ItemGroup>
     <Folder Include="Data\processing" />
     <Folder Include="tessdata" />
+    <Folder Include="Data\Ocr" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\lib\TesseractOcr\x86\liblept170.dll">
@@ -132,6 +133,14 @@
     </None>
     <None Include="..\lib\TesseractOcr\x86\libtesseract303.dll">
       <Link>x86\libtesseract303.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Ocr\uzn-test.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Ocr\uzn-test.uzn">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\processing\numbers.png">

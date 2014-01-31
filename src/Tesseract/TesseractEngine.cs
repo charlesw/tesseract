@@ -172,9 +172,9 @@ namespace Tesseract
         /// <param name="pageSegMode">The page layout analyasis method to use.</param>
         public Page Process(Pix image, PageSegMode? pageSegMode = null)
         {
-            return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+            return Process(image, null, new Rect(0, 0, image.Width, image.Height), pageSegMode);
         }
-
+        
         /// <summary>
         /// Processes a specified region in the image using the specified page layout analysis mode.
         /// </summary>
@@ -186,6 +186,37 @@ namespace Tesseract
         /// <param name="pageSegMode">The page layout analyasis method to use.</param>
         /// <returns>A result iterator</returns>
         public Page Process(Pix image, Rect region, PageSegMode? pageSegMode = null)
+        {        	
+            return Process(image, null, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+        }
+
+        
+        /// <summary>
+        /// Processes the specific image.
+        /// </summary>
+        /// <remarks>
+        /// You can only have one result iterator open at any one time.
+        /// </remarks>
+        /// <param name="image">The image to process.</param>
+        /// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
+        /// <param name="pageSegMode">The page layout analyasis method to use.</param>
+        public Page Process(Pix image, string inputName, PageSegMode? pageSegMode = null)
+        {
+            return Process(image, inputName, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+        }
+        
+        /// <summary>
+        /// Processes a specified region in the image using the specified page layout analysis mode.
+        /// </summary>
+        /// <remarks>
+        /// You can only have one result iterator open at any one time.
+        /// </remarks>
+        /// <param name="image">The image to process.</param>
+        /// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
+        /// <param name="region">The image region to process.</param>
+        /// <param name="pageSegMode">The page layout analyasis method to use.</param>
+        /// <returns>A result iterator</returns>
+        public Page Process(Pix image, string inputName, Rect region, PageSegMode? pageSegMode = null)
         {
             if (image == null) throw new ArgumentNullException("image");
             if (region.X1 < 0 || region.Y1 < 0 || region.X2 > image.Width || region.Y2 > image.Height)
@@ -197,7 +228,9 @@ namespace Tesseract
             Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
             Interop.TessApi.BaseApiSetImage(handle, image.Handle);
             Interop.TessApi.BaseApiSetRectangle(handle, region.X1, region.Y1, region.Width, region.Height);
-
+            if(!String.IsNullOrEmpty(inputName)) {
+            	Interop.TessApi.BaseApiSetInputName(handle, inputName);
+            }
             var page = new Page(this);
             page.Disposed += OnIteratorDisposed;
             return page;
@@ -218,6 +251,23 @@ namespace Tesseract
         {
             return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
         }
+        
+        /// <summary>
+        /// Process the specified bitmap image.
+        /// </summary>
+        /// <remarks>
+        /// Please consider <see cref="Process(Pix, String, PageSegMode?)"/> instead. This is because
+        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
+        /// Leptonica also supports a large number of image pre-processing functions as well.
+        /// </remarks>
+        /// <param name="image">The image to process.</param>
+        /// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
+        /// <param name="pageSegMode">The page segmentation mode.</param>
+        /// <returns></returns>
+        public Page Process(Bitmap image, string inputName, PageSegMode? pageSegMode = null)
+        {
+            return Process(image, inputName, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+        }
 
         /// <summary>
         /// Process the specified bitmap image.
@@ -233,8 +283,26 @@ namespace Tesseract
         /// <returns></returns>
         public Page Process(Bitmap image, Rect region, PageSegMode? pageSegMode = null)
         {
+            return Process(image, null, region, pageSegMode);
+        }
+        
+         /// <summary>
+        /// Process the specified bitmap image.
+        /// </summary>
+        /// <remarks>
+        /// Please consider <see cref="TesseractEngine.Process(Pix, String, Rect, PageSegMode?)"/> instead. This is because
+        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
+        /// Leptonica also supports a large number of image pre-processing functions as well.
+        /// </remarks>
+        /// <param name="image">The image to process.</param>
+        /// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
+        /// <param name="region">The region of the image to process.</param>
+        /// <param name="pageSegMode">The page segmentation mode.</param>
+        /// <returns></returns>
+        public Page Process(Bitmap image, string inputName, Rect region, PageSegMode? pageSegMode = null)
+        {
             using (var pix = PixConverter.ToPix(image)) {
-                return Process(pix, region, pageSegMode);
+                return Process(pix, inputName, region, pageSegMode);
             }
         }
 
