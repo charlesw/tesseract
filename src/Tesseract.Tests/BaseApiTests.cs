@@ -9,10 +9,18 @@ namespace Tesseract.Tests
 	public class BaseApiTests
 	{
 		[Test]
-		public void GetVersion_Is302() 
+		public void CanGetVersion() 
 		{
             var version = Interop.TessApi.GetVersion();
-			Assert.That(version, Is.EqualTo("3.02"));
+			Assert.That(version, Is.EqualTo("3.03"));
+		}
+		
+		[Test]
+		public void CanCreateAndSetStringObject()
+		{
+			var strPtr = Interop.TessApi.TessStringCreate("test");
+			var testString = Interop.TessApi.TessStringGetCStr(strPtr);
+			Assert.That(testString, Is.EqualTo("test"));
 		}
 	}
 }

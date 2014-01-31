@@ -84,10 +84,6 @@
       <Link>x64\libtesseract302.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\lib\TesseractOcr\x86\liblept168.dll">
-      <Link>x86\liblept168.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Data\Binarization\neo-32bit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -130,6 +126,10 @@
     <Folder Include="tessdata" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\lib\TesseractOcr\x86\liblept170.dll">
+      <Link>x86\liblept170.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\lib\TesseractOcr\x86\libtesseract303.dll">
       <Link>x86\libtesseract303.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

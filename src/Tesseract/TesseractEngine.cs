@@ -152,7 +152,7 @@ namespace Tesseract
 		
 		private void Initialise(string datapath, string language, EngineMode engineMode)
 		{
-            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
+            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0, false) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
 				handle = new HandleRef(this, IntPtr.Zero);
