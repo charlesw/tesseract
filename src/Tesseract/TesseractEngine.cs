@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -13,14 +14,19 @@ namespace Tesseract
 	public class TesseractEngine : DisposableBase
 	{
 		private HandleRef handle;
-        private int processCount = 0;
-				
+        private int processCount = 0;				
+        
 		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
+			: this(datapath, language, engineMode, null)
+        {
+		}
+		
+        public TesseractEngine(string datapath, string language, EngineMode engineMode, IDictionary<string, object> variables)
         {
             DefaultPageSegMode = PageSegMode.Auto;
             handle = new HandleRef(this, Interop.TessApi.BaseApiCreate());
 			
-			Initialise(datapath, language, engineMode);
+			Initialise(datapath, language, engineMode, variables);
 		}
 
         public HandleRef Handle
@@ -150,8 +156,10 @@ namespace Tesseract
 		
 		#endregion
 		
-		private void Initialise(string datapath, string language, EngineMode engineMode)
+		private void Initialise(string datapath, string language, EngineMode engineMode, IDictionary<string, object> initialArgs)
 		{
+			
+			
             if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
