@@ -40,19 +40,7 @@ namespace Tesseract.Interop
 		
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessDeleteBlockList")]
 		public static extern void DeleteBlockList(IntPtr arr);
-		
-		// String functions
-				
-		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessStringCreate")]
-		public static extern IntPtr TessStringCreate( string value);
-		
-		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessStringDelete")]
-		public static extern void TessStringDelete(IntPtr handle);
-		
-		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessStringGetCStr")]
-		public static extern string TessStringGetCStr(IntPtr handle);
-
-		
+					
 		// Base API		
 		
 		/// <summary>
@@ -70,15 +58,12 @@ namespace Tesseract.Interop
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIDelete")]
 		public static extern void BaseApiDelete(HandleRef ptr);
 		
-		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIInit")]
-		public static extern int BaseApiInit(HandleRef handle,
-		                              string datapath,
-		                              string language,
-		                              int mode,
-		                              IntPtr configs, int configs_size,
-		                              IntPtr vars_vec, int vars_vec_size, 
-		                              IntPtr vars_values, int vars_values_size,
-		                              bool set_only_init_params);
+		
+		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIInit4")]
+		public static extern int BaseApiInit(HandleRef handle, string datapath, string language, int mode,
+		                              string[] configs, int configs_size,
+		                              string[] vars_vec, string[] vars_values, UIntPtr vars_vec_size,
+		                              bool set_only_non_debug_params);
 		
 		
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPISetVariable")]

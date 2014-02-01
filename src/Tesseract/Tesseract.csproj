@@ -59,6 +59,7 @@
     <Compile Include="BitmapToPixConverter.cs" />
     <Compile Include="Internal\ErrorMessage.cs" />
     <Compile Include="Internal\Guard.cs" />
+    <Compile Include="Internal\TessConvert.cs" />
     <Compile Include="Interop\HostProcessInfo.cs" />
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="PixColor.cs" />

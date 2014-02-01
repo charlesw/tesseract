@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -16,11 +17,17 @@ namespace Tesseract
         private int processCount = 0;
 				
 		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
+			: this(datapath, language, engineMode, null, false)
+        {
+		}
+		
+			
+		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default, IDictionary<string, object> initValues = null, bool setOnlyNonDebugVariables = false)
         {
             DefaultPageSegMode = PageSegMode.Auto;
             handle = new HandleRef(this, Interop.TessApi.BaseApiCreate());
 			
-			Initialise(datapath, language, engineMode);
+			Initialise(datapath, language, engineMode, initValues, setOnlyNonDebugVariables);			
 		}
 
         public HandleRef Handle
@@ -138,7 +145,7 @@ namespace Tesseract
 			value = Interop.TessApi.BaseApiGetStringVariable(handle, name);
 			return value != null;
 		}
-
+		
 		/// <summary>
 		/// Gets or sets default <see cref="PageSegMode" /> mode used by <see cref="Tesseract.TesseractEngine.Process(Pix, Rect, PageSegMode?)" />.
 		/// </summary>
@@ -150,9 +157,39 @@ namespace Tesseract
 		
 		#endregion
 		
-		private void Initialise(string datapath, string language, EngineMode engineMode)
+		private void Initialise(string datapath, string language, EngineMode engineMode, IDictionary<string, object> values, bool setOnlyNonDebugVariables)
 		{
-            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0, false) != 0)
+			string[] varNames = null;
+			string[] varValues = null;
+			if(values != null) {
+				varNames = new string[values.Count];
+				varValues = new string[values.Count];
+				int i = 0;
+				foreach (var pair in values) {
+					Guard.Require("values", !String.IsNullOrEmpty(pair.Key), "Variable must have a name.");
+					
+					varNames[i] = pair.Key;
+					string varValue;
+					if(TessConvert.TryToString(pair.Value, out varValue)) {
+						varValues[i] = varValue;
+					} else {
+						if(pair.Value != null) {
+							throw new ArgumentException(
+								String.Format("Variable '{0}': Must not be null.", pair.Key),
+								"values"						
+							);
+						} else {
+							throw new ArgumentException(
+								String.Format("Variable '{0}': The type '{1}' is not supported.", pair.Key, pair.Value.GetType()),
+								"values"						
+							);
+						}
+					}
+					i++;
+				}
+			}
+			
+			if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, null, 0, varNames, varValues, new UIntPtr((uint)varValues.Length), setOnlyNonDebugVariables) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
 				handle = new HandleRef(this, IntPtr.Zero);

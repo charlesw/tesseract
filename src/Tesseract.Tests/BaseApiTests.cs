@@ -14,13 +14,6 @@ namespace Tesseract.Tests
             var version = Interop.TessApi.GetVersion();
 			Assert.That(version, Is.EqualTo("3.03"));
 		}
-		
-		[Test]
-		public void CanCreateAndSetStringObject()
-		{
-			var strPtr = Interop.TessApi.TessStringCreate("test");
-			var testString = Interop.TessApi.TessStringGetCStr(strPtr);
-			Assert.That(testString, Is.EqualTo("test"));
-		}
+				
 	}
 }

@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -25,6 +26,7 @@ namespace Tesseract.Tests
 				
 			}
 		}
+		
 		[Test]
 		public void Initialise_ShouldThrowErrorIfDatapathNotCorrect()
 		{
@@ -34,6 +36,21 @@ namespace Tesseract.Tests
 					
 				}			            
 			}, Throws.InstanceOf(typeof(TesseractException)));
+		}
+		
+		[Test]
+		public void Initialise_CanPassInitVariables()
+		{
+			var initVars = new Dictionary<string, object>() {
+				{ "load_system_dawg", false }
+			};
+			 using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default, initVars)) {
+                bool loadSystemDawg;
+                if(!engine.TryGetBoolVariable("load_system_dawg", out loadSystemDawg)) {
+                	Assert.Fail("Failed to get 'load_system_dawg'.");
+                }
+                Assert.That(loadSystemDawg, Is.False);
+            }
 		}
 
         [Test]
