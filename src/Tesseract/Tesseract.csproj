@@ -103,12 +103,12 @@
       <Link>install.ps1</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\lib\TesseractOcr\x64\liblept168.dll">
-      <Link>x64\liblept168.dll</Link>
+    <None Include="..\lib\TesseractOcr\x64\liblept170.dll">
+      <Link>x64\liblept170.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\lib\TesseractOcr\x64\libtesseract302.dll">
-      <Link>x64\libtesseract302.dll</Link>
+    <None Include="..\lib\TesseractOcr\x64\libtesseract303.dll">
+      <Link>x64\libtesseract303.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\lib\TesseractOcr\x86\liblept170.dll">
