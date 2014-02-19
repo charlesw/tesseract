@@ -7,6 +7,19 @@ namespace Tesseract
 {
     public unsafe sealed class Pix : DisposableBase
     {
+        #region Enums
+
+        //From pix.h
+        enum PixaAccessType
+        {
+            L_INSERT     = 0,    // stuff it in; no copy, clone or copy-clone    
+            L_COPY       = 1,    // make/use a copy of the object               
+            L_CLONE      = 2,    // make/use clone (ref count) of the object    
+            L_COPY_CLONE = 3     // make a new object and fill with with clones of each object in the array(s) 
+        }
+
+        #endregion
+
         #region Constants
 
         // Skew Defaults
@@ -69,6 +82,24 @@ namespace Tesseract
             return new Pix(handle);
         }
 
+        public static Pix[] CreateArray( IntPtr handle )
+        {
+            if( handle == IntPtr.Zero ) throw new ArgumentException( "Pixa handle must not be zero (null).", "handle" );
+
+            var pixAHandle  = new HandleRef( null, handle ); //Not sure if null is always acceptable here
+            var pageCount   = Interop.LeptonicaApi.pixaGetCount( pixAHandle );
+            var pixa        = new Pix[pageCount];
+
+            for ( var x = 0; x < pageCount; x++ )
+            {
+                //pixaGetPix takes either L_COPY or L_CLONE
+                var pixHandle = Interop.LeptonicaApi.pixaGetPix( pixAHandle, x, ((int)PixaAccessType.L_CLONE) );
+                pixa[x] = new Pix( pixHandle );
+            }
+
+            return pixa; 
+        }
+
         public static Pix LoadFromFile(string filename)
         {
             var pixHandle = Interop.LeptonicaApi.pixRead(filename);
@@ -76,6 +107,17 @@ namespace Tesseract
                 throw new IOException(String.Format("Failed to load image '{0}'.", filename));
             }
             return Create(pixHandle);
+        }
+
+        public static Pix[] LoadMultiPageTiffFromFile( string filename )
+        {
+            var pixHandle = Interop.LeptonicaApi.pixaReadMultipageTiff( filename );
+            if( pixHandle == IntPtr.Zero )
+            {
+                throw new IOException( String.Format( "Failed to load image '{0}'.", filename ) );
+            }
+
+            return CreateArray( pixHandle );
         }
         
         /// <summary>

@@ -10,7 +10,7 @@ namespace Tesseract.Interop
         static LeptonicaApi()
         {
             // This may have already been loaded by tesseract but that's fine (EmbeddedDllLoader won't try and load the dll again).
-            WindowsLibraryLoader.Instance.LoadLibrary("liblept168.dll");
+            WindowsLibraryLoader.Instance.LoadLibrary("liblept170.dll");
         }
 
 
@@ -76,6 +76,15 @@ namespace Tesseract.Interop
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRead")]
         public static extern IntPtr pixRead(string filename);
+
+        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff" )]
+        public static extern IntPtr pixaReadMultipageTiff( string filename );
+
+        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount" )]
+        public static extern int pixaGetCount( HandleRef pix );
+
+        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetPix" )]
+        public static extern IntPtr pixaGetPix( HandleRef pixa, int index, int accesstype );
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixWrite")]
         public static extern int pixWrite(string filename, HandleRef handle, ImageFormat format);
