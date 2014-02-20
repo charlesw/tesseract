@@ -77,19 +77,7 @@ namespace Tesseract
 			}
 			return Create(pixHandle);
 		}
-		
-		public static Pix[] LoadMultiPageTiffFromFile(string filename)
-		{
-			IntPtr pixaHandle = IntPtr.Zero;
-			using(var pixA = PixArray.LoadMultiPageTiffFromFile(filename)) {
-				var result = new Pix[pixA.Count];
-				for (int i = 0; i < result.Length; i++) {
-					result[i] = pixA.GetPix(i, PixArrayAccessType.Clone);
-				}
-				return result;
-			}
-		}
-        
+				
 		/// <summary>
 		/// Creates a new pix instance using an existing handle to a pix structure.
 		/// </summary>
