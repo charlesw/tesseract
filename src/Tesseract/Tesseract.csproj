@@ -62,6 +62,8 @@
     <Compile Include="Internal\TessConvert.cs" />
     <Compile Include="Interop\HostProcessInfo.cs" />
     <Compile Include="LoadLibraryException.cs" />
+    <Compile Include="PixArray.cs" />
+    <Compile Include="PixArrayAccessType.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
     <Compile Include="RotationFill.cs" />

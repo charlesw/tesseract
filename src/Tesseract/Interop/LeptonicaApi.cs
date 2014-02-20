@@ -4,15 +4,30 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Tesseract.Interop
-{
+{		
     public unsafe static class LeptonicaApi
     {
         static LeptonicaApi()
         {
             // This may have already been loaded by tesseract but that's fine (EmbeddedDllLoader won't try and load the dll again).
-            WindowsLibraryLoader.Instance.LoadLibrary("liblept170.dll");
+            WindowsLibraryLoader.Instance.LoadLibrary(Constants.LeptonicaDllName);
         }
 
+		#region PixA
+		
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff")]
+        public static extern IntPtr pixaReadMultipageTiff( string filename );
+			
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
+        public static extern int pixaGetCount( HandleRef pixa );
+
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetPix")]
+        public static extern IntPtr pixaGetPix( HandleRef pixa, int index, PixArrayAccessType accesstype );
+				
+        [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaDestroy")]
+        public static extern void pixaDestroy(ref IntPtr pix);
+		
+		#endregion
 
         #region Pix
 
@@ -25,9 +40,6 @@ namespace Tesseract.Interop
         
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroy")]
         public static extern void pixDestroy(ref IntPtr pix);
-
-        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaDestroy" )]
-        public static extern void pixaDestroy( ref IntPtr pix );
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetWidth")]
         public static extern int pixGetWidth(HandleRef pix);
@@ -79,15 +91,6 @@ namespace Tesseract.Interop
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRead")]
         public static extern IntPtr pixRead(string filename);
-
-        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff" )]
-        public static extern IntPtr pixaReadMultipageTiff( string filename );
-
-        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount" )]
-        public static extern int pixaGetCount( HandleRef pix );
-
-        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetPix" )]
-        public static extern IntPtr pixaGetPix( HandleRef pixa, int index, int accesstype );
 
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixWrite")]
         public static extern int pixWrite(string filename, HandleRef handle, ImageFormat format);
