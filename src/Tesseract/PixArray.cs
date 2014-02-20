@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Tesseract.Internal;
@@ -9,7 +11,7 @@ namespace Tesseract
 	/// <summary>
 	/// Represents an array of <see cref="Pix"/>.
 	/// </summary>
-	public class PixArray : DisposableBase
+	public class PixArray : DisposableBase, IEnumerable<Pix>
 	{
 		#region Static Constructors
 		
@@ -31,6 +33,122 @@ namespace Tesseract
 		
 		#endregion
 		
+		#region Enumerator implementation
+		
+		/// <summary>
+		/// Handles enumerating through the <see cref="Pix"/> in the PixArray.
+		/// </summary>
+		private class PixArrayEnumerator : DisposableBase, IEnumerator<Pix>
+		{
+			#region Fields
+			
+			private readonly PixArray array;
+			private readonly Pix[] items;
+			private Pix current;
+			private int index;
+			private readonly int version;
+			
+			#endregion
+			
+			#region Constructor
+			
+			public PixArrayEnumerator(PixArray array)
+			{
+				this.array = array;
+				this.version = array.version;
+				this.items = new Pix[array.Count];
+				this.index = 0;
+				this.current = null;
+			}
+		
+			#endregion
+			
+			#region Enumerator Implementation
+						
+			/// <inheritdoc/>
+			public bool MoveNext()
+			{
+				VerifyArrayUnchanged();
+				VerifyNotDisposed();
+				
+				if(index < items.Length) {
+					if(items[index] == null) {
+						items[index] = array.GetPix(index);
+					}
+					current = items[index];
+					index++;
+					return true;
+				} else {
+					index = items.Length + 1;
+					current = null;
+					return false;
+				}
+			}
+						
+			/// <inheritdoc/>
+			public Pix Current {
+				get {
+					VerifyArrayUnchanged();
+					VerifyNotDisposed();
+										
+					return current;
+				}
+			}
+			
+			// IEnumerator imp
+			
+			/// <inheritdoc/>
+			void IEnumerator.Reset()
+			{
+				VerifyArrayUnchanged();
+				VerifyNotDisposed();
+				
+				index = 0;
+				current = null;
+			}
+			
+			/// <inheritdoc/>
+			object IEnumerator.Current {
+				get {
+					// note: Only the non-generic requires an exception check according the MSDN docs (Generic version just undefined if it's not currently pointing to an item). Go figure.
+					if(index == 0 || index == items.Length + 1) {
+						throw new InvalidOperationException("The enumerator is positioned either before the first item or after the last item .");
+					}
+					
+					return Current;
+				}
+			}
+			
+			// Helpers
+			
+			/// <inheritdoc/>
+			private void VerifyArrayUnchanged()
+			{				
+				if(version != array.version) {
+					throw new InvalidOperationException("PixArray was modified; enumeration operation may not execute.");
+				}
+			}
+			
+			#endregion	
+			
+			#region Disposal
+			
+			protected override void Dispose(bool disposing)
+			{
+				if(disposing) {
+					for (int i = 0; i < items.Length; i++) {
+						items[i].Dispose();
+						items[i] = null;
+					}
+				}
+			}
+			
+			#endregion		
+			
+		}
+		
+		#endregion
+		
 		#region Fields
 		
 		/// <summary>
@@ -38,6 +156,7 @@ namespace Tesseract
 		/// </summary>
 		private HandleRef _handle;
 		private int _count;
+		private int version;
 		
 		#endregion
 		
@@ -46,6 +165,7 @@ namespace Tesseract
 		private PixArray(IntPtr handle)
 		{
 			_handle = new HandleRef(this, handle);
+			version = 1;
 			
 			// These will need to be updated whenever the PixA structure changes (i.e. a Pix is added or removed) though at the moment that isn't a problem.
 			_count = Interop.LeptonicaApi.pixaGetCount(_handle);
@@ -89,7 +209,28 @@ namespace Tesseract
 			}
 			return Pix.Create(pixHandle);
 		}
-						
+
+		/// <summary>
+		/// Returns a <see cref="IEnumerator{Pix}"/> that iterates the the array of <see cref="Pix"/>.
+		/// </summary>
+		/// <remarks>
+		/// When done with the enumerator you must call <see cref="IEnumerator{Pix}.Dispose()"/> to release any unmanaged resources.
+		/// However if your using the enumerator in a foreach loop, this is done for you automatically by .Net. This also means
+		/// that any <see cref="Pix"/> returned from the enumerator cannot safely be used outside a foreach loop (or after Dispose has been
+		/// called on the enumerator). If you do indeed need the pix after the enumerator has been disposed of you must clone it using 
+		/// <see cref="Pix.Clone()"/>. 
+		/// </remarks>
+		/// <returns>A <see cref="IEnumerator{Pix}"/> that iterates the the array of <see cref="Pix"/>.</returns>
+		public IEnumerator<Pix> GetEnumerator()
+		{
+			return new PixArrayEnumerator(this);
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return new PixArrayEnumerator(this);
+		}					
+		
 		protected override void Dispose(bool disposing)
 		{
 			IntPtr handle = _handle.Handle;
