@@ -26,6 +26,9 @@ namespace Tesseract.Interop
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroy")]
         public static extern void pixDestroy(ref IntPtr pix);
 
+        [DllImport( Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaDestroy" )]
+        public static extern void pixaDestroy( ref IntPtr pix );
+
         [DllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetWidth")]
         public static extern int pixGetWidth(HandleRef pix);
 

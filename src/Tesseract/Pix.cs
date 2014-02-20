@@ -111,13 +111,15 @@ namespace Tesseract
 
         public static Pix[] LoadMultiPageTiffFromFile( string filename )
         {
-            var pixHandle = Interop.LeptonicaApi.pixaReadMultipageTiff( filename );
-            if( pixHandle == IntPtr.Zero )
+            var pixaHandle = Interop.LeptonicaApi.pixaReadMultipageTiff( filename );
+            if( pixaHandle == IntPtr.Zero )
             {
                 throw new IOException( String.Format( "Failed to load image '{0}'.", filename ) );
             }
 
-            return CreateArray( pixHandle );
+            var pixArray = CreateArray( pixaHandle );
+            Interop.LeptonicaApi.pixaDestroy( ref pixaHandle );
+            return pixArray;
         }
         
         /// <summary>
