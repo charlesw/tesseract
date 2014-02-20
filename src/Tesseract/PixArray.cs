@@ -137,8 +137,10 @@ namespace Tesseract
 			{
 				if(disposing) {
 					for (int i = 0; i < items.Length; i++) {
-						items[i].Dispose();
-						items[i] = null;
+						if(items[i] != null) {
+							items[i].Dispose();
+							items[i] = null;
+						}
 					}
 				}
 			}
