@@ -189,7 +189,7 @@ namespace Tesseract
 				}
 			}
 			
-			if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, null, 0, varNames, varValues, new UIntPtr((uint)varValues.Length), setOnlyNonDebugVariables) != 0)
+			if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, null, 0, varNames, varValues,  new UIntPtr(  varValues != null ? (uint)varValues.Length : 0 ), setOnlyNonDebugVariables) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
 				handle = new HandleRef(this, IntPtr.Zero);
