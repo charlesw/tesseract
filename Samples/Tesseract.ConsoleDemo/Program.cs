@@ -31,27 +31,28 @@ namespace Tesseract.ConsoleDemo
 
                                 using (var iter = page.GetIterator()) {
                                     iter.Begin();
-                                    do {
-                                        if (i % 2 == 0) {
-                                            using (logger.Begin("Line {0}", i)) {
-                                                do {
-                                                    using (logger.Begin("Word Iteration")) {
-                                                        if (iter.IsAtBeginningOf(PageIteratorLevel.Block)) {
-                                                            logger.Log("New block");
-                                                        }
-                                                        if (iter.IsAtBeginningOf(PageIteratorLevel.Para)) {
-                                                            logger.Log("New paragraph");
-                                                        }
-                                                        if (iter.IsAtBeginningOf(PageIteratorLevel.TextLine)) {
-                                                            logger.Log("New line");
-                                                        }
-                                                        logger.Log("word: " + iter.GetText(PageIteratorLevel.Word));
+									do {
+	                                    do {
+                                            do {
+												do {
+                                                    if (iter.IsAtBeginningOf(PageIteratorLevel.Block)) {
+                                                        logger.Log("New block");
                                                     }
-                                                } while (iter.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
-                                            }
-                                        }
-                                        i++;
-                                    } while (iter.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
+                                                    if (iter.IsAtBeginningOf(PageIteratorLevel.Para)) {
+                                                        logger.Log("New paragraph");
+                                                    }
+                                                    if (iter.IsAtBeginningOf(PageIteratorLevel.TextLine)) {
+                                                        logger.Log("New line");
+                                                    }
+													if (iter.IsAtBeginningOf(PageIteratorLevel.Word)) {
+                                                        logger.Log("New word");
+                                                    }
+                                                    logger.Log(iter.GetText(PageIteratorLevel.Symbol));
+												} while (iter.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
+                                            } while (iter.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
+	                                    } while (iter.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
+									} while(iter.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
+									
                                 }
                             }
                         }
