@@ -23,7 +23,6 @@ namespace Tesseract.ConsoleDemo
                 using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
                     using (var img = Pix.LoadFromFile(testImagePath)) {
                         using (logger.Begin("Process image")) {
-                            var i = 1;
                             using (var page = engine.Process(img)) {
                                 var text = page.GetText();
                                 logger.Log("Text: {0}", text);
@@ -51,8 +50,7 @@ namespace Tesseract.ConsoleDemo
 												} while (iter.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
                                             } while (iter.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
 	                                    } while (iter.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
-									} while(iter.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
-									
+									} while(iter.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));									
                                 }
                             }
                         }

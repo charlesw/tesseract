@@ -66,8 +66,21 @@ namespace Tesseract.Interop
 		                              bool set_only_non_debug_params);
 		
 		
+		public static int BaseApiSetVariable(HandleRef handle, string name, string value)
+		{
+			IntPtr valuePtr = IntPtr.Zero;
+			try {
+				valuePtr = MarshalHelper.StringToPtr(value, Encoding.UTF8);
+				return BaseApiSetVariableInternal(handle, name, valuePtr);
+			} finally {
+				if(valuePtr != IntPtr.Zero) {
+					Marshal.FreeHGlobal(valuePtr);
+				}
+			}
+		}
+		
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPISetVariable")]
-		public static extern int BaseApiSetVariable(HandleRef handle, string name, string value);
+		private static extern int BaseApiSetVariableInternal(HandleRef handle, string name, IntPtr value);
 		
 		
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPISetDebugVariable")]
@@ -86,7 +99,7 @@ namespace Tesseract.Interop
 		{
 			var resultHandle = BaseApiGetStringVariableInternal(handle, name);
 			
-			return Marshal.PtrToStringAnsi(resultHandle);
+			return MarshalHelper.PtrToString(resultHandle, Encoding.UTF8);
 		}
 		
 		[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint="TessBaseAPIGetStringVariable")]

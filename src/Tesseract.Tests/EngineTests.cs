@@ -169,6 +169,7 @@ namespace Tesseract.Tests
 		[TestCase("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")]
 		[TestCase("tessedit_char_whitelist", "")]
 		[TestCase("tessedit_char_whitelist", "Test")]
+		[TestCase("tessedit_char_whitelist", "chinese 漢字")] // Issue 68
 		public void CanSetStringVariable(string variableName, string variableValue)
 		{
 			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
