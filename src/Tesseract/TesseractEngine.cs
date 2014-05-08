@@ -187,7 +187,7 @@ namespace Tesseract
         /// <returns>A result iterator</returns>
         public Page Process(Pix image, Rect region, PageSegMode? pageSegMode = null)
         {        	
-            return Process(image, null, new Rect(0, 0, image.Width, image.Height), pageSegMode);
+            return Process(image, null, region, pageSegMode);
         }
 
         
