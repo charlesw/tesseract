@@ -21,6 +21,10 @@ You will also need to download the language data files for tesseract 3.02 from [
 
 If you run into any issues please check out [this](https://github.com/charlesw/tesseract/wiki/Errors) wiki page which details a number common issues and some potential solutions.
 
+## Note for contributors
+
+Please create your pull requests to target the "develop" branch. "Master" is only for released code. Thank you.
+
 ## License
 
 Copyright 2012 Charles Weld.
