@@ -45,9 +45,6 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Tesseract">
-      <HintPath>..\packages\Tesseract.1.0.6\lib\net40\Tesseract.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormattedConsoleLogger.cs" />
@@ -55,8 +52,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\src\lib\TesseractOcr\x64\liblept170.dll">
+      <Link>x64\liblept170.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\src\lib\TesseractOcr\x64\libtesseract303.dll">
+      <Link>x64\libtesseract303.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\src\lib\TesseractOcr\x86\liblept170.dll">
+      <Link>x86\liblept170.dll</Link>
+    </None>
+    <None Include="..\..\src\lib\TesseractOcr\x86\libtesseract303.dll">
+      <Link>x86\libtesseract303.dll</Link>
+    </None>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="phototest.tif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -87,21 +97,17 @@
     <None Include="tessdata\eng.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="x64\liblept168.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="x64\libtesseract302.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="x86\liblept168.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="x86\libtesseract302.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="x64" />
+    <Folder Include="x86" />
     <Folder Include="tessdata" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Tesseract\Tesseract.csproj">
+      <Project>{DA780CA0-2606-4259-91C4-3F38C5C90592}</Project>
+      <Name>Tesseract</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
