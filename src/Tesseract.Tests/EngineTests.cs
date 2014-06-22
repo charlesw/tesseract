@@ -52,6 +52,31 @@ namespace Tesseract.Tests
                 }
             }
         }
+				
+		[Test]
+		public void CanParseDifferentRegionsInSameImage()
+		{
+			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+				using(var img = Pix.LoadFromFile("./phototest.tif")) {
+					using(var page = engine.Process(img, Rect.FromCoords(0, 0, img.Width, 188))) {
+						var region1Text = page.GetText();
+						
+						const string expectedTextRegion1 =
+							"This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\n";
+						
+						Assert.That(region1Text, Is.EqualTo(expectedTextRegion1));
+						
+						page.RegionOfInterest =  Rect.FromCoords(0, 188, img.Width, img.Height);
+						
+						var region2Text = page.GetText();
+						const string expectedTextRegion2 =
+							"The quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
+						
+						Assert.That(region2Text, Is.EqualTo(expectedTextRegion2));
+					}
+				}
+			}
+		}
         
         [Test]
         public void CanParseUznFile()

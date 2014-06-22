@@ -9,14 +9,41 @@ namespace Tesseract
     public sealed class Page : DisposableBase
     {
         private bool runRecognitionPhase;
-
+		private Rect regionOfInterest;
+		
+		
         public TesseractEngine Engine { get; private set; }
+		public Pix Image { get; private set; }
 
-        internal Page(TesseractEngine engine)
+        internal Page(TesseractEngine engine, Pix image, Rect regionOfInterest)
         {
             Engine = engine;
+			Image = image;
+			RegionOfInterest = regionOfInterest;
         }
-
+		
+		/// <summary>
+		/// The current region of interest being parsed.
+		/// </summary>
+		public Rect RegionOfInterest {
+			get {
+				return regionOfInterest;
+			}
+			set {
+				if (value.X1 < 0 || value.Y1 < 0 || value.X2 > Image.Width || value.Y2 > Image.Height)
+                	throw new ArgumentException("The region of interest to be processed must be within the image bounds.", "value");
+				
+				if(regionOfInterest != value) {					
+					regionOfInterest = value;
+					
+					// update region of interest in image
+					Interop.TessApi.BaseApiSetRectangle(Engine.Handle, regionOfInterest.X1, regionOfInterest.Y1, regionOfInterest.Width, regionOfInterest.Height);
+					
+					// request rerun of recognition on the next call that requires recognition
+					runRecognitionPhase = true;
+				}
+			}
+		}
        
         public PageIterator AnalyseLayout()
         {

@@ -227,11 +227,10 @@ namespace Tesseract
 
             Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
             Interop.TessApi.BaseApiSetImage(handle, image.Handle);
-            Interop.TessApi.BaseApiSetRectangle(handle, region.X1, region.Y1, region.Width, region.Height);
             if(!String.IsNullOrEmpty(inputName)) {
             	Interop.TessApi.BaseApiSetInputName(handle, inputName);
             }
-            var page = new Page(this);
+            var page = new Page(this, image, region);
             page.Disposed += OnIteratorDisposed;
             return page;
         }
