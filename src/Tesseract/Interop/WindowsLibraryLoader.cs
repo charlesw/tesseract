@@ -126,7 +126,7 @@ namespace Tesseract.Interop
                             #if !ClientProfile
                             if(HttpContext.Current != null) {
                             	var server = HttpContext.Current.Server;
-                            	baseDirectory = Path.GetFullPath(server.MapPath("bin"));
+                            	baseDirectory = Path.GetFullPath(server.MapPath("~/bin"));
 	                            dllHandle = LoadLibraryInternal(dllName, baseDirectory, processArch);
 	                            if (dllHandle != IntPtr.Zero) return;	                            
                             }

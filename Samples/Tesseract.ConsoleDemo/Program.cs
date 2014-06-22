@@ -71,7 +71,7 @@ namespace Tesseract.ConsoleDemo
 
         private class ResultPrinter
         {
-            private FormattedConsoleLogger logger;
+            readonly FormattedConsoleLogger logger;
 
             public ResultPrinter(FormattedConsoleLogger logger)
             {
