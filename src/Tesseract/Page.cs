@@ -8,9 +8,8 @@ namespace Tesseract
 {
     public sealed class Page : DisposableBase
     {
-        private bool runRecognitionPhase;
-		private Rect regionOfInterest;
-		
+        bool runRecognitionPhase;
+		Rect regionOfInterest;
 		
         public TesseractEngine Engine { get; private set; }
 		public Pix Image { get; private set; }
@@ -40,7 +39,7 @@ namespace Tesseract
 					Interop.TessApi.BaseApiSetRectangle(Engine.Handle, regionOfInterest.X1, regionOfInterest.Y1, regionOfInterest.Width, regionOfInterest.Height);
 					
 					// request rerun of recognition on the next call that requires recognition
-					runRecognitionPhase = true;
+					runRecognitionPhase = false;
 				}
 			}
 		}
