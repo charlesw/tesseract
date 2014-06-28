@@ -17,8 +17,8 @@ namespace Tesseract.Internal
 		[DebuggerHidden]
 		public static void RequireNotNullOrEmpty(string argName, string value)
 		{
-			if(!String.IsNullOrEmpty(value)) {
-				throw new ArgumentException(String.Format("Argument {0} must not be null.", value));
+			if(String.IsNullOrEmpty(value)) {
+				throw new ArgumentException(String.Format("Argument {0} must not be null or empty.", argName));
 			}
 		}
 	}

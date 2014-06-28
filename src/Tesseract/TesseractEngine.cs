@@ -1,22 +1,61 @@
 ﻿
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Security;
 using Tesseract.Internal;
 
 namespace Tesseract
 {
 	/// <summary>
-	/// Description of Engine.
+	/// The tesseract OCR engine.
 	/// </summary>
 	public class TesseractEngine : DisposableBase
-	{
+	{		
+		/// <summary>
+		/// Ties the specified pix to the lifecycle of a page.
+		/// </summary>
+		class PageDisposalHandle
+		{
+			readonly Page page;
+			readonly Pix pix;
+			
+			public PageDisposalHandle(Page page, Pix pix)
+			{
+				this.page = page;
+				this.pix = pix;
+				page.Disposed += OnPageDisposed;
+			}
+
+			void OnPageDisposed(object sender, System.EventArgs e)
+			{
+				
+				
+				page.Disposed -= OnPageDisposed;
+			}
+		}
+		
 		private HandleRef handle;
         private int processCount = 0;
 				
+        /// <summary>
+        /// Creates a new instance of <see cref="TesseractEngine"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="datapath"/> parameter should point to the directory that contains the 'tessdata' folder
+		/// for example if your tesseract language data is installed in <c>C:\Tesseract\tessdata</c> the value of datapath should
+        /// be <c>C:\Tesseract</c>. Note that tesseract will use the value of the <c>TESSDATA_PREFIX</c> environment variable if defined,
+        /// effectively ignoring the value of <paramref name="datapath"/> parameter.
+		/// </para>
+        /// </remarks>
+        /// <param name="datapath">The path to the parent directory that contains the 'tessdata' directory, ignored if the <c>TESSDATA_PREFIX</c> environment variable is defined.</param>
+        /// <param name="language">The language to load, for example 'eng' for English.</param>
+        /// <param name="engineMode">The <see cref="EngineMode"/> value to use when initialising the tesseract engine.</param>
 		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
-        {
+        {			
             DefaultPageSegMode = PageSegMode.Auto;
             handle = new HandleRef(this, Interop.TessApi.BaseApiCreate());
 			
@@ -42,7 +81,7 @@ namespace Tesseract
 		/// <param name="value">The new value of the variable.</param>
 		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool SetVariable(string name, string value)
-		{
+		{			
             return Interop.TessApi.BaseApiSetVariable(handle, name, value) != 0;
 		}
 		
@@ -152,6 +191,28 @@ namespace Tesseract
 		
 		private void Initialise(string datapath, string language, EngineMode engineMode)
 		{
+			const string TessDataDirectory = "tessdata";
+			Guard.RequireNotNullOrEmpty("language", language);
+					
+			
+			// do some minor processing on datapath to fix some common errors (this basically mirrors what tesseract does as of 3.02)
+			if(!String.IsNullOrEmpty(datapath)) {
+				// remove any trialing '\' or '/' characters
+				if(datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal)) {
+					datapath = datapath.Substring(0, datapath.Length-1);
+				}
+				// remove 'tessdata', if it exists, tesseract will add it when building up the tesseract path
+				if(datapath.EndsWith("tessdata", StringComparison.OrdinalIgnoreCase)) {
+					datapath = datapath.Substring(0, datapath.Length - TessDataDirectory.Length);
+				}
+			} 
+			
+			// log a warning if TESSDATA_PREFIX is set			
+			var tessDataPrefix = GetTessDataPrefix();
+			if(tessDataPrefix != null) {
+				Trace.TraceWarning("Detected that the environment variable 'TESSDATA_PREFIX' is set to '{0}', this will be used as the data directory by tesseract.", tessDataPrefix);
+			}
+					
             if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
@@ -300,9 +361,10 @@ namespace Tesseract
         /// <returns></returns>
         public Page Process(Bitmap image, string inputName, Rect region, PageSegMode? pageSegMode = null)
         {
-            using (var pix = PixConverter.ToPix(image)) {
-                return Process(pix, inputName, region, pageSegMode);
-            }
+        	var pix = PixConverter.ToPix(image);
+            var page = Process(pix, inputName, region, pageSegMode);
+            new PageDisposalHandle(page, pix);
+            return page;
         }
 
         protected override void Dispose(bool disposing)
@@ -313,6 +375,16 @@ namespace Tesseract
             }
         }
 
+        string GetTessDataPrefix()
+        {
+        	try {
+				return Environment.GetEnvironmentVariable("TESSDATA_PREFIX");
+			} catch (SecurityException e) {
+				Trace.TraceError("Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}", e.Message);
+				return null;
+			}
+        }
+        
         #region Event Handlers
 
         private void OnIteratorDisposed(object sender, EventArgs e)
