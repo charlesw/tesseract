@@ -62,7 +62,7 @@ namespace Tesseract
 			Initialise(datapath, language, engineMode);
 		}
 
-        public HandleRef Handle
+        internal HandleRef Handle
         {
             get { return handle; }
         }

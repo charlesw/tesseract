@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Ocr" />
+    <Folder Include="Results" />
     <Folder Include="tessdata" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +142,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <Content Include="Results\EngineTests.CanProcessPixUsingResultIterator.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="tessdata\eng.cube.bigrams">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

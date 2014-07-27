@@ -143,7 +143,7 @@ namespace Tesseract
             return new PixData(this);
         }
 
-        public HandleRef Handle
+        internal HandleRef Handle
         {
             get { return handle; }
         }

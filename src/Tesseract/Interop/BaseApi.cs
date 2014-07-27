@@ -5,7 +5,7 @@ using InteropDotNet;
 
 namespace Tesseract.Interop
 {
-    public interface ITessApiSignatures
+    interface ITessApiSignatures
     {
         // Helper functions
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessVersion")]
@@ -164,7 +164,7 @@ namespace Tesseract.Interop
         void PageIteratorOrientation(HandleRef handle, out Orientation orientation, out WritingDirection writing_direction, out TextLineOrder textLineOrder, out float deskew_angle);
     }
 
-    public static class TessApi
+    static class TessApi
     {
 
         public const string htmlBeginTag =

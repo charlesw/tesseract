@@ -102,6 +102,16 @@ namespace Tesseract
             return !(lhs == rhs);
         }
         #endregion
+        
+        #region ToString
+        
+		public override string ToString()
+		{
+			return string.Format("[Rect X={0}, Y={1}, Width={2}, Height={3}]", x, y, width, height);
+		}
 
+        
+        #endregion
+        
     }
 }

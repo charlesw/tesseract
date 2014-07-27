@@ -6,7 +6,7 @@ using InteropDotNet;
 
 namespace Tesseract.Interop
 {
-    public interface ILeptonicaApiSignatures
+    interface ILeptonicaApiSignatures
     {
         #region Pix
 
@@ -400,7 +400,7 @@ namespace Tesseract.Interop
         #endregion
     }
 
-    public unsafe static class LeptonicaApi
+    unsafe static class LeptonicaApi
     {
         private static ILeptonicaApiSignatures native;
 

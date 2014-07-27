@@ -2,7 +2,7 @@
 
 namespace Tesseract.Internal
 {
-	internal static class ErrorMessage
+	static class ErrorMessage
 	{
 		private const string ErrorMessageFormat = "{0}. See {1} for details.";
 		private const string WikiUrlFormat = "https://github.com/charlesw/tesseract/wiki/Error-{0}";

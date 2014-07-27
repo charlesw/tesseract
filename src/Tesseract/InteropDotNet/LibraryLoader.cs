@@ -8,11 +8,11 @@ using System.Reflection;
 
 namespace InteropDotNet
 {
-    public class LibraryLoader
+    sealed class LibraryLoader
     {
-        private readonly ILibraryLoaderLogic logic;
+        readonly ILibraryLoaderLogic logic;
 
-        private LibraryLoader(ILibraryLoaderLogic logic)
+        LibraryLoader(ILibraryLoaderLogic logic)
         {
             this.logic = logic;
         }

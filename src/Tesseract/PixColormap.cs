@@ -62,7 +62,7 @@ namespace Tesseract
             return new PixColormap(handle);
         }
 
-        public HandleRef Handle
+        internal HandleRef Handle
         {
             get { return handle; }
         }

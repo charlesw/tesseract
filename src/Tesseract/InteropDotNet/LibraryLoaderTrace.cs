@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace InteropDotNet
 {
-    internal static class LibraryLoaderTrace
+    static class LibraryLoaderTrace
     {
         private static bool printToConsole = false;
 

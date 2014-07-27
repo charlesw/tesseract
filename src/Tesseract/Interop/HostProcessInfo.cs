@@ -5,7 +5,7 @@ namespace Tesseract.Interop
 	/// <summary>
 	/// Provides information about the hosting process.
 	/// </summary>
-	public static class HostProcessInfo
+	static class HostProcessInfo
 	{
 		public static readonly bool Is64Bit;
 		

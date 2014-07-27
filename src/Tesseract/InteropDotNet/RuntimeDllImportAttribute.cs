@@ -8,7 +8,7 @@ namespace InteropDotNet
 {
     [ComVisible(true)]
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
-    public sealed class RuntimeDllImportAttribute : Attribute
+    sealed class RuntimeDllImportAttribute : Attribute
     {
         public string EntryPoint;
 

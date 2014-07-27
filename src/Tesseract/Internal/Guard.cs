@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Tesseract.Internal
 {
-	internal static class Guard
+	static class Guard
 	{
 		[DebuggerHidden]
 		public static void RequireNotNull(string argName, object value)

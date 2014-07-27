@@ -5,7 +5,7 @@ using System;
 
 namespace InteropDotNet
 {
-    internal static class SystemManager
+    static class SystemManager
     {
         public static string GetPlatformName()
         {
@@ -33,7 +33,7 @@ namespace InteropDotNet
         }
     }
 
-    internal enum OperatingSystem
+    enum OperatingSystem
     {
         Windows,
         Unix,
