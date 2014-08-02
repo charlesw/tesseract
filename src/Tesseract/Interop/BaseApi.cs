@@ -5,7 +5,15 @@ using InteropDotNet;
 
 namespace Tesseract.Interop
 {
-    interface ITessApiSignatures
+	/// <summary>
+	/// The exported tesseract api signatures.
+	/// </summary>
+	/// <remarks>
+	/// Please note this is only public for technical reasons (you can't proxy a internal interface).
+	/// It should be considered an internal interface and is NOT part of the public api and may have 
+	/// breaking changes between releases.
+	/// </remarks>
+    public interface ITessApiSignatures
     {
         // Helper functions
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessVersion")]

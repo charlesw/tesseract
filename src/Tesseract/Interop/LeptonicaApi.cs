@@ -6,7 +6,15 @@ using InteropDotNet;
 
 namespace Tesseract.Interop
 {
-    interface ILeptonicaApiSignatures
+	/// <summary>
+	/// The exported leptonica api signatures.
+	/// </summary>
+	/// <remarks>
+	/// Please note this is only public for technical reasons (you can't proxy a internal interface).
+	/// It should be considered an internal interface and is NOT part of the public api and may have 
+	/// breaking changes between releases.
+	/// </remarks>
+    public interface ILeptonicaApiSignatures
     {
         #region Pix
 

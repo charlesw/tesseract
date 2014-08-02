@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace InteropDotNet
 {
-    sealed class LibraryLoader
+    public sealed class LibraryLoader
     {
         readonly ILibraryLoaderLogic logic;
 
