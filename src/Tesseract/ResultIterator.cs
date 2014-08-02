@@ -11,7 +11,7 @@ namespace Tesseract
 
         public float GetConfidence(PageIteratorLevel level)
         {
-            return Interop.TessApi.ResultIteratorGetConfidence(handle, level);
+            return Interop.TessApi.Native.ResultIteratorGetConfidence(handle, level);
         }
 
         public string GetText(PageIteratorLevel level)

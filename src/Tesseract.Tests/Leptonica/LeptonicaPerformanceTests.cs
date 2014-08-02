@@ -13,7 +13,7 @@ namespace Tesseract.Tests.Leptonica
 		/// <summary>
 		/// 
 		/// </summary>
-		[Test]
+		[Test, Ignore]
 		public void ConvertToBitmap()
 		{
 			const double BaseRunTime = 793.382;

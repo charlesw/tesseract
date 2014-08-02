@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using NUnit.Framework;
 
 namespace Tesseract.Tests
@@ -27,7 +28,7 @@ namespace Tesseract.Tests
 			};
 		}
 		
-		[Test]		
+		[Test]
 		public void Initialise_ShouldStartEngine(
 			[ValueSource("DataPaths")] string datapath)
 		{
@@ -41,7 +42,7 @@ namespace Tesseract.Tests
 		public void Initialise_WithTessDataPrefixSet()
 		{
 			Environment.SetEnvironmentVariable("TESSDATA_PREFIX", Environment.CurrentDirectory);
-			using (var engine = new TesseractEngine(null, "eng", EngineMode.Default)) {				
+			using (var engine = new TesseractEngine(null, "eng", EngineMode.Default)) {
 				
 			}
 		}
@@ -58,11 +59,11 @@ namespace Tesseract.Tests
 		public void Initialise_ShouldThrowErrorIfDatapathNotCorrect()
 		{
 			Assert.That(() => {
-				using (var engine = new TesseractEngine(@"./IDontExist", "eng", EngineMode.Default)) {
-					
-					
-				}			            
-			}, Throws.InstanceOf(typeof(TesseractException)));
+			            	using (var engine = new TesseractEngine(@"./IDontExist", "eng", EngineMode.Default)) {
+			            		
+			            		
+			            	}
+			            }, Throws.InstanceOf(typeof(TesseractException)));
 		}
 
 		[Test]
@@ -81,7 +82,7 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-        
+		
 		[Test]
 		public void CanProcessMultiplePixs()
 		{
@@ -97,11 +98,100 @@ namespace Tesseract.Tests
 							Assert.That(text, Is.EqualTo(expectedText));
 						}
 					}
-                    
+					
 				}
 			}
 		}
-        
+		
+		[Test]
+		public void CanProcessPixUsingResultIterator()
+		{
+			string actualResult;
+			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+				using (var img = Pix.LoadFromFile("./phototest.tif")) {
+					using (var page = engine.Process(img)) {
+						actualResult = WriteResultsToString(page);
+					}
+				}
+			}
+			
+			const string ExpectedResultPath = "./Results/EngineTests.CanProcessPixUsingResultIterator.txt";
+			var expectedResult = File.ReadAllText(ExpectedResultPath);
+			if(expectedResult != actualResult) {
+				var actualResultPath = String.Format("./Results/EngineTests.CanProcessPixUsingResultIterator_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+				File.WriteAllText(actualResultPath, actualResult);
+				Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
+			}
+		}
+		
+		private string WriteResultsToString(Page page) {
+			var output = new StringBuilder();
+			using (var iter = page.GetIterator()) {
+				iter.Begin();
+				do {
+					do {
+						do {
+							do {
+								do {
+									if (iter.IsAtBeginningOf(PageIteratorLevel.Block)) {
+										var confidence = iter.GetConfidence(PageIteratorLevel.Block) / 100;
+										Rect bounds;
+										if(iter.TryGetBoundingBox(PageIteratorLevel.Block, out bounds)) {
+											output.AppendFormat("<block confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+										} else {
+											output.AppendFormat("<block confidence=\"{0:P}\">", confidence);
+										}
+										output.AppendLine();
+									}
+									if (iter.IsAtBeginningOf(PageIteratorLevel.Para)) {
+										var confidence = iter.GetConfidence(PageIteratorLevel.Para) / 100;
+										Rect bounds;
+										if(iter.TryGetBoundingBox(PageIteratorLevel.Para, out bounds)) {
+											output.AppendFormat("<para confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+										} else {
+											output.AppendFormat("<para confidence=\"{0:P}\">", confidence);
+										}
+										output.AppendLine();
+									}
+									if (iter.IsAtBeginningOf(PageIteratorLevel.TextLine)) {
+										var confidence = iter.GetConfidence(PageIteratorLevel.TextLine) / 100;
+										Rect bounds;
+										if(iter.TryGetBoundingBox(PageIteratorLevel.TextLine, out bounds)) {
+											output.AppendFormat("<line confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+										} else {
+											output.AppendFormat("<line confidence=\"{0:P}\">", confidence);
+										}
+									}
+									if(iter.IsAtBeginningOf(PageIteratorLevel.Word)) {
+										var confidence = iter.GetConfidence(PageIteratorLevel.Word) / 100;
+										Rect bounds;
+										if(iter.TryGetBoundingBox(PageIteratorLevel.Word, out bounds)) {
+											output.AppendFormat("<word confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+										} else {
+											output.AppendFormat("<word confidence=\"{0:P}\">", confidence);
+										}
+									}
+									output.Append(iter.GetText(PageIteratorLevel.Symbol));
+									if(iter.IsAtFinalOf(PageIteratorLevel.Word, PageIteratorLevel.Symbol)) {
+										output.Append("</word>");
+									}
+								} while (iter.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
+								
+								if (iter.IsAtFinalOf(PageIteratorLevel.TextLine, PageIteratorLevel.Word)) {
+									output.AppendLine("</line>");
+								}
+							} while (iter.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
+							if (iter.IsAtFinalOf(PageIteratorLevel.Para, PageIteratorLevel.TextLine)) {
+								output.AppendLine("</para>");
+							}
+						} while (iter.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
+					} while (iter.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
+					output.AppendLine("</block>");
+				} while (iter.Next(PageIteratorLevel.Block));
+			}
+			return output.ToString();			
+		}
+		
 		[Test]
 		public void CanProcessBitmap()
 		{
@@ -118,7 +208,7 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-				
+		
 		[Test]
 		public void CanProcessDifferentRegionsInSameImage()
 		{
@@ -143,7 +233,7 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-        
+		
 		[Test]
 		public void CanParseUznFile()
 		{
@@ -161,9 +251,9 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-        
+		
 		#region Variable set\get
-        
+		
 		[Test]
 		[TestCase(false)]
 		[TestCase(true)]
@@ -181,7 +271,7 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-        
+		
 		[Test]
 		[TestCase("edges_children_count_limit", 45)]
 		[TestCase("edges_children_count_limit", 20)]
@@ -200,7 +290,7 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-                
+		
 		[Test]
 		[TestCase("edges_boxarea", 0.875)]
 		[TestCase("edges_boxarea", 0.9)]
@@ -218,8 +308,8 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-        
-                
+		
+		
 		[Test]
 		[TestCase("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")]
 		[TestCase("tessedit_char_whitelist", "")]
@@ -237,17 +327,17 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-        
+		
 		#endregion
-        
+		
 		#region File Helpers
-        
+		
 		private string TestFilePath(string path)
 		{
 			var basePath = Path.Combine(Environment.CurrentDirectory, "Data");
 			return Path.Combine(basePath, path);
 		}
-        
+		
 		#endregion
 	}
 }

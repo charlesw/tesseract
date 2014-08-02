@@ -23,7 +23,7 @@ If you run into any issues please check out [this](https://github.com/charlesw/t
 
 ## License
 
-Copyright 2012 Charles Weld.
+Copyright 2012-2014 Charles Weld.
 
 Licensed under the [Apache License, Version 2.0][apache2] (the "License"); you
 may not use this software except in compliance with the License. You may obtain
@@ -36,6 +36,12 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
+### InteropDotNet
+
+Copyright 2014 Andrey Akinshin
+Project URL: https://github.com/AndreyAkinshin/InteropDotNet
+ Distributed under the MIT License: http://opensource.org/licenses/MIT
+
 ## Core Team
 
 * [charlesw](https://github.com/charlesw) (Charles Weld)
@@ -44,6 +50,7 @@ specific language governing permissions and limitations under the License.
 
 A big thanks to GitHub and all of Tesseract's contributors:
 
+* [AndreyAkinshin](https://github.com/AndreyAkinshin)
 * [jakesays](https://github.com/jakesays)
 * [peters](https://github.com/peters)
 * [nguyenq](https://github.com/nguyenq)
@@ -52,6 +59,7 @@ A big thanks to GitHub and all of Tesseract's contributors:
 
 Also thanks to the following projects\resources without which this project would not exist in it's current form:
 
+* [InteropDotNet](https://github.com/AndreyAkinshin/InteropDotNet) - For developing a dynamic interop system that allows tesseract to be used from both mono and .net.
 * [Reactive Extensions](http://rx.codeplex.com/) - The basic idea from which the build\packaging system is built on.
 * [TwainDotNet](https://github.com/tmyroadctfig/twaindotnet) - Batch build script
 * [Tesseract-dot-net](https://code.google.com/p/tesseractdotnet) - The origianl dot net wrapper that started all this.

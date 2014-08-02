@@ -11,7 +11,7 @@ namespace Tesseract.Tests
 		[Test]
 		public void GetVersion_Is302() 
 		{
-            var version = Interop.TessApi.GetVersion();
+            var version = Interop.TessApi.Native.GetVersion();
 			Assert.That(version, Is.EqualTo("3.02"));
 		}
 	}
