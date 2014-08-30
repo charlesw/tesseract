@@ -22,7 +22,7 @@ namespace Tesseract
 		/// <returns></returns>
 		public static PixArray LoadMultiPageTiffFromFile(string filename)
 		{			
-			var	pixaHandle = Interop.LeptonicaApi.pixaReadMultipageTiff( filename );
+			var	pixaHandle = Interop.LeptonicaApi.Native.pixaReadMultipageTiff( filename );
 			if(pixaHandle == IntPtr.Zero)
 			{
 				throw new IOException(String.Format("Failed to load image '{0}'.", filename));
@@ -170,7 +170,7 @@ namespace Tesseract
 			version = 1;
 			
 			// These will need to be updated whenever the PixA structure changes (i.e. a Pix is added or removed) though at the moment that isn't a problem.
-			_count = Interop.LeptonicaApi.pixaGetCount(_handle);
+			_count = Interop.LeptonicaApi.Native.pixaGetCount(_handle);
 		}
 		
 		#endregion
@@ -205,7 +205,7 @@ namespace Tesseract
 			
 			VerifyNotDisposed();
 			
-			var pixHandle = Interop.LeptonicaApi.pixaGetPix(_handle, index, accessType);
+			var pixHandle = Interop.LeptonicaApi.Native.pixaGetPix(_handle, index, accessType);
 			if(pixHandle == IntPtr.Zero) {
 				throw new InvalidOperationException(String.Format("Failed to retrieve pix {0}.", pixHandle));
 			}
@@ -236,7 +236,7 @@ namespace Tesseract
 		protected override void Dispose(bool disposing)
 		{
 			IntPtr handle = _handle.Handle;
-			Interop.LeptonicaApi.pixaDestroy(ref handle);
+			Interop.LeptonicaApi.Native.pixaDestroy(ref handle);
 			_handle = new HandleRef(this, handle);
 		}
 		

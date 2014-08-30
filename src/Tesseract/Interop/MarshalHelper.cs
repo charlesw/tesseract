@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tesseract.Interop
 {
-    public unsafe static class MarshalHelper
+    unsafe static class MarshalHelper
     {
 		public static IntPtr StringToPtr(string value, Encoding encoding)
 		{

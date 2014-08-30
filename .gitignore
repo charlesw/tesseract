@@ -81,7 +81,7 @@ TestResult.xml
 **/*.dotCover
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
-#**/packages/ 
+packages/
 
 # Visual C++ cache files
 ipch/
@@ -187,3 +187,9 @@ pip-log.txt
 
 /*.Log
 *.sdsettings
+
+###############
+# GIT Change files
+################
+*.orig
+

@@ -60,6 +60,14 @@
     <Compile Include="Internal\ErrorMessage.cs" />
     <Compile Include="Internal\Guard.cs" />
     <Compile Include="Internal\TessConvert.cs" />
+    <Compile Include="InteropDotNet\ILibraryLoaderLogic.cs" />
+    <Compile Include="InteropDotNet\InteropRuntimeImplementer.cs" />
+    <Compile Include="InteropDotNet\LibraryLoader.cs" />
+    <Compile Include="InteropDotNet\LibraryLoaderTrace.cs" />
+    <Compile Include="InteropDotNet\RuntimeDllImportAttribute.cs" />
+    <Compile Include="InteropDotNet\SystemManager.cs" />
+    <Compile Include="InteropDotNet\UnixLibraryLoaderLogic.cs" />
+    <Compile Include="InteropDotNet\WindowsLibraryLoaderLogic.cs" />
     <Compile Include="Interop\HostProcessInfo.cs" />
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="PixArray.cs" />
@@ -76,7 +84,6 @@
     <Compile Include="ImageFormat.cs" />
     <Compile Include="Interop\BaseApi.cs" />
     <Compile Include="Interop\Constants.cs" />
-    <Compile Include="Interop\WindowsLibraryLoader.cs" />
     <Compile Include="Interop\LeptonicaApi.cs" />
     <Compile Include="Interop\MarshalHelper.cs" />
     <Compile Include="LeptonicaException.cs" />
@@ -121,7 +128,22 @@
       <Link>x86\libtesseract303.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ChangeLog.md" />
+    <None Include="..\lib\TesseractOcr\x64\liblept168.so">
+      <Link>x64\liblept168.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\TesseractOcr\x64\libtesseract302.so">
+      <Link>x64\libtesseract302.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\TesseractOcr\x86\liblept168.so">
+      <Link>x86\liblept168.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\lib\TesseractOcr\x86\libtesseract302.so">
+      <Link>x86\libtesseract302.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Internal" />

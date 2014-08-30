@@ -9,9 +9,9 @@ namespace Tesseract.Tests
 	public class BaseApiTests
 	{
 		[Test]
-		public void CanGetVersion() 
+		public void GetVersion_Is303() 
 		{
-            var version = Interop.TessApi.GetVersion();
+            var version = Interop.TessApi.Native.GetVersion();
 			Assert.That(version, Is.EqualTo("3.03"));
 		}
 				

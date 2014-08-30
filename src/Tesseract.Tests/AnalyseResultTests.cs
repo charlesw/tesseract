@@ -23,6 +23,7 @@ namespace Tesseract.Tests
         {
             if (engine != null) {
                 engine.Dispose();
+                engine = null;
             }
         }
 

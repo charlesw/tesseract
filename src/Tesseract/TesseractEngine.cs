@@ -1,21 +1,60 @@
 ﻿
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Security;
 using Tesseract.Internal;
 
 namespace Tesseract
 {
 	/// <summary>
-	/// Description of Engine.
+	/// The tesseract OCR engine.
 	/// </summary>
 	public class TesseractEngine : DisposableBase
-	{
+	{		
+		/// <summary>
+		/// Ties the specified pix to the lifecycle of a page.
+		/// </summary>
+		class PageDisposalHandle
+		{
+			readonly Page page;
+			readonly Pix pix;
+			
+			public PageDisposalHandle(Page page, Pix pix)
+			{
+				this.page = page;
+				this.pix = pix;
+				page.Disposed += OnPageDisposed;
+			}
+
+			void OnPageDisposed(object sender, System.EventArgs e)
+			{
+				
+				
+				page.Disposed -= OnPageDisposed;
+			}
+		}
+		
 		private HandleRef handle;
         private int processCount = 0;
 				
+        /// <summary>
+        /// Creates a new instance of <see cref="TesseractEngine"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="datapath"/> parameter should point to the directory that contains the 'tessdata' folder
+		/// for example if your tesseract language data is installed in <c>C:\Tesseract\tessdata</c> the value of datapath should
+        /// be <c>C:\Tesseract</c>. Note that tesseract will use the value of the <c>TESSDATA_PREFIX</c> environment variable if defined,
+        /// effectively ignoring the value of <paramref name="datapath"/> parameter.
+		/// </para>
+        /// </remarks>
+        /// <param name="datapath">The path to the parent directory that contains the 'tessdata' directory, ignored if the <c>TESSDATA_PREFIX</c> environment variable is defined.</param>
+        /// <param name="language">The language to load, for example 'eng' for English.</param>
+        /// <param name="engineMode">The <see cref="EngineMode"/> value to use when initialising the tesseract engine.</param>
 		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
 			: this(datapath, language, engineMode, null, false)
         {
@@ -23,21 +62,21 @@ namespace Tesseract
 		
 			
 		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default, IDictionary<string, object> initValues = null, bool setOnlyNonDebugVariables = false)
-        {
+        {			
             DefaultPageSegMode = PageSegMode.Auto;
-            handle = new HandleRef(this, Interop.TessApi.BaseApiCreate());
+            handle = new HandleRef(this, Interop.TessApi.Native.BaseApiCreate());
 			
 			Initialise(datapath, language, engineMode, initValues, setOnlyNonDebugVariables);			
 		}
 
-        public HandleRef Handle
+        internal HandleRef Handle
         {
             get { return handle; }
         }
 		
 		public string Version
 		{
-            get { return Interop.TessApi.GetVersion(); }
+            get { return Interop.TessApi.Native.GetVersion(); }
 		}
 		
 		#region Config
@@ -50,7 +89,7 @@ namespace Tesseract
 		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool SetVariable(string name, string value)
 		{
-            return Interop.TessApi.BaseApiSetVariable(handle, name, value) != 0;
+            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, value) != 0;
 		}
 		
 		/// <summary>
@@ -62,7 +101,7 @@ namespace Tesseract
 		public bool SetVariable(string name, bool value)
 		{
 			var strEncodedValue = value ? "TRUE" : "FALSE";
-            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
 		}
 				
 		/// <summary>
@@ -74,7 +113,7 @@ namespace Tesseract
 		public bool SetVariable(string name, int value)
 		{
 			var strEncodedValue = value.ToString("D", CultureInfo.InvariantCulture.NumberFormat);
-            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
 		}
 		
 		/// <summary>
@@ -86,12 +125,12 @@ namespace Tesseract
 		public bool SetVariable(string name, double value)
 		{
 			var strEncodedValue = value.ToString("R", CultureInfo.InvariantCulture.NumberFormat);
-            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
 		}
 		
 		public bool SetDebugVariable(string name, string value)
 		{
-            return Interop.TessApi.BaseApiSetDebugVariable(handle, name, value) != 0;
+            return Interop.TessApi.Native.BaseApiSetDebugVariable(handle, name, value) != 0;
 		}
 		
 		/// <summary>
@@ -103,7 +142,8 @@ namespace Tesseract
 		public bool TryGetBoolVariable(string name, out bool value)
 		{
 			int val;
-            if (Interop.TessApi.BaseApiGetBoolVariable(handle, name, out val) != 0) {
+            if (Interop.TessApi.Native.BaseApiGetBoolVariable(handle, name, out val) != 0)
+            {
 				value = (val != 0);
 				return true;
 			} else {
@@ -120,7 +160,7 @@ namespace Tesseract
 		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool TryGetIntVariable(string name, out int value)
 		{
-			return Interop.TessApi.BaseApiGetIntVariable(handle, name, out value) != 0;
+            return Interop.TessApi.Native.BaseApiGetIntVariable(handle, name, out value) != 0;
 		}
 		
 		/// <summary>
@@ -131,7 +171,7 @@ namespace Tesseract
 		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool TryGetDoubleVariable(string name, out double value)
 		{
-            return Interop.TessApi.BaseApiGetDoubleVariable(handle, name, out value) != 0;
+            return Interop.TessApi.Native.BaseApiGetDoubleVariable(handle, name, out value) != 0;
 		}	
 		
 		/// <summary>
@@ -189,7 +229,7 @@ namespace Tesseract
 				}
 			}
 			
-			if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, null, 0, varNames, varValues,  new UIntPtr(  varValues != null ? (uint)varValues.Length : 0 ), setOnlyNonDebugVariables) != 0)
+			if (Interop.TessApi.Native.BaseApiInit(handle, datapath, language, (int)engineMode, null, 0, varNames, varValues,  new UIntPtr(  varValues != null ? (uint)varValues.Length : 0 ), setOnlyNonDebugVariables) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
 				handle = new HandleRef(this, IntPtr.Zero);
@@ -262,10 +302,10 @@ namespace Tesseract
 
             processCount++;
 
-            Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
-            Interop.TessApi.BaseApiSetImage(handle, image.Handle);
+            Interop.TessApi.Native.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
+            Interop.TessApi.Native.BaseApiSetImage(handle, image.Handle);
             if(!String.IsNullOrEmpty(inputName)) {
-            	Interop.TessApi.BaseApiSetInputName(handle, inputName);
+                Interop.TessApi.Native.BaseApiSetInputName(handle, inputName);
             }
             var page = new Page(this, image, region);
             page.Disposed += OnIteratorDisposed;
@@ -337,19 +377,30 @@ namespace Tesseract
         /// <returns></returns>
         public Page Process(Bitmap image, string inputName, Rect region, PageSegMode? pageSegMode = null)
         {
-            using (var pix = PixConverter.ToPix(image)) {
-                return Process(pix, inputName, region, pageSegMode);
-            }
+        	var pix = PixConverter.ToPix(image);
+            var page = Process(pix, inputName, region, pageSegMode);
+            new PageDisposalHandle(page, pix);
+            return page;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (handle.Handle != IntPtr.Zero) {
-                Interop.TessApi.BaseApiDelete(handle);
+                Interop.TessApi.Native.BaseApiDelete(handle);
                 handle = new HandleRef(this, IntPtr.Zero);
             }
         }
 
+        string GetTessDataPrefix()
+        {
+        	try {
+				return Environment.GetEnvironmentVariable("TESSDATA_PREFIX");
+			} catch (SecurityException e) {
+				Trace.TraceError("Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}", e.Message);
+				return null;
+			}
+        }
+        
         #region Event Handlers
 
         private void OnIteratorDisposed(object sender, EventArgs e)
