@@ -82,7 +82,7 @@ namespace Tesseract
 		/// <returns>Returns <c>True</c> if successful; otherwise <c>False</c>.</returns>
 		public bool SetVariable(string name, string value)
 		{
-            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, value) != 0;
+            return Interop.TessApi.BaseApiSetVariable(handle, name, value) != 0;
 		}
 		
 		/// <summary>
@@ -94,7 +94,7 @@ namespace Tesseract
 		public bool SetVariable(string name, bool value)
 		{
 			var strEncodedValue = value ? "TRUE" : "FALSE";
-            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
 		}
 				
 		/// <summary>
@@ -106,7 +106,7 @@ namespace Tesseract
 		public bool SetVariable(string name, int value)
 		{
 			var strEncodedValue = value.ToString("D", CultureInfo.InvariantCulture.NumberFormat);
-            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
 		}
 		
 		/// <summary>
@@ -118,12 +118,12 @@ namespace Tesseract
 		public bool SetVariable(string name, double value)
 		{
 			var strEncodedValue = value.ToString("R", CultureInfo.InvariantCulture.NumberFormat);
-            return Interop.TessApi.Native.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
+            return Interop.TessApi.BaseApiSetVariable(handle, name, strEncodedValue) != 0;
 		}
 		
 		public bool SetDebugVariable(string name, string value)
 		{
-            return Interop.TessApi.Native.BaseApiSetDebugVariable(handle, name, value) != 0;
+            return Interop.TessApi.BaseApiSetDebugVariable(handle, name, value) != 0;
 		}
 		
 		/// <summary>

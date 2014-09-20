@@ -187,3 +187,4 @@ pip-log.txt
 
 /*.Log
 *.sdsettings
+*.orig

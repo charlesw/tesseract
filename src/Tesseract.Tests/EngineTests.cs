@@ -314,6 +314,7 @@ namespace Tesseract.Tests
 		[TestCase("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")]
 		[TestCase("tessedit_char_whitelist", "")]
 		[TestCase("tessedit_char_whitelist", "Test")]
+		[TestCase("tessedit_char_whitelist", "chinese 漢字")] // Issue 68
 		public void CanSetStringVariable(string variableName, string variableValue)
 		{
 			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
@@ -324,6 +325,29 @@ namespace Tesseract.Tests
 					Assert.That(result, Is.EqualTo(variableValue));
 				} else {
 					Assert.Fail("Failed to retrieve value for '{0}'.", variableName);
+				}
+			}
+		}
+		
+		
+		/// <summary>
+		/// As per Bug #52 setting 'classify_bln_numeric_mode' variable to '1' causes the engine to fail on processing.
+		/// </summary>
+		[Test,
+		 Ignore("Broken in Tesseract 3.02")]
+		public void CanSetClassifyBlnNumericModeVariable()
+		{
+			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+				engine.SetVariable("classify_bln_numeric_mode", 1);
+        		
+				using(var img = Pix.LoadFromFile("./Data/processing/numbers.png")) {
+					using(var page = engine.Process(img)) {
+						var text = page.GetText();
+						
+						const string expectedText = "1234567890\n\n";
+						
+						Assert.That(text, Is.EqualTo(expectedText));
+					}
 				}
 			}
 		}

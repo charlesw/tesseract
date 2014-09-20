@@ -59,11 +59,11 @@ namespace Tesseract.Interop
 
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetVariable")]
-        int BaseApiSetVariable(HandleRef handle, string name, string value);
+        int BaseApiSetVariable(HandleRef handle, string name, IntPtr valPtr);
 
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetDebugVariable")]
-        int BaseApiSetDebugVariable(HandleRef handle, string name, string value);
+        int BaseApiSetDebugVariable(HandleRef handle, string name, IntPtr valPtr);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetIntVariable")]
         int BaseApiGetIntVariable(HandleRef handle, string name, out int value);
@@ -205,12 +205,39 @@ namespace Tesseract.Interop
                 native = InteropRuntimeImplementer.CreateInstance<ITessApiSignatures>();
             }
         }
+        
+        public static int BaseApiSetVariable(HandleRef handle, string name, string value)
+        {
+            IntPtr valuePtr = IntPtr.Zero;
+            try {
+                valuePtr = MarshalHelper.StringToPtr(value, Encoding.UTF8);
+                return Native.BaseApiSetVariable(handle, name, valuePtr);
+            } finally {
+                if(valuePtr != IntPtr.Zero) {
+                    Marshal.FreeHGlobal(valuePtr);
+                }
+            }
+        }
+        
+        public static int BaseApiSetDebugVariable(HandleRef handle, string name, string value)
+        {
+            IntPtr valuePtr = IntPtr.Zero;
+            try {
+                valuePtr = MarshalHelper.StringToPtr(value, Encoding.UTF8);
+                return Native.BaseApiSetDebugVariable(handle, name, valuePtr);
+            } finally {
+                if(valuePtr != IntPtr.Zero) {
+                    Marshal.FreeHGlobal(valuePtr);
+                }
+            }
+        }
+
 
         public static string BaseApiGetStringVariable(HandleRef handle, string name)
         {
             var resultHandle = Native.BaseApiGetStringVariableInternal(handle, name);
+            return MarshalHelper.PtrToString(resultHandle, Encoding.UTF8);
 
-            return Marshal.PtrToStringAnsi(resultHandle);
         }
 
         public static string BaseAPIGetUTF8Text(HandleRef handle)
