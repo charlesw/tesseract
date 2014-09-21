@@ -19,7 +19,10 @@
 
 ## Version 2 Series
 
-### Version 2.0.0 (planned)
+### Version 2.0.0
+
+*Note:* Version 2 was initially going to introduce support for Tesseract 3.03 however as that hasn't been released yet and we have a few minor breaking changes
+due to Mono support which require a version incremment (we use semantic versioning). Once the next version of tesseract is released we'll add it.
 
 #### Breaking changes from 1.0
 
@@ -29,4 +32,9 @@
 
 #### New features
 
-* Support for multi-page tiffs.
+* Support for multi-page tiffs [Issue 50](https://github.com/charlesw/tesseract/issues/50)
+* Support for linux\mono [Issue 23](https://github.com/charlesw/tesseract/issues/23)
+
+#### Bug fixes
+
+* Fixed UTF8 handling for SetVariable (support for non-english languages) [Issue 120](https://github.com/charlesw/tesseract/issues/120) & [Issue 68](https://github.com/charlesw/tesseract/issues/68)

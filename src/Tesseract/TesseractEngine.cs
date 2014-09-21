@@ -14,6 +14,8 @@ namespace Tesseract
 	/// </summary>
 	public class TesseractEngine : DisposableBase
 	{		
+		static readonly TraceSource trace = new TraceSource("Tesseract");
+		
 		/// <summary>
 		/// Ties the specified pix to the lifecycle of a page.
 		/// </summary>
@@ -31,9 +33,9 @@ namespace Tesseract
 
 			void OnPageDisposed(object sender, System.EventArgs e)
 			{
-				
-				
 				page.Disposed -= OnPageDisposed;
+				// dispose the pix when the page is disposed.
+				pix.Dispose();
 			}
 		}
 		
@@ -190,7 +192,7 @@ namespace Tesseract
 		
 		#endregion
 		
-		private void Initialise(string datapath, string language, EngineMode engineMode)
+		void Initialise(string datapath, string language, EngineMode engineMode)
 		{
 			const string TessDataDirectory = "tessdata";
 			Guard.RequireNotNullOrEmpty("language", language);
@@ -211,7 +213,7 @@ namespace Tesseract
 			// log a warning if TESSDATA_PREFIX is set			
 			var tessDataPrefix = GetTessDataPrefix();
 			if(tessDataPrefix != null) {
-				Trace.TraceWarning("Detected that the environment variable 'TESSDATA_PREFIX' is set to '{0}', this will be used as the data directory by tesseract.", tessDataPrefix);
+				trace.TraceEvent(TraceEventType.Warning, 0, "Detected that the environment variable 'TESSDATA_PREFIX' is set to '{0}', this will be used as the data directory by tesseract.", tessDataPrefix);
 			}
 
             if (Interop.TessApi.Native.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
@@ -381,7 +383,7 @@ namespace Tesseract
         	try {
 				return Environment.GetEnvironmentVariable("TESSDATA_PREFIX");
 			} catch (SecurityException e) {
-				Trace.TraceError("Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}", e.Message);
+				trace.TraceEvent(TraceEventType.Error, 0, "Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}", e.Message);
 				return null;
 			}
         }
