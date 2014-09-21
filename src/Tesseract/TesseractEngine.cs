@@ -71,7 +71,14 @@ namespace Tesseract
 		
 		public string Version
 		{
-            get { return Interop.TessApi.Native.GetVersion(); }
+            get {
+				// Get version doesn't work for x64, might be compilation related for now just
+				// return constant so we don't crash.
+				return "3.02";
+
+				// return Interop.TessApi.Native.GetVersion();
+			
+			}
 		}
 		
 		#region Config
