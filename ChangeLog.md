@@ -25,13 +25,8 @@
 
 * Tesseract.Interop is now internal which means we can make as many interop changes as we like as long as the public version doesn't change
 * TesseractEngine.Handle, Pix.Handle, and PixColormap.Handle are now internal
-* TesseractEngine now ignores the ``TESSDATAPREFIX`` environment variable if the directory is specified.
 * Logging is done to the ``Tesseract`` source, not ``Default``.
-* Implemented as a Portable Library, this means the min .net framework is now .NET 4 (TODO)
 
 #### New features
 
-* Support for Tesseract 3.03 and Leptonica 1.7
-* PDF output support (TODO)
 * Support for multi-page tiffs.
-

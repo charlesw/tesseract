@@ -16,6 +16,22 @@ namespace Tesseract.Interop
 	/// </remarks>
     public interface ILeptonicaApiSignatures
     {
+    	#region PixA
+		
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff")]
+        IntPtr pixaReadMultipageTiff( string filename );
+			
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
+        int pixaGetCount( HandleRef pixa );
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetPix")]
+        IntPtr pixaGetPix( HandleRef pixa, int index, PixArrayAccessType accesstype );
+				
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaDestroy")]
+        void pixaDestroy(ref IntPtr pix);
+		
+		#endregion
+		
         #region Pix
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCreate")]

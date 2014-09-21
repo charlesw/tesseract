@@ -65,6 +65,25 @@ namespace Tesseract.Tests
 			            	}
 			            }, Throws.InstanceOf(typeof(TesseractException)));
 		}
+		
+		[Test]
+		public void CanProcessMultipageTif()
+		{
+			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+				using(var pixA = PixArray.LoadMultiPageTiffFromFile("./Data/processing/multi-page.tif")) {
+					int i=1;
+					foreach(var pix in pixA) {
+						using(var page = engine.Process(pix)) {
+							var text = page.GetText().Trim();
+							
+							string expectedText = String.Format("Page {0}", i);
+							Assert.That(text, Is.EqualTo(expectedText));
+						}
+						i++;
+					}
+				}
+			}
+		}
 
 		[Test]
 		public void CanProcessPix()
