@@ -131,6 +131,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Ocr" />
+    <Folder Include="Data\processing" />
+    <Folder Include="Results" />
     <Folder Include="tessdata" />
   </ItemGroup>
   <ItemGroup>
@@ -140,7 +142,13 @@
     <None Include="Data\Ocr\uzn-test.uzn">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\processing\multi-page.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+    <Content Include="Results\EngineTests.CanProcessPixUsingResultIterator.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="tessdata\eng.cube.bigrams">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

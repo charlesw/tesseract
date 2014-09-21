@@ -6,6 +6,8 @@ namespace Tesseract
 {
 	public abstract class DisposableBase: IDisposable
 	{
+		static readonly TraceSource trace = new TraceSource("Tesseract");
+		
 		protected DisposableBase()
 		{
 			IsDisposed = false;
@@ -14,7 +16,7 @@ namespace Tesseract
 		~DisposableBase() 
 		{
 			Dispose(false);
-			Trace.TraceWarning(String.Format("{0} was not disposed off.", this));
+			trace.TraceEvent(TraceEventType.Warning, 0, "{0} was not disposed off.", this);
 		}
 		
 		
