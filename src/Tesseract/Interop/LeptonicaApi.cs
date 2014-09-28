@@ -95,6 +95,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRead")]
         IntPtr pixRead(string filename);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixReadMemTiff")]
+        unsafe IntPtr pixReadMemTiff(byte* data, int length, int page);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixWrite")]
         int pixWrite(string filename, HandleRef handle, ImageFormat format);
 
