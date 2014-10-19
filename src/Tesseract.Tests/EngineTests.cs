@@ -67,6 +67,32 @@ namespace Tesseract.Tests
 		}
 		
 		[Test]
+		public void Initialise_CanLoadConfigFile()
+		{
+			var tessDataPath = Path.Combine(Environment.CurrentDirectory, @"tessdata\");
+			using (var engine = new TesseractEngine(tessDataPath, "eng", EngineMode.Default, "bazzar")) {
+				// verify that the config file was loaded
+				string user_patterns_suffix;
+				if (engine.TryGetStringVariable("user_words_suffix", out user_patterns_suffix)) {
+					Assert.That(user_patterns_suffix, Is.EqualTo("user-words"));
+				} else {
+					Assert.Fail("Failed to retrieve value for 'user_words_suffix'.");
+				}
+				
+				using (var img = Pix.LoadFromFile("./phototest.tif")) {
+					using (var page = engine.Process(img)) {
+						var text = page.GetText();
+
+						const string expectedText =
+							"This is a Iot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nIazy fox. The quick brown dog jumped\nover the Iazy fox. The quick brown dog\njumped over the Iazy fox. The quick\nbrown dog jumped over the Iazy fox.\n\n";
+
+						Assert.That(text, Is.EqualTo(expectedText));
+					}
+				}
+			}
+		}
+		
+		[Test]
 		public void CanProcessMultipageTif()
 		{
 			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
@@ -101,7 +127,7 @@ namespace Tesseract.Tests
 				}
 			}
 		}
-		
+				
 		[Test]
 		public void CanProcessMultiplePixs()
 		{

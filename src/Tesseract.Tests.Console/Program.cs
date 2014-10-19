@@ -14,7 +14,7 @@ namespace Tesseract.Tests.Console
         	
         	try {
             var testFixture = new Tesseract.Tests.EngineTests();
-            testFixture.CanProcessPixUsingResultIterator();
+            testFixture.Initialise_CanLoadConfigFile();
         	} catch (Exception e) {
         		System.Console.WriteLine("Unhandled exception occured: \r\n{0}", e);
         	}
