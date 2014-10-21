@@ -75,5 +75,19 @@ namespace Tesseract.Internal
 					String.Format(@"The argument ""{0}"" must not be null or empty.", paramName));
 			}
 		}
+
+		/// <summary>
+		/// Verifies the given <paramref name="condition"/> is <c>True</c>; throwing an <see cref="InvalidOperationException"/> when the condition is not met.
+		/// </summary>
+		/// <param name="condition">The condition to be tested.</param>
+		/// <param name="message">The error message to raise if <paramref name="condition"/> is <c>False</c>.</param>
+		/// <param name="args">Optional formatting arguments.</param>
+		[DebuggerHidden]
+		public static void Verify(bool condition, string message, params object[] args)
+		{
+			if(!condition) {
+				throw new InvalidOperationException(String.Format(message, args));
+			}
+		}
 	}
 }

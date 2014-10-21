@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using Tesseract.Internal;
 
 namespace Tesseract
 {
@@ -304,6 +305,11 @@ namespace Tesseract
         /// <returns></returns>
         public Pix ConvertRGBToGray(float rwt, float gwt, float bwt)
         {
+        	Guard.Verify(Depth == 32, "The source image must have a depth of 32 (32 bpp).");
+			Guard.Require("rwt", rwt >= 0, "All weights must be greater than or equal to zero; red was not.");
+			Guard.Require("gwt", gwt >= 0, "All weights must be greater than or equal to zero; green was not.");
+			Guard.Require("bwt", bwt >= 0, "All weights must be greater than or equal to zero; blue was not.");
+			
             var resultPixHandle = Interop.LeptonicaApi.Native.pixConvertRGBToGray(handle, rwt, gwt, bwt);
             if (resultPixHandle == IntPtr.Zero) throw new TesseractException("Failed to convert to grayscale.");
             return new Pix(resultPixHandle);
