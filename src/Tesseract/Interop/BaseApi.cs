@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using InteropDotNet;
+using Tesseract.Internal;
 
 namespace Tesseract.Interop
 {
@@ -53,9 +55,7 @@ namespace Tesseract.Interop
                                       string datapath,
                                       string language,
                                       int mode,
-                                      IntPtr configs, int configs_size,
-                                      IntPtr vars_vec, int vars_vec_size,
-                                      IntPtr vars_values, int vars_values_size);
+                                      string[] configs, int configs_size);
 
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetVariable")]
@@ -205,7 +205,26 @@ namespace Tesseract.Interop
                 native = InteropRuntimeImplementer.CreateInstance<ITessApiSignatures>();
             }
         }
-        
+
+		public static int BaseApiInit(HandleRef handle, string datapath, string language, int mode, IEnumerable<string> configFiles)
+		{
+			Guard.Require("handle", handle.Handle != IntPtr.Zero, "Handle for BaseApi, created through BaseApiCreate is required.");
+			Guard.RequireNotNullOrEmpty("language", language);
+			
+			string[] configFilesArray;
+			if (configFiles is string[]) {		
+				configFilesArray = (string[])configFiles;
+			} else if(configFiles is List<string>) {	
+				configFilesArray = ((List<string>)configFiles).ToArray();
+			} else if(configFiles != null) {
+				configFilesArray = new List<string>(configFiles).ToArray();				
+			} else {
+				configFilesArray = new string[0];
+			}
+			
+			return Native.BaseApiInit(handle, datapath, language, mode, configFilesArray, configFilesArray.Length);			
+		}
+		
         public static int BaseApiSetVariable(HandleRef handle, string name, string value)
         {
             IntPtr valuePtr = IntPtr.Zero;

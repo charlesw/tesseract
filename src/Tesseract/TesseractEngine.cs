@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -42,7 +43,8 @@ namespace Tesseract
 		private HandleRef handle;
         private int processCount = 0;
 				
-        /// <summary>
+        
+			/// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/>.
         /// </summary>
         /// <remarks>
@@ -57,13 +59,62 @@ namespace Tesseract
         /// <param name="language">The language to load, for example 'eng' for English.</param>
         /// <param name="engineMode">The <see cref="EngineMode"/> value to use when initialising the tesseract engine.</param>
 		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default)
+			: this(datapath, language, engineMode, new string[0])
+        {			
+		}		
+		
+		/// <summary>
+        /// Creates a new instance of <see cref="TesseractEngine"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="datapath"/> parameter should point to the directory that contains the 'tessdata' folder
+		/// for example if your tesseract language data is installed in <c>C:\Tesseract\tessdata</c> the value of datapath should
+        /// be <c>C:\Tesseract</c>. Note that tesseract will use the value of the <c>TESSDATA_PREFIX</c> environment variable if defined,
+        /// effectively ignoring the value of <paramref name="datapath"/> parameter.
+		/// </para>
+		/// <para>
+		/// Note: That the config files MUST be encoded without the BOM using unix end of line characters.
+		/// </para>
+        /// </remarks>
+        /// <param name="datapath">The path to the parent directory that contains the 'tessdata' directory, ignored if the <c>TESSDATA_PREFIX</c> environment variable is defined.</param>
+        /// <param name="language">The language to load, for example 'eng' for English.</param>
+        /// <param name="engineMode">The <see cref="EngineMode"/> value to use when initialising the tesseract engine.</param>
+        /// <param name="configFile">
+        /// An optional tesseract configuration file that is encoded using UTF8 without BOM
+        /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
+        /// </param>
+		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default, string configFile = null)
+			: this(datapath, language, engineMode, configFile != null ? new [] { configFile } : new string[0])
+        {			
+		}
+        
+        /// <summary>
+        /// Creates a new instance of <see cref="TesseractEngine"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="datapath"/> parameter should point to the directory that contains the 'tessdata' folder
+		/// for example if your tesseract language data is installed in <c>C:\Tesseract\tessdata</c> the value of datapath should
+        /// be <c>C:\Tesseract</c>. Note that tesseract will use the value of the <c>TESSDATA_PREFIX</c> environment variable if defined,
+        /// effectively ignoring the value of <paramref name="datapath"/> parameter.
+		/// </para>
+        /// </remarks>
+        /// <param name="datapath">The path to the parent directory that contains the 'tessdata' directory, ignored if the <c>TESSDATA_PREFIX</c> environment variable is defined.</param>
+        /// <param name="language">The language to load, for example 'eng' for English.</param>
+        /// <param name="engineMode">The <see cref="EngineMode"/> value to use when initialising the tesseract engine.</param>
+        /// <param name="configFiles">
+        /// An optional sequence of tesseract configuration files to load, encoded using UTF8 without BOM
+        /// with Unix end of line characters you can use an advanced text editor such as Notepad++ to accomplish this.
+        /// </param>
+		public TesseractEngine(string datapath, string language, EngineMode engineMode = EngineMode.Default, IEnumerable<string> configFiles = null)
         {			
             DefaultPageSegMode = PageSegMode.Auto;
             handle = new HandleRef(this, Interop.TessApi.Native.BaseApiCreate());
 			
-			Initialise(datapath, language, engineMode);
+			Initialise(datapath, language, engineMode, configFiles);
 		}
-
+		
         internal HandleRef Handle
         {
             get { return handle; }
@@ -199,7 +250,7 @@ namespace Tesseract
 		
 		#endregion
 		
-		void Initialise(string datapath, string language, EngineMode engineMode)
+		void Initialise(string datapath, string language, EngineMode engineMode, IEnumerable<string> configFiles)
 		{
 			const string TessDataDirectory = "tessdata";
 			Guard.RequireNotNullOrEmpty("language", language);
@@ -223,7 +274,7 @@ namespace Tesseract
 				trace.TraceEvent(TraceEventType.Warning, 0, "Detected that the environment variable 'TESSDATA_PREFIX' is set to '{0}', this will be used as the data directory by tesseract.", tessDataPrefix);
 			}
 
-            if (Interop.TessApi.Native.BaseApiInit(handle, datapath, language, (int)engineMode, IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, 0) != 0)
+            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles) != 0)
             {
 				// Special case logic to handle cleaning up as init has already released the handle if it fails.
 				handle = new HandleRef(this, IntPtr.Zero);

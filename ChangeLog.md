@@ -38,3 +38,8 @@ due to Mono support which require a version incremment (we use semantic versioni
 #### Bug fixes
 
 * Fixed UTF8 handling for SetVariable (support for non-english languages) [Issue 120](https://github.com/charlesw/tesseract/issues/120) & [Issue 68](https://github.com/charlesw/tesseract/issues/68)
+
+### Version 2.1
+
+* Support for loading config files
+* Support for loading Pix from memory
