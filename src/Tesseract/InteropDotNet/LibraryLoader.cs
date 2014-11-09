@@ -88,6 +88,21 @@ namespace InteropDotNet
             }
         }
 
+        public void FreeAllLibraries()
+        {
+            lock (syncLock)
+            {
+                // copy loaded libraries so that we do not enumerate the collection while modifying it
+                string[] loadedLibraries = new string[loadedAssemblies.Count];
+                loadedAssemblies.Keys.CopyTo(loadedLibraries, 0);
+
+                foreach (var loadedLibrary in loadedLibraries)
+                {
+                    FreeLibrary(loadedLibrary);
+                }
+            }
+        }
+
         public IntPtr GetProcAddress(IntPtr dllHandle, string name)
         {
             return logic.GetProcAddress(dllHandle, name);

@@ -73,6 +73,7 @@
     <Compile Include="Leptonica\PixTests\ImageManipulationTests.cs" />
     <Compile Include="Leptonica\PixTests\PixDataAccessTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TesseractEnvironmentTests.cs" />
     <Compile Include="TesseractResultSet.cs" />
   </ItemGroup>
   <ItemGroup>
