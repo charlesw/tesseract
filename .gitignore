@@ -184,6 +184,7 @@ pip-log.txt
 ###############
 
 /src/AssemblyVersionInfo.cs
+/release
 
 /*.Log
 *.sdsettings
