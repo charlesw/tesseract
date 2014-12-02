@@ -39,6 +39,8 @@ namespace Tesseract
         /// <returns></returns>
         public bool Next(PageIteratorLevel level)
         {
+            if (handle.Handle == IntPtr.Zero)
+                return false;
             return Interop.TessApi.Native.PageIteratorNext(handle, level) != 0;
         }
 
@@ -68,6 +70,8 @@ namespace Tesseract
         /// <returns></returns>
         public bool IsAtBeginningOf(PageIteratorLevel level)
         {
+            if (handle.Handle == IntPtr.Zero)
+                return false;
             return Interop.TessApi.Native.PageIteratorIsAtBeginningOf(handle, level) != 0;
         }
 
@@ -79,6 +83,8 @@ namespace Tesseract
         /// <returns></returns>
         public bool IsAtFinalOf(PageIteratorLevel level, PageIteratorLevel element)
         {
+            if (handle.Handle == IntPtr.Zero)
+                return false;
             return Interop.TessApi.Native.PageIteratorIsAtFinalElement(handle, level, element) != 0;
         }
 
