@@ -43,3 +43,7 @@ due to Mono support which require a version incremment (we use semantic versioni
 
 * Support for loading config files
 * Support for loading Pix from memory
+
+### Version 2.1.1
+
+* Bug fix - Added null ptr checks to PageIterator and ResultIterator
