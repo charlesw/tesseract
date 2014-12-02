@@ -68,5 +68,20 @@ namespace Tesseract.Tests
             // this assert also shows us the contents of the list
             Assert.That(lockedLibraries, Is.EquivalentTo(new List<string>()));
         }
+
+        [Test]
+        public void Unload_ShouldReloadNativeLibrariesOnNextUse()
+        {
+            // Arrange:
+            // 1. we create the tesseract engine wrapper which should load the native libraries
+            using (new TesseractEngine("./tessdata", "eng", EngineMode.Default)) { }
+
+            // 2. Now we unload the native libraries
+            TesseractEnvironment.Unload();
+
+            // Act: Create another tesseract engine instance which should reload the native libraries
+            using (new TesseractEngine("./tessdata", "eng", EngineMode.Default)) { }
+     
+        }
     }
 }
