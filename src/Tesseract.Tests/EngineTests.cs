@@ -127,6 +127,25 @@ namespace Tesseract.Tests
 				}
 			}
 		}
+
+        [Test]
+        public void CanProcessEmptyPxUsingResultIterator()
+        {
+            string actualResult;
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+                using (var img = Pix.LoadFromFile("./data/ocr/empty.png")) {
+                    using (var page = engine.Process(img)) {
+                        actualResult = WriteResultsToString(page);
+                    }
+                }
+            }
+
+            Assert.That(actualResult, Is.EqualTo(
+@"</word></line>
+</para>
+</block>
+"));
+        }
 				
 		[Test]
 		public void CanProcessMultiplePixs()
