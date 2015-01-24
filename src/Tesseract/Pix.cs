@@ -306,7 +306,14 @@ namespace Tesseract
         {
             IntPtr ppixth, ppixd;
             int result = Interop.LeptonicaApi.Native.pixOtsuAdaptiveThreshold(handle, sx, sy, smoothx, smoothy, scorefract, out ppixth, out ppixd);
+
+            if (ppixth != IntPtr.Zero) {
+                // free memory held by ppixth, an array of threshold values found for each tile
+                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixth);
+            }
+
             if (result == 1) throw new TesseractException("Failed to binarize image.");
+
             return new Pix(ppixd);
         }
 
