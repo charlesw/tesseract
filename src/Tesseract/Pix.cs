@@ -301,12 +301,121 @@ namespace Tesseract
         /// <param name="smoothx"> smoothX Half-width of convolution kernel applied to threshold array: use 0 for no smoothing.</param>
         /// <param name="smoothy"> smoothY Half-height of convolution kernel applied to threshold array: use 0 for no smoothing.</param>
         /// <param name="scorefract"> scoreFraction Fraction of the max Otsu score; typ. 0.1 (use 0.0 for standard Otsu).</param>
-        /// <returns> ppixd is a pointer to the thresholded PIX image.</returns>
+        /// <returns>The binarized image.</returns>
         public Pix BinarizeOtsuAdaptiveThreshold(int sx, int sy, int smoothx, int smoothy, float scorefract)
         {
             IntPtr ppixth, ppixd;
             int result = Interop.LeptonicaApi.Native.pixOtsuAdaptiveThreshold(handle, sx, sy, smoothx, smoothy, scorefract, out ppixth, out ppixd);
+
+            if (ppixth != IntPtr.Zero) {
+                // free memory held by ppixth, an array of threshold values found for each tile
+                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixth);
+            }
+
             if (result == 1) throw new TesseractException("Failed to binarize image.");
+
+            return new Pix(ppixd);
+        }
+
+        /// <summary>
+        /// Binarization of the input image using the Sauvola local thresholding method.
+        /// 
+        /// Note: The source image must be 8 bpp grayscale; not colormapped.
+        /// </summary>
+        /// <remarks>
+        /// <list type="number">
+        ///     <listheader>Notes</listheader>
+        ///     <item>The window width and height are 2 * <paramref name="whsize"/> + 1. The minimum value for <paramref name="whsize"/> is 2; typically it is >= 7.</item>
+        ///     <item>The local statistics, measured over the window, are the average and standard deviation.</item>
+        ///     <item>
+        ///     The measurements of the mean and standard deviation are performed inside a border of (<paramref name="whsize"/> + 1) pixels.  
+        ///     If source pix does not have these added border pixels, use <paramref name="addborder"/> = <c>True</c> to add it here; otherwise use 
+        ///     <paramref name="addborder"/> = <c>False</c>.
+        ///     </item>
+        ///     <item>
+        ///     The Sauvola threshold is determined from the formula:  t = m * (1 - k * (1 - s / 128)) where t = local threshold, m = local mean, 
+        ///     k = <paramref name="factor"/>, and s = local standard deviation which is maximised at 127.5 when half the samples are 0 and the other
+        ///     half are 255.
+        ///     </item>
+        ///     <item>
+        ///     The basic idea of Niblack and Sauvola binarization is that the local threshold should be less than the median value,
+        ///     and the larger the variance, the closer to the median it should be chosen. Typical values for k are between 0.2 and 0.5.
+        ///     </item>
+        /// </list>
+        /// </remarks>
+        /// <param name="whsize">the window half-width for measuring local statistics.</param>
+        /// <param name="factor">The factor for reducing threshold due to variances greater than or equal to zero (0). Typically around 0.35.</param>
+        /// <param name="addborder">If <c>True</c> add a border of width (<paramref name="whsize"/> + 1) on all sides.</param>
+        /// <returns>The binarized image.</returns>
+        public Pix BinarizeSauvola(int whsize, float factor, bool addborder)
+        {
+            Guard.Verify(Depth == 8, "Source image must be 8bpp");
+            Guard.Verify(Colormap == null, "Source image must not be color mapped.");
+            Guard.Require("whsize", whsize >= 2, "The window half-width (whsize) must be greater than 2.");            
+            int maxWhSize = Math.Min((Width - 3) / 2, (Height - 3) / 2);
+            Guard.Require("whsize", whsize < maxWhSize, "The window half-width (whsize) must be less than {0} for this image.", maxWhSize);
+            Guard.Require("factor", factor >= 0, "Factor must be greater than zero (0).");
+
+            IntPtr ppixm, ppixsd, ppixth, ppixd;
+            int result = Interop.LeptonicaApi.Native.pixSauvolaBinarize(handle, whsize, factor, addborder ? 1 : 0, out ppixm, out ppixsd, out ppixth, out ppixd);
+
+            // Free memory held by other unused pix's
+
+            if (ppixm != IntPtr.Zero) {
+                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixm);
+            }
+
+            if (ppixsd != IntPtr.Zero) {
+                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixsd);
+            }
+
+            if (ppixth != IntPtr.Zero) {
+                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixth);
+            }
+
+            if (result == 1) throw new TesseractException("Failed to binarize image.");
+
+            return new Pix(ppixd);
+        }
+
+        /// <summary>
+        /// Binarization of the input image using the Sauvola local thresholding method on tiles
+        /// of the source image.
+        /// 
+        /// Note: The source image must be 8 bpp grayscale; not colormapped.
+        /// </summary>
+        /// <remarks>
+        /// A tiled version of Sauvola can become neccisary for large source images (over 16M pixels) because:
+        /// 
+        /// * The mean value accumulator is a uint32, overflow can occur for an image with more than 16M pixels.
+        /// * The mean value accumulator array for 16M pixels is 64 MB. While the mean square accumulator array for 16M pixels is 128 MB.
+        ///   Using tiles reduces the size of these arrays.
+        /// * Each tile can be processed independently, in parallel, on a multicore processor.
+        /// </remarks>
+        /// <param name="whsize">The window half-width for measuring local statistics</param>
+        /// <param name="factor">The factor for reducing threshold due to variances greater than or equal to zero (0). Typically around 0.35.</param>
+        /// <param name="nx">The number of tiles to subdivide the source image into on the x-axis.</param>
+        /// <param name="ny">The number of tiles to subdivide the source image into on the y-axis.</param>
+        /// <returns>THe binarized image.</returns>
+        public Pix BinarizeSauvolaTiled(int whsize, float factor, int nx, int ny)
+        {
+            Guard.Verify(Depth == 8, "Source image must be 8bpp");
+            Guard.Verify(Colormap == null, "Source image must not be color mapped.");
+            Guard.Require("whsize", whsize >= 2, "The window half-width (whsize) must be greater than 2.");
+            int maxWhSize = Math.Min((Width - 3) / 2, (Height - 3) / 2);
+            Guard.Require("whsize", whsize < maxWhSize, "The window half-width (whsize) must be less than {0} for this image.", maxWhSize);
+            Guard.Require("factor", factor >= 0, "Factor must be greater than zero (0).");
+
+            IntPtr ppixth, ppixd;
+            int result = Interop.LeptonicaApi.Native.pixSauvolaBinarizeTiled(handle, whsize, factor, nx, ny, out ppixth, out ppixd);
+
+            // Free memory held by other unused pix's
+            if (ppixth != IntPtr.Zero) {
+                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixth);
+            }
+
+            if (result == 1) throw new TesseractException("Failed to binarize image.");
+
             return new Pix(ppixd);
         }
 

@@ -1,23 +1,18 @@
-﻿## Version 1 Series
+﻿
+### Version 2.2.0
 
-...
+* Improved error message when dll failed to load - [Issue 141](https://github.com/charlesw/tesseract/issues/141)
+* Changed TesseractEngine's constructors to use overloading rather than default parameters - [Issue 146](https://github.com/charlesw/tesseract/issues/146)
+* Added support for Sauvola Binarization.
 
-### Version 1.10
+### Version 2.1.1
 
-* Added support for uzn files - [Issue 66](https://github.com/charlesw/tesseract/issues/66)
+* Bug fix - Added null ptr checks to PageIterator and ResultIterator
 
-### Version 1.11
+### Version 2.1.0
 
-* Allow changing the current region of interest without having to reload the entire image (Page.RegionOfInterest)
-* Fixed loader for ASP.NET [Issue 97](https://github.com/charlesw/tesseract/issues/97)
-
-### Version 1.12
-
-* Automatically strip '\' and '/' characters of path and remove tessdata prefix.
-* Fixed bug introduced in previous region of interest
-* Don't dispose of Pix generated when processing a Bitmap till the Page is disposed off.
-
-## Version 2 Series
+* Support for loading config files
+* Support for loading Pix from memory
 
 ### Version 2.0.0
 
@@ -39,11 +34,19 @@ due to Mono support which require a version incremment (we use semantic versioni
 
 * Fixed UTF8 handling for SetVariable (support for non-english languages) [Issue 120](https://github.com/charlesw/tesseract/issues/120) & [Issue 68](https://github.com/charlesw/tesseract/issues/68)
 
-### Version 2.1
+### Version 1.12
 
-* Support for loading config files
-* Support for loading Pix from memory
+* Automatically strip '\' and '/' characters of path and remove tessdata prefix.
+* Fixed bug introduced in previous region of interest
+* Don't dispose of Pix generated when processing a Bitmap till the Page is disposed off.
 
-### Version 2.1.1
+### Version 1.11
 
-* Bug fix - Added null ptr checks to PageIterator and ResultIterator
+* Allow changing the current region of interest without having to reload the entire image (Page.RegionOfInterest)
+* Fixed loader for ASP.NET [Issue 97](https://github.com/charlesw/tesseract/issues/97)
+
+
+### Version 1.10
+
+* Added support for uzn files - [Issue 66](https://github.com/charlesw/tesseract/issues/66)
+

@@ -38,7 +38,35 @@ namespace Tesseract.Tests.Leptonica.PixTests
                 {
                     Assert.That(binarizedImage, Is.Not.Null);
                     Assert.That(binarizedImage.Handle, Is.Not.EqualTo(IntPtr.Zero));
-                    SaveResult(binarizedImage, "binarizedImage.png");
+                    SaveResult(binarizedImage, "binarizedOtsuImage.png");
+                }
+            }
+        }
+
+        [Test]
+        public void SauvolaBinarizationTest()
+        {
+            using (var sourcePix = Pix.LoadFromFile(@".\Data\Binarization\neo-8bit-grayscale.png")) {
+                using (var grayscalePix = sourcePix.ConvertRGBToGray(1, 1, 1)) {
+                    using (var binarizedImage = grayscalePix.BinarizeSauvola(10, 0.35f, false)) {
+                        Assert.That(binarizedImage, Is.Not.Null);
+                        Assert.That(binarizedImage.Handle, Is.Not.EqualTo(IntPtr.Zero));
+                        SaveResult(binarizedImage, "binarizedSauvolaImage.png");
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void SauvolaTiledBinarizationTest()
+        {
+            using (var sourcePix = Pix.LoadFromFile(@".\Data\Binarization\neo-8bit-grayscale.png")) {
+                using (var grayscalePix = sourcePix.ConvertRGBToGray(1, 1, 1)) {
+                    using (var binarizedImage = grayscalePix.BinarizeSauvolaTiled(10, 0.35f, 2, 2)) {
+                        Assert.That(binarizedImage, Is.Not.Null);
+                        Assert.That(binarizedImage.Handle, Is.Not.EqualTo(IntPtr.Zero));
+                        SaveResult(binarizedImage, "binarizedSauvolaTiledImage.png");
+                    }
                 }
             }
         }
