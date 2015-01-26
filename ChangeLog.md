@@ -2,6 +2,7 @@
 ### Version 2.1.2
 
 * Improved error message when dll failed to load - [Issue 141](https://github.com/charlesw/tesseract/issues/141)
+* Changed TesseractEngine's constructors to use overloading rather than default parameters - [Issue 146](https://github.com/charlesw/tesseract/issues/146)
 
 ### Version 2.1.1
 
