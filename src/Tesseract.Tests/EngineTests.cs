@@ -91,7 +91,7 @@ namespace Tesseract.Tests
                         var region1Text = page.GetText();
 
                         const string expectedTextRegion1 =
-                            "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\n";
+                            "This is a lot of 12 point text to test the\ncor code and see if it works on all types\nof file format.\n\n";
 
                         Assert.That(region1Text, Is.EqualTo(expectedTextRegion1));
 
