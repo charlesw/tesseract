@@ -47,9 +47,10 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Tesseract, Version=1.0.12.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
+    <Reference Include="Tesseract, Version=2.1.0.1, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Tesseract.1.0.12\lib\net40\Tesseract.dll</HintPath>
+      <HintPath>..\packages\Tesseract.2.1.0.1\lib\net40\Tesseract.dll</HintPath>
+	  <IlMerge>True</IlMerge> 
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -134,5 +135,12 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <Target Name="MergeAssemblies" AfterTargets="AfterBuild">
+	<CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'">
+      <Output TaskParameter="Include" ItemName="IlmergeAssemblies"/>     
+    </CreateItem> 
+	<Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)')" Importance="High" /> 
+	<Exec Command="&quot;$(SolutionDir)\packages\ILMerge.2.14.1208\tools\Ilmerge.exe&quot; /lib:&quot;$(MSBuildBinPath)&quot; /targetplatform:v4 /out:&quot;@(MainAssembly)&quot; &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" /> 
   </Target>
 </Project>

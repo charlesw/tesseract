@@ -112,43 +112,33 @@
       <Link>install.ps1</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\lib\TesseractOcr\x64\liblept170.dll">
-      <Link>x64\liblept170.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\lib\TesseractOcr\x64\libtesseract303.dll">
-      <Link>x64\libtesseract303.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\lib\TesseractOcr\x86\liblept170.dll">
-      <Link>x86\liblept170.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\lib\TesseractOcr\x86\libtesseract303.dll">
-      <Link>x86\libtesseract303.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\lib\TesseractOcr\x64\liblept168.so">
-      <Link>x64\liblept168.so</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\lib\TesseractOcr\x64\libtesseract302.so">
-      <Link>x64\libtesseract302.so</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\lib\TesseractOcr\x86\liblept168.so">
-      <Link>x86\liblept168.so</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\lib\TesseractOcr\x86\libtesseract302.so">
-      <Link>x86\libtesseract302.so</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Internal" />
-    <Folder Include="x64" />
-    <Folder Include="x86" />
+    <Content Include="..\lib\TesseractOcr\x64\liblept171.dll">
+      <Link>x64\liblept171.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\x64\libtesseract304.dll">
+      <Link>x64\libtesseract304.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\x64\tesseract.exe">
+      <Link>x64\tesseract.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\x86\liblept171.dll">
+      <Link>x86\liblept171.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\x86\libtesseract304.dll">
+      <Link>x86\libtesseract304.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\lib\TesseractOcr\x86\tesseract.exe">
+      <Link>x86\tesseract.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

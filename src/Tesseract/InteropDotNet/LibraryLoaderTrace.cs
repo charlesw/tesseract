@@ -9,7 +9,8 @@ namespace InteropDotNet
 {
     static class LibraryLoaderTrace
     {
-        private static bool printToConsole = false;
+        const bool printToConsole = false;
+		readonly static TraceSource trace = new TraceSource("Tesseract");
 
         private static void Print(string message)
         {
@@ -23,7 +24,7 @@ namespace InteropDotNet
             if (printToConsole)
                 Print(string.Format(CultureInfo.CurrentCulture, format, args));
             else
-                Trace.TraceInformation(string.Format(CultureInfo.CurrentCulture, format, args));
+                trace.TraceEvent(TraceEventType.Information, 0, string.Format(CultureInfo.CurrentCulture, format, args));
         }
 
         public static void TraceError(string format, params object[] args)
@@ -31,7 +32,7 @@ namespace InteropDotNet
             if (printToConsole)
                 Print(string.Format(CultureInfo.CurrentCulture, format, args));
             else
-                Trace.TraceError(string.Format(CultureInfo.CurrentCulture, format, args));
+                trace.TraceEvent(TraceEventType.Error, 0, string.Format(CultureInfo.CurrentCulture, format, args));
         }
 
         public static void TraceWarning(string format, params object[] args)
@@ -39,7 +40,7 @@ namespace InteropDotNet
             if (printToConsole)
                 Print(string.Format(CultureInfo.CurrentCulture, format, args));
             else
-                Trace.TraceWarning(string.Format(CultureInfo.CurrentCulture, format, args));
+                trace.TraceEvent(TraceEventType.Warning, 0, string.Format(CultureInfo.CurrentCulture, format, args));
         }
     }
 }
