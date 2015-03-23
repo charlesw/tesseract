@@ -414,12 +414,13 @@ namespace Tesseract
 
             processCount++;
 
-            Interop.TessApi.Native.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
+            var actualPageSegmentMode = pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode;
+            Interop.TessApi.Native.BaseAPISetPageSegMode(handle, actualPageSegmentMode);
             Interop.TessApi.Native.BaseApiSetImage(handle, image.Handle);
             if(!String.IsNullOrEmpty(inputName)) {
                 Interop.TessApi.Native.BaseApiSetInputName(handle, inputName);
             }
-            var page = new Page(this, image, region);
+            var page = new Page(this, image, inputName, region, actualPageSegmentMode);
             page.Disposed += OnIteratorDisposed;
             return page;
         }
