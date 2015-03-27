@@ -14,10 +14,22 @@ namespace Tesseract
 
         public TesseractEngine Engine { get; private set; }
 
+        /// <summary>
+        /// Gets the <see cref="Pix"/> that is being ocr'd.
+        /// </summary>
         public Pix Image { get; private set; }
 
+        /// <summary>
+        /// Gets the name of the image being ocr'd.
+        /// </summary>
+        /// <remarks>
+        /// This is also used for some of the more advanced functionality such as identifying the associated UZN file if present.
+        /// </remarks>
         public string ImageName { get; private set; }
 
+        /// <summary>
+        /// Gets the page segmentation mode used to OCR the specified image.
+        /// </summary>
         public PageSegMode PageSegmentMode { get; private set; }
 
         internal Page(TesseractEngine engine, Pix image, string imageName, Rect regionOfInterest, PageSegMode pageSegmentMode)
@@ -55,6 +67,10 @@ namespace Tesseract
             }
         }
 
+        /// <summary>
+        /// Creates a <see cref="PageIterator"/> object that is used to iterate over the page's layout as defined by the current <see cref="Page.RegionOfInterest"/>.
+        /// </summary>
+        /// <returns></returns>
         public PageIterator AnalyseLayout()
         {
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot analyse image layout when using OSD only page segmentation, please use DetectBestOrientation instead.");
@@ -63,6 +79,10 @@ namespace Tesseract
             return new PageIterator(resultIteratorHandle);
         }
 
+        /// <summary>
+        /// Creates a <see cref="ResultIterator"/> object that is used to iterate over the page as defined by the current <see cref="Page.RegionOfInterest"/>.
+        /// </summary>
+        /// <returns></returns>
         public ResultIterator GetIterator()
         {
             Recognize();
@@ -70,24 +90,46 @@ namespace Tesseract
             return new ResultIterator(resultIteratorHandle);
         }
 
+        /// <summary>
+        /// Gets the page's content as plain text.
+        /// </summary>
+        /// <returns></returns>
         public string GetText()
         {
             Recognize();
             return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
         }
 
+        /// <summary>
+        /// Gets the page's content as a HOCR text.
+        /// </summary>
+        /// <param name="pageNum"></param>
+        /// <returns></returns>
         public string GetHOCRText(int pageNum)
         {
             Recognize();
             return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
         }
 
+        /// <summary>
+        /// Get's the mean confidence that as a percentage of the recognized text.
+        /// </summary>
+        /// <returns></returns>
         public float GetMeanConfidence()
         {
             Recognize();
             return Interop.TessApi.Native.BaseAPIMeanTextConf(Engine.Handle) / 100.0f;
         }
 
+        /// <summary>
+        /// Detects the page orientation, with corresponding confidence when using <see cref="PageSegMode.OsdOnly"/>.
+        /// </summary>
+        /// <remarks>
+        /// If using full page segmentation mode (i.e. AutoOsd) then consider using <see cref="AnalyseLayout"/> instead as this also provides a
+        /// deskew angle which isn't available when just performing orientation detection.
+        /// </remarks>
+        /// <param name="orientation">The page orientation.</param>
+        /// <param name="confidence">The corresponding confidence score that the detected orientation is correct.</param>
         public void DetectBestOrientation(out Orientation orientation, out float confidence)
         {
             Interop.OSResult result = new Interop.OSResult();
