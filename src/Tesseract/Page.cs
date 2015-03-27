@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -9,6 +11,8 @@ namespace Tesseract
 {
     public sealed class Page : DisposableBase
     {
+        private static readonly TraceSource trace = new TraceSource("Tesseract");
+
         private bool runRecognitionPhase;
         private Rect regionOfInterest;
 
@@ -65,6 +69,22 @@ namespace Tesseract
                     runRecognitionPhase = false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the thresholded image that was OCR'd.
+        /// </summary>
+        /// <returns></returns>
+        public Pix GetThresholdedImage()
+        {
+            Recognize();
+
+            var pixHandle = Interop.TessApi.Native.BaseAPIGetThresholdedImage(Engine.Handle);
+            if (pixHandle == IntPtr.Zero) {
+                throw new TesseractException("Failed to get thresholded image.");
+            }
+
+            return Pix.Create(pixHandle);
         }
 
         /// <summary>
@@ -152,7 +172,22 @@ namespace Tesseract
                 if (Interop.TessApi.Native.BaseApiRecognize(Engine.Handle, new HandleRef(this, IntPtr.Zero)) != 0) {
                     throw new InvalidOperationException("Recognition of image failed.");
                 }
+
                 runRecognitionPhase = true;
+
+                // now write out the thresholded image if required to do so
+                bool tesseditWriteImages;
+                if (Engine.TryGetBoolVariable("tessedit_write_images", out tesseditWriteImages) && tesseditWriteImages) {
+                    using (Pix thresholdedImage = GetThresholdedImage()) {
+                        string filePath = Path.Combine(Environment.CurrentDirectory, "tessinput.tif");
+                        try {
+                            thresholdedImage.Save(filePath, ImageFormat.TiffG4);
+                            trace.TraceEvent(TraceEventType.Information, 2, "Successfully saved the thresholded image to '{0}'", filePath);
+                        } catch (Exception error) {
+                            trace.TraceEvent(TraceEventType.Error, 2, "Failed to save the thresholded image to '{0}'.\nError: {1}", filePath, error.Message);
+                        }
+                    }
+                }
             }
         }
 
