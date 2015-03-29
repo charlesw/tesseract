@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 namespace Tesseract
 {
     /// <summary>
-    /// Description of BitmapToPixConverter.
+    /// Converts a <see cref="Bitmap"/> to a <see cref="Pix"/>.
     /// </summary>
     public class BitmapToPixConverter
     {
@@ -13,6 +13,11 @@ namespace Tesseract
         {
         }
 
+        /// <summary>
+        /// Converts the specified <paramref name="img"/> to a <see cref="Pix"/>.
+        /// </summary>
+        /// <param name="img">The source image to be converted.</param>
+        /// <returns>The converted pix.</returns>
         public Pix Convert(Bitmap img)
         {
             var pixDepth = GetPixDepth(img.PixelFormat);

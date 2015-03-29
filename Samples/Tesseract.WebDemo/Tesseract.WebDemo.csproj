@@ -70,10 +70,10 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Tesseract, Version=2.1.0.1, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Tesseract.2.1.0.1\lib\net40\Tesseract.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\src\Tesseract\Tesseract.csproj">
+      <Project>{DA780CA0-2606-4259-91C4-3F38C5C90592}</Project>
+      <Name>Tesseract</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -81,22 +81,25 @@
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\lib\TesseractOcr\x64\liblept170.dll">
-      <Link>x64\liblept170.dll</Link>
+    <None Include="..\..\src\lib\TesseractOcr\x64\liblept171.dll">
+      <Link>x64\liblept171.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\lib\TesseractOcr\x64\libtesseract303.dll">
-      <Link>x64\libtesseract303.dll</Link>
+    <None Include="..\..\src\lib\TesseractOcr\x64\libtesseract304.dll">
+      <Link>x64\libtesseract304.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\lib\TesseractOcr\x86\liblept170.dll">
-      <Link>x86\liblept170.dll</Link>
+    <None Include="..\..\src\lib\TesseractOcr\x86\liblept171.dll">
+      <Link>x86\liblept171.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\lib\TesseractOcr\x86\libtesseract303.dll">
-      <Link>x86\libtesseract303.dll</Link>
+    <None Include="..\..\src\lib\TesseractOcr\x86\libtesseract304.dll">
+      <Link>x86\libtesseract304.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\bootstrap-theme.css" />
@@ -126,30 +129,7 @@
     <None Include="tessdata\eng.traineddata" />
     <None Include="Tesseract.WebDemo.css" />
     <None Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="x64" />
-    <Folder Include="x86" />
-    <Folder Include="tessdata" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Tesseract\Tesseract.csproj">
-      <Project>{DA780CA0-2606-4259-91C4-3F38C5C90592}</Project>
-      <Name>Tesseract</Name>
-    </ProjectReference>
-  </ItemGroup>
-    <Content Include="x64\liblept168.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x64\libtesseract302.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\liblept168.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\libtesseract302.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Global.asax" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

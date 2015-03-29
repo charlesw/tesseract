@@ -38,6 +38,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDelete")]
         void BaseApiDelete(HandleRef ptr);
 
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDetectOS")]
+        int BaseAPIDetectOS(HandleRef handle, ref OSResult result);
+
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetBoolVariable")]
         int BaseApiGetBoolVariable(HandleRef handle, string name, out int value);
 
@@ -58,6 +61,9 @@ namespace Tesseract.Interop
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetStringVariable")]
         IntPtr BaseApiGetStringVariableInternal(HandleRef handle, string name);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetThresholdedImage")]
+        IntPtr BaseAPIGetThresholdedImage(HandleRef handle);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUTF8Text")]
         IntPtr BaseAPIGetUTF8TextInternal(HandleRef handle);
