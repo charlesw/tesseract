@@ -1,4 +1,9 @@
-﻿
+﻿### Version 2.3.0
+
+* Support for OsdOnly mode - [Issue 156](https://github.com/charlesw/tesseract/issues/156)
+* Support for saving the thresholded image to tessinput.tif when tessedit_write_images is set  - [Issue 160](https://github.com/charlesw/tesseract/issues/160)
+* Support for specifying custom search directory for dlls and improved logging - [Issue 157](https://github.com/charlesw/tesseract/issues/157)
+
 ### Version 2.2.0
 
 * Improved error message when dll failed to load - [Issue 141](https://github.com/charlesw/tesseract/issues/141)

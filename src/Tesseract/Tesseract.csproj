@@ -47,8 +47,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" Condition=" '$(TargetFrameworkProfile)' != 'Client' " />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyVersionInfo.cs">
@@ -103,6 +101,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />
     <Compile Include="ResultIterator.cs" />
+    <Compile Include="TesseractEnviornment.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TesseractException.cs" />
     <Compile Include="TextLineOrder.cs" />
     <Compile Include="WritingDirection.cs" />
@@ -145,10 +146,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internal" />
-    <Folder Include="x64" />
-    <Folder Include="x86" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
