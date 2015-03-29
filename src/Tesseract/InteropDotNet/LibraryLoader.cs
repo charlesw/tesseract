@@ -45,6 +45,8 @@ namespace InteropDotNet
                     if (dllHandle == IntPtr.Zero)
                         dllHandle = CheckCurrentAppDomain(fileName, platformName);
                     if (dllHandle == IntPtr.Zero)
+                        dllHandle = CheckCurrentAppDomainBin(fileName, platformName);
+                    if (dllHandle == IntPtr.Zero)
                         dllHandle = CheckWorkingDirecotry(fileName, platformName);
 
                     if (dllHandle != IntPtr.Zero)
@@ -82,6 +84,32 @@ namespace InteropDotNet
             var baseDirectory = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
             LibraryLoaderTrace.TraceInformation("Checking current application domain location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
             return InternalLoadLibrary(baseDirectory, platformName, fileName);
+        }
+
+        /// <summary>
+        /// Special test for web applications.
+        /// </summary>
+        /// <remarks>
+        /// Note that this makes a couple of assumptions these being:
+        /// 
+        /// <list type="bullet">
+        ///     <item>That the current application domain's location for web applications corresponds to the web applications root directory.</item>
+        ///     <item>That the tesseract\leptonica dlls reside in the corresponding x86 or x64 directories in the bin directory under the apps root directory.</item>
+        /// </list>
+        /// </remarks>
+        /// <param name="fileName"></param>
+        /// <param name="platformName"></param>
+        /// <returns></returns>
+        private IntPtr CheckCurrentAppDomainBin(string fileName, string platformName)
+        {
+            var baseDirectory = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "bin");
+            if (Directory.Exists(baseDirectory)) {
+                LibraryLoaderTrace.TraceInformation("Checking current application domain's bin location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
+                return InternalLoadLibrary(baseDirectory, platformName, fileName);
+            } else {
+                LibraryLoaderTrace.TraceInformation("No bin directory exists under the current application domain's location, skipping.");
+                return IntPtr.Zero;
+            }
         }
 
         private IntPtr CheckWorkingDirecotry(string fileName, string platformName)

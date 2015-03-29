@@ -1,7 +1,7 @@
 ﻿### Version 2.3.0
 
 * Support for OsdOnly mode - [Issue 156](https://github.com/charlesw/tesseract/issues/156)
-* Support for saving the thresholded image to tessinput.tif when tessedit_write_images is set  - [Issue 160](https://github.com/charlesw/tesseract/issues/160)
+* Support for saving the thresholded image to tessinput.tif when tessedit_write_images is set - [Issue 160](https://github.com/charlesw/tesseract/issues/160)
 * Support for specifying custom search directory for dlls and improved logging - [Issue 157](https://github.com/charlesw/tesseract/issues/157)
 
 ### Version 2.2.0
@@ -22,7 +22,7 @@
 ### Version 2.0.0
 
 *Note:* Version 2 was initially going to introduce support for Tesseract 3.03 however as that hasn't been released yet and we have a few minor breaking changes
-due to Mono support which require a version incremment (we use semantic versioning). Once the next version of tesseract is released we'll add it.
+due to Mono support which require a version increment (we use semantic versioning). Once the next version of tesseract is released we'll add it.
 
 #### Breaking changes from 1.0
 
