@@ -123,10 +123,11 @@ namespace Tesseract
         /// <summary>
         /// Gets the page's content as a HOCR text.
         /// </summary>
-        /// <param name="pageNum"></param>
-        /// <returns></returns>
+        /// <param name="pageNum">The page number (zero based).</param>
+        /// <returns>The OCR'd output as a HOCR text string.</returns>
         public string GetHOCRText(int pageNum)
         {
+            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
             return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
         }

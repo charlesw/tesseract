@@ -145,6 +145,34 @@ namespace Tesseract.Tests
         }
 
         [Test]
+        public void CanGenerateHOCROutput()
+        {
+            string actualResult; 
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+                using (var img = Pix.LoadFromFile("./phototest.tif")) {
+                    using (var page = engine.Process(img)) {
+                        actualResult = page.GetHOCRText(1);
+                    }
+                }
+            }
+
+
+            const string ExpectedResultPath = "./Results/EngineTests.CanGenerateHOCROutput.txt";
+            if (File.Exists(ExpectedResultPath)) {
+                var expectedResult = File.ReadAllText(ExpectedResultPath);
+                if (expectedResult != actualResult) {
+                    var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+                    File.WriteAllText(actualResultPath, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
+                }
+            } else {
+                var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+                File.WriteAllText(actualResultPath, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualResultPath);
+            }
+        }
+
+        [Test]
         public void CanProcessPixUsingResultIterator()
         {
             string actualResult;
