@@ -168,6 +168,49 @@ namespace Tesseract.Interop
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetUTF8Text")]
         IntPtr ResultIteratorGetUTF8TextInternal(HandleRef handle, PageIteratorLevel level);
+
+        #region Choice Iterator
+
+        /// <summary>
+        /// Native API call to TessResultIteratorGetChoiceIterator
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetChoiceIterator")]
+        IntPtr ResultIteratorGetChoiceIterator(HandleRef handle);
+
+        /// <summary>
+        /// Native API call to TessChoiceIteratorDelete
+        /// </summary>
+        /// <param name="handle"></param>
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorDelete")]
+        void ChoiceIteratorDelete(HandleRef handle);
+
+        /// <summary>
+        /// Native API call to TessChoiceIteratorNext
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorNext")]
+        int ChoiceIteratorNext(HandleRef handle);
+
+        /// <summary>
+        /// Native API call to TessChoiceIteratorGetUTF8Text
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorGetUTF8Text")]
+        IntPtr ChoiceIteratorGetUTF8TextInternal(HandleRef handle);
+
+        /// <summary>
+        /// Native API call to TessChoiceIteratorConfidence
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorConfidence")]
+        float ChoiceIteratorGetConfidence(HandleRef handle);
+
+        #endregion
     }
 
     internal static class TessApi
@@ -302,6 +345,22 @@ namespace Tesseract.Interop
             } else {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Returns the null terminated UTF-8 encoded text string for the current choice           
+        /// </summary>
+        /// <remarks>
+        /// NOTE: Unlike LTRResultIterator::GetUTF8Text, the return points to an
+        /// internal structure and should NOT be delete[]ed to free after use.
+        /// </remarks>
+        /// <param name="choiceIteratorHandle"></param>
+        /// <returns>string</returns>
+        internal static string ChoiceIteratorGetUTF8Text(HandleRef choiceIteratorHandle)
+        {
+            Guard.Require("choiceIteratorHandle", choiceIteratorHandle.Handle != IntPtr.Zero, "ChoiceIterator Handle cannot be a null IntPtr and is required");
+            IntPtr txtChoiceHandle = Native.ChoiceIteratorGetUTF8TextInternal(choiceIteratorHandle);
+            return MarshalHelper.PtrToString(txtChoiceHandle, Encoding.UTF8);
         }
     }
 }
