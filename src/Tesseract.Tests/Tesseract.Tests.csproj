@@ -181,6 +181,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <Content Include="Results\EngineTests.CanProcessPixUsingResultIteratorAndChoiceIterator.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Results\EngineTests.CanProcessPixUsingResultIterator.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

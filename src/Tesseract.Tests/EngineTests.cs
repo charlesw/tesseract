@@ -114,7 +114,7 @@ namespace Tesseract.Tests
             using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
                 using (var img = Pix.LoadFromFile("./data/ocr/empty.png")) {
                     using (var page = engine.Process(img)) {
-                        actualResult = WriteResultsToString(page);
+                        actualResult = WriteResultsToString(page, false);
                     }
                 }
             }
@@ -152,7 +152,7 @@ namespace Tesseract.Tests
             using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
                 using (var img = Pix.LoadFromFile("./phototest.tif")) {
                     using (var page = engine.Process(img)) {
-                        actualResult = WriteResultsToString(page);
+                        actualResult = WriteResultsToString(page, false);
                     }
                 }
             }
@@ -164,6 +164,32 @@ namespace Tesseract.Tests
                 File.WriteAllText(actualResultPath, actualResult);
                 Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
             }
+        }
+
+        [Test]
+        public void CanProcessPixUsingResultIteratorAndChoiceIterator()
+        {
+            string actualResult;
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                using (var img = Pix.LoadFromFile("./phototest.tif"))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        actualResult = WriteResultsToString(page, true);
+                    }
+                }
+            }
+
+            const string ExpectedResultPath = "./Results/EngineTests.CanProcessPixUsingResultIteratorAndChoiceIterator.txt";            
+            var expectedResult = File.ReadAllText(ExpectedResultPath);
+                        
+            if (expectedResult != actualResult)
+            {
+                var actualResultPath = String.Format("./Results/EngineTests.CanProcessPixUsingResultIteratorAndChoiceIterator_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+                File.WriteAllText(actualResultPath, actualResult);
+                Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
+            }            
         }
 
         [Test]
@@ -256,7 +282,7 @@ namespace Tesseract.Tests
 			};
         }
 
-        private string WriteResultsToString(Page page)
+        private string WriteResultsToString(Page page, bool outputChoices)
         {
             var output = new StringBuilder();
             using (var iter = page.GetIterator()) {
@@ -304,7 +330,36 @@ namespace Tesseract.Tests
                                             output.AppendFormat("<word confidence=\"{0:P}\">", confidence);
                                         }
                                     }
-                                    output.Append(iter.GetText(PageIteratorLevel.Symbol));
+
+                                    // symbol and choices
+                                    if (outputChoices)
+                                    {
+                                        using (var choiceIter = iter.GetChoiceIterator())
+                                        {
+                                            var symbolConfidence = iter.GetConfidence(PageIteratorLevel.Symbol)/100;
+                                            if (choiceIter != null)
+                                            {
+                                                output.AppendFormat("<symbol text=\"{0}\" confidence=\"{1:P}\">", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
+                                                output.Append("<choices>");
+                                                do
+                                                {
+                                                    var choiceConfidence = choiceIter.GetConfidence()/100;
+                                                    output.AppendFormat("<choice text=\"{0}\" confidence\"{1:P}\"/>", choiceIter.GetText(), choiceConfidence);
+
+                                                } while (choiceIter.Next());
+                                                output.Append("</choices>");
+                                                output.Append("</symbol>");
+                                            }
+                                            else
+                                            {
+                                                output.AppendFormat("<symbol text=\"{0}\" confidence=\"{1:P}\"/>", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        output.Append(iter.GetText(PageIteratorLevel.Symbol));   
+                                    }                                    
                                     if (iter.IsAtFinalOf(PageIteratorLevel.Word, PageIteratorLevel.Symbol)) {
                                         output.Append("</word>");
                                     }
@@ -324,7 +379,7 @@ namespace Tesseract.Tests
             }
             return output.ToString();
         }
-
+        
         #region Variable set\get
 
         [Test]

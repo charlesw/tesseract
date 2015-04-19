@@ -55,6 +55,7 @@
     <Compile Include="AddNewColorStatus.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
+    <Compile Include="ChoiceIterator.cs" />
     <Compile Include="Internal\ErrorMessage.cs" />
     <Compile Include="Internal\Guard.cs" />
     <Compile Include="Internal\TessConvert.cs" />
