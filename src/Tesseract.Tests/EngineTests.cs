@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -296,9 +297,9 @@ namespace Tesseract.Tests
                                         var confidence = iter.GetConfidence(PageIteratorLevel.Block) / 100;
                                         Rect bounds;
                                         if (iter.TryGetBoundingBox(PageIteratorLevel.Block, out bounds)) {
-                                            output.AppendFormat("<block confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<block confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
                                         } else {
-                                            output.AppendFormat("<block confidence=\"{0:P}\">", confidence);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<block confidence=\"{0:P}\">", confidence);
                                         }
                                         output.AppendLine();
                                     }
@@ -306,9 +307,9 @@ namespace Tesseract.Tests
                                         var confidence = iter.GetConfidence(PageIteratorLevel.Para) / 100;
                                         Rect bounds;
                                         if (iter.TryGetBoundingBox(PageIteratorLevel.Para, out bounds)) {
-                                            output.AppendFormat("<para confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<para confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
                                         } else {
-                                            output.AppendFormat("<para confidence=\"{0:P}\">", confidence);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<para confidence=\"{0:P}\">", confidence);
                                         }
                                         output.AppendLine();
                                     }
@@ -316,18 +317,18 @@ namespace Tesseract.Tests
                                         var confidence = iter.GetConfidence(PageIteratorLevel.TextLine) / 100;
                                         Rect bounds;
                                         if (iter.TryGetBoundingBox(PageIteratorLevel.TextLine, out bounds)) {
-                                            output.AppendFormat("<line confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<line confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
                                         } else {
-                                            output.AppendFormat("<line confidence=\"{0:P}\">", confidence);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<line confidence=\"{0:P}\">", confidence);
                                         }
                                     }
                                     if (iter.IsAtBeginningOf(PageIteratorLevel.Word)) {
                                         var confidence = iter.GetConfidence(PageIteratorLevel.Word) / 100;
                                         Rect bounds;
                                         if (iter.TryGetBoundingBox(PageIteratorLevel.Word, out bounds)) {
-                                            output.AppendFormat("<word confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<word confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
                                         } else {
-                                            output.AppendFormat("<word confidence=\"{0:P}\">", confidence);
+                                            output.AppendFormat(CultureInfo.InvariantCulture, "<word confidence=\"{0:P}\">", confidence);
                                         }
                                     }
 
@@ -339,12 +340,12 @@ namespace Tesseract.Tests
                                             var symbolConfidence = iter.GetConfidence(PageIteratorLevel.Symbol)/100;
                                             if (choiceIter != null)
                                             {
-                                                output.AppendFormat("<symbol text=\"{0}\" confidence=\"{1:P}\">", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
+                                                output.AppendFormat(CultureInfo.InvariantCulture, "<symbol text=\"{0}\" confidence=\"{1:P}\">", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
                                                 output.Append("<choices>");
                                                 do
                                                 {
                                                     var choiceConfidence = choiceIter.GetConfidence()/100;
-                                                    output.AppendFormat("<choice text=\"{0}\" confidence\"{1:P}\"/>", choiceIter.GetText(), choiceConfidence);
+                                                    output.AppendFormat(CultureInfo.InvariantCulture, "<choice text=\"{0}\" confidence\"{1:P}\"/>", choiceIter.GetText(), choiceConfidence);
 
                                                 } while (choiceIter.Next());
                                                 output.Append("</choices>");
@@ -352,7 +353,7 @@ namespace Tesseract.Tests
                                             }
                                             else
                                             {
-                                                output.AppendFormat("<symbol text=\"{0}\" confidence=\"{1:P}\"/>", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
+                                                output.AppendFormat(CultureInfo.InvariantCulture, "<symbol text=\"{0}\" confidence=\"{1:P}\"/>", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
                                             }
                                         }
                                     }
