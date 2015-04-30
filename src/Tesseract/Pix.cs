@@ -304,6 +304,10 @@ namespace Tesseract
         /// <returns>The binarized image.</returns>
         public Pix BinarizeOtsuAdaptiveThreshold(int sx, int sy, int smoothx, int smoothy, float scorefract)
         {
+            Guard.Verify(Depth == 8, "Image must have a depth of 8 bits per pixel to be binerized using Otsu.");
+            Guard.Require("sx", sx >= 16, "The sx parameter must be greater than or equal to 16");
+            Guard.Require("sy", sy >= 16, "The sy parameter must be greater than or equal to 16");
+
             IntPtr ppixth, ppixd;
             int result = Interop.LeptonicaApi.Native.pixOtsuAdaptiveThreshold(handle, sx, sy, smoothx, smoothy, scorefract, out ppixth, out ppixd);
 
