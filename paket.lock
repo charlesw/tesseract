@@ -1,0 +1,12 @@
+NUGET
+  remote: https://nuget.org/api/v2
+  specs:
+    bootstrap (3.0.3) - framework: >= net45
+      jQuery (>= 1.9.0)
+    ilmerge (2.14.1208) - framework: >= net40
+    jQuery (1.9.1) - framework: >= net45
+    NUnit (2.6.3) - framework: >= net45
+    NUnit.Runners (2.6.4)
+    Tesseract (2.3.0.0) - framework: >= net40
+    Twitter.Bootstrap (3.0.1.1) - framework: >= net45
+      bootstrap (>= 3.0.1)
