@@ -188,3 +188,5 @@ pip-log.txt
 /*.Log
 *.sdsettings
 *.orig
+paket.exe
+AssemblyVersionInfo.cs

@@ -24,7 +24,6 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -70,10 +69,6 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Tesseract, Version=2.3.0.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Tesseract.2.3.0.0\lib\net40\Tesseract.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -95,7 +90,7 @@
     <None Include="fonts\glyphicons-halflings-regular.svg" />
     <None Include="fonts\glyphicons-halflings-regular.ttf" />
     <None Include="fonts\glyphicons-halflings-regular.woff" />
-    <None Include="packages.config" />
+    <None Include="paket.references" />
     <None Include="Scripts\bootstrap.js" />
     <None Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.9.1-vsdoc.js" />
@@ -115,18 +110,64 @@
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Content\bootstrap-theme.min.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Content\bootstrap.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Content\bootstrap.min.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\bootstrap.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\bootstrap.min.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.eot">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.svg">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.ttf">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1-vsdoc.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1.min.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1.min.map">
+      <Paket>True</Paket>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="x64\liblept168.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Paket>True</Paket>
     </Content>
     <Content Include="x64\libtesseract302.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Paket>True</Paket>
     </Content>
     <Content Include="x86\liblept168.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Paket>True</Paket>
     </Content>
     <Content Include="x86\libtesseract302.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Paket>True</Paket>
     </Content>
   </ItemGroup>
   <PropertyGroup>
@@ -154,11 +195,33 @@
   </ProjectExtensions>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net45\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0')">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net40\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch')">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net451\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
 </Project>

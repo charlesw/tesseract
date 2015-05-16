@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Provides commonon target config that always targets the latest .net version (currently 4.5.1) for all configurations.
+Provides commonon target config that always targets the latest .net version (currently 4.5) for all configurations.
 
 This is mainly for the testing dlls and demo apps so we don't need to worry about making sure the test\demo code runs on older platforms, i.e. 2.0.
 -->
@@ -87,7 +87,7 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
 	
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net451' ">
     <DefineConstants>$(DefineConstants);Net451;Net45;Net40;Net35;Net20</DefineConstants>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR451</BuildFlavor>
@@ -96,7 +96,7 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net45' ">
     <DefineConstants>$(DefineConstants);Net45;Net40;Net35;Net20</DefineConstants>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR45</BuildFlavor>
@@ -105,7 +105,7 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net40' ">
     <DefineConstants>$(DefineConstants);Net45;Net40;Net35;Net20</DefineConstants>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR40</BuildFlavor>
 	<SupportNet35>True</SupportNet35>
@@ -114,7 +114,7 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
 	
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net40Client' ">
     <DefineConstants>$(DefineConstants);Net45;Net40;Net35;Net20</DefineConstants>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR40CLIENT</BuildFlavor>
 	<SupportNet35>True</SupportNet35>
@@ -122,7 +122,7 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
 	
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net35' ">
     <DefineConstants>$(DefineConstants);Net45;Net40;Net35;Net20</DefineConstants>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR35</BuildFlavor>
 	<SupportNet35>True</SupportNet35>
@@ -130,7 +130,7 @@ This is mainly for the testing dlls and demo apps so we don't need to worry abou
 	
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net20' ">
     <DefineConstants>$(DefineConstants);Net45;Net40;Net35;Net20</DefineConstants>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR20</BuildFlavor>
 	<SupportNet35>True</SupportNet35>
