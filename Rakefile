@@ -61,14 +61,16 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :compile] do |p|
 end
 
 namespace :tests do
-  #task :unit do
-  #  system "src/MyProj.Tests/bin/#{Configuration}/MyProj.Tests.exe", clr_command: true
-  #end
+  task :unit do
+    system "packages/NUnit.Runners/tools/nunit-console.exe",
+           %w|src/Tesseract.Tests/bin/Release/Net45/Tesseract.Tests.dll|,
+           clr_command: true
+  end
 end
 
-# task :tests => :'tests:unit'
+task :tests => :'tests:unit'
 
-task :default => :create_nugets #, :tests ]
+task :default => [:create_nugets ,:tests]
 
 #task :ensure_nuget_key do
 #  raise 'missing env NUGET_KEY value' unless ENV['NUGET_KEY']

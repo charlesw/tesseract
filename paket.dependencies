@@ -2,6 +2,7 @@ source https://nuget.org/api/v2
 
 nuget ILMerge 2.14.1208 framework: >= net40
 nuget NUnit 2.6.3 framework: >= net45
+nuget NUnit.Runners
 nuget Tesseract 2.3.0.0 framework: >= net40
 nuget Twitter.Bootstrap 3.0.1.1 framework: >= net45
 nuget bootstrap 3.0.3 framework: >= net45
