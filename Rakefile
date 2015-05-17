@@ -70,7 +70,7 @@ end
 
 task :tests => :'tests:unit'
 
-task :default => [:tests, :create_nugets]
+task :default => [:compile, :tests, :create_nugets]
 
 #task :ensure_nuget_key do
 #  raise 'missing env NUGET_KEY value' unless ENV['NUGET_KEY']

@@ -14,12 +14,15 @@ namespace InteropDotNet
 
             try
             {
-                LibraryLoaderTrace.TraceInformation("Trying to load native library \"{0}\"...", fileName);
+                LibraryLoaderTrace.TraceInformation("Trying to load native library (unix) \"{0}\"...", fileName);
                 libraryHandle = UnixLoadLibrary(fileName, RTLD_NOW);
                 if (libraryHandle != IntPtr.Zero)
                     LibraryLoaderTrace.TraceInformation("Successfully loaded native library \"{0}\", handle = {1}.", fileName, libraryHandle);
                 else
-                    LibraryLoaderTrace.TraceError("Failed to load native library \"{0}\".\r\nCheck windows event log.", fileName);
+                {
+                    EnsureSuccess ();
+                    LibraryLoaderTrace.TraceError("Failed to load native library \"{0}\".", fileName);
+                }
             }
             catch (Exception e)
             {
@@ -41,15 +44,15 @@ namespace InteropDotNet
             LibraryLoaderTrace.TraceInformation("Trying to load native function \"{0}\" from the library with handle {1}...",
                 functionName, libraryHandle);
             var functionHandle = UnixGetProcAddress(libraryHandle, functionName);
-            var errorPointer = UnixGetLastError();
-            if (errorPointer != IntPtr.Zero)
-                throw new Exception("dlsym: " + Marshal.PtrToStringAnsi(errorPointer));
-            if (functionHandle != IntPtr.Zero && errorPointer == IntPtr.Zero)
+
+            EnsureSuccess ();
+
+            if (functionHandle != IntPtr.Zero)
                 LibraryLoaderTrace.TraceInformation("Successfully loaded native function \"{0}\", function handle = {1}.",
                     functionName, functionHandle);
             else
-                LibraryLoaderTrace.TraceError("Failed to load native function \"{0}\", function handle = {1}, error pointer = {2}",
-                    functionName, functionHandle, errorPointer);
+                LibraryLoaderTrace.TraceError("Failed to load native function \"{0}\", function handle = {1}",
+                    functionName, functionHandle);
             return functionHandle;
         }
 
@@ -66,6 +69,18 @@ namespace InteropDotNet
         }
 
         const int RTLD_NOW = 2;
+
+        static void EnsureSuccess () {
+            var error = UnixGetLastErrorString ();
+            if (error != null) throw new Exception("dlsym: " + error);
+        }
+
+        static string UnixGetLastErrorString() {
+            var errorPointer = UnixGetLastError();
+            if (errorPointer != IntPtr.Zero)
+                return Marshal.PtrToStringAnsi(errorPointer);
+            return null;
+        }
 
         [DllImport("libdl.so", EntryPoint = "dlopen")]
         private static extern IntPtr UnixLoadLibrary(String fileName, int flags);

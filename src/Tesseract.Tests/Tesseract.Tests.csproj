@@ -5,7 +5,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Tesseract.Tests</RootNamespace>
     <AssemblyName>Tesseract.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkProfile />
