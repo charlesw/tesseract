@@ -2,6 +2,7 @@
 //  Project URL: https://github.com/AndreyAkinshin/InteropDotNet
 //  Distributed under the MIT License: http://opensource.org/licenses/MIT
 using System;
+using System.IO;
 
 namespace InteropDotNet
 {
@@ -14,6 +15,9 @@ namespace InteropDotNet
 
         public static OperatingSystem GetOperatingSystem()
         {
+            if (File.Exists ("/System/Library/CoreServices/SystemVersion.plist"))
+                return OperatingSystem.MacOSX;
+
             var pid = (int)Environment.OSVersion.Platform;
             switch (pid)
             {
