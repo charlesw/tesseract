@@ -51,8 +51,8 @@ nugets_pack :create_nugets => ['build/pkg', :versioning, :compile] do |p|
   p.exe     = 'packages/NuGet.CommandLine/tools/NuGet.exe'
   p.with_metadata do |m|
     # m.id          = 'MyProj'
-    m.title       = 'TODO'
-    m.description = 'TODO'
+    m.title       = 'Tesseract'
+    m.description = 'OCR library wrapper for .Net'
     m.authors     = 'John Doe, Foretag AB'
     m.project_url = 'http://example.com'
     m.tags        = ''
@@ -70,7 +70,7 @@ end
 
 task :tests => :'tests:unit'
 
-task :default => [:create_nugets ,:tests]
+task :default => [:tests, :create_nugets]
 
 #task :ensure_nuget_key do
 #  raise 'missing env NUGET_KEY value' unless ENV['NUGET_KEY']
