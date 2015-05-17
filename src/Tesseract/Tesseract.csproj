@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
     <ProjectGuid>{DA780CA0-2606-4259-91C4-3F38C5C90592}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug45</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug451</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <RootNamespace>Tesseract</RootNamespace>
@@ -19,28 +19,52 @@
   </PropertyGroup>
   <!-- Dummy config\platform declaration section. This is so the supported configs show up in the ide -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug451|AnyCPU' ">
+    <OutputPath>bin\Debug451</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release451|AnyCPU' ">
+    <OutputPath>bin\Release451</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug45|AnyCPU' ">
+    <OutputPath>bin\Debug45</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release45|AnyCPU' ">
+    <OutputPath>bin\Release45</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40|AnyCPU' ">
+    <OutputPath>bin\Debug40</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
+    <OutputPath>bin\Release40</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40Client|AnyCPU' ">
+    <OutputPath>bin\Debug40Client</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40Client|AnyCPU' ">
+    <OutputPath>bin\Release40Client</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
+    <OutputPath>bin\Debug35</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
+    <OutputPath>bin\Release35</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug20|AnyCPU' ">
+    <OutputPath>bin\Debug20</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release20|AnyCPU' ">
+    <OutputPath>bin\Release20</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <!-- Load the common target, this does the real work for supporting multiple builds -->
   <Import Project="..\Common.targets" />
@@ -107,6 +131,7 @@
     <Compile Include="TesseractException.cs" />
     <Compile Include="TextLineOrder.cs" />
     <Compile Include="WritingDirection.cs" />
+    <Compile Include="InteropDotNet\OSXLibraryLoadedLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\install.ps1">

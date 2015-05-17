@@ -6,7 +6,8 @@ using System.Runtime.InteropServices;
 
 namespace InteropDotNet
 {
-    class WindowsLibraryLoaderLogic : ILibraryLoaderLogic
+    class WindowsLibraryLoaderLogic
+        : ILibraryLoaderLogic
     {
         public IntPtr LoadLibrary(string fileName)
         {
