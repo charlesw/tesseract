@@ -15,8 +15,11 @@ RUN yum install -y epel-release yum-utils && \
     yum-config-manager --add-repo http://download.mono-project.com/repo/centos/ && \
     yum install -y mono-complete
 RUN  yum install -y python-setuptools hostname inotify-tools yum-utils ruby-devel \
-                 gcc gcc-c++ rpm-build redhat-rpm-config make readline-devel \
-                 tar openssl-devel zlib-devel libffi-devel sqlite-devel
+                    gcc gcc-c++ rpm-build redhat-rpm-config make readline-devel \
+                    tar openssl-devel zlib-devel libffi-devel sqlite-devel
+
+# requirement for liblept:
+RUN yum install -y libpng12-devel libjpeg-turbo-devel libwebp-devel
 
 RUN gem install bundler
 
@@ -24,9 +27,5 @@ COPY . $BUILD_PREFIX
 
 RUN bundle
 RUN bundle exec rake
-
-
-RUN gem install rake albacore
-RUN rake
 
 ENTRYPOINT ["/bin/bash"]
