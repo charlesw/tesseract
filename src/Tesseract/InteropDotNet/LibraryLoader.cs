@@ -184,7 +184,8 @@ namespace InteropDotNet
                             instance = new LibraryLoader(new UnixLibraryLoaderLogic());
                             break;
                         case OperatingSystem.MacOSX:
-                            throw new Exception("Unsupported operation system");
+                            instance = new LibraryLoader (new OSXLibraryLoaderLogic ());
+                            break;
                         default:
                             throw new Exception("Unsupported operation system");
                     }

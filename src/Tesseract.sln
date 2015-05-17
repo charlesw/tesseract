@@ -1,9 +1,14 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 # SharpDevelop 5.0
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{3D1BF515-598C-45FD-97CF-5CBE2C16895A}"
+	ProjectSection(SolutionItems) = preProject
+		..\paket.dependencies = ..\paket.dependencies
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90E7305F-2B8F-4E99-9667-56945609ABBE}"
 	ProjectSection(SolutionItems) = preProject
 		..\build.proj = ..\build.proj

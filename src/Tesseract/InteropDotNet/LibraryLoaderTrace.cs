@@ -9,8 +9,8 @@ namespace InteropDotNet
 {
     static class LibraryLoaderTrace
     {
-        const bool printToConsole = false;
-		readonly static TraceSource trace = new TraceSource("Tesseract");
+        const bool printToConsole = true;
+        readonly static TraceSource trace = new TraceSource("Tesseract");
 
         private static void Print(string message)
         {
