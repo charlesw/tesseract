@@ -15,6 +15,28 @@ namespace Tesseract.Tests.Leptonica
         const string DataDirectory = @"Data\Conversion\";
         const string ResultsDirectory = @"Results\Conversion\";
 
+        // Test for [Issue #166](https://github.com/charlesw/tesseract/issues/166)
+        [Test]
+        public unsafe void Convert_ScaledBitmapToPix()
+        {
+            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
+
+            var sourceFile = "photo_rgb_32bpp.tif";
+            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var bitmapConverter = new BitmapToPixConverter();
+            using (var source = new Bitmap(sourceFilePath)) {
+                using (var scaledSource = new Bitmap(source, new Size(source.Width * 2, source.Height * 2))) {
+                    Assert.That(BitmapHelper.GetBPP(scaledSource), Is.EqualTo(32));
+                    using (var dest = bitmapConverter.Convert(scaledSource)) {
+                        var destFilename = "ScaledBitmapToPix_rgb_32bpp.tif";
+                        dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
+
+                        AssertAreEquivalent(scaledSource, dest, true);
+                    }
+                }
+            }
+        }
+
         [Test]
         [TestCase(1)] // Note: 1bpp will not save pixmap when writing out the result, this is a limitation of leptonica (see pixWriteToTiffStream)
         [TestCase(4, Ignore = true, Reason = "4bpp images not supported.")]

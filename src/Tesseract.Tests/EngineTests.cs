@@ -167,6 +167,54 @@ namespace Tesseract.Tests
             }
         }
 
+        // Test for [Issue #166](https://github.com/charlesw/tesseract/issues/166)
+        [Test]
+        public void CanProcessScaledBitmap()
+        {
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+                using (var img = Bitmap.FromFile("./phototest.tif")) {
+                    using (var scaledImg = new Bitmap(img, new Size(img.Width * 2, img.Height * 2))) {
+                        using (var page = engine.Process(scaledImg)) {
+                            var text = page.GetText().Trim();
+
+                            const string expectedText =
+                                "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.";
+
+                            Assert.That(text, Is.EqualTo(expectedText));
+                        }
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void CanGenerateHOCROutput()
+        {
+            string actualResult; 
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+                using (var img = Pix.LoadFromFile("./phototest.tif")) {
+                    using (var page = engine.Process(img)) {
+                        actualResult = page.GetHOCRText(1);
+                    }
+                }
+            }
+
+
+            const string ExpectedResultPath = "./Results/EngineTests.CanGenerateHOCROutput.txt";
+            if (File.Exists(ExpectedResultPath)) {
+                var expectedResult = File.ReadAllText(ExpectedResultPath);
+                if (expectedResult != actualResult) {
+                    var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+                    File.WriteAllText(actualResultPath, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
+                }
+            } else {
+                var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+                File.WriteAllText(actualResultPath, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualResultPath);
+            }
+        }
+
         [Test]
         public void CanProcessPixUsingResultIteratorAndChoiceIterator()
         {
