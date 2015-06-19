@@ -65,6 +65,29 @@ namespace Tesseract.Tests.Leptonica
             }
         }
 
+        /// <summary>
+        /// Test case for https://github.com/charlesw/tesseract/issues/180
+        /// </summary>
+        [Test]
+        public unsafe void Convert_BitmapToPix_Format8bppIndexed()
+        {
+            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
+
+            var sourceFile = "photo_palette_8bpp.png";
+            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var bitmapConverter = new BitmapToPixConverter();
+            using (var source = new Bitmap(sourceFilePath)) {
+                Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(8));
+                Assert.That(source.PixelFormat, Is.EqualTo(PixelFormat.Format8bppIndexed));
+                using (var dest = bitmapConverter.Convert(source)) {
+                    var destFilename = "BitmapToPix_palette_8bpp.png";
+                    dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Png);
+
+                    AssertAreEquivalent(source, dest, true);
+                }
+            }
+        }
+
         [Test]
         [TestCase(1, true, false)]
         [TestCase(1, false, false)]
