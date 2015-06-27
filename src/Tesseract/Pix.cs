@@ -424,12 +424,12 @@ namespace Tesseract
         }
 
         /// <summary>
-        /// Conversion from RBG to 8bpp grayscale.
+        /// Conversion from RBG to 8bpp grayscale using the specified weights. Note red, green, blue weights should add up to 1.0.
         /// </summary>
         /// <param name="rwt">Red weight</param>
         /// <param name="gwt">Green weight</param>
         /// <param name="bwt">Blue weight</param>
-        /// <returns></returns>
+        /// <returns>The Grayscale pix.</returns>
         public Pix ConvertRGBToGray(float rwt, float gwt, float bwt)
         {
         	Guard.Verify(Depth == 32, "The source image must have a depth of 32 (32 bpp).");
@@ -440,6 +440,14 @@ namespace Tesseract
             var resultPixHandle = Interop.LeptonicaApi.Native.pixConvertRGBToGray(handle, rwt, gwt, bwt);
             if (resultPixHandle == IntPtr.Zero) throw new TesseractException("Failed to convert to grayscale.");
             return new Pix(resultPixHandle);
+        }
+        /// <summary>
+        /// Conversion from RBG to 8bpp grayscale.
+        /// </summary>
+        /// <returns>The Grayscale pix.</returns>
+        public Pix ConvertRGBToGray()
+        {
+            return ConvertRGBToGray(0, 0, 0);
         }
         
 		/// <summary>
