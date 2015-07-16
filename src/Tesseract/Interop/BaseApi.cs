@@ -83,7 +83,7 @@ namespace Tesseract.Interop
 
         // image analysis
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage")]
-		void BaseApiSetImage(HandleRef handle, byte[] imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line);
+	unsafe static extern void BaseApiSetImage(HandleRef handle, byte* imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line);
 		
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage2")]
         void BaseApiSetImage(HandleRef handle, HandleRef pixHandle);
