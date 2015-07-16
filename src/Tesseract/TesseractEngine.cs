@@ -496,38 +496,61 @@ namespace Tesseract
             return page;
         }
         
-	/// <summary>
-	/// Processes a specified region in the image using the specified page layout analysis mode.
-	/// </summary>
-	/// <remarks>
-	/// You can only have one result iterator open at any one time.
-	/// </remarks>
-	/// <param name="imagedata">The array with the Pixeldata.</param>
-	/// <param name="width">The width of the image.</param>
-	/// <param name="height">The height of the image.</param>
-	/// <param name="bytes_per_pixel">Bytes per pixel.</param>
-	/// <param name="bytes_per_line">Number of bytes per Line. (Stride)</param>
-	/// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
-	/// <param name="region">The image region to process.</param>
-	/// <param name="pageSegMode">The page layout analyasis method to use.</param>
-	/// <returns>A result iterator</returns>
-	public Page Process(byte[] imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line, string inputName, Rect region, PageSegMode? pageSegMode = null)
-	{
-		if (processCount > 0) throw new InvalidOperationException("Only one image can be processed at once. Please make sure you dispose of the page once your finished with it.");
-	
-		processCount++;
-	
-		Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
-		Interop.TessApi.BaseApiSetImage(handle, imagedata, width, height, bytes_per_pixel, bytes_per_line);
-		Interop.TessApi.BaseApiSetRectangle(handle, region.X1, region.Y1, region.Width, region.Height);
-		if (!String.IsNullOrEmpty(inputName))
+		/// <summary>
+		/// Processes a specified region in the image using the specified page layout analysis mode.
+		/// </summary>
+		/// <remarks>
+		/// You can only have one result iterator open at any one time.
+		/// </remarks>
+		/// <param name="imagedata">The array with the Pixeldata.</param>
+		/// <param name="width">The width of the image.</param>
+		/// <param name="height">The height of the image.</param>
+		/// <param name="bytes_per_pixel">Bytes per pixel.</param>
+		/// <param name="bytes_per_line">Number of bytes per Line. (Stride)</param>
+		/// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
+		/// <param name="region">The image region to process.</param>
+		/// <param name="pageSegMode">The page layout analyasis method to use.</param>
+		/// <returns>A result iterator</returns>
+		public unsafe Page Process(byte[] imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line, string inputName, Rect region, PageSegMode? pageSegMode = null)
 		{
-			Interop.TessApi.BaseApiSetInputName(handle, inputName);
+			fixed (byte* imagedataP = imagedata)
+			{
+				return Process(imagedataP, width, height, bytes_per_pixel, bytes_per_line, inputName, region, pageSegMode);
+			}
 		}
-		var page = new Page(this);
-		page.Disposed += OnIteratorDisposed;
-		return page;
-	}
+	
+		/// <summary>
+		/// Processes a specified region in the image using the specified page layout analysis mode.
+		/// </summary>
+		/// <remarks>
+		/// You can only have one result iterator open at any one time.
+		/// </remarks>
+		/// <param name="imagedata">The array with the Pixeldata.</param>
+		/// <param name="width">The width of the image.</param>
+		/// <param name="height">The height of the image.</param>
+		/// <param name="bytes_per_pixel">Bytes per pixel.</param>
+		/// <param name="bytes_per_line">Number of bytes per Line. (Stride)</param>
+		/// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
+		/// <param name="region">The image region to process.</param>
+		/// <param name="pageSegMode">The page layout analyasis method to use.</param>
+		/// <returns>A result iterator</returns>
+		public unsafe Page Process(byte* imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line, string inputName, Rect region, PageSegMode? pageSegMode = null)
+		{
+			if (processCount > 0) throw new InvalidOperationException("Only one image can be processed at once. Please make sure you dispose of the page once your finished with it.");
+		
+			processCount++;
+		
+			Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
+			Interop.TessApi.BaseApiSetImage(handle, imagedata, width, height, bytes_per_pixel, bytes_per_line);
+			Interop.TessApi.BaseApiSetRectangle(handle, region.X1, region.Y1, region.Width, region.Height);
+			if (!String.IsNullOrEmpty(inputName))
+			{
+				Interop.TessApi.BaseApiSetInputName(handle, inputName);
+			}
+			var page = new Page(this);
+			page.Disposed += OnIteratorDisposed;
+			return page;
+		}
 
         protected override void Dispose(bool disposing)
         {
