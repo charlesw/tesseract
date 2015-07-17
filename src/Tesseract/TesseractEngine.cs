@@ -511,14 +511,16 @@ namespace Tesseract
 		/// <param name="region">The image region to process.</param>
 		/// <param name="pageSegMode">The page layout analyasis method to use.</param>
 		/// <returns>A result iterator</returns>
-		public unsafe Page Process(byte[] imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line, string inputName, Rect region, PageSegMode? pageSegMode = null)
+		public Page Process(byte[] imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line, string inputName, Rect region, PageSegMode? pageSegMode = null)
 		{
-			fixed (byte* imagedataP = imagedata)
-			{
-				return Process(imagedataP, width, height, bytes_per_pixel, bytes_per_line, inputName, region, pageSegMode);
-			}
+			GCHandle pinnedImagedata = GCHandle.Alloc(imagedata, GCHandleType.Pinned);
+			IntPtr imagedataP = pinnedImagedata.AddrOfPinnedObject();
+			Page returnPage = Process(imagedataP, width, height, bytes_per_pixel, bytes_per_line, inputName, region, pageSegMode);
+			pinnedImagedata.Free();
+
+			return returnPage;
 		}
-	
+
 		/// <summary>
 		/// Processes a specified region in the image using the specified page layout analysis mode.
 		/// </summary>
@@ -534,12 +536,12 @@ namespace Tesseract
 		/// <param name="region">The image region to process.</param>
 		/// <param name="pageSegMode">The page layout analyasis method to use.</param>
 		/// <returns>A result iterator</returns>
-		public unsafe Page Process(byte* imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line, string inputName, Rect region, PageSegMode? pageSegMode = null)
+		public Page Process(IntPtr imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line, string inputName, Rect region, PageSegMode? pageSegMode = null)
 		{
 			if (processCount > 0) throw new InvalidOperationException("Only one image can be processed at once. Please make sure you dispose of the page once your finished with it.");
-		
+
 			processCount++;
-		
+
 			Interop.TessApi.BaseAPISetPageSegMode(handle, pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode);
 			Interop.TessApi.BaseApiSetImage(handle, imagedata, width, height, bytes_per_pixel, bytes_per_line);
 			Interop.TessApi.BaseApiSetRectangle(handle, region.X1, region.Y1, region.Width, region.Height);
