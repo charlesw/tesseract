@@ -500,7 +500,7 @@ namespace Tesseract
 			
 			return new Pix(resultHandle);
 		}
-		
+
         #endregion
 
         #region Scaling
@@ -574,7 +574,7 @@ namespace Tesseract
         /// The default sharpening factors are:
         /// <list type="bullet">
         /// <item>
-        /// <description>for scaling factors < 0.7:   sharpfract = 0.2    sharpwidth = 1</description>
+        /// <description><![CDATA[for scaling factors < 0.7:   sharpfract = 0.2    sharpwidth = 1]]></description>
         /// </item>
         /// <item>
         /// <description>for scaling factors >= 0.7:  sharpfract = 0.4    sharpwidth = 2</description>
