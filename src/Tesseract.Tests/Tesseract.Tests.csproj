@@ -64,7 +64,6 @@
     </Compile>
     <Compile Include="AnalyseResultTests.cs" />
     <Compile Include="BaseApiTests.cs" />
-    <Compile Include="Data\PixToBitmapConverter.cs" />
     <Compile Include="EngineTests.cs" />
     <Compile Include="Leptonica\BitmapHelperTests.cs" />
     <Compile Include="Leptonica\ColorTests.cs" />
