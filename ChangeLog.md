@@ -1,4 +1,4 @@
-﻿### Version 2.4.0 (pending)
+﻿### Version 2.4.0
 
 * Support for scaling images - [Issue 183](https://github.com/charlesw/tesseract/issues/183)
 * Provide meaningful defaults for Pix.ConvertToGrayscale  - [Issue 184](https://github.com/charlesw/tesseract/issues/184)
