@@ -75,13 +75,12 @@ namespace Tesseract.Tests.Leptonica.PixTests
         public void ConvertRGBToGrayTest()
         {
             using (var sourcePix = Pix.LoadFromFile(@".\Data\Conversion\photo_rgb_32bpp.tif"))
-            using (var grayscaleImage = sourcePix.ConvertRGBToGray(1.0F, 1.0F, 1.0F))
+            using (var grayscaleImage = sourcePix.ConvertRGBToGray())
             {
                 Assert.That(grayscaleImage.Depth, Is.EqualTo(8));
         		SaveResult(grayscaleImage, "grayscaleImage.jpg");
             }
-        }
-        
+        }        
         
         [Test]
         [TestCase(45)]
@@ -101,6 +100,24 @@ namespace Tesseract.Tests.Leptonica.PixTests
         			SaveResult(result, filename);
 	            }
         	}
+        }
+
+
+        [Test]
+        public void Scale_RGB_ShouldBeScaledBySpecifiedFactor(
+            [Values(0.25f, 0.5f, 0.75f, 1, 1.25f, 1.5f, 1.75f, 2, 4, 8)]  float scale)
+        {
+        	const string FileNameFormat = "scale_{0}.jpg";
+            using (var sourcePix = Pix.LoadFromFile(@".\Data\Conversion\photo_rgb_32bpp.tif")) {
+                using (var result = sourcePix.Scale(scale, scale)) {
+                    Assert.That(result.Width, Is.EqualTo((int)Math.Round(sourcePix.Width * scale)));
+                    Assert.That(result.Height, Is.EqualTo((int)Math.Round(sourcePix.Height * scale)));
+
+        			// TODO: Visualy confirm successful rotation and then setup an assertion to compare that result is the same.
+        			var filename = String.Format(FileNameFormat, scale);
+        			SaveResult(result, filename);
+                }
+            }
         }
                       
         private void SaveResult(Pix result, string filename)

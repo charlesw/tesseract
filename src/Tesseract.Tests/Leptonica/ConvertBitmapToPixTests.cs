@@ -15,6 +15,28 @@ namespace Tesseract.Tests.Leptonica
         const string DataDirectory = @"Data\Conversion\";
         const string ResultsDirectory = @"Results\Conversion\";
 
+        // Test for [Issue #166](https://github.com/charlesw/tesseract/issues/166)
+        [Test]
+        public unsafe void Convert_ScaledBitmapToPix()
+        {
+            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
+
+            var sourceFile = "photo_rgb_32bpp.tif";
+            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var bitmapConverter = new BitmapToPixConverter();
+            using (var source = new Bitmap(sourceFilePath)) {
+                using (var scaledSource = new Bitmap(source, new Size(source.Width * 2, source.Height * 2))) {
+                    Assert.That(BitmapHelper.GetBPP(scaledSource), Is.EqualTo(32));
+                    using (var dest = bitmapConverter.Convert(scaledSource)) {
+                        var destFilename = "ScaledBitmapToPix_rgb_32bpp.tif";
+                        dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
+
+                        AssertAreEquivalent(scaledSource, dest, true);
+                    }
+                }
+            }
+        }
+
         [Test]
         [TestCase(1)] // Note: 1bpp will not save pixmap when writing out the result, this is a limitation of leptonica (see pixWriteToTiffStream)
         [TestCase(4, Ignore = true, Reason = "4bpp images not supported.")]
@@ -37,6 +59,29 @@ namespace Tesseract.Tests.Leptonica
                 using (var dest = bitmapConverter.Convert(source)) {
                     var destFilename = String.Format("BitmapToPix_{0}_{1}bpp.tif", pixType, depth);
                     dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
+
+                    AssertAreEquivalent(source, dest, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Test case for https://github.com/charlesw/tesseract/issues/180
+        /// </summary>
+        [Test]
+        public unsafe void Convert_BitmapToPix_Format8bppIndexed()
+        {
+            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
+
+            var sourceFile = "photo_palette_8bpp.png";
+            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var bitmapConverter = new BitmapToPixConverter();
+            using (var source = new Bitmap(sourceFilePath)) {
+                Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(8));
+                Assert.That(source.PixelFormat, Is.EqualTo(PixelFormat.Format8bppIndexed));
+                using (var dest = bitmapConverter.Convert(source)) {
+                    var destFilename = "BitmapToPix_palette_8bpp.png";
+                    dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Png);
 
                     AssertAreEquivalent(source, dest, true);
                 }

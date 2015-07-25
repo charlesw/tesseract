@@ -64,7 +64,6 @@
     </Compile>
     <Compile Include="AnalyseResultTests.cs" />
     <Compile Include="BaseApiTests.cs" />
-    <Compile Include="Data\PixToBitmapConverter.cs" />
     <Compile Include="EngineTests.cs" />
     <Compile Include="Leptonica\BitmapHelperTests.cs" />
     <Compile Include="Leptonica\ColorTests.cs" />
@@ -114,6 +113,9 @@
     <Content Include="Data\Conversion\photo_palette_4bpp.tif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Conversion\photo_palette_8bpp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Conversion\photo_palette_8bpp.tif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -153,6 +155,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <Content Include="Results\EngineTests.CanGenerateHOCROutput.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Results\EngineTests.CanProcessPixUsingResultIterator.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
