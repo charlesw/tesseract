@@ -1,8 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-# SharpDevelop 5.0
-VisualStudioVersion = 12.0.20827.3
 # Visual Studio Express 2013 for Web
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -13,16 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console Examples", "Console Examples", "{2FB55EBD-958B-43D2-98F6-B47194CA3B82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.ConsoleDemo", "Tesseract.ConsoleDemo\Tesseract.ConsoleDemo.csproj", "{E168ED88-0452-4918-9D81-611CFA353A0F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{5A933A2D-E59D-46DC-882B-BE59BA06326E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract", "..\src\Tesseract\Tesseract.csproj", "{DA780CA0-2606-4259-91C4-3F38C5C90592}"
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FAD8EC9B-A5DD-4CF1-A48D-0007E83446F6}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,10 +25,6 @@ Global
 		{E168ED88-0452-4918-9D81-611CFA353A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E168ED88-0452-4918-9D81-611CFA353A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E168ED88-0452-4918-9D81-611CFA353A0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA780CA0-2606-4259-91C4-3F38C5C90592}.Debug|Any CPU.ActiveCfg = Debug40|Any CPU
-		{DA780CA0-2606-4259-91C4-3F38C5C90592}.Debug|Any CPU.Build.0 = Debug40|Any CPU
-		{DA780CA0-2606-4259-91C4-3F38C5C90592}.Release|Any CPU.ActiveCfg = Release40|Any CPU
-		{DA780CA0-2606-4259-91C4-3F38C5C90592}.Release|Any CPU.Build.0 = Release40|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +32,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7650CFED-6660-4354-9D78-1C54CDF12542} = {47D551BB-CFCE-41AF-A16F-D9BD3F2A5C84}
 		{E168ED88-0452-4918-9D81-611CFA353A0F} = {2FB55EBD-958B-43D2-98F6-B47194CA3B82}
-		{DA780CA0-2606-4259-91C4-3F38C5C90592} = {5A933A2D-E59D-46DC-882B-BE59BA06326E}
 	EndGlobalSection
 EndGlobal

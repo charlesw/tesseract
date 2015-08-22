@@ -1,4 +1,10 @@
-﻿### Version 2.3.0
+﻿### Version 2.4.0
+
+* Support for scaling images - [Issue 183](https://github.com/charlesw/tesseract/issues/183)
+* Provide meaningful defaults for Pix.ConvertToGrayscale  - [Issue 184](https://github.com/charlesw/tesseract/issues/184)
+* Make TesseractException serialisable - [Issue 194](https://github.com/charlesw/tesseract/issues/194)
+
+### Version 2.3.0
 
 * Support for OsdOnly mode - [Issue 156](https://github.com/charlesw/tesseract/issues/156)
 * Support for saving the thresholded image to tessinput.tif when tessedit_write_images is set - [Issue 160](https://github.com/charlesw/tesseract/issues/160)

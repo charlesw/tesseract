@@ -121,10 +121,10 @@ namespace Tesseract.Tests
             }
 
             Assert.That(actualResult, Is.EqualTo(
-@"</word></line>
+NormaliseNewLine(@"</word></line>
 </para>
 </block>
-"));
+")));
         }
 
         [Test]
@@ -194,7 +194,7 @@ namespace Tesseract.Tests
             using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
                 using (var img = Pix.LoadFromFile("./phototest.tif")) {
                     using (var page = engine.Process(img)) {
-                        actualResult = page.GetHOCRText(1);
+                        actualResult = NormaliseNewLine(page.GetHOCRText(1));
                     }
                 }
             }
@@ -202,7 +202,7 @@ namespace Tesseract.Tests
 
             const string ExpectedResultPath = "./Results/EngineTests.CanGenerateHOCROutput.txt";
             if (File.Exists(ExpectedResultPath)) {
-                var expectedResult = File.ReadAllText(ExpectedResultPath);
+                var expectedResult = NormaliseNewLine(File.ReadAllText(ExpectedResultPath));
                 if (expectedResult != actualResult) {
                     var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
                     File.WriteAllText(actualResultPath, actualResult);
@@ -231,7 +231,7 @@ namespace Tesseract.Tests
             }
 
             const string ExpectedResultPath = "./Results/EngineTests.CanProcessPixUsingResultIteratorAndChoiceIterator.txt";            
-            var expectedResult = File.ReadAllText(ExpectedResultPath);
+            var expectedResult = NormaliseNewLine(File.ReadAllText(ExpectedResultPath));
                         
             if (expectedResult != actualResult)
             {
@@ -426,7 +426,7 @@ namespace Tesseract.Tests
                     output.AppendLine("</block>");
                 } while (iter.Next(PageIteratorLevel.Block));
             }
-            return output.ToString();
+            return NormaliseNewLine(output.ToString());
         }
         
         #region Variable set\get
@@ -534,6 +534,18 @@ namespace Tesseract.Tests
         {
             var basePath = Path.Combine(Environment.CurrentDirectory, "Data");
             return Path.Combine(basePath, path);
+        }
+
+        /// <summary>
+        /// Normalise new line characters to unix (\n) so they are all the same.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private string NormaliseNewLine(string text)
+        {
+            return text
+                .Replace("\r\n", "\n")
+                .Replace("\r", "\n");
         }
 
         #endregion File Helpers

@@ -216,7 +216,7 @@ namespace Tesseract
 		/// Returns a <see cref="IEnumerator{Pix}"/> that iterates the the array of <see cref="Pix"/>.
 		/// </summary>
 		/// <remarks>
-		/// When done with the enumerator you must call <see cref="IEnumerator{Pix}.Dispose()"/> to release any unmanaged resources.
+		/// When done with the enumerator you must call <see cref="Dispose"/> to release any unmanaged resources.
 		/// However if your using the enumerator in a foreach loop, this is done for you automatically by .Net. This also means
 		/// that any <see cref="Pix"/> returned from the enumerator cannot safely be used outside a foreach loop (or after Dispose has been
 		/// called on the enumerator). If you do indeed need the pix after the enumerator has been disposed of you must clone it using 

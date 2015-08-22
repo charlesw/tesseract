@@ -83,6 +83,9 @@ TestResult.xml
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 packages/
 
+# VS 2015 Files
+.vs/
+
 # Visual C++ cache files
 ipch/
 *.aps
@@ -138,7 +141,7 @@ UpgradeLog*.XML
 ############
 
 # Windows image file caches
-Thumbs.db 
+Thumbs.db
 
 # Folder config file
 Desktop.ini
