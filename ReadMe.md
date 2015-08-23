@@ -70,4 +70,4 @@ Also thanks to the following projects\resources without which this project would
 * [Interop with Native Libraries](http://www.mono-project.com/Interop_with_Native_Libraries) - Stacks of useful information about c# P/Invoke and Marshaling
 
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
-[tesseract-ocr]: http://code.google.com/p/tesseract-ocr
+[tesseract-ocr]: https://github.com/tesseract-ocr/tesseract
