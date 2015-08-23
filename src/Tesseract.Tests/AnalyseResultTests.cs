@@ -108,8 +108,8 @@ namespace Tesseract.Tests
         {
             using (var img = Pix.LoadFromFile(@".\phototest.tif")) {
                 using (var rotatedPix = img.Rotate(rotation / 360 * (float)Math.PI * 2)) {
-                    var destFilename = String.Format("RotatedPix_{0}.tif", rotation);
-                    rotatedPix.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
+                    //var destFilename = String.Format("RotatedPix_{0}.tif", rotation);
+                    //rotatedPix.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
 
                     using (var page = engine.Process(rotatedPix, PageSegMode.OsdOnly)) {
                         Orientation expectedOrientation;
