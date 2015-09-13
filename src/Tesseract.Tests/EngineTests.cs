@@ -153,13 +153,13 @@ NormaliseNewLine(@"</word></line>
             using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
                 using (var img = Pix.LoadFromFile("./phototest.tif")) {
                     using (var page = engine.Process(img)) {
-                        actualResult = WriteResultsToString(page, false);
+                        actualResult = NormaliseNewLine(WriteResultsToString(page, false));
                     }
                 }
             }
 
             const string ExpectedResultPath = "./Results/EngineTests.CanProcessPixUsingResultIterator.txt";
-            var expectedResult = File.ReadAllText(ExpectedResultPath);
+            var expectedResult = NormaliseNewLine(File.ReadAllText(ExpectedResultPath));
             if (expectedResult != actualResult) {
                 var actualResultPath = String.Format("./Results/EngineTests.CanProcessPixUsingResultIterator_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
                 File.WriteAllText(actualResultPath, actualResult);

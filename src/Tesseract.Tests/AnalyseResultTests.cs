@@ -126,6 +126,26 @@ namespace Tesseract.Tests
             }
         }
 
+        [Test]
+        public void GetImage(
+            [Values(PageIteratorLevel.Block, PageIteratorLevel.Para, PageIteratorLevel.TextLine, PageIteratorLevel.Word, PageIteratorLevel.Symbol)] PageIteratorLevel level, 
+            [Values(0, 3)] int padding)
+        {
+            using (var img = new Bitmap(@".\phototest.tif")) {
+                using (var page = engine.Process(img)) {
+                    using (var pageLayout = page.GetIterator()) {
+                        pageLayout.Begin();
+                        // get symbol
+                        int x, y;
+                        using (var elementImg = pageLayout.GetImage(level, padding, out x, out y)) {
+                            //var destFilename = String.Format("ResultIterator_Image_{0}_{1}_at_({2},{3}).png", level, padding, x, y);
+                            //elementImg.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Png);
+                        }
+                    }
+                }
+            }
+        }
+
         private void ExpectedOrientation(float rotation, out Orientation orientation, out float deskew)
         {
             rotation = rotation % 360f;

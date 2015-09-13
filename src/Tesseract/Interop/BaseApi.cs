@@ -139,7 +139,7 @@ namespace Tesseract.Interop
         IntPtr PageIteratorGetBinaryImage(HandleRef handle, PageIteratorLevel level);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorGetImage")]
-        IntPtr PageIteratorGetImage(HandleRef handle, PageIteratorLevel level, int padding, out int left, out int top);
+        IntPtr PageIteratorGetImage(HandleRef handle, PageIteratorLevel level, int padding, HandleRef originalImage, out int left, out int top);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorIsAtBeginningOf")]
         int PageIteratorIsAtBeginningOf(HandleRef handle, PageIteratorLevel level);

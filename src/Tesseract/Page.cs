@@ -96,7 +96,7 @@ namespace Tesseract
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot analyse image layout when using OSD only page segmentation, please use DetectBestOrientation instead.");
 
             var resultIteratorHandle = Interop.TessApi.Native.BaseAPIAnalyseLayout(Engine.Handle);
-            return new PageIterator(resultIteratorHandle);
+            return new PageIterator(this, resultIteratorHandle);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Tesseract
         {
             Recognize();
             var resultIteratorHandle = Interop.TessApi.Native.BaseApiGetIterator(Engine.Handle);
-            return new ResultIterator(resultIteratorHandle);
+            return new ResultIterator(this, resultIteratorHandle);
         }
 
         /// <summary>

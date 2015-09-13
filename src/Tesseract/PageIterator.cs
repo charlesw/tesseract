@@ -14,10 +14,12 @@ namespace Tesseract
     /// </remarks>
     public class PageIterator : DisposableBase
     {
+        protected readonly Page page;
         protected readonly HandleRef handle;
 
-        internal PageIterator(IntPtr handle)
+        internal PageIterator(Page page, IntPtr handle)
         {
+            this.page = page;
         	this.handle = new HandleRef(this, handle);
         }
 
@@ -130,7 +132,7 @@ namespace Tesseract
                 return null;
             }
 
-            return Pix.Create(Interop.TessApi.Native.PageIteratorGetImage(handle, level, padding, out x, out y));
+            return Pix.Create(Interop.TessApi.Native.PageIteratorGetImage(handle, level, padding, page.Image.Handle, out x, out y));
         }
 
         /// <summary>
