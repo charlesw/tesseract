@@ -1,4 +1,13 @@
-﻿### Version 2.4.0
+﻿### Version 2.5.0 (Tesseract 3.04)
+
+* Update Tesseract binaries to 3.04 - [Issue 168](https://github.com/charlesw/tesseract/issues/168)
+* Iterator.GetImage throws ArgumentException: Pix handle must not be zero  - [Issue ](https://github.com/charlesw/tesseract/issues/)
+* Support for ChoiceIterator - [Issue 129](https://github.com/charlesw/tesseract/issues/129)
+* Support for classify_bln_numeric_mode - [Issue 52](https://github.com/charlesw/tesseract/issues/52)
+* Support for setting Init only variables - [Issue 70](https://github.com/charlesw/tesseract/issues/70)
+* Support for copying\cloning an iterator - [Issue 25](https://github.com/charlesw/tesseract/issues/25)
+
+### Version 2.4.0
 
 * Support for scaling images - [Issue 183](https://github.com/charlesw/tesseract/issues/183)
 * Provide meaningful defaults for Pix.ConvertToGrayscale  - [Issue 184](https://github.com/charlesw/tesseract/issues/184)
