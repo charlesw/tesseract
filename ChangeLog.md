@@ -1,4 +1,10 @@
-﻿### Version 2.5.0 (Tesseract 3.04)
+﻿### Version 3.0.0 (Tesseract 3.04)
+
+#### Breaking Changes
+
+* Requires VS 2013 runtime as the included Tesseract binaries are now compiled with VS 2013.
+
+#### Other Changes
 
 * Update Tesseract binaries to 3.04 - [Issue 168](https://github.com/charlesw/tesseract/issues/168)
 * Iterator.GetImage throws ArgumentException: Pix handle must not be zero  - [Issue ](https://github.com/charlesw/tesseract/issues/)
