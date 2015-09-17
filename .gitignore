@@ -194,4 +194,6 @@ pip-log.txt
 # GIT Change files
 ################
 *.orig
-
+paket.exe
+AssemblyVersionInfo.cs
+*.userprefs
