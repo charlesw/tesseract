@@ -15,7 +15,7 @@ You will also need to download the language data files for tesseract 3.04 from [
 
 1. Add the ``Tesseract`` NuGet Package by running ``Install-Package Tesseract`` from the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console).
 2. Ensure you have Visual Studio 2013 x86 & x64 runtimes installed (see note above).
-3. Download language data files for tesseract 3.03 from [tesseract-ocr] and add them to your project, 
+3. Download language data files for tesseract 3.04 from [tesseract-ocr] and add them to your project, 
    ensure 'Copy to output directory' is set to Always.
 4. Check out the Samples solution ``~/Samples/Tesseract.Samples.sln`` for a working example
 
