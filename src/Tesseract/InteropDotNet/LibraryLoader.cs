@@ -61,15 +61,25 @@ namespace InteropDotNet
 
         private IntPtr CheckCustomSearchPath(string fileName, string platformName)
         {
+            var libPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
             var baseDirectory = CustomSearchPath;
-            if (!String.IsNullOrEmpty(baseDirectory)) {
+            if (!String.IsNullOrEmpty(baseDirectory))
+            {
                 LibraryLoaderTrace.TraceInformation("Checking custom search location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
                 return InternalLoadLibrary(baseDirectory, platformName, fileName);
-            } else {
-                LibraryLoaderTrace.TraceInformation("Custom search path is not defined, skipping.");
-                return IntPtr.Zero;
+            }
+            else if (libPath != null)
+            {
+                LibraryLoaderTrace.TraceInformation("Custom search path is not defined, testing LD_LIBRARY_PATH: {0}", libPath);
+                foreach (var dir in libPath.Split(':'))
+                {
+                    var res = InternalLoadLibrary (dir, platformName, fileName);
+                    if (res != IntPtr.Zero)
+                        return res;
+                }
             }
 
+            return IntPtr.Zero;
         }
 
         private IntPtr CheckExecutingAssemblyDomain(string fileName, string platformName)
@@ -173,6 +183,7 @@ namespace InteropDotNet
                 if (instance == null)
                 {
                     var operatingSystem = SystemManager.GetOperatingSystem();
+
                     switch (operatingSystem)
                     {
                         case OperatingSystem.Windows:
