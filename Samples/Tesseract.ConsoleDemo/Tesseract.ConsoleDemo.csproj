@@ -33,6 +33,18 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="x64\liblept168.dll">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="x64\libtesseract302.dll">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="x86\liblept168.dll">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="x86\libtesseract302.dll">
+      <Paket>True</Paket>
+    </Content>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -49,7 +61,7 @@
     <ProjectReference Include="..\..\src\Tesseract\Tesseract.csproj">
       <Project>{DA780CA0-2606-4259-91C4-3F38C5C90592}</Project>
       <Name>Tesseract</Name>
-	  <IlMerge>True</IlMerge>
+      <IlMerge>True</IlMerge>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +123,36 @@
     <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true' and '%(ReferencePath.IlMerge)'=='true'">
       <Output TaskParameter="Include" ItemName="IlmergeAssemblies" />
     </CreateItem>
-    <Message Text="MERGING: @(IlmergeAssemblies->'%(Filename)')" Importance="High" />
-    <Exec Command="&quot;$(SolutionDir)packages\ILMerge.2.14.1208\tools\Ilmerge.exe&quot; /lib:&quot;$(MSBuildBinPath)&quot; /targetplatform:v4 /out:&quot;@(MainAssembly)&quot; &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
+    <Message Text="MERGING: @(IlmergeAssemblies-&gt;'%(Filename)')" Importance="High" />
+    <Exec Command="&quot;$(SolutionDir)packages\ILMerge.2.14.1208\tools\Ilmerge.exe&quot; /lib:&quot;$(MSBuildBinPath)&quot; /targetplatform:v4 /out:&quot;@(MainAssembly)&quot; &quot;@(IntermediateAssembly)&quot; @(IlmergeAssemblies-&gt;'&quot;%(FullPath)&quot;', ' ')" />
   </Target>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net45\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0')">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net40\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch')">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net451\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
 </Project>

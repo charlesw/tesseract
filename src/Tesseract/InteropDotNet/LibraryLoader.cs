@@ -47,7 +47,7 @@ namespace InteropDotNet
                     if (dllHandle == IntPtr.Zero)
                         dllHandle = CheckCurrentAppDomainBin(fileName, platformName);
                     if (dllHandle == IntPtr.Zero)
-                        dllHandle = CheckWorkingDirecotry(fileName, platformName);
+                        dllHandle = CheckWorkingDirectory(fileName, platformName);
 
                     if (dllHandle != IntPtr.Zero)
                         loadedAssemblies[fileName] = dllHandle;
@@ -73,7 +73,7 @@ namespace InteropDotNet
                 LibraryLoaderTrace.TraceInformation("Custom search path is not defined, testing LD_LIBRARY_PATH: {0}", libPath);
                 foreach (var dir in libPath.Split(':'))
                 {
-                    var res = InternalLoadLibrary (dir, platformName, fileName);
+                    var res = logic.LoadLibrary(Path.Combine(dir, fileName));
                     if (res != IntPtr.Zero)
                         return res;
                 }
@@ -122,7 +122,7 @@ namespace InteropDotNet
             }
         }
 
-        private IntPtr CheckWorkingDirecotry(string fileName, string platformName)
+        private IntPtr CheckWorkingDirectory(string fileName, string platformName)
         {
             var baseDirectory = Path.GetFullPath(Environment.CurrentDirectory);
             LibraryLoaderTrace.TraceInformation("Checking working directory '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);

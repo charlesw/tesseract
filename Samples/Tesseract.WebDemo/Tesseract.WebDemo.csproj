@@ -110,7 +110,7 @@
     <None Include="fonts\glyphicons-halflings-regular.svg" />
     <None Include="fonts\glyphicons-halflings-regular.ttf" />
     <None Include="fonts\glyphicons-halflings-regular.woff" />
-    <None Include="packages.config" />
+    <None Include="paket.references" />
     <None Include="Scripts\bootstrap.js" />
     <None Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.9.1-vsdoc.js" />
@@ -128,6 +128,60 @@
     <None Include="tessdata\eng.traineddata" />
     <None Include="Tesseract.WebDemo.css" />
     <None Include="Web.config" />
+    <Content Include="x64\liblept168.dll">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="x64\libtesseract302.dll">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="x86\liblept168.dll">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="x86\libtesseract302.dll">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Content\bootstrap-theme.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Content\bootstrap-theme.min.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Content\bootstrap.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Content\bootstrap.min.css">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\bootstrap.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\bootstrap.min.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.eot">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.svg">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.ttf">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1-vsdoc.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1.min.js">
+      <Paket>True</Paket>
+    </Content>
+    <Content Include="Scripts\jquery-1.9.1.min.map">
+      <Paket>True</Paket>
+    </Content>
     <Content Include="Global.asax" />
   </ItemGroup>
   <PropertyGroup>
@@ -155,4 +209,33 @@
   </ProjectExtensions>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net45\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0')">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net40\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch')">
+      <ItemGroup>
+        <Reference Include="Tesseract">
+          <HintPath>..\..\packages\Tesseract\lib\net451\Tesseract.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
 </Project>
