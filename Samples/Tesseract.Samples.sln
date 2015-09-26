@@ -1,8 +1,13 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Web
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{74DBD22A-83D1-4924-90BF-D4F858B482FA}"
+	ProjectSection(SolutionItems) = preProject
+		..\paket.dependencies = ..\paket.dependencies
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web Examples", "Web Examples", "{47D551BB-CFCE-41AF-A16F-D9BD3F2A5C84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesseract.WebDemo", "Tesseract.WebDemo\Tesseract.WebDemo.csproj", "{7650CFED-6660-4354-9D78-1C54CDF12542}"

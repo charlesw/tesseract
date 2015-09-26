@@ -35,6 +35,7 @@ namespace InteropDotNet
             ImplementConstructor(typeBuilder, methods);
 
             var implementationType = typeBuilder.CreateType();
+
             return (T)Activator.CreateInstance(implementationType, LibraryLoader.Instance);
         }
 

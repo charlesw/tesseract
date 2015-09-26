@@ -197,3 +197,5 @@ pip-log.txt
 paket.exe
 AssemblyVersionInfo.cs
 *.userprefs
+x86/
+x64/
