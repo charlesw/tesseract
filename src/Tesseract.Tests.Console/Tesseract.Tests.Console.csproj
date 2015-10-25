@@ -58,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,6 +81,15 @@
       <Project>{abf7dbf7-2358-47c5-9e42-6f1c04e658a5}</Project>
       <Name>Tesseract.Tests</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tesseract\Tesseract.csproj">
+      <Project>{da780ca0-2606-4259-91c4-3f38c5c90592}</Project>
+      <Name>Tesseract</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="phototest2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
