@@ -313,7 +313,7 @@ namespace Tesseract
 
             if (ppixth != IntPtr.Zero) {
                 // free memory held by ppixth, an array of threshold values found for each tile
-                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixth);
+                Interop.LeptonicaApi.Native.pixDestroy(ref ppixth);
             }
 
             if (result == 1) throw new TesseractException("Failed to binarize image.");
@@ -366,15 +366,15 @@ namespace Tesseract
             // Free memory held by other unused pix's
 
             if (ppixm != IntPtr.Zero) {
-                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixm);
+                Interop.LeptonicaApi.Native.pixDestroy(ref ppixm);
             }
 
             if (ppixsd != IntPtr.Zero) {
-                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixsd);
+                Interop.LeptonicaApi.Native.pixDestroy(ref ppixsd);
             }
 
             if (ppixth != IntPtr.Zero) {
-                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixth);
+                Interop.LeptonicaApi.Native.pixDestroy(ref ppixth);
             }
 
             if (result == 1) throw new TesseractException("Failed to binarize image.");
@@ -415,7 +415,7 @@ namespace Tesseract
 
             // Free memory held by other unused pix's
             if (ppixth != IntPtr.Zero) {
-                Interop.LeptonicaApi.Native.pixaDestroy(ref ppixth);
+                Interop.LeptonicaApi.Native.pixDestroy(ref ppixth);
             }
 
             if (result == 1) throw new TesseractException("Failed to binarize image.");
