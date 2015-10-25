@@ -1,4 +1,8 @@
-﻿### Version 2.4.0
+﻿### Version 2.4.1
+
+* Fixed memory leak in Pix.BinarizeOtsuAdaptiveThreshold, Pix.BinarizeSauvola, and Pix.BinarizeSauvolaTiled - [Issue 218](https://github.com/charlesw/tesseract/issues/218)
+
+### Version 2.4.0
 
 * Support for scaling images - [Issue 183](https://github.com/charlesw/tesseract/issues/183)
 * Provide meaningful defaults for Pix.ConvertToGrayscale  - [Issue 184](https://github.com/charlesw/tesseract/issues/184)
