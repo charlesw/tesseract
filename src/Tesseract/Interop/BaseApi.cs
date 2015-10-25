@@ -252,7 +252,11 @@ namespace Tesseract.Interop
         public static string BaseApiGetStringVariable(HandleRef handle, string name)
         {
             var resultHandle = Native.BaseApiGetStringVariableInternal(handle, name);
-            return MarshalHelper.PtrToString(resultHandle, Encoding.UTF8);
+            if (resultHandle != IntPtr.Zero) {
+                return MarshalHelper.PtrToString(resultHandle, Encoding.UTF8);
+            } else {
+                return null;
+            }
         }
 
         public static string BaseAPIGetUTF8Text(HandleRef handle)

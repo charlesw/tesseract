@@ -549,6 +549,17 @@ NormaliseNewLine(@"</word></line>
 			}
 		}
 
+        [Test]
+        public void CanGetStringVariableThatDoesNotExist()
+        {
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+                String result;
+                Boolean success = engine.TryGetStringVariable("illegal-variable", out result);
+                Assert.That(success, Is.False);
+                Assert.That(result, Is.Null);
+            }
+        }
+
 		#endregion Variable set\get
 
 		#region File Helpers
