@@ -96,7 +96,7 @@ namespace Tesseract
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot analyse image layout when using OSD only page segmentation, please use DetectBestOrientation instead.");
 
             var resultIteratorHandle = Interop.TessApi.Native.BaseAPIAnalyseLayout(Engine.Handle);
-            return new PageIterator(resultIteratorHandle);
+            return new PageIterator(this, resultIteratorHandle);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Tesseract
         {
             Recognize();
             var resultIteratorHandle = Interop.TessApi.Native.BaseApiGetIterator(Engine.Handle);
-            return new ResultIterator(resultIteratorHandle);
+            return new ResultIterator(this, resultIteratorHandle);
         }
 
         /// <summary>
@@ -120,17 +120,22 @@ namespace Tesseract
             return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
         }
 
-        /// <summary>
-        /// Gets the page's content as a HOCR text.
-        /// </summary>
-        /// <param name="pageNum">The page number (zero based).</param>
-        /// <returns>The OCR'd output as a HOCR text string.</returns>
-        public string GetHOCRText(int pageNum)
+		/// <summary>
+		/// Gets the page's content as a HOCR text.
+		/// </summary>
+		/// <param name="pageNum">The page number (zero based).</param>
+		/// <param name="useXHtml">True to use XHTML Output, False to HTML Output</param>
+		/// <returns>The OCR'd output as a HOCR text string.</returns>
+		public string GetHOCRText(int pageNum, bool useXHtml = false)
         {
+			//Why Not Use 'nameof(pageNum)' instead of '"pageNum"'
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-            return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
-        }
+			if(useXHtml)
+				return Interop.TessApi.BaseAPIGetHOCRText2(Engine.Handle, pageNum);
+			else
+				return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
+		}
 
         /// <summary>
         /// Get's the mean confidence that as a percentage of the recognized text.
@@ -155,7 +160,7 @@ namespace Tesseract
         {
             Interop.OSResult result = new Interop.OSResult();
             result.Init();
-            if (Interop.TessApi.Native.TessBaseAPIDetectOS(Engine.Handle, ref result) != 0) {
+            if (Interop.TessApi.Native.BaseAPIDetectOS(Engine.Handle, ref result) != 0) {
                 result.GetBestOrientation(out orientation, out confidence);
             } else {
                 throw new TesseractException("Failed to detect image orientation.");

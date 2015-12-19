@@ -6,6 +6,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90E7305F-2B8F-4E99-9667-56945609ABBE}"
 	ProjectSection(SolutionItems) = preProject
+		Common.targets = Common.targets
+		Common.net45.targets = Common.net45.targets
 		..\build.proj = ..\build.proj
 		Common.net45.targets = Common.net45.targets
 		Common.targets = Common.targets
@@ -15,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{8599BCF5-EB0D-4308-9D0D-369928B56A87}"
 	ProjectSection(SolutionItems) = preProject
+		Tesseract.nuspec = Tesseract.nuspec
 		install.ps1 = install.ps1
 		Tesseract.nuspec = Tesseract.nuspec
 	EndProjectSection

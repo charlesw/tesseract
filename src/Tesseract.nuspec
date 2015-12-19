@@ -27,10 +27,10 @@
 	 <file src="Release451\Tesseract.dll" target="lib\net451" />
 	 <file src="Release451\Tesseract.xml" target="lib\net451" />
 	 
-	 <file src="\Release20\x86\libtesseract302.dll" target="content\x86" />
-	 <file src="\Release20\x86\liblept168.dll" target="content\x86" />	
-	 <file src="\Release20\x64\libtesseract302.dll" target="content\x64" />
-	 <file src="\Release20\x64\liblept168.dll" target="content\x64" />	  
+	 <file src="\Release20\x86\libtesseract304.dll" target="content\x86" />
+	 <file src="\Release20\x86\liblept171.dll" target="content\x86" />	
+	 <file src="\Release20\x64\libtesseract304.dll" target="content\x64" />
+	 <file src="\Release20\x64\liblept171.dll" target="content\x64" />	  
 	 <file src="\Release20\install.ps1" target="tools\install.ps1" />
   </files>
 </package>

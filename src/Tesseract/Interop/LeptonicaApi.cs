@@ -5,7 +5,7 @@ using System.Text;
 using InteropDotNet;
 
 namespace Tesseract.Interop
-{
+{		
 	/// <summary>
 	/// The exported leptonica api signatures.
 	/// </summary>
