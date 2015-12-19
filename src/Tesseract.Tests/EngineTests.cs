@@ -211,28 +211,29 @@ NormaliseNewLine(@"</word></line>
 		}
 
 		[Test]
-		public void CanGenerateHOCROutput()
+		public void CanGenerateHOCROutput(
+            [Values(true, false)] Boolean useXHtml)
 		{
 			string actualResult; 
 			using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
 				using (var img = Pix.LoadFromFile("./phototest.tif")) {
 					using (var page = engine.Process(img)) {
-						actualResult = NormaliseNewLine(page.GetHOCRText(1));
+						actualResult = NormaliseNewLine(page.GetHOCRText(1, useXHtml));
 					}
 				}
 			}
 
 
-			const string ExpectedResultPath = "./Results/EngineTests.CanGenerateHOCROutput.txt";
+			string ExpectedResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0}.txt", useXHtml);
 			if (File.Exists(ExpectedResultPath)) {
 				var expectedResult = NormaliseNewLine(File.ReadAllText(ExpectedResultPath));
 				if (expectedResult != actualResult) {
-					var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+					var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0}_{1:yyyyMMddTHHmmss}.txt", useXHtml, DateTime.UtcNow);
 					File.WriteAllText(actualResultPath, actualResult);
 					Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
 				}
 			} else {
-				var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+				var actualResultPath = String.Format("./Results/EngineTests.CanGenerateHOCROutput_{0}_{1:yyyyMMddTHHmmss}.txt", useXHtml, DateTime.UtcNow);
 				File.WriteAllText(actualResultPath, actualResult);
 				Assert.Fail("Expected result did not exist, actual results saved to {0}", actualResultPath);
 			}
