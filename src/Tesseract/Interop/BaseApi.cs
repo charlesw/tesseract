@@ -211,10 +211,27 @@ namespace Tesseract.Interop
         float ChoiceIteratorGetConfidence(HandleRef handle);
 
         #endregion
-    }
+	}
 
-    internal static class TessApi
+	internal static class TessApi
     {
+		//XHTML Begin Tag:
+		public const string xhtmlBeginTag =
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			+ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n"
+			+ "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+			+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" "
+			+ "lang=\"en\">\n <head>\n  <title></title>\n"
+			+ "<meta http-equiv=\"Content-Type\" content=\"text/html;"
+			+ "charset=utf-8\" />\n"
+			+ "  <meta name='ocr-system' content='tesseract' />\n"
+			+ "  <meta name='ocr-capabilities' content='ocr_page ocr_carea ocr_par"
+			+ " ocr_line ocrx_word"
+			+ "'/>\n"
+			+ "</head>\n<body>\n";
+		//XHTML End Tag:
+		public const string xhtmlEndTag = " </body>\n</html>\n";
+
         public const string htmlBeginTag =
             "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
             + " \"http://www.w3.org/TR/html4/loose.dtd\">\n"
@@ -248,6 +265,18 @@ namespace Tesseract.Interop
                 return null;
             }
         }
+		 
+		//Just Copied:
+		public static string BaseAPIGetHOCRText2(HandleRef handle,int pageNum) {
+			IntPtr txtHandle = Native.BaseAPIGetHOCRTextInternal(handle, pageNum);
+			if(txtHandle != IntPtr.Zero) {
+				var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+				TessApi.Native.DeleteText(txtHandle);
+				return xhtmlBeginTag + result + xhtmlEndTag;
+			} else {
+				return null;
+			}
+		}
 
         public static string BaseApiGetStringVariable(HandleRef handle, string name)
         {
@@ -366,5 +395,9 @@ namespace Tesseract.Interop
             IntPtr txtChoiceHandle = Native.ChoiceIteratorGetUTF8TextInternal(choiceIteratorHandle);
             return MarshalHelper.PtrToString(txtChoiceHandle, Encoding.UTF8);
         }
+
+		// hOCR Extension
+
+
     }
 }
