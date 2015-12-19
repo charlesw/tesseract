@@ -51,19 +51,21 @@
 	</ItemGroup>
 	<Target Name="PrepareBuild">
 		<Copy SourceFiles="$(SourceDir)\AssemblyVersionInfo.template.cs" DestinationFiles="$(SourceDir)\AssemblyVersionInfo.cs" />
-		
-        <MSBuild.ExtensionPack.FileSystem.File TaskAction="Replace" RegexPattern="\$\(Version\)" Replacement="$(Version)" Files="$(SourceDir)\AssemblyVersionInfo.cs"/> 
+    <MSBuild.ExtensionPack.FileSystem.File TaskAction="Replace" RegexPattern="\$\(Version\)" Replacement="$(Version)" Files="$(SourceDir)\AssemblyVersionInfo.cs"/> 
 	</Target>
 	<Target Name="ExpandFlavors" DependsOnTargets="PrepareBuild">
 		<CreateItem Include="@(Flavor)" AdditionalMetadata="Properties=Configuration=%(Flavor.Configuration)%3BPlatform=Any CPU%3BOutDir=$(BuildDir)\%(Flavor.Configuration)\">
 			<Output TaskParameter="Include" ItemName="ProjectToBuild" />
 		</CreateItem>
 	</Target>
-	<Target Name="Clean" DependsOnTargets="ExpandFlavors">
+  <Target Name="RestorePackages">
+    <Exec Command='$(ToolsDir)\NuGet.exe restore "$(SourceDir)\Tesseract.sln"'/>
+  </Target>
+	<Target Name="Clean" DependsOnTargets="ExpandFlavors;RestorePackages">
 		<MSBuild Projects="@(ProjectToBuild)" Targets="Clean" />
 		<RemoveDir Directories="$(BuildDir)" />
 	</Target>
-	<Target Name="Build" DependsOnTargets="ExpandFlavors">
+	<Target Name="Build" DependsOnTargets="ExpandFlavors;RestorePackages">
 		<MSBuild Projects="@(ProjectToBuild)" Targets="Build" />
 	</Target>
 	<Target Name="Package" DependsOnTargets="Build">
