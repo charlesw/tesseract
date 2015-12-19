@@ -7,7 +7,7 @@
 #### Other Changes
 
 * Update Tesseract binaries to 3.04 - [Issue 168](https://github.com/charlesw/tesseract/issues/168)
-* Iterator.GetImage throws ArgumentException: Pix handle must not be zero  - [Issue ](https://github.com/charlesw/tesseract/issues/)
+* Iterator.GetImage throws ArgumentException: Pix handle must not be zero  - [Issue 206](https://github.com/charlesw/tesseract/issues/206)
 * Support for ChoiceIterator - [Issue 129](https://github.com/charlesw/tesseract/issues/129)
 * Support for classify_bln_numeric_mode - [Issue 52](https://github.com/charlesw/tesseract/issues/52)
 * Support for setting Init only variables - [Issue 70](https://github.com/charlesw/tesseract/issues/70)
