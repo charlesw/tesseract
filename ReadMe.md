@@ -5,7 +5,7 @@ A .NET wrapper for [tesseract-ocr].
 ### Visual Studio 2013 x86 and x64 Runtimes 
 
 Since tesseract and leptonica binaries are compiled with Visual Studio 2013 you'll need to ensure you have the 
-[Visual Studio 2013 Runtime](vs-runtime) installed.
+[Visual Studio 2013 Runtime][vs-runtime] installed.
 
 ### Tesseract language data
 
@@ -27,7 +27,7 @@ Please create your pull requests to target the "develop" branch. "Master" is onl
 
 ## License
 
-Copyright 2012-2014 Charles Weld.
+Copyright 2012-2015 Charles Weld.
 
 Licensed under the [Apache License, Version 2.0][apache2] (the "License"); you
 may not use this software except in compliance with the License. You may obtain
