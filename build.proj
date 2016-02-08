@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<Version>3.0.1.0</Version>
+		<Version>3.0.2.0</Version>
+    <ReleaseVersion>3.0.2.0-alpha1</ReleaseVersion>
 		<SourceDir>$(MSBuildProjectDirectory)\src</SourceDir>
 		<BuildDir>$(MSBuildProjectDirectory)\bin</BuildDir>
 		<ReleaseDir>$(MSBuildProjectDirectory)\release</ReleaseDir>
@@ -70,7 +71,7 @@
 	</Target>
 	<Target Name="Package" DependsOnTargets="Build">
 		<MakeDir Directories='$(ReleaseDir)'/>		
-		<Exec Command='$(ToolsDir)\NuGet.exe pack "$(SourceDir)\Tesseract.nuspec" -BasePath "$(BuildDir)" -Version $(Version) -o "$(ReleaseDir)"'/>
+		<Exec Command='$(ToolsDir)\NuGet.exe pack "$(SourceDir)\Tesseract.nuspec" -BasePath "$(BuildDir)" -Version $(ReleaseVersion) -o "$(ReleaseDir)"'/>
 	</Target>
 
 </Project>
