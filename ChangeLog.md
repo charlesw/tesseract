@@ -1,4 +1,9 @@
-﻿### Version 3.0.1
+﻿### Version 3.0.2
+
+* Fixed intermittent crash on initialisation - [Issue 231](https://github.com/charlesw/tesseract/issues/231)
+* Upgraded native tesseract libraries to those provided by https://github.com/charlesw/tesseract-vs (Visual Studio 2015)
+
+### Version 3.0.1
 
 * Fixed 64 bit support - [Issue 232](https://github.com/charlesw/tesseract/issues/232)
 

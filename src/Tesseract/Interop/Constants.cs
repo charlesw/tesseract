@@ -7,7 +7,7 @@ namespace Tesseract.Interop
     /// </summary>
     internal static class Constants
     {
-        public const string LeptonicaDllName = "liblept171";
+        public const string LeptonicaDllName = "liblept172";
         public const string TesseractDllName = "libtesseract304";
     }
 }
