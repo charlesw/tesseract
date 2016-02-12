@@ -2,10 +2,10 @@ A .NET wrapper for [tesseract-ocr].
 
 ## Dependencies
 
-### Visual Studio 2013 x86 and x64 Runtimes 
+### Visual Studio 2015 x86 and x64 Runtimes 
 
-Since tesseract and leptonica binaries are compiled with Visual Studio 2013 you'll need to ensure you have the 
-[Visual Studio 2013 Runtime][vs-runtime] installed.
+Since tesseract and leptonica binaries are compiled with Visual Studio 2015 you'll need to ensure you have the 
+[Visual Studio 2015 Runtime][vs-runtime] installed.
 
 ### Tesseract language data
 
@@ -71,4 +71,4 @@ Also thanks to the following projects\resources without which this project would
 
 [apache2]: http://www.apache.org/licenses/LICENSE-2.0
 [tesseract-ocr]: https://github.com/tesseract-ocr/tesseract
-[vs-runtime]:https://www.microsoft.com/en-au/download/details.aspx?id=40784
+[vs-runtime]: https://www.microsoft.com/en-us/download/details.aspx?id=48145
