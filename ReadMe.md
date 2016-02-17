@@ -1,10 +1,4 @@
-A .NET wrapper for [tesseract-ocr].
-
-## Version 3.0 Note
-
-The current version of 3.0 unfortunately has some stability issues (See issue [#231](https://github.com/charlesw/tesseract/issues/231)) please use the previously released version (2.4.1) which can be installed using the following command from the Package Manager Console (View -> Other Windows -> Package Manager Console):
-
-``Install-Package Tesseract -Version 2.4.1.0``
+A .NET wrapper for [tesseract-ocr] 3.04.
 
 ## Dependencies
 
