@@ -1,4 +1,9 @@
-﻿### Version 3.0.2
+﻿### Version 3.1.0
+
+* Support for printing list of available variables - [Issue 256](https://github.com/charlesw/tesseract/issues/256)
+* Support for line removal - [Issue 268](https://github.com/charlesw/tesseract/issues/256)
+
+### Version 3.0.2
 
 * Fixed intermittent crash on initialisation - [Issue 231](https://github.com/charlesw/tesseract/issues/231)
 * Upgraded native tesseract libraries to those provided by https://github.com/charlesw/tesseract-vs (Visual Studio 2015)

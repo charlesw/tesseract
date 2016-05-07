@@ -406,59 +406,85 @@ namespace Tesseract
         public Pix RemoveLines()
         {
             float angle, conf;
-            IntPtr pix1, pix2, pix3, pix4, pix5;
-            IntPtr pix6, pix7, pix8, pix9;
+            IntPtr pix1, pix2, pix3, pix4, pix5, pix6, pix7, pix8, pix9;
+            
+            pix1 = pix2 = pix3 = pix4 = pix5 = pix6 = pix7 = pix8 = pix9 = IntPtr.Zero;
 
-            /* threshold to binary, extracting much of the lines */
-            pix1 = Interop.LeptonicaApi.Native.pixThresholdToBinary(handle, 170);
+            try {
+                /* threshold to binary, extracting much of the lines */
+                pix1 = Interop.LeptonicaApi.Native.pixThresholdToBinary(handle, 170);
 
-            /* find the skew angle and deskew using an interpolated
-             * rotator for anti-aliasing (to avoid jaggies) */
-            Interop.LeptonicaApi.Native.pixFindSkew(new HandleRef(this, pix1), out angle, out conf);
-            pix2 = Interop.LeptonicaApi.Native.pixRotateAMGray(handle, (float)(Deg2Rad * angle), (byte)255);
+                /* find the skew angle and deskew using an interpolated
+                 * rotator for anti-aliasing (to avoid jaggies) */
+                Interop.LeptonicaApi.Native.pixFindSkew(new HandleRef(this, pix1), out angle, out conf);
+                pix2 = Interop.LeptonicaApi.Native.pixRotateAMGray(handle, (float)(Deg2Rad * angle), (byte)255);
 
-            /* extract the lines to be removed */
-            pix3 = Interop.LeptonicaApi.Native.pixCloseGray(new HandleRef(this, pix2), 51, 1);
+                /* extract the lines to be removed */
+                pix3 = Interop.LeptonicaApi.Native.pixCloseGray(new HandleRef(this, pix2), 51, 1);
 
-            /* solidify the lines to be removed */
-            pix4 = Interop.LeptonicaApi.Native.pixErodeGray(new HandleRef(this, pix3), 1, 5);
+                /* solidify the lines to be removed */
+                pix4 = Interop.LeptonicaApi.Native.pixErodeGray(new HandleRef(this, pix3), 1, 5);
 
-            /* clean the background of those lines */
-            pix5 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), 210, 255);
+                /* clean the background of those lines */
+                pix5 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), 210, 255);
 
-            pix6 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix5), 200, 0);
+                pix6 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix5), 200, 0);
 
-            /* get paint-through mask for changed pixels */
-            pix7 = Interop.LeptonicaApi.Native.pixThresholdToBinary(new HandleRef(this, pix6), 210);
+                /* get paint-through mask for changed pixels */
+                pix7 = Interop.LeptonicaApi.Native.pixThresholdToBinary(new HandleRef(this, pix6), 210);
 
-            /* add the inverted, cleaned lines to orig.  Because
-             * the background was cleaned, the inversion is 0,
-             * so when you add, it doesn't lighten those pixels.
-             * It only lightens (to white) the pixels in the lines! */
-            Interop.LeptonicaApi.Native.pixInvert(new HandleRef(this, pix6), new HandleRef(this, pix6));
-            pix8 = Interop.LeptonicaApi.Native.pixAddGray(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix2), new HandleRef(this, pix6));
+                /* add the inverted, cleaned lines to orig.  Because
+                 * the background was cleaned, the inversion is 0,
+                 * so when you add, it doesn't lighten those pixels.
+                 * It only lightens (to white) the pixels in the lines! */
+                Interop.LeptonicaApi.Native.pixInvert(new HandleRef(this, pix6), new HandleRef(this, pix6));
+                pix8 = Interop.LeptonicaApi.Native.pixAddGray(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix2), new HandleRef(this, pix6));
 
-            pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
+                pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
 
-            Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
+                if(Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7)) == 0) {
+                    // Destroy pix8 (result), as it won't be returned in this 
+                    // scenario, which shouldn't be possible, and will therefore result in a memory leak.
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix8);
+                    throw new TesseractException("Failed to remove lines from image; pixCombineMasked failed.");
+                }
+             
+                return new Pix(pix8);
+            } finally {
+                // destroy any created intermediate pix's, regardless of if the process 
+                // failed for any reason.
+                if(pix1 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
+                }
+                
+                if (pix2 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
+                }
 
-            // resource cleanup
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
-            Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
+                if (pix3 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
+                }
 
-            if (pix8 == IntPtr.Zero)
-            {
-                Interop.LeptonicaApi.Native.pixDestroy(ref pix8);
-                return this;
+                if (pix4 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
+                }
+
+                if (pix5 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
+                }
+
+                if (pix6 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
+                }
+
+                if (pix7 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
+                }
+
+                if (pix9 != IntPtr.Zero) {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
+                }
             }
-
-            return new Pix(pix8);
         }
 
         /// <summary>

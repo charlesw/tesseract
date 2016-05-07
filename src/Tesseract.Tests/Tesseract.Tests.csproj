@@ -210,6 +210,9 @@
     <Content Include="Results\EngineTests.CanGenerateHOCROutput_True.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Results\EngineTests.CanPrintVariables.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Results\EngineTests.CanProcessPixUsingResultIteratorAndChoiceIterator.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

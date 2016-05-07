@@ -561,11 +561,34 @@ NormaliseNewLine(@"</word></line>
             }
         }
 
-		#endregion Variable set\get
+        #endregion Variable set\get
 
-		#region File Helpers
+        #region Variable print
 
-		private string TestFilePath(string path)
+        [Test]
+        public void CanPrintVariables()
+        {
+            const String VARIABLES_FILENAME = "./variables.txt";
+            using (var engine = new TesseractEngine(@"./tessdata", "eng")) {
+                Assert.That(engine.TryPrintVariablesToFile(VARIABLES_FILENAME), Is.True);
+
+                var actualResult = NormaliseNewLine( File.ReadAllText(VARIABLES_FILENAME));
+
+                const string ExpectedResultPath = "./Results/EngineTests.CanPrintVariables.txt";
+                var expectedResult = NormaliseNewLine(File.ReadAllText(ExpectedResultPath));
+                if (expectedResult != actualResult) {
+                    var actualResultPath = String.Format("./Results/EngineTests.CanPrintVariables{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+                    File.WriteAllText(actualResultPath, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
+                }
+            }
+        }
+
+        #endregion
+
+        #region File Helpers
+
+        private string TestFilePath(string path)
 		{
 			var basePath = Path.Combine(Environment.CurrentDirectory, "Data");
 			return Path.Combine(basePath, path);
