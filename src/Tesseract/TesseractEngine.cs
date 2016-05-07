@@ -529,6 +529,16 @@ namespace Tesseract
             return value != null;
         }
 
+        /// <summary>
+        /// Attempts to print the variables to the file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public bool TryPrintVariablesToFile(string filename)
+        {
+            return Interop.TessApi.Native.BaseApiPrintVariablesToFile(handle, filename) != 0;
+        }
+
         #endregion Config
 
         #region Event Handlers

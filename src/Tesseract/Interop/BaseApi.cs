@@ -211,6 +211,9 @@ namespace Tesseract.Interop
         float ChoiceIteratorGetConfidence(HandleRef handle);
 
         #endregion
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIPrintVariablesToFile")]
+        int BaseApiPrintVariablesToFile(HandleRef handle, string filename); 
 	}
 
 	internal static class TessApi
