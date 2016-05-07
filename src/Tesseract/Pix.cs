@@ -402,7 +402,7 @@ namespace Tesseract
         /// The algorithm is based on Leptonica <code>lineremoval.c</code> example.
         /// See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
         /// </summary>
-        /// <returns>image with lines removed</returns>
+        /// <returns>image with lines removed; original if error</returns>
         public Pix RemoveLines()
         {
             float angle, conf;
@@ -451,6 +451,12 @@ namespace Tesseract
             Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
             Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
             Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
+
+            if (pix8 == IntPtr.Zero)
+            {
+                Interop.LeptonicaApi.Native.pixDestroy(ref pix8);
+                return this;
+            }
 
             return new Pix(pix8);
         }
@@ -581,12 +587,15 @@ namespace Tesseract
         /// 90 degree rotation.
         /// </summary>
         /// <param name="direction">1 = clockwise,  -1 = counter-clockwise</param>
-        /// <returns>rotated image, or null on error</returns>
+        /// <returns>rotated image, or original on error</returns>
         public Pix Rotate90(int direction)
         {
             IntPtr resultHandle = Interop.LeptonicaApi.Native.pixRotate90(handle, direction);
 
-            if (resultHandle == IntPtr.Zero) return null;
+            if (resultHandle == IntPtr.Zero)
+            {
+                return this;
+            }
             return new Pix(resultHandle);
         }
 
