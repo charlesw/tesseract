@@ -5,33 +5,33 @@ using System.Text;
 using InteropDotNet;
 
 namespace Tesseract.Interop
-{		
-	/// <summary>
-	/// The exported leptonica api signatures.
-	/// </summary>
-	/// <remarks>
-	/// Please note this is only public for technical reasons (you can't proxy a internal interface).
-	/// It should be considered an internal interface and is NOT part of the public api and may have 
-	/// breaking changes between releases.
-	/// </remarks>
+{
+    /// <summary>
+    /// The exported leptonica api signatures.
+    /// </summary>
+    /// <remarks>
+    /// Please note this is only public for technical reasons (you can't proxy a internal interface).
+    /// It should be considered an internal interface and is NOT part of the public api and may have 
+    /// breaking changes between releases.
+    /// </remarks>
     public interface ILeptonicaApiSignatures
     {
-    	#region PixA
-		
+        #region PixA
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff")]
-        IntPtr pixaReadMultipageTiff( string filename );
-			
+        IntPtr pixaReadMultipageTiff(string filename);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
-        int pixaGetCount( HandleRef pixa );
+        int pixaGetCount(HandleRef pixa);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetPix")]
-        IntPtr pixaGetPix( HandleRef pixa, int index, PixArrayAccessType accesstype );
-				
+        IntPtr pixaGetPix(HandleRef pixa, int index, PixArrayAccessType accesstype);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaDestroy")]
         void pixaDestroy(ref IntPtr pix);
-		
-		#endregion
-		
+
+        #endregion
+
         #region Pix
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCreate")]
