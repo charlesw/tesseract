@@ -443,11 +443,9 @@ namespace Tesseract
 
                 pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
 
-                if (Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7)) == 0)
+                Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
+                if (pix8 == IntPtr.Zero)
                 {
-                    // Destroy pix8 (result), as it won't be returned in this 
-                    // scenario, which shouldn't be possible, and will therefore result in a memory leak.
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix8);
                     return this; // return original pix
                 }
 
