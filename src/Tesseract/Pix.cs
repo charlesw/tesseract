@@ -407,10 +407,11 @@ namespace Tesseract
         {
             float angle, conf;
             IntPtr pix1, pix2, pix3, pix4, pix5, pix6, pix7, pix8, pix9;
-            
+
             pix1 = pix2 = pix3 = pix4 = pix5 = pix6 = pix7 = pix8 = pix9 = IntPtr.Zero;
 
-            try {
+            try
+            {
                 /* threshold to binary, extracting much of the lines */
                 pix1 = Interop.LeptonicaApi.Native.pixThresholdToBinary(handle, 170);
 
@@ -442,46 +443,57 @@ namespace Tesseract
 
                 pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
 
-                if(Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7)) == 0) {
+                if (Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7)) == 0)
+                {
                     // Destroy pix8 (result), as it won't be returned in this 
                     // scenario, which shouldn't be possible, and will therefore result in a memory leak.
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix8);
-                    throw new TesseractException("Failed to remove lines from image; pixCombineMasked failed.");
+                    return this; // return original pix
                 }
-             
+
                 return new Pix(pix8);
-            } finally {
+            }
+            finally
+            {
                 // destroy any created intermediate pix's, regardless of if the process 
                 // failed for any reason.
-                if(pix1 != IntPtr.Zero) {
+                if (pix1 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
                 }
-                
-                if (pix2 != IntPtr.Zero) {
+
+                if (pix2 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
                 }
 
-                if (pix3 != IntPtr.Zero) {
+                if (pix3 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
                 }
 
-                if (pix4 != IntPtr.Zero) {
+                if (pix4 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
                 }
 
-                if (pix5 != IntPtr.Zero) {
+                if (pix5 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
                 }
 
-                if (pix6 != IntPtr.Zero) {
+                if (pix6 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
                 }
 
-                if (pix7 != IntPtr.Zero) {
+                if (pix7 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
                 }
 
-                if (pix9 != IntPtr.Zero) {
+                if (pix9 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
                 }
             }
