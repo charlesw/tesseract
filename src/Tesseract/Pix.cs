@@ -446,7 +446,7 @@ namespace Tesseract
                 Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
                 if (pix8 == IntPtr.Zero)
                 {
-                    return this; // return original pix
+                    throw new TesseractException("Failed to remove lines from image.");
                 }
 
                 return new Pix(pix8);

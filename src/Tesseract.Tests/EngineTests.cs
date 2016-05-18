@@ -131,6 +131,28 @@ namespace Tesseract.Tests
 			}
 		}
 
+        [Test]
+        public void GetSegmentedRegionsTest()
+        {
+            int expectedCount = 8; // number of text lines in test image
+
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                using (var img = new Bitmap("./phototest.tif"))
+                {
+                    List<Rectangle> boxes = engine.GetSegmentedRegions(img, PageIteratorLevel.TextLine);
+
+                    for (int i = 0; i < boxes.Count; i++ )
+                    {
+                        Rectangle box = boxes[i];
+                        Console.WriteLine(String.Format("Box[{0}]: x={1}, y={2}, w={3}, h={4}", i, box.X, box.Y, box.Width, box.Height));
+                    }
+                    
+                    Assert.AreEqual(boxes.Count, expectedCount);
+                }
+            }
+        }
+
 		[Test]
 		public void CanProcessEmptyPxUsingResultIterator()
 		{

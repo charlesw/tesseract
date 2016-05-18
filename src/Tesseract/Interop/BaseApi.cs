@@ -18,7 +18,7 @@ namespace Tesseract.Interop
     public interface ITessApiSignatures
     {
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetComponentImages")]
-        IntPtr BaseAPIGetComponentImages(HandleRef handle, int level, int text_only, IntPtr pixa, IntPtr blockids);
+        IntPtr BaseAPIGetComponentImages(HandleRef handle, PageIteratorLevel level, int text_only, IntPtr pixa, IntPtr blockids);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIAnalyseLayout")]
         IntPtr BaseAPIAnalyseLayout(HandleRef handle);
