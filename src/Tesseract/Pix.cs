@@ -402,7 +402,7 @@ namespace Tesseract
         /// The algorithm is based on Leptonica <code>lineremoval.c</code> example.
         /// See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
         /// </summary>
-        /// <returns>image with lines removed; original if error</returns>
+        /// <returns>image with lines removed</returns>
         public Pix RemoveLines()
         {
             float angle, conf;
