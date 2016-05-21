@@ -5,7 +5,9 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using Tesseract.Interop;
 
 namespace Tesseract.Tests
 {
@@ -150,6 +152,43 @@ namespace Tesseract.Tests
                     
                     Assert.AreEqual(boxes.Count, expectedCount);
                 }
+            }
+        }
+
+        [Test]
+        public void ResultRendererTest()
+        {
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                string image = "./phototest.tif";
+                string output = "capi-test.txt";
+                Interop.TessApi.Native.BaseAPISetOutputName(engine.Handle, output);
+                string outputbase = "Results/outputbase";
+                
+                IntPtr renderer = Interop.TessApi.Native.HOcrRendererCreate(outputbase);
+                Interop.TessApi.Native.ResultRendererInsert(new HandleRef(this, renderer), new HandleRef(this, Interop.TessApi.Native.BoxTextRendererCreate(outputbase)));
+                Interop.TessApi.Native.ResultRendererInsert(new HandleRef(this, renderer), new HandleRef(this, Interop.TessApi.Native.TextRendererCreate(outputbase)));
+                //string dataPath = @"./tessdata/"; // Interop.TessApi.Native.BaseAPIGetDatapath(engine.Handle);
+                //IntPtr pdfrenderer = Interop.TessApi.Native.PDFRendererCreate(outputbase, dataPath);          // PDF not working yet!
+                //Interop.TessApi.Native.ResultRendererInsert(new HandleRef(this, renderer), new HandleRef(this, pdfrenderer));
+                int result = Interop.TessApi.Native.BaseAPIProcessPages(engine.Handle, image, null, 0, new HandleRef(this, renderer));
+
+                if (result == TesseractEngine.FALSE)
+                {
+                    throw new Exception("Error during processing.");
+                }
+
+                while ((renderer = Interop.TessApi.Native.ResultRendererNext(new HandleRef(this, renderer))) != IntPtr.Zero)
+                {
+                    IntPtr ext = Interop.TessApi.Native.ResultRendererExtention(new HandleRef(this, renderer));
+                    Console.WriteLine(String.Format("TessResultRendererExtention: {0}\nTessResultRendererTitle: {1}\nTessResultRendererImageNum: {2}",
+                            MarshalHelper.PtrToString(ext, Encoding.UTF8),
+                            MarshalHelper.PtrToString(Interop.TessApi.Native.ResultRendererTitle(new HandleRef(this, renderer)), Encoding.UTF8),
+                            Interop.TessApi.Native.ResultRendererImageNum(new HandleRef(this, renderer))));
+                }
+
+                Interop.TessApi.Native.DeleteResultRenderer(new HandleRef(this, renderer));
+                Assert.IsTrue(File.Exists(outputbase + ".hocr"));
             }
         }
 

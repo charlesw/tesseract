@@ -68,13 +68,15 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetThresholdedImage")]
         IntPtr BaseAPIGetThresholdedImage(HandleRef handle);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIProcessPages")]
-        int BaseAPIProcessPages(HandleRef handle, String filename, String retry_config, int timeout_millisec, ResultRenderer renderer);
+        int BaseAPIProcessPages(HandleRef handle, string filename, string retry_config, int timeout_millisec, HandleRef renderer);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIProcessPage")]
-        int BaseAPIProcessPage(HandleRef handle, Pix pix, int page_index, String filename, String retry_config, int timeout_millisec, ResultRenderer renderer);
+        int BaseAPIProcessPage(HandleRef handle, Pix pix, int page_index, string filename, string retry_config, int timeout_millisec, HandleRef renderer);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetInputName")]
         void BaseAPISetInputName(HandleRef handle, string name);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetDatapath")]
         string BaseAPIGetDatapath(HandleRef handle);
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetOutputName")]
+        void BaseAPISetOutputName(HandleRef handle, string name);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUTF8Text")]
         IntPtr BaseAPIGetUTF8TextInternal(HandleRef handle);
 
@@ -228,35 +230,35 @@ namespace Tesseract.Interop
         #region Renderer API
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessTextRendererCreate")]
-        ResultRenderer TextRendererCreate(string outputbase);
+        IntPtr TextRendererCreate(string outputbase);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessHOcrRendererCreate")]
-        ResultRenderer HOcrRendererCreate(string outputbase);
+        IntPtr HOcrRendererCreate(string outputbase);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessHOcrRendererCreate2")]
-        ResultRenderer HOcrRendererCreate2(string outputbase, int font_info);
+        IntPtr HOcrRendererCreate2(string outputbase, int font_info);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPDFRendererCreate")]
-        ResultRenderer PDFRendererCreate(string outputbase, string datadir);
+        IntPtr PDFRendererCreate(string outputbase, string datadir);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessUnlvRendererCreate")]
-        ResultRenderer UnlvRendererCreate(string outputbase);
+        IntPtr UnlvRendererCreate(string outputbase);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBoxTextRendererCreate")]
-        ResultRenderer BoxTextRendererCreate(string outputbase);
+        IntPtr BoxTextRendererCreate(string outputbase);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteResultRenderer")]
-        void DeleteResultRenderer(ResultRenderer renderer);
+        void DeleteResultRenderer(HandleRef renderer);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererInsert")]
-        void ResultRendererInsert(ResultRenderer renderer, ResultRenderer next);
+        void ResultRendererInsert(HandleRef renderer, HandleRef next);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererNext")]
-        ResultRenderer ResultRendererNext(ResultRenderer renderer);
+        IntPtr ResultRendererNext(HandleRef renderer);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererBeginDocument")]
-        int ResultRendererBeginDocument(ResultRenderer renderer, string title);
+        int ResultRendererBeginDocument(HandleRef renderer, string title);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererAddImage")]
-        int ResultRendererAddImage(ResultRenderer renderer, IntPtr api);
+        int ResultRendererAddImage(HandleRef renderer, HandleRef api);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererEndDocument")]
-        int ResultRendererEndDocument(ResultRenderer renderer);
+        int ResultRendererEndDocument(HandleRef renderer);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererExtention")]
-        IntPtr ResultRendererExtention(ResultRenderer renderer);
+        IntPtr ResultRendererExtention(HandleRef renderer);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererTitle")]
-        IntPtr ResultRendererTitle(ResultRenderer renderer);
+        IntPtr ResultRendererTitle(HandleRef renderer);
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererImageNum")]
-        int ResultRendererImageNum(ResultRenderer renderer);
+        int ResultRendererImageNum(HandleRef renderer);
         #endregion
     }
 

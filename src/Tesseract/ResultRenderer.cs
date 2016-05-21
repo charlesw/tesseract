@@ -20,11 +20,11 @@ namespace Tesseract
         /// </summary>
         /// <param name="outputbase"></param>
         /// <returns></returns>
-        public ResultRenderer TextRendererCreate(String outputbase)
+        public IntPtr TextRendererCreate(string outputbase)
         {
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
-                return null;
+                return IntPtr.Zero;
 
             return Interop.TessApi.Native.TextRendererCreate(outputbase);
         }
@@ -34,11 +34,11 @@ namespace Tesseract
         /// </summary>
         /// <param name="outputbase"></param>
         /// <returns></returns>
-        public ResultRenderer HOcrRendererCreate(String outputbase)
+        public IntPtr HOcrRendererCreate(string outputbase)
         {
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
-                return null;
+                return IntPtr.Zero;
 
             return Interop.TessApi.Native.HOcrRendererCreate(outputbase);
         }
@@ -49,11 +49,11 @@ namespace Tesseract
         /// <param name="outputbase"></param>
         /// <param name="font_info"></param>
         /// <returns></returns>
-        public ResultRenderer HOcrRendererCreate2(String outputbase, bool font_info)
+        public IntPtr HOcrRendererCreate2(string outputbase, bool font_info)
         {
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
-                return null;
+                return IntPtr.Zero;
 
             return Interop.TessApi.Native.HOcrRendererCreate2(outputbase, font_info ? 1 : 0);
         }
@@ -64,11 +64,11 @@ namespace Tesseract
         /// <param name="outputbase"></param>
         /// <param name="datadir"></param>
         /// <returns></returns>
-        public ResultRenderer PDFRendererCreate(string outputbase, string datadir)
+        public IntPtr PDFRendererCreate(string outputbase, string datadir)
         {
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
-                return null;
+                return IntPtr.Zero;
 
             return Interop.TessApi.Native.PDFRendererCreate(outputbase, datadir);
         }
@@ -78,11 +78,11 @@ namespace Tesseract
         /// </summary>
         /// <param name="outputbase"></param>
         /// <returns></returns>
-        public ResultRenderer UnlvRendererCreate(String outputbase)
+        public IntPtr UnlvRendererCreate(string outputbase)
         {
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
-                return null;
+                return IntPtr.Zero;
 
             return Interop.TessApi.Native.UnlvRendererCreate(outputbase);
         }
@@ -92,11 +92,11 @@ namespace Tesseract
         /// </summary>
         /// <param name="outputbase"></param>
         /// <returns></returns>
-        public ResultRenderer BoxTextRendererCreate(String outputbase)
+        public IntPtr BoxTextRendererCreate(string outputbase)
         {
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
-                return null;
+                return IntPtr.Zero;
 
             return Interop.TessApi.Native.BoxTextRendererCreate(outputbase);
         }
@@ -105,12 +105,12 @@ namespace Tesseract
         /// Returns the next renderer or NULL.
         /// </summary>
         /// <returns></returns>
-        public ResultRenderer Next()
+        public IntPtr Next()
         {
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
-                return null;
-            return Interop.TessApi.Native.ResultRendererNext(this);
+                return IntPtr.Zero;
+            return Interop.TessApi.Native.ResultRendererNext(_handleRef);
         }
 
         /// <summary>
@@ -123,14 +123,14 @@ namespace Tesseract
             if (_handleRef.Handle == IntPtr.Zero)            
                 return;
 
-            Interop.TessApi.Native.ResultRendererInsert(this, next);
+            Interop.TessApi.Native.ResultRendererInsert(_handleRef, next._handleRef);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (_handleRef.Handle != IntPtr.Zero)
             {
-                Interop.TessApi.Native.DeleteResultRenderer(this);
+                Interop.TessApi.Native.DeleteResultRenderer(_handleRef);
             }
         }
     }
