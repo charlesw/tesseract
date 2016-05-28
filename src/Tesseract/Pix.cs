@@ -614,7 +614,7 @@ namespace Tesseract
                 resultHandle = Interop.LeptonicaApi.Native.pixRotate(handle, angle, method, fillColor, width.Value, height.Value);
             }
 
-            if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around it's centre.");
+            if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around its centre.");
 
             return new Pix(resultHandle);
         }
@@ -623,14 +623,14 @@ namespace Tesseract
         /// 90 degree rotation.
         /// </summary>
         /// <param name="direction">1 = clockwise,  -1 = counter-clockwise</param>
-        /// <returns>rotated image, or original on error</returns>
+        /// <returns>rotated image</returns>
         public Pix Rotate90(int direction)
         {
             IntPtr resultHandle = Interop.LeptonicaApi.Native.pixRotate90(handle, direction);
 
             if (resultHandle == IntPtr.Zero)
             {
-                return this;
+                throw new LeptonicaException("Failed to rotate image.");
             }
             return new Pix(resultHandle);
         }
