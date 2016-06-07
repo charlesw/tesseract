@@ -169,6 +169,30 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetUTF8Text")]
         IntPtr ResultIteratorGetUTF8TextInternal(HandleRef handle, PageIteratorLevel level);
 
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordRecognitionLanguage")]
+        IntPtr ResultIteratorGetWordRecognitionLanguageInternal(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordFontAttributes")]
+        IntPtr ResultIteratorGetWordFontAttributesInternal(HandleRef handle,
+                out int isBold, out int isItalic, out int isUnderlined,
+                out int isMonospace, out int isSerif, out int isSmallCaps,
+                out int pointSize, out int fontId);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsFromDictionary")]
+        int ResultIteratorWordIsFromDictionary(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsNumeric")]
+        int ResultIteratorWordIsNumeric(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSuperscript")]
+        int ResultIteratorSymbolIsSuperscript(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSubscript")]
+        int ResultIteratorSymbolIsSubscript(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsDropcap")]
+        int ResultIteratorSymbolIsDropcap(HandleRef handle);
+
         #region Choice Iterator
 
         /// <summary>
@@ -213,7 +237,7 @@ namespace Tesseract.Interop
         #endregion
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIPrintVariablesToFile")]
-        int BaseApiPrintVariablesToFile(HandleRef handle, string filename); 
+        int BaseApiPrintVariablesToFile(HandleRef handle, string filename);
 	}
 
 	internal static class TessApi
@@ -268,7 +292,7 @@ namespace Tesseract.Interop
                 return null;
             }
         }
-		 
+
 		//Just Copied:
 		public static string BaseAPIGetHOCRText2(HandleRef handle,int pageNum) {
 			IntPtr txtHandle = Native.BaseAPIGetHOCRTextInternal(handle, pageNum);
@@ -383,8 +407,55 @@ namespace Tesseract.Interop
             }
         }
 
+        public static string ResultIteratorGetWordRecognitionLanguage(HandleRef handle)
+        {
+            IntPtr txtHandle = Native.ResultIteratorGetWordRecognitionLanguageInternal(handle);
+            if (txtHandle != IntPtr.Zero) {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                // txtHandle must not be deleted, see method WordRecognistionLanguage
+                // in tesseract/ccmain/ltrresultiterator.h.
+                return result;
+            } else {
+                return null;
+            }
+        }
+
+        public static string ResultIteratorGetWordFontAttributes(HandleRef handle,
+                out bool isBold, out bool isItalic, out bool isUnderlined,
+                out bool isMonospace, out bool isSerif, out bool isSmallCaps,
+                out int pointSize, out int fontId)
+        {
+            int bold, italic, underlined, monospace, serif, smallCaps;
+            IntPtr txtHandle = Native.ResultIteratorGetWordFontAttributesInternal(handle,
+                    out bold, out italic, out underlined,
+                    out monospace, out serif, out smallCaps,
+                    out pointSize, out fontId);
+            if (txtHandle != IntPtr.Zero) {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                // txtHandle must not be deleted, see method WordFontAttributes
+                // in tesseract/ccmain/ltrresultiterator.h.
+                isBold = Convert.ToBoolean(bold);
+                isItalic = Convert.ToBoolean(italic);
+                isUnderlined = Convert.ToBoolean(underlined);
+                isMonospace = Convert.ToBoolean(monospace);
+                isSerif = Convert.ToBoolean(serif);
+                isSmallCaps = Convert.ToBoolean(smallCaps);
+                return result;
+            } else {
+                isBold = false;
+                isItalic = false;
+                isUnderlined = false;
+                isMonospace = false;
+                isSerif = false;
+                isSmallCaps = false;
+                pointSize = 0;
+                fontId = -1;
+                return null;
+            }
+        }
+
         /// <summary>
-        /// Returns the null terminated UTF-8 encoded text string for the current choice           
+        /// Returns the null terminated UTF-8 encoded text string for the current choice
         /// </summary>
         /// <remarks>
         /// NOTE: Unlike LTRResultIterator::GetUTF8Text, the return points to an
