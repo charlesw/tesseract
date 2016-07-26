@@ -5,7 +5,10 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using Tesseract.Interop;
+using Tesseract.Renderers;
 
 namespace Tesseract.Tests
 {
@@ -131,7 +134,118 @@ namespace Tesseract.Tests
 			}
 		}
 
-		[Test]
+        [Test]
+        public void GetSegmentedRegionsTest()
+        {
+            int expectedCount = 8; // number of text lines in test image
+
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                using (var img = new Bitmap("./phototest.tif"))
+                {
+                    List<Rectangle> boxes = engine.GetSegmentedRegions(img, PageIteratorLevel.TextLine);
+
+                    for (int i = 0; i < boxes.Count; i++ )
+                    {
+                        Rectangle box = boxes[i];
+                        Console.WriteLine(String.Format("Box[{0}]: x={1}, y={2}, w={3}, h={4}", i, box.X, box.Y, box.Width, box.Height));
+                    }
+                    
+                    Assert.AreEqual(boxes.Count, expectedCount);
+                }
+            }
+        }
+
+        [Test]
+        public void ResultRendererTest()
+        {
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                string image = "./phototest.tif";
+                string outputbase = "Results/outputbase";
+                
+                IntPtr renderer = Interop.TessApi.Native.HOcrRendererCreate(outputbase);
+                Interop.TessApi.Native.ResultRendererInsert(new HandleRef(this, renderer), new HandleRef(this, Interop.TessApi.Native.BoxTextRendererCreate(outputbase)));
+                Interop.TessApi.Native.ResultRendererInsert(new HandleRef(this, renderer), new HandleRef(this, Interop.TessApi.Native.TextRendererCreate(outputbase)));
+                //string dataPath = @"./tessdata/"; // Interop.TessApi.Native.BaseAPIGetDatapath(engine.Handle);
+                //IntPtr pdfrenderer = Interop.TessApi.Native.PDFRendererCreate(outputbase, dataPath);          // PDF not working yet!
+                //Interop.TessApi.Native.ResultRendererInsert(new HandleRef(this, renderer), new HandleRef(this, pdfrenderer));
+                bool result = Interop.TessApi.Native.BaseAPIProcessPages(engine.Handle, image, null, 0, new HandleRef(this, renderer));
+
+                if (!result)
+                {
+                    throw new Exception("Error during processing.");
+                }
+
+                while ((renderer = Interop.TessApi.Native.ResultRendererNext(new HandleRef(this, renderer))) != IntPtr.Zero)
+                {
+                    IntPtr ext = Interop.TessApi.Native.ResultRendererExtention(new HandleRef(this, renderer));
+                    Console.WriteLine(String.Format("TessResultRendererExtention: {0}\nTessResultRendererTitle: {1}\nTessResultRendererImageNum: {2}",
+                            MarshalHelper.PtrToString(ext, Encoding.UTF8),
+                            MarshalHelper.PtrToString(Interop.TessApi.Native.ResultRendererTitle(new HandleRef(this, renderer)), Encoding.UTF8),
+                            Interop.TessApi.Native.ResultRendererImageNum(new HandleRef(this, renderer))));
+                }
+
+                Interop.TessApi.Native.DeleteResultRenderer(new HandleRef(this, renderer));
+                Assert.IsTrue(File.Exists(outputbase + ".hocr"));
+            }
+        }
+
+        [Test]
+        public void PdfRendererTest()
+        {
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                string image = "./phototest.tif";
+                string outputbase = "Results/outputbase";
+
+                string dataPath = @"./tessdata/";
+
+                IntPtr renderer = Interop.TessApi.Native.PDFRendererCreate(outputbase, Marshal.StringToHGlobalAnsi(dataPath));
+                bool result = Interop.TessApi.Native.BaseAPIProcessPages(engine.Handle, image, null, 0, new HandleRef(this, renderer));
+
+                if (!result)
+                {
+                    throw new Exception("Error during processing.");
+                }
+
+                while ((renderer = Interop.TessApi.Native.ResultRendererNext(new HandleRef(this, renderer))) != IntPtr.Zero)
+                {
+                    IntPtr ext = Interop.TessApi.Native.ResultRendererExtention(new HandleRef(this, renderer));
+                    Console.WriteLine(String.Format("TessResultRendererExtention: {0}\nTessResultRendererTitle: {1}\nTessResultRendererImageNum: {2}",
+                            MarshalHelper.PtrToString(ext, Encoding.UTF8),
+                            MarshalHelper.PtrToString(Interop.TessApi.Native.ResultRendererTitle(new HandleRef(this, renderer)), Encoding.UTF8),
+                            Interop.TessApi.Native.ResultRendererImageNum(new HandleRef(this, renderer))));
+                }
+
+                Interop.TessApi.Native.DeleteResultRenderer(new HandleRef(this, renderer));
+                Assert.IsTrue(File.Exists(outputbase + ".pdf"));
+            }
+        }
+
+        [Test]
+        public void PdfRendererTestUsingObject()
+        {
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                string image = "./phototest.tif";
+                string outputbase = "Results/outputbase";
+
+                string dataPath = @"./tessdata/";
+
+                using (var renderer = new PdfRenderer(outputbase, dataPath))
+                {
+                    bool result = renderer.ProcessPages(engine, image);
+
+                    if (!result)
+                    {
+                        throw new Exception("Error during processing.");
+                    }
+                }
+            }
+        }
+
+        [Test]
 		public void CanProcessEmptyPxUsingResultIterator()
 		{
 			string actualResult;
@@ -561,11 +675,34 @@ NormaliseNewLine(@"</word></line>
             }
         }
 
-		#endregion Variable set\get
+        #endregion Variable set\get
 
-		#region File Helpers
+        #region Variable print
 
-		private string TestFilePath(string path)
+        [Test]
+        public void CanPrintVariables()
+        {
+            const String VARIABLES_FILENAME = "./variables.txt";
+            using (var engine = new TesseractEngine(@"./tessdata", "eng")) {
+                Assert.That(engine.TryPrintVariablesToFile(VARIABLES_FILENAME), Is.True);
+
+                var actualResult = NormaliseNewLine( File.ReadAllText(VARIABLES_FILENAME));
+
+                const string ExpectedResultPath = "./Results/EngineTests.CanPrintVariables.txt";
+                var expectedResult = NormaliseNewLine(File.ReadAllText(ExpectedResultPath));
+                if (expectedResult != actualResult) {
+                    var actualResultPath = String.Format("./Results/EngineTests.CanPrintVariables{0:yyyyMMddTHHmmss}.txt", DateTime.UtcNow);
+                    File.WriteAllText(actualResultPath, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", ExpectedResultPath, actualResultPath);
+                }
+            }
+        }
+
+        #endregion
+
+        #region File Helpers
+
+        private string TestFilePath(string path)
 		{
 			var basePath = Path.Combine(Environment.CurrentDirectory, "Data");
 			return Path.Combine(basePath, path);

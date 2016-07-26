@@ -20,6 +20,9 @@ namespace Tesseract
 
         private int processCount = 0;
 
+        public const int TRUE = 1;
+        public const int FALSE = 0;
+
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> using the <see cref="EngineMode.Default"/> mode.
         /// </summary>
@@ -265,7 +268,8 @@ namespace Tesseract
             var actualPageSegmentMode = pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode;
             Interop.TessApi.Native.BaseAPISetPageSegMode(handle, actualPageSegmentMode);
             Interop.TessApi.Native.BaseApiSetImage(handle, image.Handle);
-            if (!String.IsNullOrEmpty(inputName)) {
+            if (!String.IsNullOrEmpty(inputName))
+            {
                 Interop.TessApi.Native.BaseApiSetInputName(handle, inputName);
             }
             var page = new Page(this, image, inputName, region, actualPageSegmentMode);
@@ -344,9 +348,47 @@ namespace Tesseract
             return page;
         }
 
+        /// <summary>
+        /// Get segmented regions at specified page iterator level.
+        /// </summary>
+        /// <param name="image">input image</param>
+        /// <param name="pageIteratorLevel">PageIteratorLevel enum</param>
+        /// <returns></returns>
+        public List<Rectangle> GetSegmentedRegions(Bitmap image, PageIteratorLevel pageIteratorLevel)
+        {
+            using (var pix = PixConverter.ToPix(image))
+            {
+                Interop.TessApi.Native.BaseApiSetImage(handle, pix.Handle);
+
+                var boxArray = Interop.TessApi.Native.BaseAPIGetComponentImages(handle, pageIteratorLevel, TRUE, IntPtr.Zero, IntPtr.Zero);
+                int boxCount = Interop.LeptonicaApi.Native.boxaGetCount(new HandleRef(this, boxArray));
+                
+                List<Rectangle> boxList = new List<Rectangle>();
+
+                for (int i = 0; i < boxCount; i++)
+                {
+                    var box = Interop.LeptonicaApi.Native.boxaGetBox(new HandleRef(this, boxArray), i, PixArrayAccessType.Clone);
+                    if (box == IntPtr.Zero)
+                    {
+                        continue;
+                    }
+
+                    int px, py, pw, ph;
+                    Interop.LeptonicaApi.Native.boxGetGeometry(new HandleRef(this, box), out px, out py, out pw, out ph);
+                    boxList.Add(new Rectangle(px, py, pw, ph));
+                    Interop.LeptonicaApi.Native.boxDestroy(ref box);
+                }
+
+                Interop.LeptonicaApi.Native.boxaDestroy(ref boxArray);
+
+                return boxList;
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
-            if (handle.Handle != IntPtr.Zero) {
+            if (handle.Handle != IntPtr.Zero)
+            {
                 Interop.TessApi.Native.BaseApiDelete(handle);
                 handle = new HandleRef(this, IntPtr.Zero);
             }
@@ -354,9 +396,12 @@ namespace Tesseract
 
         private string GetTessDataPrefix()
         {
-            try {
+            try
+            {
                 return Environment.GetEnvironmentVariable("TESSDATA_PREFIX");
-            } catch (SecurityException e) {
+            }
+            catch (SecurityException e)
+            {
                 trace.TraceEvent(TraceEventType.Error, 0, "Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}", e.Message);
                 return null;
             }
@@ -368,21 +413,25 @@ namespace Tesseract
             Guard.RequireNotNullOrEmpty("language", language);
 
             // do some minor processing on datapath to fix some common errors (this basically mirrors what tesseract does as of 3.04)
-            if (!String.IsNullOrEmpty(datapath)) {
+            if (!String.IsNullOrEmpty(datapath))
+            {
                 // remove any excess whitespace
                 datapath = datapath.Trim();
 
                 // remove any trialing '\' or '/' characters
-                if (datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal)) {
+                if (datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal))
+                {
                     datapath = datapath.Substring(0, datapath.Length - 1);
                 }
                 // remove 'tessdata', if it exists, tesseract will add it when building up the tesseract path
-                if (datapath.EndsWith("tessdata", StringComparison.OrdinalIgnoreCase)) {
+                if (datapath.EndsWith("tessdata", StringComparison.OrdinalIgnoreCase))
+                {
                     datapath = datapath.Substring(0, datapath.Length - TessDataDirectory.Length);
                 }
             }
 
-            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles ?? new List<string>(), initialValues ?? new Dictionary<string, object>(), setOnlyNonDebugVariables) != 0) {
+            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles ?? new List<string>(), initialValues ?? new Dictionary<string, object>(), setOnlyNonDebugVariables) != 0)
+            {
                 // Special case logic to handle cleaning up as init has already released the handle if it fails.
                 handle = new HandleRef(this, IntPtr.Zero);
                 GC.SuppressFinalize(this);
@@ -486,10 +535,13 @@ namespace Tesseract
         public bool TryGetBoolVariable(string name, out bool value)
         {
             int val;
-            if (Interop.TessApi.Native.BaseApiGetBoolVariable(handle, name, out val) != 0) {
+            if (Interop.TessApi.Native.BaseApiGetBoolVariable(handle, name, out val) != 0)
+            {
                 value = (val != 0);
                 return true;
-            } else {
+            }
+            else
+            {
                 value = false;
                 return false;
             }
@@ -527,6 +579,16 @@ namespace Tesseract
         {
             value = Interop.TessApi.BaseApiGetStringVariable(handle, name);
             return value != null;
+        }
+
+        /// <summary>
+        /// Attempts to print the variables to the file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public bool TryPrintVariablesToFile(string filename)
+        {
+            return Interop.TessApi.Native.BaseApiPrintVariablesToFile(handle, filename) != 0;
         }
 
         #endregion Config
