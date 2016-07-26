@@ -31,7 +31,7 @@
     <BuildTarget>Net451</BuildTarget>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug45|AnyCPU' ">
+  <!--<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug45|AnyCPU' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>Net45</BuildTarget>
   </PropertyGroup>
@@ -77,7 +77,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release20|AnyCPU' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>Net20</BuildTarget>
-  </PropertyGroup>
+  </PropertyGroup>-->
 	
   <PropertyGroup Condition=" '$(BuildTarget)' == 'Net451' ">
     <DefineConstants>$(DefineConstants);Net451;Net45;Net35;Net40;Net20</DefineConstants>
