@@ -1,4 +1,8 @@
-﻿### Version 3.1.0
+﻿### Version 3.2.0
+
+* Fixed PolyBlockType definition - [Issue #280](https://github.com/charlesw/tesseract/issues/280)
+
+### Version 3.1.0
 
 * Support for printing list of available variables - [Issue 256](https://github.com/charlesw/tesseract/issues/256)
 * Support for line removal - [Issue 268](https://github.com/charlesw/tesseract/issues/256)
