@@ -402,15 +402,16 @@ namespace Tesseract
         /// The algorithm is based on Leptonica <code>lineremoval.c</code> example.
         /// See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
         /// </summary>
-        /// <returns>image with lines removed; original if error</returns>
+        /// <returns>image with lines removed</returns>
         public Pix RemoveLines()
         {
             float angle, conf;
             IntPtr pix1, pix2, pix3, pix4, pix5, pix6, pix7, pix8, pix9;
-            
+
             pix1 = pix2 = pix3 = pix4 = pix5 = pix6 = pix7 = pix8 = pix9 = IntPtr.Zero;
 
-            try {
+            try
+            {
                 /* threshold to binary, extracting much of the lines */
                 pix1 = Interop.LeptonicaApi.Native.pixThresholdToBinary(handle, 170);
 
@@ -442,46 +443,55 @@ namespace Tesseract
 
                 pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
 
-                if(Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7)) == 0) {
-                    // Destroy pix8 (result), as it won't be returned in this 
-                    // scenario, which shouldn't be possible, and will therefore result in a memory leak.
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix8);
-                    throw new TesseractException("Failed to remove lines from image; pixCombineMasked failed.");
+                Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
+                if (pix8 == IntPtr.Zero)
+                {
+                    throw new TesseractException("Failed to remove lines from image.");
                 }
-             
+
                 return new Pix(pix8);
-            } finally {
+            }
+            finally
+            {
                 // destroy any created intermediate pix's, regardless of if the process 
                 // failed for any reason.
-                if(pix1 != IntPtr.Zero) {
+                if (pix1 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
                 }
-                
-                if (pix2 != IntPtr.Zero) {
+
+                if (pix2 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
                 }
 
-                if (pix3 != IntPtr.Zero) {
+                if (pix3 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
                 }
 
-                if (pix4 != IntPtr.Zero) {
+                if (pix4 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
                 }
 
-                if (pix5 != IntPtr.Zero) {
+                if (pix5 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
                 }
 
-                if (pix6 != IntPtr.Zero) {
+                if (pix6 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
                 }
 
-                if (pix7 != IntPtr.Zero) {
+                if (pix7 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
                 }
 
-                if (pix9 != IntPtr.Zero) {
+                if (pix9 != IntPtr.Zero)
+                {
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
                 }
             }
@@ -604,7 +614,7 @@ namespace Tesseract
                 resultHandle = Interop.LeptonicaApi.Native.pixRotate(handle, angle, method, fillColor, width.Value, height.Value);
             }
 
-            if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around it's centre.");
+            if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around its centre.");
 
             return new Pix(resultHandle);
         }
@@ -613,14 +623,14 @@ namespace Tesseract
         /// 90 degree rotation.
         /// </summary>
         /// <param name="direction">1 = clockwise,  -1 = counter-clockwise</param>
-        /// <returns>rotated image, or original on error</returns>
+        /// <returns>rotated image</returns>
         public Pix Rotate90(int direction)
         {
             IntPtr resultHandle = Interop.LeptonicaApi.Native.pixRotate90(handle, direction);
 
             if (resultHandle == IntPtr.Zero)
             {
-                return this;
+                throw new LeptonicaException("Failed to rotate image.");
             }
             return new Pix(resultHandle);
         }

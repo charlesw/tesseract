@@ -71,6 +71,7 @@
     <Compile Include="PixArrayAccessType.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
+    <Compile Include="ResultRenderer.cs" />
     <Compile Include="RotationFill.cs" />
     <Compile Include="RotationMethod.cs" />
     <Compile Include="Scew.cs" />
