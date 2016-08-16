@@ -481,6 +481,25 @@ namespace Tesseract.Interop
 
 
         #endregion
+
+        #region Box
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxaGetCount")]
+        int boxaGetCount(HandleRef boxa);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxaGetBox")]
+        IntPtr boxaGetBox(HandleRef boxa, int index, PixArrayAccessType accesstype);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxGetGeometry")]
+        int boxGetGeometry(HandleRef box, out int px, out int py, out int pw, out int ph);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxDestroy")]
+        void boxDestroy(ref IntPtr box);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxaDestroy")]
+        void boxaDestroy(ref IntPtr box);
+
+        #endregion
     }
 
     unsafe static class LeptonicaApi
