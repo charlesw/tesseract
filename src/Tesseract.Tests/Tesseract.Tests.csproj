@@ -87,7 +87,10 @@
     <Compile Include="Leptonica\PixTests\ImageManipulationTests.cs" />
     <Compile Include="Leptonica\PixTests\PixDataAccessTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultRendererTests.cs" />
     <Compile Include="TesseractResultSet.cs" />
+    <Compile Include="TesseractTestBase.cs" />
+    <Compile Include="TestRun.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\lib\TesseractOcr\x64\liblept172.dll">
@@ -166,7 +169,7 @@
     <Content Include="Data\Scew\scewed-phototest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="phototest.tif">
+    <Content Include="Data\Ocr\phototest.tif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -210,19 +213,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <Content Include="Results\EngineTests.CanGenerateHOCROutput_False.txt">
+    <Content Include="Results\EngineTests\CanGenerateHOCROutput_False.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Results\EngineTests.CanGenerateHOCROutput_True.txt">
+    <Content Include="Results\EngineTests\CanGenerateHOCROutput_True.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Results\EngineTests.CanPrintVariables.txt">
+    <Content Include="Results\EngineTests\CanPrintVariables.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Results\EngineTests.CanProcessPixUsingResultIteratorAndChoiceIterator.txt">
+    <Content Include="Results\EngineTests\CanProcessPixUsingResultIteratorAndChoiceIterator.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Results\EngineTests.CanProcessPixUsingResultIterator.txt">
+    <Content Include="Results\EngineTests\CanProcessPixUsingResultIterator.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="tessdata\eng.cube.bigrams">

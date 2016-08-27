@@ -14,6 +14,7 @@ namespace Tesseract
     /// </summary>
     public class TesseractEngine : DisposableBase
     {
+        private const string TesseractVersion = "3.04.01";
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
         private HandleRef handle;
@@ -192,7 +193,7 @@ namespace Tesseract
             {
                 // Get version doesn't work for x64, might be compilation related for now just
                 // return constant so we don't crash.
-                return "3.03";
+                return TesseractVersion;
 
                 // return Interop.TessApi.Native.GetVersion();
             }
@@ -348,6 +349,7 @@ namespace Tesseract
             return page;
         }
 
+        // TODO: Consider refactoring this to the 'Page' object...
         /// <summary>
         /// Get segmented regions at specified page iterator level.
         /// </summary>

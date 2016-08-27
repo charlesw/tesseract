@@ -65,13 +65,14 @@
     <Compile Include="InteropDotNet\UnixLibraryLoaderLogic.cs" />
     <Compile Include="InteropDotNet\WindowsLibraryLoaderLogic.cs" />
     <Compile Include="Interop\HostProcessInfo.cs" />
+    <Compile Include="IResultRenderer.cs" />
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="Interop\OSResult.cs" />
     <Compile Include="PixArray.cs" />
     <Compile Include="PixArrayAccessType.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
-    <Compile Include="ResultRenderer.cs" />
+    <Compile Include="ResultRender.cs" />
     <Compile Include="RotationFill.cs" />
     <Compile Include="RotationMethod.cs" />
     <Compile Include="Scew.cs" />

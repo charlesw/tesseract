@@ -166,12 +166,8 @@ namespace Tesseract
                 throw new TesseractException("Failed to detect image orientation.");
             }
         }
-
-#if Net45
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-        private void Recognize()
+        
+        internal void Recognize()
         {
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead.");
             if (!runRecognitionPhase) {

@@ -1,6 +1,16 @@
 ﻿### Version 3.2.0
 
+* Added support for the renderer api (generation of PDF, Text, etc) - [Issue ](https://github.com/charlesw/tesseract/issues/) 
+* Updated to Tesseract 3.04.01
 * Fixed PolyBlockType definition - [Issue #280](https://github.com/charlesw/tesseract/issues/280)
+
+#### TODO:
+
+* Move TesseractEngine.GetSegmentedRegions to Page.GetSegmentedRegions
+* Add support for aggregating multiple result renderers together
+* Allow result renderer to return current page number.
+* Improve result renderer tests to ensure they're actually generating the expected files.
+* Improve test coverage and speed (test).
 
 ### Version 3.1.0
 
