@@ -53,6 +53,16 @@ namespace Tesseract.Tests
         }
 
         [Test]
+        public void CanRenderMultiplePageDocumentToPdfFile()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
+            using (var renderer = ResultRender.CreatePdfRenderer(resultPath, DataPath)) {
+                var examplePixPath = this.TestFilePath("processing/multi-page.tif");
+                ProcessMultipageTiff(renderer, examplePixPath);
+            }
+        }
+
+        [Test]
         public void CanRenderResultsIntoHOcrFile()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\HOCR\phototest");
@@ -82,6 +92,19 @@ namespace Tesseract.Tests
             }
         }
 
+        private void ProcessMultipageTiff(IResultRenderer renderer, string filename)
+        {
+            var imageName = Path.GetFileNameWithoutExtension(filename);
+            using (var pixA = PixArray.LoadMultiPageTiffFromFile(filename)) {
+                using (renderer.BeginDocument(imageName)) {
+                    foreach (var pix in pixA) {
+                        using (var page = _engine.Process(pix, imageName)) {
+                            renderer.AddPage(page);
+                        }
+                    }
+                }
+            }
+        }
 
         private void ProcessFile(IResultRenderer renderer, string filename)
         {

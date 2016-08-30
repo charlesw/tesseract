@@ -209,9 +209,6 @@
     <None Include="Data\processing\numbers.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\processing\multi-page.tif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <Content Include="Results\EngineTests\CanGenerateHOCROutput_False.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
