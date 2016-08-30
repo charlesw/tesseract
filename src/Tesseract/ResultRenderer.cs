@@ -16,7 +16,7 @@ namespace Tesseract
     /// renderer hierarchy. This gets around a number of difficult issues such
     /// as keeping track of what the next renderer is and how to manage the memory.
     /// </remarks>
-    public class ResultRender : DisposableBase, IResultRenderer
+    public class ResultRenderer : DisposableBase, IResultRenderer
     {
         #region Factory Methods
 
@@ -32,7 +32,7 @@ namespace Tesseract
         {
             var rendererHandle = Interop.TessApi.Native.PDFRendererCreate(outputFilename, fontDirectory);
 
-            return new ResultRender(rendererHandle);
+            return new ResultRenderer(rendererHandle);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Tesseract
         {
             var rendererHandle = Interop.TessApi.Native.TextRendererCreate(outputFilename);
 
-            return new ResultRender(rendererHandle);
+            return new ResultRenderer(rendererHandle);
         }
 
 
@@ -61,7 +61,7 @@ namespace Tesseract
         {
             var rendererHandle = Interop.TessApi.Native.HOcrRendererCreate2(outputFilename, fontInfo ? 1 : 0);
 
-            return new ResultRender(rendererHandle);
+            return new ResultRenderer(rendererHandle);
         }
 
 
@@ -75,7 +75,7 @@ namespace Tesseract
         {
             var rendererHandle = Interop.TessApi.Native.UnlvRendererCreate(outputFilename);
 
-            return new ResultRender(rendererHandle);
+            return new ResultRenderer(rendererHandle);
         }
         
         /// <summary>
@@ -87,7 +87,7 @@ namespace Tesseract
         {
             var rendererHandle = Interop.TessApi.Native.BoxTextRendererCreate(outputFilename);
 
-            return new ResultRender(rendererHandle);
+            return new ResultRenderer(rendererHandle);
         }
        
         #endregion
@@ -97,9 +97,9 @@ namespace Tesseract
         /// </summary>
         private class EndDocumentOnDispose : IDisposable
         {
-            readonly ResultRender _renderer;
+            readonly ResultRenderer _renderer;
 
-            public EndDocumentOnDispose(ResultRender renderer)
+            public EndDocumentOnDispose(ResultRenderer renderer)
             {
                 _renderer = renderer;
             }
@@ -113,7 +113,7 @@ namespace Tesseract
         
         private HandleRef _handle;
 
-        protected ResultRender(IntPtr handle)
+        protected ResultRenderer(IntPtr handle)
         {
             Guard.Require("handle", handle != IntPtr.Zero, "handle must be initialised.");
 
@@ -127,6 +127,7 @@ namespace Tesseract
         public void AddPage(Page page)
         {
             Guard.RequireNotNull("page", page);
+            VerifyNotDisposed();
 
             // TODO: Force page to do a recognise run to ensure the underlying base api is full of state note if
             // your implementing your own renderer you won't need to do this since all the page operations will do it
@@ -144,10 +145,21 @@ namespace Tesseract
         public IDisposable BeginDocument(string title)
         {
             Guard.RequireNotNull("title", title);
+            VerifyNotDisposed();
 
             Interop.TessApi.Native.ResultRendererBeginDocument(_handle, title);
 
             return new EndDocumentOnDispose(this);
+        }
+        
+        public int PageNumber
+        {
+            get
+            {
+                VerifyNotDisposed();
+
+                return Interop.TessApi.Native.ResultRendererImageNum(_handle);
+            }
         }
 
         protected override void Dispose(bool disposing)
