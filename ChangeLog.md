@@ -6,9 +6,8 @@
 
 #### TODO:
 
-* Move TesseractEngine.GetSegmentedRegions to Page.GetSegmentedRegions
+* Decide what to do if result renderer opp fails (return bool?)
 * Add support for aggregating multiple result renderers together
-* Allow result renderer to return current page number.
 * Improve result renderer tests to ensure they're actually generating the expected files.
 * Improve test coverage and speed (test).
 

@@ -21,9 +21,6 @@ namespace Tesseract
 
         private int processCount = 0;
 
-        public const int TRUE = 1;
-        public const int FALSE = 0;
-
         /// <summary>
         /// Creates a new instance of <see cref="TesseractEngine"/> using the <see cref="EngineMode.Default"/> mode.
         /// </summary>
@@ -348,45 +345,7 @@ namespace Tesseract
             new PageDisposalHandle(page, pix);
             return page;
         }
-
-        // TODO: Consider refactoring this to the 'Page' object...
-        /// <summary>
-        /// Get segmented regions at specified page iterator level.
-        /// </summary>
-        /// <param name="image">input image</param>
-        /// <param name="pageIteratorLevel">PageIteratorLevel enum</param>
-        /// <returns></returns>
-        public List<Rectangle> GetSegmentedRegions(Bitmap image, PageIteratorLevel pageIteratorLevel)
-        {
-            using (var pix = PixConverter.ToPix(image))
-            {
-                Interop.TessApi.Native.BaseApiSetImage(handle, pix.Handle);
-
-                var boxArray = Interop.TessApi.Native.BaseAPIGetComponentImages(handle, pageIteratorLevel, TRUE, IntPtr.Zero, IntPtr.Zero);
-                int boxCount = Interop.LeptonicaApi.Native.boxaGetCount(new HandleRef(this, boxArray));
-                
-                List<Rectangle> boxList = new List<Rectangle>();
-
-                for (int i = 0; i < boxCount; i++)
-                {
-                    var box = Interop.LeptonicaApi.Native.boxaGetBox(new HandleRef(this, boxArray), i, PixArrayAccessType.Clone);
-                    if (box == IntPtr.Zero)
-                    {
-                        continue;
-                    }
-
-                    int px, py, pw, ph;
-                    Interop.LeptonicaApi.Native.boxGetGeometry(new HandleRef(this, box), out px, out py, out pw, out ph);
-                    boxList.Add(new Rectangle(px, py, pw, ph));
-                    Interop.LeptonicaApi.Native.boxDestroy(ref box);
-                }
-
-                Interop.LeptonicaApi.Native.boxaDestroy(ref boxArray);
-
-                return boxList;
-            }
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (handle.Handle != IntPtr.Zero)

@@ -137,24 +137,25 @@ namespace Tesseract.Tests
         }
 
         [Test]
-        public void GetSegmentedRegionsTest()
+        public void CanGetSegmentedRegions()
         {
             int expectedCount = 8; // number of text lines in test image
 
             using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
             {
                 var imgPath = TestFilePath(TestImagePath);
-                using (var img = new Bitmap(imgPath))
+                using (var img = Pix.LoadFromFile(imgPath))
                 {
-                    List<Rectangle> boxes = engine.GetSegmentedRegions(img, PageIteratorLevel.TextLine);
+                    using (var page = engine.Process(img)) {
+                        List<Rectangle> boxes = page.GetSegmentedRegions(PageIteratorLevel.TextLine);
 
-                    for (int i = 0; i < boxes.Count; i++ )
-                    {
-                        Rectangle box = boxes[i];
-                        Console.WriteLine(String.Format("Box[{0}]: x={1}, y={2}, w={3}, h={4}", i, box.X, box.Y, box.Width, box.Height));
+                        for (int i = 0; i < boxes.Count; i++) {
+                            Rectangle box = boxes[i];
+                            Console.WriteLine(String.Format("Box[{0}]: x={1}, y={2}, w={3}, h={4}", i, box.X, box.Y, box.Width, box.Height));
+                        }
+
+                        Assert.AreEqual(boxes.Count, expectedCount);
                     }
-                    
-                    Assert.AreEqual(boxes.Count, expectedCount);
                 }
             }
         }
