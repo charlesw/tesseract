@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Package" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<Version>3.0.4.0</Version>
 		<ReleaseVersion>3.0.4.0</ReleaseVersion>
@@ -18,36 +18,6 @@
 		</Flavor>
 		<Flavor Include="$(SourceDir)\Tesseract.sln">
 			<Configuration>Release451</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug45</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release45</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug40</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release40</Configuration>
-		</Flavor>		
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug40Client</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release40Client</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug35</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release35</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug20</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release20</Configuration>
 		</Flavor>
 	</ItemGroup>
 	<Target Name="PrepareBuild">
