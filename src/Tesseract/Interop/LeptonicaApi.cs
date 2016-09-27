@@ -5,33 +5,33 @@ using System.Text;
 using InteropDotNet;
 
 namespace Tesseract.Interop
-{		
-	/// <summary>
-	/// The exported leptonica api signatures.
-	/// </summary>
-	/// <remarks>
-	/// Please note this is only public for technical reasons (you can't proxy a internal interface).
-	/// It should be considered an internal interface and is NOT part of the public api and may have 
-	/// breaking changes between releases.
-	/// </remarks>
+{
+    /// <summary>
+    /// The exported leptonica api signatures.
+    /// </summary>
+    /// <remarks>
+    /// Please note this is only public for technical reasons (you can't proxy a internal interface).
+    /// It should be considered an internal interface and is NOT part of the public api and may have 
+    /// breaking changes between releases.
+    /// </remarks>
     public interface ILeptonicaApiSignatures
     {
-    	#region PixA
-		
+        #region PixA
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff")]
-        IntPtr pixaReadMultipageTiff( string filename );
-			
+        IntPtr pixaReadMultipageTiff(string filename);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
-        int pixaGetCount( HandleRef pixa );
+        int pixaGetCount(HandleRef pixa);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetPix")]
-        IntPtr pixaGetPix( HandleRef pixa, int index, PixArrayAccessType accesstype );
-				
+        IntPtr pixaGetPix(HandleRef pixa, int index, PixArrayAccessType accesstype);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaDestroy")]
         void pixaDestroy(ref IntPtr pix);
-		
-		#endregion
-		
+
+        #endregion
+
         #region Pix
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCreate")]
@@ -101,6 +101,12 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixWrite")]
         int pixWrite(string filename, HandleRef handle, ImageFormat format);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDisplayWrite")]
+        int pixDisplayWrite(HandleRef pixs, int reduction);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDisplayMultiple")]
+        int pixDisplayMultiple(string filepattern);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetColormap")]
         IntPtr pixGetColormap(HandleRef pix);
 
@@ -123,6 +129,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDeskewGeneral")]
         IntPtr pixDeskewGeneral(HandleRef pix, int redSweep, float sweepRange, float sweepDelta, int redSearch, int thresh, out float pAngle, out float pConf);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixFindSkew")]
+        int pixFindSkew(HandleRef pixs, out float pangle, out float pconf);
+
         // rotation
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRotate")]
@@ -130,6 +139,40 @@ namespace Tesseract.Interop
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRotateOrth")]
         IntPtr pixRotateOrth(HandleRef pixs, int quads);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRotateAMGray")]
+        IntPtr pixRotateAMGray(HandleRef pixs, float angle, byte grayval);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRotate90")]
+        IntPtr pixRotate90(HandleRef pixs, int direction);
+
+        // Grayscale
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCloseGray")]
+        IntPtr pixCloseGray(HandleRef pixs, int hsize, int vsize);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixErodeGray")]
+        IntPtr pixErodeGray(HandleRef pixs, int hsize, int vsize);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixAddGray")]
+        IntPtr pixAddGray(HandleRef pixd, HandleRef pixs1, HandleRef pixs2);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOpenGray")]
+        IntPtr pixOpenGray(HandleRef pixs, int hsize, int vsize);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCombineMasked")]
+        int pixCombineMasked(HandleRef pixd, HandleRef pixs, HandleRef pixm);
+
+        // Threshold
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixThresholdToValue")]
+        IntPtr pixThresholdToValue(HandleRef pixd, HandleRef pixs, int threshval, int setval);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixThresholdToBinary")]
+        IntPtr pixThresholdToBinary(HandleRef pixs, int thresh);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixInvert")]
+        IntPtr pixInvert(HandleRef pixd, HandleRef pixs);
 
         // Binarization - src/binarize.c
 
@@ -436,6 +479,25 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapShiftIntensity")]
         int pixcmapShiftIntensity(HandleRef cmap, float fraction);
 
+
+        #endregion
+
+        #region Box
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxaGetCount")]
+        int boxaGetCount(HandleRef boxa);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxaGetBox")]
+        IntPtr boxaGetBox(HandleRef boxa, int index, PixArrayAccessType accesstype);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxGetGeometry")]
+        int boxGetGeometry(HandleRef box, out int px, out int py, out int pw, out int ph);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxDestroy")]
+        void boxDestroy(ref IntPtr box);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "boxaDestroy")]
+        void boxaDestroy(ref IntPtr box);
 
         #endregion
     }

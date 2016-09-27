@@ -14,23 +14,17 @@
     <tags>Tesseract Ocr</tags>
   </metadata>
   <files>
-	 <file src="Release20\Tesseract.dll" target="lib\net20" />
-	 <file src="Release20\Tesseract.xml" target="lib\net20" />
-	 <file src="Release35\Tesseract.dll" target="lib\net35" />
-	 <file src="Release35\Tesseract.xml" target="lib\net35" />
-	 <file src="Release40\Tesseract.dll" target="lib\net40" />
-	 <file src="Release40\Tesseract.xml" target="lib\net40" />
-	 <file src="Release40Client\Tesseract.dll" target="lib\net40-client" />
-	 <file src="Release40Client\Tesseract.xml" target="lib\net40-client" />
-	 <file src="Release45\Tesseract.dll" target="lib\net45" />
-	 <file src="Release45\Tesseract.xml" target="lib\net45" />
 	 <file src="Release451\Tesseract.dll" target="lib\net451" />
-	 <file src="Release451\Tesseract.xml" target="lib\net451" />
 	 
-	 <file src="\Release20\x86\libtesseract304.dll" target="content\x86" />
-	 <file src="\Release20\x86\liblept172.dll" target="content\x86" />	
-	 <file src="\Release20\x64\libtesseract304.dll" target="content\x64" />
-	 <file src="\Release20\x64\liblept172.dll" target="content\x64" />	  
-	 <file src="\Release20\install.ps1" target="tools\install.ps1" />
+	 <file src="\Release451\x86\libtesseract304.dll" target="content\x86" />
+	 <file src="\Release451\x86\liblept172.dll" target="content\x86" />	
+	 <file src="\Release451\x64\libtesseract304.dll" target="content\x64" />
+	 <file src="\Release451\x64\liblept172.dll" target="content\x64" />	 
+	 
+	 <file src="\Release451\x64\liblept172.dll" target="build\x64"/>
+	 <file src="\Release451\x64\libtesseract304.dll" target="build\x64"/>
+	
+	 <file src="\Release451\x86\liblept172.dll" target="build\x86"/>
+	 <file src="\Release451\x86\libtesseract304.dll" target="build\x86"/>
   </files>
 </package>
