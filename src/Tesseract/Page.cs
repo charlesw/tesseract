@@ -120,13 +120,23 @@ namespace Tesseract
             return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
         }
 
-		/// <summary>
-		/// Gets the page's content as a HOCR text.
-		/// </summary>
-		/// <param name="pageNum">The page number (zero based).</param>
-		/// <param name="useXHtml">True to use XHTML Output, False to HTML Output</param>
-		/// <returns>The OCR'd output as a HOCR text string.</returns>
-		public string GetHOCRText(int pageNum, bool useXHtml = false)
+        public string GetText(int timeout)
+        {
+            if (!Recognize(0, timeout))
+            {
+                return null;
+            }
+
+            return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
+        }
+
+        /// <summary>
+        /// Gets the page's content as a HOCR text.
+        /// </summary>
+        /// <param name="pageNum">The page number (zero based).</param>
+        /// <param name="useXHtml">True to use XHTML Output, False to HTML Output</param>
+        /// <returns>The OCR'd output as a HOCR text string.</returns>
+        public string GetHOCRText(int pageNum, bool useXHtml = false)
         {
 			//Why Not Use 'nameof(pageNum)' instead of '"pageNum"'
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
@@ -136,6 +146,22 @@ namespace Tesseract
 			else
 				return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
 		}
+
+        public string GetHOCRText(int pageNum, int timeout, bool useXHtml = false)
+        {
+            //Why Not Use 'nameof(pageNum)' instead of '"pageNum"'
+            Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
+
+            if (!Recognize(pageNum, timeout))
+            {
+                return null;
+            }
+
+            if (useXHtml)
+                return Interop.TessApi.BaseAPIGetHOCRText2(Engine.Handle, pageNum);
+            else
+                return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
+        }
 
         /// <summary>
         /// Get's the mean confidence that as a percentage of the recognized text.
@@ -195,6 +221,51 @@ namespace Tesseract
                     }
                 }
             }
+        }
+
+        private bool Recognize(int pageNum, int timeout)
+        {
+            Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead.");
+
+            //string strText = null;
+
+            int success = -1;
+
+            if (!runRecognitionPhase)
+            {
+                //Interop.TessApi.BaseApiSetVariable(Engine.Handle, "tessedit_create_hocr", "1");
+                string fileName = Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
+                //IntPtr renderer = Interop.TessApi.Native.HOcrRendererCreate(fileName);
+                success = Interop.TessApi.Native.BaseAPIProcessPage(Engine.Handle, Image.Handle, pageNum, null, null, timeout, new HandleRef(this, IntPtr.Zero));
+            }
+
+            if (success == 1)
+            {
+                runRecognitionPhase = true;
+
+                // now write out the thresholded image if required to do so
+                bool tesseditWriteImages;
+                if (Engine.TryGetBoolVariable("tessedit_write_images", out tesseditWriteImages) && tesseditWriteImages)
+                {
+                    using (Pix thresholdedImage = GetThresholdedImage())
+                    {
+                        string filePath = Path.Combine(Environment.CurrentDirectory, "tessinput.tif");
+                        try
+                        {
+                            thresholdedImage.Save(filePath, ImageFormat.TiffG4);
+                            trace.TraceEvent(TraceEventType.Information, 2,
+                                "Successfully saved the thresholded image to '{0}'", filePath);
+                        }
+                        catch (Exception error)
+                        {
+                            trace.TraceEvent(TraceEventType.Error, 2,
+                                "Failed to save the thresholded image to '{0}'.\nError: {1}", filePath, error.Message);
+                        }
+                    }
+                }
+            }
+
+            return success == 1;
         }
 
         protected override void Dispose(bool disposing)
