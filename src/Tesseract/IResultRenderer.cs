@@ -9,7 +9,7 @@ namespace Tesseract
         /// </summary>
         /// <param name="title">The title of the new document.</param>
         /// <returns>A handle that when disposed of ends the current document.</returns>
-        IDisposable BeginDocument(string name);
+        IDisposable BeginDocument(string title);
 
         /// <summary>
         /// Add the page to the current document.

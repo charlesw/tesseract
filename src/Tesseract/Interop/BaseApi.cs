@@ -263,7 +263,7 @@ namespace Tesseract.Interop
         IntPtr ResultRendererNext(HandleRef renderer);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererBeginDocument")]
-        int ResultRendererBeginDocument(HandleRef renderer, string title);
+        int ResultRendererBeginDocument(HandleRef renderer, IntPtr titlePtr);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererAddImage")]
         int ResultRendererAddImage(HandleRef renderer, HandleRef api);

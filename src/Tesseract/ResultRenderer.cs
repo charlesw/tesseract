@@ -77,23 +77,39 @@ namespace Tesseract
         /// <summary>
         /// Ensures the renderer's EndDocument when disposed off.
         /// </summary>
-        private class EndDocumentOnDispose : IDisposable
+        private class EndDocumentOnDispose : DisposableBase
         {
             private readonly ResultRenderer _renderer;
+            private IntPtr _titlePtr;
 
-            public EndDocumentOnDispose(ResultRenderer renderer)
+            public EndDocumentOnDispose(ResultRenderer renderer, IntPtr titlePtr)
             {
                 _renderer = renderer;
+                _titlePtr = titlePtr;
             }
 
-            public void Dispose()
+            protected override void Dispose(bool disposing)
             {
-                // End the renderer
-                Interop.TessApi.Native.ResultRendererEndDocument(_renderer._handle);
+                try {
+                    if (disposing) {
+                        Guard.Verify(_renderer._currentDocumentHandle == this, "Expected the Result Render's active document to be this document.");
+
+                        // End the renderer
+                        Interop.TessApi.Native.ResultRendererEndDocument(_renderer._handle);
+                        _renderer._currentDocumentHandle = null;
+                    }
+                } finally {
+                    // free title ptr
+                    if (_titlePtr != IntPtr.Zero) {
+                        Marshal.FreeHGlobal(_titlePtr);
+                        _titlePtr = IntPtr.Zero;
+                    }
+                }
             }
         }
 
         private HandleRef _handle;
+        private IDisposable _currentDocumentHandle;
 
         protected ResultRenderer()
         {
@@ -133,18 +149,24 @@ namespace Tesseract
         /// <summary>
         /// Begins a new document with the specified <paramref name="title"/>.
         /// </summary>
-        /// <param name="title">The title of the new document.</param>
+        /// <param name="title">The (ANSI) title of the new document.</param>
         /// <returns>A handle that when disposed of ends the current document.</returns>
         public IDisposable BeginDocument(string title)
         {
             Guard.RequireNotNull("title", title);
             VerifyNotDisposed();
+            Guard.Verify(_currentDocumentHandle == null, "Cannot being document \"{0}\" as another document is currently being processed which must be dispose off first.", title);
 
-            if (Interop.TessApi.Native.ResultRendererBeginDocument(Handle, title) == 0) {
+            IntPtr titlePtr = Marshal.StringToHGlobalAnsi(title);
+            if (Interop.TessApi.Native.ResultRendererBeginDocument(Handle, titlePtr) == 0) {
+                // release the pointer first before throwing an error.
+                Marshal.FreeHGlobal(titlePtr);
+
                 throw new InvalidOperationException(String.Format("Failed to being document \"{0}\".", title));
             }
 
-            return new EndDocumentOnDispose(this);
+            _currentDocumentHandle = new EndDocumentOnDispose(this, titlePtr);
+            return _currentDocumentHandle;
         }
 
         protected HandleRef Handle
@@ -164,9 +186,18 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            if (_handle.Handle != IntPtr.Zero) {
-                Interop.TessApi.Native.DeleteResultRenderer(_handle);
-                _handle = new HandleRef(this, IntPtr.Zero);
+            try {
+                if (disposing) {
+                    // Ensure that if the renderer has an active document when disposed it too is disposed off.
+                    if (_currentDocumentHandle != null) {
+                        _currentDocumentHandle.Dispose();
+                    }
+                }
+            } finally {
+                if (_handle.Handle != IntPtr.Zero) {
+                    Interop.TessApi.Native.DeleteResultRenderer(_handle);
+                    _handle = new HandleRef(this, IntPtr.Zero);
+                }
             }
         }
     }
