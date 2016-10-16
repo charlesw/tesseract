@@ -8,9 +8,10 @@ using System.Text;
 namespace Tesseract.Tests
 {
     [TestFixture]
-    public class AnalyseResultTests
+    public class AnalyseResultTests : TesseractTestBase
     {
         private const string ResultsDirectory = @"Results\Analysis\";
+        private const string ExampleImagePath = @"Ocr\phototest.tif";
 
         #region Setup\TearDown
 
@@ -39,33 +40,42 @@ namespace Tesseract.Tests
 
         [Test]
         [TestCase(null)]
-        [TestCase(RotateFlipType.Rotate90FlipNone)]
-        [TestCase(RotateFlipType.Rotate180FlipNone)]
-        public void AnalyseLayout_RotatedImage(RotateFlipType? rotation)
+        [TestCase(90f)]
+        [TestCase(180f)]
+        public void AnalyseLayout_RotatedImage(float? angle)
         {
-            using (var img = new Bitmap(@".\phototest.tif")) {
-                if (rotation.HasValue) img.RotateFlip(rotation.Value);
-                engine.DefaultPageSegMode = PageSegMode.AutoOsd;
-                using (var page = engine.Process(img)) {
-                    using (var pageLayout = page.GetIterator()) {
-                        pageLayout.Begin();
-                        do {
-                            var result = pageLayout.GetProperties();
-                            // Note: The orientation always seem to be 'PageUp' in Tesseract 3.02 according to this test.
-                            Assert.That(result.Orientation, Is.EqualTo(Orientation.PageUp));
-                            if (rotation == RotateFlipType.Rotate180FlipNone) {
-                                // This isn't correct...
-                                Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.LeftToRight));
-                                Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.TopToBottom));
-                            } else if (rotation == RotateFlipType.Rotate90FlipNone) {
-                                Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.TopToBottom));
-                                Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.RightToLeft));
-                            } else if (rotation == null) {
-                                Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.LeftToRight));
-                                Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.TopToBottom));
-                            }
-                            // Not sure...
-                        } while (pageLayout.Next(PageIteratorLevel.Block));
+            var exampleImagePath = this.TestFilePath("Ocr/phototest.tif");
+            using (var img = LoadTestImage(ExampleImagePath)) {
+                using (var rotatedImage = angle.HasValue ? img.Rotate(MathHelper.ToRadians(angle.Value)) : img.Clone()) {
+                    rotatedImage.Save(TestResultRunFile(String.Format(@"AnalyseResult\AnalyseLayout_RotateImage_{0}.png", angle)));
+
+
+                    engine.DefaultPageSegMode = PageSegMode.AutoOsd;
+                    using (var page = engine.Process(rotatedImage)) {
+                        using (var pageLayout = page.GetIterator()) {
+                            pageLayout.Begin();
+                            do {
+                                var result = pageLayout.GetProperties();
+                                // Note: The orientation always seem to be 'PageUp' in Tesseract 3.04 according to this test.
+                                Assert.That(result.Orientation, Is.EqualTo(Orientation.PageUp));
+
+                                if(angle.HasValue) {
+                                    if (angle == 180f) {
+                                        // This isn't correct...
+                                        Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.LeftToRight));
+                                        Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.TopToBottom));
+                                    } else if (angle == 90f) {
+                                        Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.TopToBottom));
+                                        Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.RightToLeft));
+                                    } else {
+                                        Assert.Fail("Angle not supported.");
+                                    }
+                                } else {
+                                    Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.LeftToRight));
+                                    Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.TopToBottom));
+                                }                               
+                            } while (pageLayout.Next(PageIteratorLevel.Block));
+                        }
                     }
                 }
             }
@@ -86,7 +96,7 @@ namespace Tesseract.Tests
                 PageSegMode.SingleWord)]
             PageSegMode pageSegMode)
         {
-            using (var img = Pix.LoadFromFile(@".\phototest.tif")) {
+            using (var img = LoadTestImage(ExampleImagePath)) {
                 using (var rotatedPix = img.Rotate((float)Math.PI)) {
                     using (var page = engine.Process(rotatedPix, pageSegMode)) {
                         Orientation orientation;
@@ -106,11 +116,8 @@ namespace Tesseract.Tests
         [TestCase(270f)]
         public void DetectOrientation_RotatedImage(float rotation)
         {
-            using (var img = Pix.LoadFromFile(@".\phototest.tif")) {
+            using (var img = LoadTestImage(ExampleImagePath)) {
                 using (var rotatedPix = img.Rotate(rotation / 360 * (float)Math.PI * 2)) {
-                    //var destFilename = String.Format("RotatedPix_{0}.tif", rotation);
-                    //rotatedPix.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
-
                     using (var page = engine.Process(rotatedPix, PageSegMode.OsdOnly)) {
                         Orientation expectedOrientation;
                         float expectedDeskew;
@@ -131,20 +138,28 @@ namespace Tesseract.Tests
             [Values(PageIteratorLevel.Block, PageIteratorLevel.Para, PageIteratorLevel.TextLine, PageIteratorLevel.Word, PageIteratorLevel.Symbol)] PageIteratorLevel level, 
             [Values(0, 3)] int padding)
         {
-            using (var img = new Bitmap(@".\phototest.tif")) {
+            using (var img = LoadTestImage(ExampleImagePath)) {
                 using (var page = engine.Process(img)) {
                     using (var pageLayout = page.GetIterator()) {
                         pageLayout.Begin();
                         // get symbol
                         int x, y;
                         using (var elementImg = pageLayout.GetImage(level, padding, out x, out y)) {
-                            //var destFilename = String.Format("ResultIterator_Image_{0}_{1}_at_({2},{3}).png", level, padding, x, y);
-                            //elementImg.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Png);
+                            var elementImgFilename = String.Format(@"AnalyseResult\GetImage\ResultIterator_Image_{0}_{1}_at_({2},{3}).png", level, padding, x, y);
+
+                            // TODO: Ensure generated pix is equal to expected pix, only saving it if it's not.
+                            var destFilename = TestResultRunFile(elementImgFilename);
+                            elementImg.Save(destFilename, ImageFormat.Png);                           
                         }
                     }
                 }
             }
         }
+
+        #endregion Tests
+
+        #region Helpers
+
 
         private void ExpectedOrientation(float rotation, out Orientation orientation, out float deskew)
         {
@@ -168,6 +183,12 @@ namespace Tesseract.Tests
             }
         }
 
-        #endregion Tests
+        private Pix LoadTestImage(string path)
+        {
+            var fullExampleImagePath = this.TestFilePath(path);
+            return Pix.LoadFromFile(fullExampleImagePath);
+        }
+
+        #endregion
     }
 }
