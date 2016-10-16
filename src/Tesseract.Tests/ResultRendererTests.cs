@@ -13,7 +13,7 @@ namespace Tesseract.Tests
     {
         #region Test setup and teardown
 
-        TesseractEngine _engine;
+        private TesseractEngine _engine;
 
         [SetUp]
         public void Inititialse()
@@ -30,7 +30,7 @@ namespace Tesseract.Tests
             }
         }
 
-        #endregion
+        #endregion Test setup and teardown
 
         [Test]
         public void CanRenderResultsIntoTextFile()
@@ -40,6 +40,9 @@ namespace Tesseract.Tests
                 var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
                 ProcessFile(renderer, examplePixPath);
             }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "txt");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Text file \"{expectedOutputFilename}\" to have been created; but non was found.");
         }
 
         [Test]
@@ -50,6 +53,9 @@ namespace Tesseract.Tests
                 var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
                 ProcessFile(renderer, examplePixPath);
             }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but non was found.");
         }
 
         [Test]
@@ -60,6 +66,9 @@ namespace Tesseract.Tests
                 var examplePixPath = this.TestFilePath("processing/multi-page.tif");
                 ProcessMultipageTiff(renderer, examplePixPath);
             }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but non was found.");
         }
 
         [Test]
@@ -70,6 +79,9 @@ namespace Tesseract.Tests
                 var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
                 ProcessFile(renderer, examplePixPath);
             }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "hocr");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a HOCR file \"{expectedOutputFilename}\" to have been created; but non was found.");
         }
 
         [Test]
@@ -80,6 +92,9 @@ namespace Tesseract.Tests
                 var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
                 ProcessFile(renderer, examplePixPath);
             }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "unlv");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Unlv file \"{expectedOutputFilename}\" to have been created; but non was found.");
         }
 
         [Test]
@@ -90,26 +105,30 @@ namespace Tesseract.Tests
                 var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
                 ProcessFile(renderer, examplePixPath);
             }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "box");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Box file \"{expectedOutputFilename}\" to have been created; but non was found.");
         }
 
         private void ProcessMultipageTiff(IResultRenderer renderer, string filename)
         {
             var imageName = Path.GetFileNameWithoutExtension(filename);
             using (var pixA = PixArray.LoadMultiPageTiffFromFile(filename)) {
-
                 int expectedPageNumber = -1;
                 using (renderer.BeginDocument(imageName)) {
                     Assert.AreEqual(renderer.PageNumber, expectedPageNumber);
                     foreach (var pix in pixA) {
                         using (var page = _engine.Process(pix, imageName)) {
-                            renderer.AddPage(page);
+                            var addedPage = renderer.AddPage(page);
+                            expectedPageNumber++;
 
-                            Assert.AreEqual(renderer.PageNumber, ++expectedPageNumber);
+                            Assert.That(addedPage, Is.True);
+                            Assert.That(renderer.PageNumber, Is.EqualTo(expectedPageNumber));
                         }
                     }
                 }
 
-                Assert.AreEqual(renderer.PageNumber, expectedPageNumber);
+                Assert.That(renderer.PageNumber, Is.EqualTo(expectedPageNumber));
             }
         }
 
@@ -120,9 +139,10 @@ namespace Tesseract.Tests
                 using (renderer.BeginDocument(imageName)) {
                     Assert.AreEqual(renderer.PageNumber, -1);
                     using (var page = _engine.Process(pix, imageName)) {
-                        renderer.AddPage(page);
+                        var addedPage = renderer.AddPage(page);
 
-                        Assert.AreEqual(renderer.PageNumber, 0);
+                        Assert.That(addedPage, Is.True);
+                        Assert.That(renderer.PageNumber, Is.EqualTo(0));
                     }
                 }
 

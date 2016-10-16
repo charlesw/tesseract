@@ -4,13 +4,6 @@
 * Updated to Tesseract 3.04.01
 * Fixed PolyBlockType definition - [Issue #280](https://github.com/charlesw/tesseract/issues/280)
 
-#### TODO:
-
-* Decide what to do if result renderer opp fails (return bool?)
-* Add support for aggregating multiple result renderers together - move to new task
-* Improve result renderer tests to ensure they're actually generating the expected files.
-* Improve test coverage and speed (test).
-
 ### Version 3.1.0
 
 * Support for printing list of available variables - [Issue 256](https://github.com/charlesw/tesseract/issues/256)

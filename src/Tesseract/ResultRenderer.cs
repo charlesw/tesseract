@@ -22,7 +22,6 @@ namespace Tesseract
         /// </summary>
         /// <param name="outputFilename">The filename of the pdf file to be generated without the file extension.</param>
         /// <param name="fontDirectory">The directory containing the pdf font data, normally same as your tessdata directory.</param>
-        /// <param name="next">The next renderer.</param>
         /// <returns></returns>
         public static IResultRenderer CreatePdfRenderer(string outputFilename, string fontDirectory)
         {
@@ -45,8 +44,7 @@ namespace Tesseract
         /// file from tesseract's output.
         /// </summary>
         /// <param name="outputFilename">The path to the hocr file to be generated without the file extension.</param>
-        /// <param name="fontInfo"></param>
-        /// <param name="next"></param>
+        /// <param name="fontInfo">Determines if the generated HOCR file includes font information or not.</param>
         /// <returns></returns>
         public static IResultRenderer CreateHOcrRenderer(string outputFilename, bool fontInfo = false)
         {
@@ -118,7 +116,8 @@ namespace Tesseract
         /// Add the page to the current document.
         /// </summary>
         /// <param name="page"></param>
-        public void AddPage(Page page)
+        /// <returns><c>True</c> if the page was successfully added to the result renderer; otherwise false.</returns>
+        public bool AddPage(Page page)
         {
             Guard.RequireNotNull("page", page);
             VerifyNotDisposed();
@@ -128,20 +127,22 @@ namespace Tesseract
             // implicitly if required. This is why I've only made Page.Recognise internal not public.
             page.Recognize();
 
-            Interop.TessApi.Native.ResultRendererAddImage(Handle, page.Engine.Handle);
+            return Interop.TessApi.Native.ResultRendererAddImage(Handle, page.Engine.Handle) != 0;
         }
 
         /// <summary>
-        /// Notifies the renderer to start a new document, ensure any previous 'documents' have been disposed off.
+        /// Begins a new document with the specified <paramref name="title"/>.
         /// </summary>
-        /// <param name="title"></param>
-        /// <returns></returns>
+        /// <param name="title">The title of the new document.</param>
+        /// <returns>A handle that when disposed of ends the current document.</returns>
         public IDisposable BeginDocument(string title)
         {
             Guard.RequireNotNull("title", title);
             VerifyNotDisposed();
 
-            Interop.TessApi.Native.ResultRendererBeginDocument(Handle, title);
+            if (Interop.TessApi.Native.ResultRendererBeginDocument(Handle, title) == 0) {
+                throw new InvalidOperationException(String.Format("Failed to being document \"{0}\".", title));
+            }
 
             return new EndDocumentOnDispose(this);
         }
