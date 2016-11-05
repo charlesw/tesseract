@@ -42,7 +42,7 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "txt");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Text file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Text file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "hocr");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a HOCR file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a HOCR file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "unlv");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Unlv file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Unlv file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -107,7 +107,26 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "box");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Box file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Box file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
+        public void CanRenderResultsIntoMultipleOutputFormats()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
+            List<RenderedFormat> formats = new List<RenderedFormat> { RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT };
+            using (var renderer = ResultRenderer.CreateRenderers(resultPath, DataPath, formats))
+            {
+                var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
+                ProcessFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
+            expectedOutputFilename = Path.ChangeExtension(resultPath, "hocr");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a HOCR file \"{expectedOutputFilename}\" to have been created; but none was found.");
+            expectedOutputFilename = Path.ChangeExtension(resultPath, "txt");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a TEXT file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         private void ProcessMultipageTiff(IResultRenderer renderer, string filename)
