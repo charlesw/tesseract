@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddNewColorStatus.cs" />
+    <Compile Include="AggregateResultRenderer.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
     <Compile Include="ChoiceIterator.cs" />

@@ -110,6 +110,22 @@ namespace Tesseract.Tests
             Assert.That(File.Exists(expectedOutputFilename), $"Expected a Box file \"{expectedOutputFilename}\" to have been created; but non was found.");
         }
 
+        [Test]
+        public void CanRenderMultiplePageDocumentIntoMultipleResultRenderers()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\Aggregate\multi-page");
+            using (var renderer = new AggregateResultRenderer(ResultRenderer.CreatePdfRenderer(resultPath, DataPath), ResultRenderer.CreateTextRenderer(resultPath))) {
+                var examplePixPath = this.TestFilePath("processing/multi-page.tif");
+                ProcessMultipageTiff(renderer, examplePixPath);
+            }
+
+            var expectedPdfOutputFilename = Path.ChangeExtension(resultPath, "pdf");
+            Assert.That(File.Exists(expectedPdfOutputFilename), $"Expected a PDF file \"{expectedPdfOutputFilename}\" to have been created; but non was found.");
+
+            var expectedTxtOutputFilename = Path.ChangeExtension(resultPath, "txt");
+            Assert.That(File.Exists(expectedTxtOutputFilename), $"Expected a Text file \"{expectedTxtOutputFilename}\" to have been created; but non was found.");
+        }
+
         private void ProcessMultipageTiff(IResultRenderer renderer, string filename)
         {
             var imageName = Path.GetFileNameWithoutExtension(filename);
