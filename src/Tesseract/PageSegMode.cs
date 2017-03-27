@@ -65,6 +65,21 @@ namespace Tesseract
         SingleChar, 
         
         /// <summary>
+        /// Find as much text as possible in no particular order.
+        /// </summary>
+	SparseText,
+        
+        /// <summary>
+        /// Sparse text with orientation and script det.
+        /// </summary>
+	SparseTextOsd,
+        
+        /// <summary>
+        /// Treat the image as a single text line, bypassing hacks that are Tesseract-specific.
+        /// </summary>
+	RawLine,
+        
+        /// <summary>
         /// Number of enum entries.
         /// </summary>
         Count
