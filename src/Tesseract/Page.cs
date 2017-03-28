@@ -225,7 +225,7 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed) {
+            if (disposing) {
                 Interop.TessApi.Native.BaseAPIClear(Engine.Handle);
             }
         }
