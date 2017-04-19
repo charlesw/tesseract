@@ -181,6 +181,12 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorConfidence")]
         float ResultIteratorGetConfidence(HandleRef handle, PageIteratorLevel level);
 
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordFontAttributes")]
+        IntPtr ResultIteratorWordFontAttributesInternal(HandleRef handle, out bool is_bold, out bool is_italic, out bool is_underlined, out bool is_monospace, out bool is_serif, out bool is_smallcaps, out int pointsize, out int font_id);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordRecognitionLanguage")]
+        IntPtr ResultIteratorWordRecognitionLanguageInternal(HandleRef handle);
+
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetPageIterator")]
         IntPtr ResultIteratorGetPageIterator(HandleRef handle);
 
@@ -438,6 +444,40 @@ namespace Tesseract.Interop
                 LeptonicaApi.Initialize();
                 native = InteropRuntimeImplementer.CreateInstance<ITessApiSignatures>();
             }
+        }
+
+        public static string ResultIteratorWordFontAttributes(
+            HandleRef handle,
+            out bool is_bold, out bool is_italic, out bool is_underlined,
+            out bool is_monospace, out bool is_serif, out bool is_smallcaps,
+            out int pointsize, out int font_id
+        )
+        {
+            // per docs (ltrresultiterator.h:104 as of 4897796 in github:tesseract-ocr/tesseract)
+            // this return value points to an internal table and should not be deleted.
+            IntPtr txtHandle =
+                Native.ResultIteratorWordFontAttributesInternal(
+                    handle,
+                    out is_bold, out is_italic, out is_underlined,
+                    out is_monospace, out is_serif, out is_smallcaps,
+                    out pointsize, out font_id
+                );
+
+            return txtHandle != IntPtr.Zero
+                ? MarshalHelper.PtrToString(txtHandle, Encoding.UTF8)
+                : null;
+        }
+
+        public static string ResultIteratorWordRecognitionLanguage(HandleRef handle)
+        {
+            // per docs (ltrresultiterator.h:118 as of 4897796 in github:tesseract-ocr/tesseract)
+            // this return value should *NOT* be deleted.
+            IntPtr txtHandle =
+                Native.ResultIteratorWordRecognitionLanguageInternal(handle);
+
+            return txtHandle != IntPtr.Zero
+                ? MarshalHelper.PtrToString(txtHandle, Encoding.UTF8)
+                : null;
         }
 
         public static string ResultIteratorGetUTF8Text(HandleRef handle, PageIteratorLevel level)
