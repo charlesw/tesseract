@@ -34,31 +34,7 @@ namespace Tesseract
                 return null;
             }
 
-            bool is_bold, is_italic, is_underlined,
-                    is_monospace, is_serif, is_smallcaps;
-
-            int pointsize, font_id;
-            string name =
-                Interop.TessApi.ResultIteratorWordFontAttributes(
-                    handle,
-                    out is_bold, out is_italic, out is_underlined,
-                    out is_monospace, out is_serif, out is_smallcaps,
-                    out pointsize, out font_id
-                );
-
-            // this can happen in certain error conditions.
-            if (name == null) {
-                return null;
-            }
-
-            var fontInfo =
-                FontInfo.GetOrCreate(
-                    name, font_id,
-                    is_italic, is_bold,
-                    is_monospace, is_serif
-                );
-
-            return new FontAttributes(fontInfo, is_underlined, is_smallcaps, pointsize);
+            return Interop.TessApi.ResultIteratorWordFontAttributes(handle);
         }
 
         public string GetWordRecognitionLanguage()
@@ -69,6 +45,56 @@ namespace Tesseract
             }
 
             return Interop.TessApi.ResultIteratorWordRecognitionLanguage(handle);
+        }
+
+        public bool GetWordIsFromDictionary()
+        {
+            VerifyNotDisposed();
+            if (handle.Handle == IntPtr.Zero) {
+                return false;
+            }
+
+            return Interop.TessApi.Native.ResultIteratorWordIsFromDictionary(handle);
+        }
+
+        public bool GetWordIsNumeric()
+        {
+            VerifyNotDisposed();
+            if (handle.Handle == IntPtr.Zero) {
+                return false;
+            }
+
+            return Interop.TessApi.Native.ResultIteratorWordIsNumeric(handle);
+        }
+
+        public bool GetSymbolIsSuperscript()
+        {
+            VerifyNotDisposed();
+            if (handle.Handle == IntPtr.Zero) {
+                return false;
+            }
+
+            return Interop.TessApi.Native.ResultIteratorSymbolIsSuperscript(handle);
+        }
+
+        public bool GetSymbolIsSubscript()
+        {
+            VerifyNotDisposed();
+            if (handle.Handle == IntPtr.Zero) {
+                return false;
+            }
+
+            return Interop.TessApi.Native.ResultIteratorSymbolIsSubscript(handle);
+        }
+
+        public bool GetSymbolIsDropcap()
+        {
+            VerifyNotDisposed();
+            if (handle.Handle == IntPtr.Zero) {
+                return false;
+            }
+
+            return Interop.TessApi.Native.ResultIteratorSymbolIsDropcap(handle);
         }
 
         /// <summary>
