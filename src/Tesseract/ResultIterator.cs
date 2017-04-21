@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using Tesseract.Interop;
 
 namespace Tesseract
 {
@@ -28,13 +32,33 @@ namespace Tesseract
             return Interop.TessApi.ResultIteratorGetUTF8Text(handle, level);
         }
         
+        private Dictionary<int, FontInfo> _fontInfoCache = new Dictionary<int, FontInfo>();
         public FontAttributes GetWordFontAttributes() {
             VerifyNotDisposed();
             if (handle.Handle == IntPtr.Zero) {
                 return null;
             }
 
-            return Interop.TessApi.ResultIteratorWordFontAttributes(handle);
+            bool isBold, isItalic, isUnderlined, isMonospace, isSerif, isSmallCaps;
+            int pointSize, fontId;
+
+            // per docs (ltrresultiterator.h:104 as of 4897796 in github:tesseract-ocr/tesseract)
+            // this return value points to an internal table and should not be deleted.
+            IntPtr nameHandle =
+                Interop.TessApi.Native.ResultIteratorWordFontAttributes(
+                    handle,
+                    out isBold, out isItalic, out isUnderlined,
+                    out isMonospace, out isSerif, out isSmallCaps,
+                    out pointSize, out fontId);
+
+            FontInfo fontInfo;
+            if (!_fontInfoCache.TryGetValue(fontId, out fontInfo)) {
+                string fontName = MarshalHelper.PtrToString(nameHandle, Encoding.UTF8);
+                fontInfo = new FontInfo(fontName, fontId, isItalic, isBold, isMonospace, isSerif);
+                _fontInfoCache.Add(fontId, fontInfo);
+            }
+
+            return new FontAttributes(fontInfo, isUnderlined, isSmallCaps, pointSize);
         }
 
         public string GetWordRecognitionLanguage()

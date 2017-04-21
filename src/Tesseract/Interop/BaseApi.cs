@@ -182,7 +182,7 @@ namespace Tesseract.Interop
         float ResultIteratorGetConfidence(HandleRef handle, PageIteratorLevel level);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordFontAttributes")]
-        IntPtr ResultIteratorWordFontAttributesInternal(HandleRef handle, out bool is_bold, out bool is_italic, out bool is_underlined, out bool is_monospace, out bool is_serif, out bool is_smallcaps, out int pointsize, out int font_id);
+        IntPtr ResultIteratorWordFontAttributes(HandleRef handle, out bool isBold, out bool isItalic, out bool isUnderlined, out bool isMonospace, out bool isSerif, out bool isSmallCaps, out int pointSize, out int fontId);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsFromDictionary")]
         bool ResultIteratorWordIsFromDictionary(HandleRef handle);
@@ -459,40 +459,6 @@ namespace Tesseract.Interop
                 LeptonicaApi.Initialize();
                 native = InteropRuntimeImplementer.CreateInstance<ITessApiSignatures>();
             }
-        }
-
-        public static FontAttributes ResultIteratorWordFontAttributes(HandleRef handle)
-        {
-            bool is_bold, is_italic, is_underlined,
-                 is_monospace, is_serif, is_smallcaps;
-
-            int pointsize, font_id;
-
-            // per docs (ltrresultiterator.h:104 as of 4897796 in github:tesseract-ocr/tesseract)
-            // this return value points to an internal table and should not be deleted.
-            IntPtr txtHandle =
-                Native.ResultIteratorWordFontAttributesInternal(
-                    handle,
-                    out is_bold, out is_italic, out is_underlined,
-                    out is_monospace, out is_serif, out is_smallcaps,
-                    out pointsize, out font_id
-                );
-
-            // this can happen in certain error conditions.
-            if (txtHandle == IntPtr.Zero) {
-                return null;
-            }
-
-            var fontInfo =
-                FontInfo.GetById(font_id)
-                    ?? FontInfo.GetOrCreate(
-                           MarshalHelper.PtrToString(txtHandle, Encoding.UTF8),
-                           font_id,
-                           is_italic, is_bold,
-                           is_monospace, is_serif
-                       );
-
-            return new FontAttributes(fontInfo, is_underlined, is_smallcaps, pointsize);
         }
 
         public static string ResultIteratorWordRecognitionLanguage(HandleRef handle)
