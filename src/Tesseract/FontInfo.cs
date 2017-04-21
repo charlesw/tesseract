@@ -9,7 +9,7 @@ namespace Tesseract
     // it's probably not all that useful anyway)
     public class FontInfo
     {
-        private FontInfo(
+        internal FontInfo(
             string name, int id,
             bool isItalic, bool isBold, bool isFixedPitch,
             bool isSerif, bool isFraktur = false
@@ -33,33 +33,5 @@ namespace Tesseract
         public bool IsFixedPitch { get; private set; }
         public bool IsSerif      { get; private set; }
         public bool IsFraktur    { get; private set; }
-
-        private static Dictionary<int, FontInfo> _cache = new Dictionary<int, FontInfo>();
-
-        public static FontInfo GetById(int id) {
-            if (_cache.ContainsKey(id)) {
-                return _cache[id];
-            }
-            return null;
-        }
-
-        public static object _cacheLock = new object();
-        public static FontInfo GetOrCreate(
-            string name, int id,
-            bool isItalic, bool isBold, bool isFixedPitch,
-            bool isSerif, bool isFraktur = false
-        )
-        {
-            lock (_cacheLock) {
-                if (_cache.ContainsKey(id)) {
-                    return _cache[id];
-                }
-
-                var newFont = new FontInfo(name, id, isItalic, isBold, isFixedPitch, isSerif, isFraktur);
-                _cache.Add(id, newFont);
-
-                return newFont;
-            }
-        }
     }
 }
