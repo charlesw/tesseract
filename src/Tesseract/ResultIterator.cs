@@ -51,6 +51,11 @@ namespace Tesseract
                     out isMonospace, out isSerif, out isSmallCaps,
                     out pointSize, out fontId);
 
+            // This can happen in certain error conditions
+            if (nameHandle == IntPtr.Zero) {
+                return null;
+            }
+
             FontInfo fontInfo;
             if (!_fontInfoCache.TryGetValue(fontId, out fontInfo)) {
                 string fontName = MarshalHelper.PtrToString(nameHandle, Encoding.UTF8);
