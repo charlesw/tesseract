@@ -435,12 +435,6 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetNearestGrayIndex")]
         int pixcmapGetNearestGrayIndex(HandleRef cmap, int val, out int index);
 
-        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetComponentRange")]
-        int pixcmapGetComponentRange(HandleRef cmap, int component, out int minVal, out int maxVal);
-
-        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetExtremeValue")]
-        int pixcmapGetExtremeValue(HandleRef cmap, int type, out int rVal, out int gVal, out int bVal);
-
         // color map conversion
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGrayToColor")]

@@ -190,11 +190,11 @@ namespace Tesseract
         {
             Interop.OSResult result = new Interop.OSResult();
             result.Init();
-            if (Interop.TessApi.Native.BaseAPIDetectOS(Engine.Handle, ref result) != 0) {
-                result.GetBestOrientation(out orientation, out confidence);
-            } else {
+            //if (Interop.TessApi.Native.BaseAPIDetectOS(Engine.Handle, ref result) != 0) {
+            //    result.GetBestOrientation(out orientation, out confidence);
+            //} else {
                 throw new TesseractException("Failed to detect image orientation.");
-            }
+            //}
         }
         
         internal void Recognize()
@@ -225,7 +225,7 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) {
+            if (!IsDisposed) {
                 Interop.TessApi.Native.BaseAPIClear(Engine.Handle);
             }
         }
