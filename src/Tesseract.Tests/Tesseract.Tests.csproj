@@ -88,6 +88,7 @@
     <Compile Include="Leptonica\PixTests\PixDataAccessTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultIteratorTests\OfAnEmptyPixTests.cs" />
+    <Compile Include="ResultIteratorTests\FontAttributesTests.cs" />
     <Compile Include="ResultRendererTests.cs" />
     <Compile Include="TesseractResultSet.cs" />
     <Compile Include="TesseractTestBase.cs" />
@@ -159,6 +160,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Ocr\PSM_SingleWord.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Ocr\Fonts.tif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Ocr\blank.tif">
