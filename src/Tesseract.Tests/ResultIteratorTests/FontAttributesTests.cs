@@ -34,18 +34,6 @@ namespace Tesseract.Tests.ResultIteratorTests
             }
         }
 
-        private void Debug(ResultIterator iter, FontAttributes fontAttrs) {
-            Console.WriteLine("Word: {0}", iter.GetText(PageIteratorLevel.Word));
-                Console.WriteLine("IsBold: {0}", fontAttrs.FontInfo.IsBold);
-                Console.WriteLine("IsItalic: {0}", fontAttrs.FontInfo.IsItalic);
-                Console.WriteLine("IsFixedPitch: {0}", fontAttrs.FontInfo.IsFixedPitch);
-                Console.WriteLine("IsSerif: {0}", fontAttrs.FontInfo.IsSerif);
-
-                Console.WriteLine("IsUnderlined: {0}", fontAttrs.IsUnderlined);
-                Console.WriteLine("IsSmallCaps: {0}", fontAttrs.IsSmallCaps);
-                Console.WriteLine("Point size: {0}", fontAttrs.PointSize);
-        }
-
         #region Tests
         [Test]
         public void GetWordFontAttributesWorks()
