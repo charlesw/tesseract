@@ -49,9 +49,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AssemblyVersionInfo.cs">
-      <Link>Properties\AssemblyVersionInfo.cs</Link>
-    </Compile>
     <Compile Include="AddNewColorStatus.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
@@ -74,6 +71,7 @@
     <Compile Include="PixArrayAccessType.cs" />
     <Compile Include="PixColor.cs" />
     <Compile Include="DisposableBase.cs" />
+    <Compile Include="ResultRenderer.cs" />
     <Compile Include="RotationFill.cs" />
     <Compile Include="RotationMethod.cs" />
     <Compile Include="Scew.cs" />
