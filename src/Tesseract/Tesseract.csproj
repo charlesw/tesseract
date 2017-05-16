@@ -101,6 +101,8 @@
     <Compile Include="PolyBlockType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />
+    <Compile Include="FontAttributes.cs" />
+    <Compile Include="FontInfo.cs" />
     <Compile Include="ResultIterator.cs" />
     <Compile Include="TesseractEnviornment.cs">
       <SubType>Code</SubType>
