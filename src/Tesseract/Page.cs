@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -120,22 +121,22 @@ namespace Tesseract
             return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
         }
 
-		/// <summary>
-		/// Gets the page's content as a HOCR text.
-		/// </summary>
-		/// <param name="pageNum">The page number (zero based).</param>
-		/// <param name="useXHtml">True to use XHTML Output, False to HTML Output</param>
-		/// <returns>The OCR'd output as a HOCR text string.</returns>
-		public string GetHOCRText(int pageNum, bool useXHtml = false)
+        /// <summary>
+        /// Gets the page's content as a HOCR text.
+        /// </summary>
+        /// <param name="pageNum">The page number (zero based).</param>
+        /// <param name="useXHtml">True to use XHTML Output, False to HTML Output</param>
+        /// <returns>The OCR'd output as a HOCR text string.</returns>
+        public string GetHOCRText(int pageNum, bool useXHtml = false)
         {
-			//Why Not Use 'nameof(pageNum)' instead of '"pageNum"'
+            //Why Not Use 'nameof(pageNum)' instead of '"pageNum"'
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-			if(useXHtml)
-				return Interop.TessApi.BaseAPIGetHOCRText2(Engine.Handle, pageNum);
-			else
-				return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
-		}
+            if(useXHtml)
+                return Interop.TessApi.BaseAPIGetHOCRText2(Engine.Handle, pageNum);
+            else
+                return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
+        }
 
         /// <summary>
         /// Get's the mean confidence that as a percentage of the recognized text.
@@ -145,6 +146,35 @@ namespace Tesseract
         {
             Recognize();
             return Interop.TessApi.Native.BaseAPIMeanTextConf(Engine.Handle) / 100.0f;
+        }
+
+        /// <summary>
+        /// Get segmented regions at specified page iterator level.
+        /// </summary>
+        /// <param name="pageIteratorLevel">PageIteratorLevel enum</param>
+        /// <returns></returns>
+        public List<Rectangle> GetSegmentedRegions(PageIteratorLevel pageIteratorLevel)
+        {
+            var boxArray = Interop.TessApi.Native.BaseAPIGetComponentImages(Engine.Handle, pageIteratorLevel, Interop.Constants.TRUE, IntPtr.Zero, IntPtr.Zero);
+            int boxCount = Interop.LeptonicaApi.Native.boxaGetCount(new HandleRef(this, boxArray));
+
+            List<Rectangle> boxList = new List<Rectangle>();
+
+            for (int i = 0; i < boxCount; i++) {
+                var box = Interop.LeptonicaApi.Native.boxaGetBox(new HandleRef(this, boxArray), i, PixArrayAccessType.Clone);
+                if (box == IntPtr.Zero) {
+                    continue;
+                }
+
+                int px, py, pw, ph;
+                Interop.LeptonicaApi.Native.boxGetGeometry(new HandleRef(this, box), out px, out py, out pw, out ph);
+                boxList.Add(new Rectangle(px, py, pw, ph));
+                Interop.LeptonicaApi.Native.boxDestroy(ref box);
+            }
+
+            Interop.LeptonicaApi.Native.boxaDestroy(ref boxArray);
+
+            return boxList;
         }
 
         /// <summary>
@@ -160,18 +190,14 @@ namespace Tesseract
         {
             Interop.OSResult result = new Interop.OSResult();
             result.Init();
-            if (Interop.TessApi.Native.BaseAPIDetectOS(Engine.Handle, ref result) != 0) {
-                result.GetBestOrientation(out orientation, out confidence);
-            } else {
+            //if (Interop.TessApi.Native.BaseAPIDetectOS(Engine.Handle, ref result) != 0) {
+            //    result.GetBestOrientation(out orientation, out confidence);
+            //} else {
                 throw new TesseractException("Failed to detect image orientation.");
-            }
+            //}
         }
-
-#if Net45
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-        private void Recognize()
+        
+        internal void Recognize()
         {
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead.");
             if (!runRecognitionPhase) {

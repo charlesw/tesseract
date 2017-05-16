@@ -1,4 +1,4 @@
-﻿textord_debug_tabfind	0	Debug tab finding
+textord_debug_tabfind	0	Debug tab finding
 textord_debug_bugs	0	Turn on output related to bugs in tab finding
 textord_testregion_left	-1	Left edge of debug reporting rectangle
 textord_testregion_top	-1	Top edge of debug reporting rectangle
@@ -201,14 +201,14 @@ textord_words_default_maxspace	3.5	Max believable third space
 textord_words_default_minspace	0.6	Fraction of xheight
 textord_words_min_minspace	0.3	Fraction of xheight
 textord_words_default_nonspace	0.2	Fraction of xheight
-textord_words_initial_lower	0.25	Max inital cluster size
+textord_words_initial_lower	0.25	Max initial cluster size
 textord_words_initial_upper	0.15	Min initial cluster spacing
 textord_words_minlarge	0.75	Fraction of valid gaps needed
 textord_words_pitchsd_threshold	0.04	Pitch sync threshold
 textord_words_def_fixed	0.016	Threshold for definite fixed
 textord_words_def_prop	0.09	Threshold for definite prop
 textord_pitch_rowsimilarity	0.08	Fraction of xheight for sameness
-words_initial_lower	0.5	Max inital cluster size
+words_initial_lower	0.5	Max initial cluster size
 words_initial_upper	0.15	Min initial cluster spacing
 words_default_prop_nonspace	0.25	Fraction of xheight
 words_default_fixed_space	0.75	Fraction of xheight
@@ -236,7 +236,7 @@ classify_class_pruner_threshold	229	Class Pruner Threshold 0-255
 classify_class_pruner_multiplier	15	Class Pruner Multiplier 0-255:       
 classify_cp_cutoff_strength	7	Class Pruner CutoffStrength:         
 classify_integer_matcher_multiplier	10	Integer Matcher Multiplier  0-255:   
-il1_adaption_test	0	Dont adapt to i/I at beginning of word
+il1_adaption_test	0	Don't adapt to i/I at beginning of word
 dawg_debug_level	0	Set to 1 for general debug info, to 2 for more details, to 3 to see all the debug messages
 hyphen_debug_level	0	Debug level for hyphenated words.
 max_viterbi_list_size	10	Maximum size of viterbi list.
@@ -287,8 +287,8 @@ cube_debug_level	0	Print cube debug info.
 tessedit_preserve_min_wd_len	2	Only preserve wds longer than this
 crunch_rating_max	10	For adj length in rating per ch
 crunch_pot_indicators	1	How many potential indicators needed
-crunch_leave_lc_strings	4	Dont crunch words with long lower case strings
-crunch_leave_uc_strings	4	Dont crunch words with long lower case strings
+crunch_leave_lc_strings	4	Don't crunch words with long lower case strings
+crunch_leave_uc_strings	4	Don't crunch words with long lower case strings
 crunch_long_repetitions	3	Crunch words with long repetitions
 crunch_debug	0	As it says
 fixsp_non_noise_limit	1	How many non-noise blbs either side?
@@ -299,7 +299,7 @@ x_ht_min_change	8	Min change in xht before actually trying it
 superscript_debug	0	Debug level for sub & superscript fixer
 suspect_level	99	Suspect marker level
 suspect_space_level	100	Min suspect level for rejecting spaces
-suspect_short_words	2	Dont Suspect dict wds longer than this
+suspect_short_words	2	Don't suspect dict wds longer than this
 tessedit_reject_mode	0	Rejection algorithm
 tessedit_image_border	2	Rej blbs near image edge limit
 min_sane_x_ht_pixels	8	Reject any x-ht lt or eq than this
@@ -344,7 +344,7 @@ load_number_dawg	1	Load dawg with number patterns.
 load_bigram_dawg	1	Load dawg with special word bigrams.
 use_only_first_uft8_step	0	Use only the first UTF8 step of the given string when computing log probabilities.
 stopper_no_acceptable_choices	0	Make AcceptableChoice() always return false. Useful when there is a need to explore all segmentations
-save_raw_choices	0	Deprecated- backward compatablity only
+save_raw_choices	0	Deprecated- backward compatibility only
 segment_nonalphabetic_script	0	Don't use any alphabetic-specific tricks.Set to true in the traineddata config file for scripts that are cursive or inherently fixed-pitch
 save_doc_words	0	Save Document Words
 merge_fragments_in_matrix	1	Merge the fragments in the ratings matrix and delete them after merging
@@ -377,7 +377,7 @@ tessedit_display_outwords	0	Draw output words
 tessedit_dump_choices	0	Dump char choices
 tessedit_timing_debug	0	Print timing stats
 tessedit_fix_fuzzy_spaces	1	Try to improve fuzzy spaces
-tessedit_unrej_any_wd	0	Dont bother with word plausibility
+tessedit_unrej_any_wd	0	Don't bother with word plausibility
 tessedit_fix_hyphens	1	Crunch double hyphens?
 tessedit_redo_xheight	1	Check/Correct x-height
 tessedit_enable_doc_dict	1	Add words to the document dictionary
@@ -410,28 +410,28 @@ crunch_early_merge_tess_fails	1	Before word crunch?
 crunch_early_convert_bad_unlv_chs	0	Take out ~^ early?
 crunch_terrible_garbage	1	As it says
 crunch_pot_garbage	1	POTENTIAL crunch garbage
-crunch_leave_ok_strings	1	Dont touch sensible strings
+crunch_leave_ok_strings	1	Don't touch sensible strings
 crunch_accept_ok	1	Use acceptability in okstring
-crunch_leave_accept_strings	0	Dont pot crunch sensible strings
+crunch_leave_accept_strings	0	Don't pot crunch sensible strings
 crunch_include_numerals	0	Fiddle alpha figures
 tessedit_prefer_joined_punct	0	Reward punctation joins
 tessedit_write_block_separators	0	Write block separators in output
 tessedit_write_rep_codes	0	Write repetition char code
 tessedit_write_unlv	0	Write .unlv output file
-tessedit_create_txt	1	Write .txt output file
+tessedit_create_txt	0	Write .txt output file
 tessedit_create_hocr	0	Write .html hOCR output file
 tessedit_create_pdf	0	Write .pdf output file
 suspect_constrain_1Il	0	UNLV keep 1Il chars rejected
 tessedit_minimal_rejection	0	Only reject tess failures
-tessedit_zero_rejection	0	Dont reject ANYTHING
+tessedit_zero_rejection	0	Don't reject ANYTHING
 tessedit_word_for_word	0	Make output have exactly one word per WERD
-tessedit_zero_kelvin_rejection	0	Dont reject ANYTHING AT ALL
+tessedit_zero_kelvin_rejection	0	Don't reject ANYTHING AT ALL
 tessedit_consistent_reps	1	Force all rep chars the same
 tessedit_rejection_debug	0	Adaption debug
 tessedit_flip_0O	1	Contextual 0O O0 flips
 rej_trust_doc_dawg	0	Use DOC dawg in 11l conf. detector
 rej_1Il_use_dict_word	0	Use dictword test
-rej_1Il_trust_permuter_type	1	Dont double check
+rej_1Il_trust_permuter_type	1	Don't double check
 rej_use_tess_accepted	1	Individual rejection control
 rej_use_tess_blanks	1	Individual rejection control
 rej_use_good_perm	1	Individual rejection control
@@ -476,11 +476,11 @@ tosp_row_use_cert_spaces1	1	Only stat OBVIOUS spaces
 tosp_recovery_isolated_row_stats	1	Use row alone when inadequate cert spaces
 tosp_only_small_gaps_for_kern	0	Better guess
 tosp_all_flips_fuzzy	0	Pass ANY flip to context?
-tosp_fuzzy_limit_all	1	Dont restrict kn->sp fuzzy limit to tables
+tosp_fuzzy_limit_all	1	Don't restrict kn->sp fuzzy limit to tables
 tosp_stats_use_xht_gaps	1	Use within xht gap for wd breaks
 tosp_use_xht_gaps	1	Use within xht gap for wd breaks
 tosp_only_use_xht_gaps	0	Only use within xht gap for wd breaks
-tosp_rule_9_test_punct	0	Dont chng kn to space next to punct
+tosp_rule_9_test_punct	0	Don't chng kn to space next to punct
 tosp_flip_fuzz_kn_to_sp	1	Default flip
 tosp_flip_fuzz_sp_to_kn	1	Default flip
 tosp_improve_thresh	0	Enable improvement heuristic
@@ -613,7 +613,7 @@ superscript_bettered_certainty	0.97	What reduction in badness do we think suffic
 superscript_scaledown_ratio	0.4	A superscript scaled down more than this is unbelievably small.  For example, 0.3 means we expect the font size to be no smaller than 30% of the text line font size.
 subscript_max_y_top	0.5	Maximum top of a character measured as a multiple of x-height above the baseline for us to reconsider whether it's a subscript.
 superscript_min_y_bottom	0.3	Minimum bottom of a character measured as a multiple of x-height above the baseline for us to reconsider whether it's a superscript.
-suspect_rating_per_ch	999.9	Dont touch bad rating limit
+suspect_rating_per_ch	999.9	Don't touch bad rating limit
 suspect_accept_rating	-999.9	Accept good rating limit
 tessedit_lower_flip_hyphen	1.5	Aspect ratio dot/hyphen test
 tessedit_upper_flip_hyphen	1.8	Aspect ratio dot/hyphen test
@@ -654,15 +654,15 @@ tosp_table_xht_sp_ratio	0.33	Expect spaces bigger than this
 tosp_table_fuzzy_kn_sp_ratio	3	Fuzzy if less than this
 tosp_fuzzy_kn_fraction	0.5	New fuzzy kn alg
 tosp_fuzzy_sp_fraction	0.5	New fuzzy sp alg
-tosp_min_sane_kn_sp	1.5	Dont trust spaces less than this time kn
+tosp_min_sane_kn_sp	1.5	Don't trust spaces less than this time kn
 tosp_init_guess_kn_mult	2.2	Thresh guess - mult kn by this
 tosp_init_guess_xht_mult	0.28	Thresh guess - mult xht by this
 tosp_max_sane_kn_thresh	5	Multiplier on kn to limit thresh
-tosp_flip_caution	0	Dont autoflip kn to sp when large separation
+tosp_flip_caution	0	Don't autoflip kn to sp when large separation
 tosp_large_kerning	0.19	Limit use of xht gap with large kns
 tosp_dont_fool_with_small_kerns	-1	Limit use of xht gap with odd small kns
-tosp_near_lh_edge	0	Dont reduce box if the top left is non blank
-tosp_silly_kn_sp_gap	0.2	Dont let sp minus kn get too small
+tosp_near_lh_edge	0	Don't reduce box if the top left is non blank
+tosp_silly_kn_sp_gap	0.2	Don't let sp minus kn get too small
 tosp_pass_wide_fuzz_sp_to_context	0.75	How wide fuzzies need context
 textord_blob_size_bigile	95	Percentile for large blobs
 textord_noise_area_ratio	0.7	Fraction of bounding box for noise

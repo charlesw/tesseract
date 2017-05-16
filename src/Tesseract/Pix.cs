@@ -587,22 +587,22 @@ namespace Tesseract
         /// Please note there is an implicit assumption about RGB component ordering.
         /// </para>
         /// </remarks>
-        /// <param name="angle">The angle to rotate by, in radians; clockwise is positive.</param>
+        /// <param name="angleInRadians">The angle to rotate by, in radians; clockwise is positive.</param>
         /// <param name="method">The rotation method to use.</param>
         /// <param name="fillColor">The fill color to use for pixels that are brought in from the outside.</param>
         /// <param name="width">The original width; use 0 to avoid embedding</param>
         /// <param name="height">The original height; use 0 to avoid embedding</param>
         /// <returns>The image rotated around it's centre.</returns>
-        public Pix Rotate(float angle, RotationMethod method = RotationMethod.AreaMap, RotationFill fillColor = RotationFill.White, int? width = null, int? height = null)
+        public Pix Rotate(float angleInRadians, RotationMethod method = RotationMethod.AreaMap, RotationFill fillColor = RotationFill.White, int? width = null, int? height = null)
         {
             if (width == null) width = this.Width;
             if (height == null) height = this.Height;
 
-            if (Math.Abs(angle) < VerySmallAngle) return this.Clone();
+            if (Math.Abs(angleInRadians) < VerySmallAngle) return this.Clone();
 
             IntPtr resultHandle;
 
-            var rotations = 2 * angle / Math.PI;
+            var rotations = 2 * angleInRadians / Math.PI;
             if (Math.Abs(rotations - Math.Floor(rotations)) < VerySmallAngle)
             {
                 // handle special case of orthoganal rotations (90, 180, 270)
@@ -611,7 +611,7 @@ namespace Tesseract
             else
             {
                 // handle general case
-                resultHandle = Interop.LeptonicaApi.Native.pixRotate(handle, angle, method, fillColor, width.Value, height.Value);
+                resultHandle = Interop.LeptonicaApi.Native.pixRotate(handle, angleInRadians, method, fillColor, width.Value, height.Value);
             }
 
             if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around its centre.");

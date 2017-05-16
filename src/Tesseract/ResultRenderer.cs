@@ -1,136 +1,264 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Tesseract.Internal;
 
 namespace Tesseract
 {
     /// <summary>
-    /// Class to create result renderer.
+    /// Represents a native result renderer (e.g. text, pdf, etc).
     /// </summary>
-    public sealed class ResultRenderer : DisposableBase
+    /// <remarks>
+    /// Note that the ResultRenderer is explictly responsible for managing the
+    /// renderer hierarchy. This gets around a number of difficult issues such
+    /// as keeping track of what the next renderer is and how to manage the memory.
+    /// </remarks>
+    public abstract class ResultRenderer : DisposableBase, IResultRenderer
     {
-        private readonly HandleRef _handleRef;
-
-        internal ResultRenderer(IntPtr handle)
-        {
-            this._handleRef = new HandleRef(this, handle);
-        }
+        #region Factory Methods
 
         /// <summary>
-        /// Renders tesseract output into a plain UTF-8 text string.
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a searchable
+        /// pdf file from tesseract's output.
         /// </summary>
-        /// <param name="outputbase"></param>
+        /// <param name="outputFilename">The filename of the pdf file to be generated without the file extension.</param>
+        /// <param name="fontDirectory">The directory containing the pdf font data, normally same as your tessdata directory.</param>
         /// <returns></returns>
-        public IntPtr TextRendererCreate(string outputbase)
+        public static IResultRenderer CreatePdfRenderer(string outputFilename, string fontDirectory)
         {
-            VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)
-                return IntPtr.Zero;
-
-            return Interop.TessApi.Native.TextRendererCreate(outputbase);
+            return new PdfResultRenderer(outputFilename, fontDirectory);
         }
 
         /// <summary>
-        /// Renders tesseract output into an hocr text string.
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates UTF-8 encoded text
+        /// file from tesseract's output.
         /// </summary>
-        /// <param name="outputbase"></param>
+        /// <param name="outputFilename">The path to the text file to be generated without the file extension.</param>
         /// <returns></returns>
-        public IntPtr HOcrRendererCreate(string outputbase)
+        public static IResultRenderer CreateTextRenderer(string outputFilename)
         {
-            VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)
-                return IntPtr.Zero;
-
-            return Interop.TessApi.Native.HOcrRendererCreate(outputbase);
+            return new TextResultRenderer(outputFilename);
         }
 
         /// <summary>
-        /// Renders tesseract output into an hocr text string.
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a HOCR
+        /// file from tesseract's output.
         /// </summary>
-        /// <param name="outputbase"></param>
-        /// <param name="font_info"></param>
+        /// <param name="outputFilename">The path to the hocr file to be generated without the file extension.</param>
+        /// <param name="fontInfo">Determines if the generated HOCR file includes font information or not.</param>
         /// <returns></returns>
-        public IntPtr HOcrRendererCreate2(string outputbase, bool font_info)
+        public static IResultRenderer CreateHOcrRenderer(string outputFilename, bool fontInfo = false)
         {
-            VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)
-                return IntPtr.Zero;
-
-            return Interop.TessApi.Native.HOcrRendererCreate2(outputbase, font_info ? 1 : 0);
+            return new HOcrResultRenderer(outputFilename, fontInfo);
         }
 
         /// <summary>
-        /// Renders tesseract output into searchable PDF.
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a unlv
+        /// file from tesseract's output.
         /// </summary>
-        /// <param name="outputbase"></param>
-        /// <param name="datadir"></param>
+        /// <param name="outputFilename">The path to the unlv file to be created without the file extension.</param>
         /// <returns></returns>
-        public IntPtr PDFRendererCreate(string outputbase, string datadir)
+        public static IResultRenderer CreateUnlvRenderer(string outputFilename)
         {
-            VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)
-                return IntPtr.Zero;
-
-            return Interop.TessApi.Native.PDFRendererCreate(outputbase, datadir);
+            return new UnlvResultRenderer(outputFilename);
         }
 
         /// <summary>
-        /// Renders tesseract output into a plain UTF-8 text string in UNLV format.
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a box text file from tesseract's output.
         /// </summary>
-        /// <param name="outputbase"></param>
+        /// <param name="outputFilename">The path to the box file to be created without the file extension.</param>
         /// <returns></returns>
-        public IntPtr UnlvRendererCreate(string outputbase)
+        public static IResultRenderer CreateBoxRenderer(string outputFilename)
         {
-            VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)
-                return IntPtr.Zero;
+            return new BoxResultRenderer(outputFilename);
+        }
 
-            return Interop.TessApi.Native.UnlvRendererCreate(outputbase);
+        #endregion Factory Methods
+
+        /// <summary>
+        /// Ensures the renderer's EndDocument when disposed off.
+        /// </summary>
+        private class EndDocumentOnDispose : DisposableBase
+        {
+            private readonly ResultRenderer _renderer;
+            private IntPtr _titlePtr;
+
+            public EndDocumentOnDispose(ResultRenderer renderer, IntPtr titlePtr)
+            {
+                _renderer = renderer;
+                _titlePtr = titlePtr;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                try {
+                    if (disposing) {
+                        Guard.Verify(_renderer._currentDocumentHandle == this, "Expected the Result Render's active document to be this document.");
+
+                        // End the renderer
+                        Interop.TessApi.Native.ResultRendererEndDocument(_renderer._handle);
+                        _renderer._currentDocumentHandle = null;
+                    }
+                } finally {
+                    // free title ptr
+                    if (_titlePtr != IntPtr.Zero) {
+                        Marshal.FreeHGlobal(_titlePtr);
+                        _titlePtr = IntPtr.Zero;
+                    }
+                }
+            }
+        }
+
+        private HandleRef _handle;
+        private IDisposable _currentDocumentHandle;
+
+        protected ResultRenderer()
+        {
+            _handle = new HandleRef(this, IntPtr.Zero);
         }
 
         /// <summary>
-        /// Renders tesseract output into a plain UTF-8 text string in Box format.
+        /// Initialise the render to use the specified native result renderer.
         /// </summary>
-        /// <param name="outputbase"></param>
-        /// <returns></returns>
-        public IntPtr BoxTextRendererCreate(string outputbase)
+        /// <param name="handle"></param>
+        protected void Initialise(IntPtr handle)
         {
-            VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)
-                return IntPtr.Zero;
+            Guard.Require("handle", handle != IntPtr.Zero, "handle must be initialised.");
+            Guard.Verify(_handle.Handle == IntPtr.Zero, "Rensult renderer has already been initialised.");
 
-            return Interop.TessApi.Native.BoxTextRendererCreate(outputbase);
+            _handle = new HandleRef(this, handle);
         }
 
         /// <summary>
-        /// Returns the next renderer or NULL.
+        /// Add the page to the current document.
         /// </summary>
-        /// <returns></returns>
-        public IntPtr Next()
+        /// <param name="page"></param>
+        /// <returns><c>True</c> if the page was successfully added to the result renderer; otherwise false.</returns>
+        public bool AddPage(Page page)
         {
+            Guard.RequireNotNull("page", page);
             VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)
-                return IntPtr.Zero;
-            return Interop.TessApi.Native.ResultRendererNext(_handleRef);
+
+            // TODO: Force page to do a recognise run to ensure the underlying base api is full of state note if
+            // your implementing your own renderer you won't need to do this since all the page operations will do it
+            // implicitly if required. This is why I've only made Page.Recognise internal not public.
+            page.Recognize();
+
+            return Interop.TessApi.Native.ResultRendererAddImage(Handle, page.Engine.Handle) != 0;
         }
 
         /// <summary>
-        /// Inserts the next renderer.
+        /// Begins a new document with the specified <paramref name="title"/>.
         /// </summary>
-        /// <returns>string</returns>
-        public void Insert(ResultRenderer next)
+        /// <param name="title">The (ANSI) title of the new document.</param>
+        /// <returns>A handle that when disposed of ends the current document.</returns>
+        public IDisposable BeginDocument(string title)
         {
+            Guard.RequireNotNull("title", title);
             VerifyNotDisposed();
-            if (_handleRef.Handle == IntPtr.Zero)            
-                return;
+            Guard.Verify(_currentDocumentHandle == null, "Cannot begin document \"{0}\" as another document is currently being processed which must be dispose off first.", title);
 
-            Interop.TessApi.Native.ResultRendererInsert(_handleRef, next._handleRef);
+            IntPtr titlePtr = Marshal.StringToHGlobalAnsi(title);
+            if (Interop.TessApi.Native.ResultRendererBeginDocument(Handle, titlePtr) == 0) {
+                // release the pointer first before throwing an error.
+                Marshal.FreeHGlobal(titlePtr);
+
+                throw new InvalidOperationException(String.Format("Failed to begin document \"{0}\".", title));
+            }
+
+            _currentDocumentHandle = new EndDocumentOnDispose(this, titlePtr);
+            return _currentDocumentHandle;
+        }
+
+        protected HandleRef Handle
+        {
+            get { return _handle; }
+        }
+
+        public int PageNumber
+        {
+            get
+            {
+                VerifyNotDisposed();
+
+                return Interop.TessApi.Native.ResultRendererImageNum(Handle);
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (_handleRef.Handle != IntPtr.Zero)
-            {
-                Interop.TessApi.Native.DeleteResultRenderer(_handleRef);
+            try {
+                if (disposing) {
+                    // Ensure that if the renderer has an active document when disposed it too is disposed off.
+                    if (_currentDocumentHandle != null) {
+                        _currentDocumentHandle.Dispose();
+                        _currentDocumentHandle = null;
+                    }
+                }
+            } finally {
+                if (_handle.Handle != IntPtr.Zero) {
+                    Interop.TessApi.Native.DeleteResultRenderer(_handle);
+                    _handle = new HandleRef(this, IntPtr.Zero);
+                }
+            }
+        }
+    }
+
+    public sealed class TextResultRenderer : ResultRenderer
+    {
+        public TextResultRenderer(string outputFilename)
+        {
+            var rendererHandle = Interop.TessApi.Native.TextRendererCreate(outputFilename);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class HOcrResultRenderer : ResultRenderer
+    {
+        public HOcrResultRenderer(string outputFilename, bool fontInfo = false)
+        {
+            var rendererHandle = Interop.TessApi.Native.HOcrRendererCreate2(outputFilename, fontInfo ? 1 : 0);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class UnlvResultRenderer : ResultRenderer
+    {
+        public UnlvResultRenderer(string outputFilename)
+        {
+            var rendererHandle = Interop.TessApi.Native.UnlvRendererCreate(outputFilename);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class BoxResultRenderer : ResultRenderer
+    {
+        public BoxResultRenderer(string outputFilename)
+        {
+            var rendererHandle = Interop.TessApi.Native.BoxTextRendererCreate(outputFilename);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class PdfResultRenderer : ResultRenderer
+    {
+        private IntPtr _fontDirectoryHandle;
+
+        public PdfResultRenderer(string outputFilename, string fontDirectory)
+        {
+            var fontDirectoryHandle = Marshal.StringToHGlobalAnsi(fontDirectory);
+            var rendererHandle = Interop.TessApi.Native.PDFRendererCreate(outputFilename, fontDirectoryHandle);
+
+            Initialise(rendererHandle);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            // dispose of font
+            if (_fontDirectoryHandle != IntPtr.Zero) {
+                Marshal.FreeHGlobal(_fontDirectoryHandle);
+                _fontDirectoryHandle = IntPtr.Zero;
             }
         }
     }

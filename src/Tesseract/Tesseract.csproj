@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddNewColorStatus.cs" />
+    <Compile Include="AggregateResultRenderer.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BitmapToPixConverter.cs" />
     <Compile Include="ChoiceIterator.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="InteropDotNet\UnixLibraryLoaderLogic.cs" />
     <Compile Include="InteropDotNet\WindowsLibraryLoaderLogic.cs" />
     <Compile Include="Interop\HostProcessInfo.cs" />
+    <Compile Include="IResultRenderer.cs" />
     <Compile Include="LoadLibraryException.cs" />
     <Compile Include="Interop\OSResult.cs" />
     <Compile Include="PixArray.cs" />
