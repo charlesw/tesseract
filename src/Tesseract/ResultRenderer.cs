@@ -236,14 +236,14 @@ namespace Tesseract
         {
             Guard.RequireNotNull("title", title);
             VerifyNotDisposed();
-            Guard.Verify(_currentDocumentHandle == null, "Cannot being document \"{0}\" as another document is currently being processed which must be dispose off first.", title);
+            Guard.Verify(_currentDocumentHandle == null, "Cannot begin document \"{0}\" as another document is currently being processed which must be dispose off first.", title);
 
             IntPtr titlePtr = Marshal.StringToHGlobalAnsi(title);
             if (Interop.TessApi.Native.ResultRendererBeginDocument(Handle, titlePtr) == 0) {
                 // release the pointer first before throwing an error.
                 Marshal.FreeHGlobal(titlePtr);
 
-                throw new InvalidOperationException(String.Format("Failed to being document \"{0}\".", title));
+                throw new InvalidOperationException(String.Format("Failed to begin document \"{0}\".", title));
             }
 
             _currentDocumentHandle = new EndDocumentOnDispose(this, titlePtr);
@@ -272,6 +272,7 @@ namespace Tesseract
                     // Ensure that if the renderer has an active document when disposed it too is disposed off.
                     if (_currentDocumentHandle != null) {
                         _currentDocumentHandle.Dispose();
+                        _currentDocumentHandle = null;
                     }
                 }
             } finally {
