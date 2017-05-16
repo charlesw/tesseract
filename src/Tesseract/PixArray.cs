@@ -30,15 +30,32 @@ namespace Tesseract
 			
 			return new PixArray(pixaHandle);
 		}
-		
-		#endregion
-		
-		#region Enumerator implementation
-		
-		/// <summary>
-		/// Handles enumerating through the <see cref="Pix"/> in the PixArray.
-		/// </summary>
-		private class PixArrayEnumerator : DisposableBase, IEnumerator<Pix>
+
+        public static PixArray Create(int n)
+        {
+            var pixaHandle = Interop.LeptonicaApi.Native.pixaCreate(n);
+            if (pixaHandle == IntPtr.Zero)
+            {
+                throw new IOException("Failed to create PixArray");
+            }
+
+            return new PixArray(pixaHandle);
+        }
+
+        public bool Add(Pix pix, int copyflag)
+        {
+            int result = Interop.LeptonicaApi.Native.pixaAddPix(_handle, pix, copyflag);
+            return result == 0;
+        }
+
+        #endregion
+
+        #region Enumerator implementation
+
+        /// <summary>
+        /// Handles enumerating through the <see cref="Pix"/> in the PixArray.
+        /// </summary>
+        private class PixArrayEnumerator : DisposableBase, IEnumerator<Pix>
 		{
 			#region Fields
 			

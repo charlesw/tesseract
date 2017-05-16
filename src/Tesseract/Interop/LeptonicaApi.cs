@@ -21,6 +21,12 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff")]
         IntPtr pixaReadMultipageTiff(string filename);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaCreate")]
+        IntPtr pixaCreate(int n);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaAddPix")]
+        int pixaAddPix(HandleRef pixa, Pix pix, int copyflag);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
         int pixaGetCount(HandleRef pixa);
 
@@ -434,12 +440,6 @@ namespace Tesseract.Interop
         /// <returns>Returns 0 if OK; 1 on error.</returns>
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetNearestGrayIndex")]
         int pixcmapGetNearestGrayIndex(HandleRef cmap, int val, out int index);
-
-        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetComponentRange")]
-        int pixcmapGetComponentRange(HandleRef cmap, int component, out int minVal, out int maxVal);
-
-        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixcmapGetExtremeValue")]
-        int pixcmapGetExtremeValue(HandleRef cmap, int type, out int rVal, out int gVal, out int bVal);
 
         // color map conversion
 
