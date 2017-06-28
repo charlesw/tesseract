@@ -268,6 +268,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPDFRendererCreate")]
         IntPtr PDFRendererCreate(string outputbase, IntPtr datadir);
 
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPDFRendererCreateTextonly")]
+        IntPtr PDFRendererCreateTextonly(string outputbase, IntPtr datadir, int textonly);
+
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessUnlvRendererCreate")]
         IntPtr UnlvRendererCreate(string outputbase);
 
