@@ -42,33 +42,33 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "txt");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Text file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Text file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
         public void CanRenderResultsIntoPdfFile()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
-            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath)) {
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false)) {
                 var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
                 ProcessFile(renderer, examplePixPath);
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
         public void CanRenderMultiplePageDocumentToPdfFile()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
-            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath)) {
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false)) {
                 var examplePixPath = this.TestFilePath("processing/multi-page.tif");
                 ProcessMultipageTiff(renderer, examplePixPath);
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "hocr");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a HOCR file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a HOCR file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "unlv");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Unlv file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Unlv file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
@@ -107,23 +107,23 @@ namespace Tesseract.Tests
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "box");
-            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Box file \"{expectedOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Box file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 
         [Test]
         public void CanRenderMultiplePageDocumentIntoMultipleResultRenderers()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\Aggregate\multi-page");
-            using (var renderer = new AggregateResultRenderer(ResultRenderer.CreatePdfRenderer(resultPath, DataPath), ResultRenderer.CreateTextRenderer(resultPath))) {
+            using (var renderer = new AggregateResultRenderer(ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false), ResultRenderer.CreateTextRenderer(resultPath))) {
                 var examplePixPath = this.TestFilePath("processing/multi-page.tif");
                 ProcessMultipageTiff(renderer, examplePixPath);
             }
 
             var expectedPdfOutputFilename = Path.ChangeExtension(resultPath, "pdf");
-            Assert.That(File.Exists(expectedPdfOutputFilename), $"Expected a PDF file \"{expectedPdfOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedPdfOutputFilename), $"Expected a PDF file \"{expectedPdfOutputFilename}\" to have been created; but none was found.");
 
             var expectedTxtOutputFilename = Path.ChangeExtension(resultPath, "txt");
-            Assert.That(File.Exists(expectedTxtOutputFilename), $"Expected a Text file \"{expectedTxtOutputFilename}\" to have been created; but non was found.");
+            Assert.That(File.Exists(expectedTxtOutputFilename), $"Expected a Text file \"{expectedTxtOutputFilename}\" to have been created; but none was found.");
         }
 
         private void ProcessMultipageTiff(IResultRenderer renderer, string filename)

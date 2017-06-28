@@ -94,20 +94,20 @@
     <Compile Include="TestRun.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\lib\TesseractOcr\x64\liblept172.dll">
-      <Link>x64\liblept172.dll</Link>
+    <Content Include="..\lib\TesseractOcr\x64\liblept1742.dll">
+      <Link>x64\liblept1742.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\lib\TesseractOcr\x64\libtesseract304.dll">
-      <Link>x64\libtesseract304.dll</Link>
+    <Content Include="..\lib\TesseractOcr\x64\libtesseract400.dll">
+      <Link>x64\libtesseract400.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\lib\TesseractOcr\x86\liblept172.dll">
-      <Link>x86\liblept172.dll</Link>
+    <Content Include="..\lib\TesseractOcr\x86\liblept1742.dll">
+      <Link>x86\liblept1742.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\lib\TesseractOcr\x86\libtesseract304.dll">
-      <Link>x86\libtesseract304.dll</Link>
+    <Content Include="..\lib\TesseractOcr\x86\libtesseract400.dll">
+      <Link>x86\libtesseract400.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Binarization\neo-32bit.png">
