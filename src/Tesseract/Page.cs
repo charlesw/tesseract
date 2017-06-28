@@ -177,25 +177,25 @@ namespace Tesseract
             return boxList;
         }
 
-        /// <summary>
-        /// Detects the page orientation, with corresponding confidence when using <see cref="PageSegMode.OsdOnly"/>.
-        /// </summary>
-        /// <remarks>
-        /// If using full page segmentation mode (i.e. AutoOsd) then consider using <see cref="AnalyseLayout"/> instead as this also provides a
-        /// deskew angle which isn't available when just performing orientation detection.
-        /// </remarks>
-        /// <param name="orientation">The page orientation.</param>
-        /// <param name="confidence">The corresponding confidence score that the detected orientation is correct.</param>
-        public void DetectBestOrientation(out Orientation orientation, out float confidence)
-        {
-            Interop.OSResult result = new Interop.OSResult();
-            result.Init();
-            //if (Interop.TessApi.Native.BaseAPIDetectOS(Engine.Handle, ref result) != 0) {
-            //    result.GetBestOrientation(out orientation, out confidence);
-            //} else {
-                throw new TesseractException("Failed to detect image orientation.");
-            //}
-        }
+        ///// <summary>
+        ///// Detects the page orientation, with corresponding confidence when using <see cref="PageSegMode.OsdOnly"/>.
+        ///// </summary>
+        ///// <remarks>
+        ///// If using full page segmentation mode (i.e. AutoOsd) then consider using <see cref="AnalyseLayout"/> instead as this also provides a
+        ///// deskew angle which isn't available when just performing orientation detection.
+        ///// </remarks>
+        ///// <param name="orientation">The page orientation.</param>
+        ///// <param name="confidence">The corresponding confidence score that the detected orientation is correct.</param>
+        //public void DetectBestOrientation(out Orientation orientation, out float confidence)
+        //{
+        //    Interop.OSResult result = new Interop.OSResult();
+        //    result.Init();
+        //    //if (Interop.TessApi.Native.BaseAPIDetectOS(Engine.Handle, ref result) != 0) {
+        //    //    result.GetBestOrientation(out orientation, out confidence);
+        //    //} else {
+        //        throw new TesseractException("Failed to detect image orientation.");
+        //    //}
+        //}
         
         internal void Recognize()
         {

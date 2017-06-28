@@ -22,10 +22,11 @@ namespace Tesseract
         /// </summary>
         /// <param name="outputFilename">The filename of the pdf file to be generated without the file extension.</param>
         /// <param name="fontDirectory">The directory containing the pdf font data, normally same as your tessdata directory.</param>
+        /// <param name="textonly">skip images if set</param>
         /// <returns></returns>
-        public static IResultRenderer CreatePdfRenderer(string outputFilename, string fontDirectory)
+        public static IResultRenderer CreatePdfRenderer(string outputFilename, string fontDirectory, bool textonly)
         {
-            return new PdfResultRenderer(outputFilename, fontDirectory);
+            return new PdfResultRenderer(outputFilename, fontDirectory, textonly);
         }
 
         /// <summary>
@@ -90,17 +91,22 @@ namespace Tesseract
 
             protected override void Dispose(bool disposing)
             {
-                try {
-                    if (disposing) {
+                try
+                {
+                    if (disposing)
+                    {
                         Guard.Verify(_renderer._currentDocumentHandle == this, "Expected the Result Render's active document to be this document.");
 
                         // End the renderer
                         Interop.TessApi.Native.ResultRendererEndDocument(_renderer._handle);
                         _renderer._currentDocumentHandle = null;
                     }
-                } finally {
+                }
+                finally
+                {
                     // free title ptr
-                    if (_titlePtr != IntPtr.Zero) {
+                    if (_titlePtr != IntPtr.Zero)
+                    {
                         Marshal.FreeHGlobal(_titlePtr);
                         _titlePtr = IntPtr.Zero;
                     }
@@ -158,7 +164,8 @@ namespace Tesseract
             Guard.Verify(_currentDocumentHandle == null, "Cannot begin document \"{0}\" as another document is currently being processed which must be dispose off first.", title);
 
             IntPtr titlePtr = Marshal.StringToHGlobalAnsi(title);
-            if (Interop.TessApi.Native.ResultRendererBeginDocument(Handle, titlePtr) == 0) {
+            if (Interop.TessApi.Native.ResultRendererBeginDocument(Handle, titlePtr) == 0)
+            {
                 // release the pointer first before throwing an error.
                 Marshal.FreeHGlobal(titlePtr);
 
@@ -186,16 +193,22 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            try {
-                if (disposing) {
+            try
+            {
+                if (disposing)
+                {
                     // Ensure that if the renderer has an active document when disposed it too is disposed off.
-                    if (_currentDocumentHandle != null) {
+                    if (_currentDocumentHandle != null)
+                    {
                         _currentDocumentHandle.Dispose();
                         _currentDocumentHandle = null;
                     }
                 }
-            } finally {
-                if (_handle.Handle != IntPtr.Zero) {
+            }
+            finally
+            {
+                if (_handle.Handle != IntPtr.Zero)
+                {
                     Interop.TessApi.Native.DeleteResultRenderer(_handle);
                     _handle = new HandleRef(this, IntPtr.Zero);
                 }
@@ -243,10 +256,10 @@ namespace Tesseract
     {
         private IntPtr _fontDirectoryHandle;
 
-        public PdfResultRenderer(string outputFilename, string fontDirectory)
+        public PdfResultRenderer(string outputFilename, string fontDirectory, bool textonly)
         {
             var fontDirectoryHandle = Marshal.StringToHGlobalAnsi(fontDirectory);
-            var rendererHandle = Interop.TessApi.Native.PDFRendererCreate(outputFilename, fontDirectoryHandle);
+            var rendererHandle = Interop.TessApi.Native.PDFRendererCreate(outputFilename, fontDirectoryHandle, textonly ? 1 : 0);
 
             Initialise(rendererHandle);
         }
@@ -256,7 +269,8 @@ namespace Tesseract
             base.Dispose(disposing);
 
             // dispose of font
-            if (_fontDirectoryHandle != IntPtr.Zero) {
+            if (_fontDirectoryHandle != IntPtr.Zero)
+            {
                 Marshal.FreeHGlobal(_fontDirectoryHandle);
                 _fontDirectoryHandle = IntPtr.Zero;
             }

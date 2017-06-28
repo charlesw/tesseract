@@ -67,7 +67,7 @@ namespace Tesseract.Tests
                         var text = page.GetText();
 
                         const string expectedText =
-                            "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
+                            "This is a lot of 12 point text to test the\ncor code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
 
                         Assert.That(text, Is.EqualTo(expectedText));
                     }
@@ -103,7 +103,7 @@ namespace Tesseract.Tests
                         var text = page.GetText();
 
                         const string expectedText =
-                            "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
+                            "This is a lot of 12 point text to test the\ncor code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
 
                         Assert.That(text, Is.EqualTo(expectedText));
                     }
@@ -189,7 +189,7 @@ NormaliseNewLine(@"</word></line>
                             var text = page.GetText();
 
                             const string expectedText =
-                                "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
+                                "This is a lot of 12 point text to test the\ncor code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
 
                             Assert.That(text, Is.EqualTo(expectedText));
                         }
@@ -233,7 +233,7 @@ NormaliseNewLine(@"</word></line>
                             var text = page.GetText().Trim();
 
                             const string expectedText =
-                                "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.";
+                                "This is a lot of 12 point text to test the\ncor code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.";
 
                             Assert.That(text, Is.EqualTo(expectedText));
                         }
@@ -316,7 +316,7 @@ NormaliseNewLine(@"</word></line>
                         var text = page.GetText();
 
                         const string expectedText =
-                            "This is a Iot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nIazy fox. The quick brown dog jumped\nover the Iazy fox. The quick brown dog\njumped over the Iazy fox. The quick\nbrown dog jumped over the Iazy fox.\n\n";
+                            "This is a Iot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n\nThe quick brown dog jumped over the\nlazy fox. The quick brown dog jumped\nover the lazy fox. The quick brown dog\njumped over the lazy fox. The quick\nbrown dog jumped over the lazy fox.\n\n";
 
                         Assert.That(text, Is.EqualTo(expectedText));
                     }

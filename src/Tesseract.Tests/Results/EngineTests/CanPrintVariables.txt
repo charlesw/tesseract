@@ -47,7 +47,6 @@ textord_dotmatrix_gap	3	Max pixel gap for broken pixed pitch
 textord_debug_block	0	Block to do debug on
 textord_pitch_range	2	Max range test on pitch
 textord_words_veto_power	5	Rows required to outvote a veto
-textord_debug_images	0	Use greyed image background for debug
 textord_debug_printable	0	Make debug windows printable
 stream_filelist	0	Stream a filelist from stdin
 textord_space_size_is_variable	0	If true, word delimiter spaces are assumed to have variable width, even though characters have fixed pitch.
@@ -105,7 +104,6 @@ wordrec_display_splits	0	Display splits
 textord_tabfind_only_strokewidths	0	Only run stroke widths
 textord_tabfind_show_initialtabs	0	Show tab candidates
 textord_tabfind_show_finaltabs	0	Show tab vectors
-textord_dump_table_images	0	Paint table detection output
 textord_show_tables	0	Show table regions
 textord_tablefind_show_mark	0	Debug table marking steps in detail
 textord_tablefind_show_stats	0	Show page stats used in table finding
@@ -268,7 +266,7 @@ language_model_viterbi_list_max_size	500	Maximum size of viterbi lists recorded 
 language_model_min_compound_length	3	Minimum length of compound words
 wordrec_display_segmentations	0	Display Segmentations
 tessedit_pageseg_mode	6	Page seg mode: 0=osd only, 1=auto+osd, 2=auto, 3=col, 4=block, 5=line, 6=word, 7=char (Values from PageSegMode enum in publictypes.h)
-tessedit_ocr_engine_mode	0	Which OCR engine(s) to run (Tesseract, Cube, both). Defaults to loading and running only Tesseract (no Cube,no combiner). Values from OcrEngineMode enum in tesseractclass.h)
+tessedit_ocr_engine_mode	0	Which OCR engine(s) to run (Tesseract, LSTM, both). Defaults to loading and running the most accurate available.
 pageseg_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing page-segmentation.
 ocr_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing ocr.
 bidi_debug	0	Debug level for BiDi
@@ -282,8 +280,8 @@ debug_x_ht_level	0	Reestimate debug
 quality_min_initial_alphas_reqd	2	alphas in a good word
 tessedit_tess_adaption_mode	39	Adaptation decision algorithm for tess
 tessedit_test_adaption_mode	3	Adaptation decision algorithm for tess
+multilang_debug_level	0	Print multilang debug info.
 paragraph_debug_level	0	Print paragraph debug info.
-cube_debug_level	0	Print cube debug info.
 tessedit_preserve_min_wd_len	2	Only preserve wds longer than this
 crunch_rating_max	10	For adj length in rating per ch
 crunch_pot_indicators	1	How many potential indicators needed
@@ -303,8 +301,7 @@ suspect_short_words	2	Don't suspect dict wds longer than this
 tessedit_reject_mode	0	Rejection algorithm
 tessedit_image_border	2	Rej blbs near image edge limit
 min_sane_x_ht_pixels	8	Reject any x-ht lt or eq than this
-tessedit_page_number	-1	-1 -> All pages , else specifc page to process
-tessdata_manager_debug_level	0	Debug level for TessdataManager functions.
+tessedit_page_number	-1	-1 -> All pages , else specific page to process
 tessedit_parallelize	0	Run in parallel where possible
 tessedit_ok_mode	5	Acceptance decision algorithm
 segment_debug	0	Debug the whole segmentation process
@@ -368,6 +365,7 @@ tessedit_resegment_from_boxes	0	Take segmentation and labeling from box file
 tessedit_resegment_from_line_boxes	0	Conversion of word/line box file to char box file
 tessedit_train_from_boxes	0	Generate training data from boxed chars
 tessedit_make_boxes_from_boxes	0	Generate more boxes from boxed chars
+tessedit_train_line_recognizer	0	Break input into lines and remap boxes if present
 tessedit_dump_pageseg_images	0	Dump intermediate images made during page segmentation
 tessedit_ambigs_training	0	Perform training for ambiguities
 tessedit_adaption_debug	0	Generate and print debug information for adaption
@@ -392,6 +390,7 @@ tessedit_test_adaption	0	Test adaption criteria
 tessedit_matcher_log	0	Log matcher activity
 test_pt	0	Test for point
 paragraph_text_based	1	Run paragraph detection on the post-text-recognition (more accurate)
+lstm_use_matrix	1	Use ratings matrix/beam search with lstm
 docqual_excuse_outline_errs	0	Allow outline errs in unrejection?
 tessedit_good_quality_unrej	1	Reduce rejection on good docs
 tessedit_use_reject_spaces	1	Reject spaces?
@@ -403,7 +402,7 @@ tessedit_row_rej_good_docs	1	Apply row rejection to good docs
 tessedit_reject_bad_qual_wds	1	Reject all bad quality wds
 tessedit_debug_doc_rejection	0	Page stats
 tessedit_debug_quality_metrics	0	Output data to debug file
-bland_unrej	0	unrej potential with no chekcs
+bland_unrej	0	unrej potential with no checks
 unlv_tilde_crunching	1	Mark v.bad words for tilde crunch
 hocr_font_info	0	Add font info to hocr output
 crunch_early_merge_tess_fails	1	Before word crunch?
@@ -420,7 +419,9 @@ tessedit_write_rep_codes	0	Write repetition char code
 tessedit_write_unlv	0	Write .unlv output file
 tessedit_create_txt	0	Write .txt output file
 tessedit_create_hocr	0	Write .html hOCR output file
+tessedit_create_tsv	0	Write .tsv output file
 tessedit_create_pdf	0	Write .pdf output file
+textonly_pdf	0	Create PDF with only one invisible text layer
 suspect_constrain_1Il	0	UNLV keep 1Il chars rejected
 tessedit_minimal_rejection	0	Only reject tess failures
 tessedit_zero_rejection	0	Don't reject ANYTHING
@@ -491,7 +492,7 @@ textord_noise_rejwords	1	Reject noise-like words
 textord_noise_rejrows	1	Reject noise-like rows
 textord_noise_debug	0	Debug row garbage detector
 m_data_sub_dir	tessdata/	Directory for data files
-tessedit_module_name	libtesseract304.dll	Module colocated with tessdata dir
+tessedit_module_name	libtesseract400.dll	Module colocated with tessdata dir
 classify_learn_debug_str		Class str to debug learning
 user_words_file		A filename of user-provided words.
 user_words_suffix		A suffix of user-provided words located in tessdata.
