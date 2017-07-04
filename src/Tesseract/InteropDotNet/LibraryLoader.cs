@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
+using Tesseract.Internal;
+
 namespace InteropDotNet
 {
     public sealed class LibraryLoader
@@ -37,7 +39,7 @@ namespace InteropDotNet
                     if (platformName == null)
                         platformName = SystemManager.GetPlatformName();
                     
-                    LibraryLoaderTrace.TraceInformation("Current platform: " + platformName);
+                    Logger.TraceInformation("Current platform: " + platformName);
                                         
                     IntPtr dllHandle = CheckCustomSearchPath(fileName, platformName);
                     if (dllHandle == IntPtr.Zero)
@@ -63,10 +65,10 @@ namespace InteropDotNet
         {
             var baseDirectory = CustomSearchPath;
             if (!String.IsNullOrEmpty(baseDirectory)) {
-                LibraryLoaderTrace.TraceInformation("Checking custom search location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
+                Logger.TraceInformation("Checking custom search location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
                 return InternalLoadLibrary(baseDirectory, platformName, fileName);
             } else {
-                LibraryLoaderTrace.TraceInformation("Custom search path is not defined, skipping.");
+                Logger.TraceInformation("Custom search path is not defined, skipping.");
                 return IntPtr.Zero;
             }
 
@@ -75,14 +77,14 @@ namespace InteropDotNet
         private IntPtr CheckExecutingAssemblyDomain(string fileName, string platformName)
         {
             var baseDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            LibraryLoaderTrace.TraceInformation("Checking executing application domain location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
+            Logger.TraceInformation("Checking executing application domain location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
             return InternalLoadLibrary(baseDirectory, platformName, fileName);
         }
 
         private IntPtr CheckCurrentAppDomain(string fileName, string platformName)
         {
             var baseDirectory = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
-            LibraryLoaderTrace.TraceInformation("Checking current application domain location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
+            Logger.TraceInformation("Checking current application domain location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
             return InternalLoadLibrary(baseDirectory, platformName, fileName);
         }
 
@@ -104,10 +106,10 @@ namespace InteropDotNet
         {
             var baseDirectory = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "bin");
             if (Directory.Exists(baseDirectory)) {
-                LibraryLoaderTrace.TraceInformation("Checking current application domain's bin location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
+                Logger.TraceInformation("Checking current application domain's bin location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
                 return InternalLoadLibrary(baseDirectory, platformName, fileName);
             } else {
-                LibraryLoaderTrace.TraceInformation("No bin directory exists under the current application domain's location, skipping.");
+                Logger.TraceInformation("No bin directory exists under the current application domain's location, skipping.");
                 return IntPtr.Zero;
             }
         }
@@ -115,7 +117,7 @@ namespace InteropDotNet
         private IntPtr CheckWorkingDirecotry(string fileName, string platformName)
         {
             var baseDirectory = Path.GetFullPath(Environment.CurrentDirectory);
-            LibraryLoaderTrace.TraceInformation("Checking working directory '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
+            Logger.TraceInformation("Checking working directory '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
             return InternalLoadLibrary(baseDirectory, platformName, fileName);
         }
 
@@ -132,7 +134,7 @@ namespace InteropDotNet
             {
                 if (!IsLibraryLoaded(fileName))
                 {
-                    LibraryLoaderTrace.TraceWarning("Failed to free library \"{0}\" because it is not loaded", fileName);
+                    Logger.TraceWarning("Failed to free library \"{0}\" because it is not loaded", fileName);
                     return false;
                 }
                 if (logic.FreeLibrary(loadedAssemblies[fileName]))
@@ -176,15 +178,15 @@ namespace InteropDotNet
                     switch (operatingSystem)
                     {
                         case OperatingSystem.Windows:
-                            LibraryLoaderTrace.TraceInformation("Current OS: Windows");
+                            Logger.TraceInformation("Current OS: Windows");
                             instance = new LibraryLoader(new WindowsLibraryLoaderLogic());
                             break;
                         case OperatingSystem.Unix:
-                            LibraryLoaderTrace.TraceInformation("Current OS: Unix");
+                            Logger.TraceInformation("Current OS: Unix");
                             instance = new LibraryLoader(new UnixLibraryLoaderLogic());
                             break;
                         case OperatingSystem.MacOSX:
-                            LibraryLoaderTrace.TraceInformation("Current OS: MacOsX");
+                            Logger.TraceInformation("Current OS: MacOsX");
                             instance = new LibraryLoader(new UnixLibraryLoaderLogic());
                             break;
                         default:

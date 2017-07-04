@@ -60,7 +60,7 @@
     <Compile Include="InteropDotNet\ILibraryLoaderLogic.cs" />
     <Compile Include="InteropDotNet\InteropRuntimeImplementer.cs" />
     <Compile Include="InteropDotNet\LibraryLoader.cs" />
-    <Compile Include="InteropDotNet\LibraryLoaderTrace.cs" />
+    <Compile Include="Internal\Logger.cs" />
     <Compile Include="InteropDotNet\RuntimeDllImportAttribute.cs" />
     <Compile Include="InteropDotNet\SystemManager.cs" />
     <Compile Include="InteropDotNet\UnixLibraryLoaderLogic.cs" />
