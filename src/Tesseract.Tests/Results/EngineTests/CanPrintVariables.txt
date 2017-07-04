@@ -420,7 +420,9 @@ tessedit_write_rep_codes	0	Write repetition char code
 tessedit_write_unlv	0	Write .unlv output file
 tessedit_create_txt	0	Write .txt output file
 tessedit_create_hocr	0	Write .html hOCR output file
+tessedit_create_tsv	0	Write .tsv output file
 tessedit_create_pdf	0	Write .pdf output file
+textonly_pdf	0	Create PDF with only one invisible text layer
 suspect_constrain_1Il	0	UNLV keep 1Il chars rejected
 tessedit_minimal_rejection	0	Only reject tess failures
 tessedit_zero_rejection	0	Don't reject ANYTHING
@@ -491,7 +493,7 @@ textord_noise_rejwords	1	Reject noise-like words
 textord_noise_rejrows	1	Reject noise-like rows
 textord_noise_debug	0	Debug row garbage detector
 m_data_sub_dir	tessdata/	Directory for data files
-tessedit_module_name	libtesseract304.dll	Module colocated with tessdata dir
+tessedit_module_name	libtesseract3051.dll	Module colocated with tessdata dir
 classify_learn_debug_str		Class str to debug learning
 user_words_file		A filename of user-provided words.
 user_words_suffix		A suffix of user-provided words located in tessdata.
