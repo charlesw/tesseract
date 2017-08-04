@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Tesseract.Internal;
+using Tesseract.Interop;
 
 namespace Tesseract
 {
@@ -177,7 +178,45 @@ namespace Tesseract
             return boxList;
         }
 
-                
+        /// <summary>
+        /// Detects the page orientation, with corresponding confidence when using <see cref="PageSegMode.OsdOnly"/>.
+        /// </summary>
+        /// <remarks>
+        /// If using full page segmentation mode (i.e. AutoOsd) then consider using <see cref="AnalyseLayout"/> instead as this also provides a
+        /// deskew angle which isn't available when just performing orientation detection.
+        /// </remarks>
+        /// <param name="orientation">The page orientation.</param>
+        /// <param name="confidence">The corresponding confidence score that the detected orientation is correct.</param>
+        /// <param name="scriptName">The script name<param>
+        /// <param name="scriptConfidence">The script confidence</param>
+        public void DetectBestOrientation(out int orientation, out float confidence, out string scriptName, out float scriptConfidence)
+        {
+            int orient_deg;
+            float orient_conf;
+            IntPtr script_nameHandle;
+            float script_conf;
+
+            if (Interop.TessApi.Native.TessBaseAPIDetectOrientationScript(Engine.Handle, out orient_deg, out orient_conf, out script_nameHandle, out script_conf) != 0)
+            {
+                orientation = orient_deg;
+                confidence = orient_conf;
+                if (script_nameHandle != IntPtr.Zero)
+                {
+                    scriptName = MarshalHelper.PtrToString(script_nameHandle, Encoding.UTF8);
+                    TessApi.Native.DeleteText(script_nameHandle);
+                }
+                else
+                {
+                    scriptName = null;
+                }
+                scriptConfidence = script_conf;
+            }
+            else
+            {
+                throw new TesseractException("Failed to detect image orientation.");
+            }
+        }
+
         internal void Recognize()
         {
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead.");
