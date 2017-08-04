@@ -96,17 +96,24 @@ namespace Tesseract.Tests
                 PageSegMode.SingleWord)]
             PageSegMode pageSegMode)
         {
-            //using (var img = LoadTestImage(ExampleImagePath)) {
-            //    using (var rotatedPix = img.Rotate((float)Math.PI)) {
-            //        using (var page = engine.Process(rotatedPix, pageSegMode)) {
-            //            Orientation orientation;
-            //            float confidence;
-            //            page.DetectBestOrientation(out orientation, out confidence);
+            using (var img = LoadTestImage(ExampleImagePath)) {
+                using (var rotatedPix = img.Rotate((float)Math.PI)) {
+                    using (var page = engine.Process(rotatedPix, pageSegMode)) {
+                        int orientation;
+                        float confidence;
+                        string scriptName;
+                        float scriptConfidence;
 
-            //            Assert.That(orientation, Is.EqualTo(Orientation.PageDown));
-            //        }
-            //    }
-            //}
+                        page.DetectBestOrientation(out orientation, out confidence, out scriptName, out scriptConfidence);
+
+                        Orientation resultOrientation;
+                        float resultDeskew;
+                        ExpectedOrientation(orientation, out resultOrientation, out resultDeskew);
+
+                        Assert.That(resultOrientation, Is.EqualTo(Orientation.PageDown));
+                    }
+                }
+            }
         }
 
         [Test]
@@ -117,19 +124,26 @@ namespace Tesseract.Tests
         public void DetectOrientation_RotatedImage(float rotation)
         {
             using (var img = LoadTestImage(ExampleImagePath)) {
-                //using (var rotatedPix = img.Rotate(rotation / 360 * (float)Math.PI * 2)) {
-                //    using (var page = engine.Process(rotatedPix, PageSegMode.OsdOnly)) {
-                //        Orientation expectedOrientation;
-                //        float expectedDeskew;
-                //        ExpectedOrientation(rotation, out expectedOrientation, out expectedDeskew);
+                using (var rotatedPix = img.Rotate(rotation / 360 * (float)Math.PI * 2)) {
+                    using (var page = engine.Process(rotatedPix, PageSegMode.OsdOnly)) {
+                        Orientation expectedOrientation;
+                        float expectedDeskew;
+                        ExpectedOrientation(rotation, out expectedOrientation, out expectedDeskew);
 
-                //        Orientation orientation;
-                //        float confidence;
-                //        page.DetectBestOrientation(out orientation, out confidence);
+                        int orientation;
+                        float confidence;
+                        string scriptName;
+                        float scriptConfidence;
 
-                //        Assert.That(orientation, Is.EqualTo(expectedOrientation));
-                //    }
-                //}
+                        page.DetectBestOrientation(out orientation, out confidence, out scriptName, out scriptConfidence);
+
+                        Orientation resultOrientation;
+                        float resultDeskew;
+                        ExpectedOrientation(orientation, out resultOrientation, out resultDeskew);
+
+                        Assert.That(resultOrientation, Is.EqualTo(expectedOrientation));
+                    }
+                }
             }
         }
 
