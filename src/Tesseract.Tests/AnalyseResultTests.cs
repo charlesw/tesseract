@@ -104,13 +104,10 @@ namespace Tesseract.Tests
                         string scriptName;
                         float scriptConfidence;
 
-                        page.DetectBestOrientation(out orientation, out confidence, out scriptName, out scriptConfidence);
+                        page.DetectBestOrientationAndScript(out orientation, out confidence, out scriptName, out scriptConfidence);
 
-                        Orientation resultOrientation;
-                        float resultDeskew;
-                        ExpectedOrientation(orientation, out resultOrientation, out resultDeskew);
-
-                        Assert.That(resultOrientation, Is.EqualTo(Orientation.PageDown));
+                        Assert.That(orientation, Is.EqualTo(180));
+                        Assert.That(scriptName, Is.EqualTo("Latin"));
                     }
                 }
             }
@@ -118,34 +115,54 @@ namespace Tesseract.Tests
 
         [Test]
         [TestCase(0)]
-        [TestCase(90f)]
-        [TestCase(180f)]
-        [TestCase(270f)]
-        public void DetectOrientation_RotatedImage(float rotation)
+        [TestCase(90)]
+        [TestCase(180)]
+        [TestCase(270)]
+        public void DetectOrientation_Degrees_RotatedImage(int expectedOrientation)
         {
             using (var img = LoadTestImage(ExampleImagePath)) {
-                using (var rotatedPix = img.Rotate(rotation / 360 * (float)Math.PI * 2)) {
+                using (var rotatedPix = img.Rotate((float)expectedOrientation / 360 * (float)Math.PI * 2)) {
                     using (var page = engine.Process(rotatedPix, PageSegMode.OsdOnly)) {
-                        Orientation expectedOrientation;
-                        float expectedDeskew;
-                        ExpectedOrientation(rotation, out expectedOrientation, out expectedDeskew);
 
                         int orientation;
                         float confidence;
                         string scriptName;
                         float scriptConfidence;
 
-                        page.DetectBestOrientation(out orientation, out confidence, out scriptName, out scriptConfidence);
+                        page.DetectBestOrientationAndScript(out orientation, out confidence, out scriptName, out scriptConfidence);
 
-                        Orientation resultOrientation;
-                        float resultDeskew;
-                        ExpectedOrientation(orientation, out resultOrientation, out resultDeskew);
-
-                        Assert.That(resultOrientation, Is.EqualTo(expectedOrientation));
+                        Assert.That(orientation, Is.EqualTo(expectedOrientation));
+                        Assert.That(scriptName, Is.EqualTo("Latin"));
                     }
                 }
             }
         }
+
+        [Test]
+        [TestCase(0)]
+        [TestCase(90)]
+        [TestCase(180)]
+        [TestCase(270)]
+        public void DetectOrientation_Legacy_RotatedImage(int expectedOrientationDegrees)
+        {
+            using (var img = LoadTestImage(ExampleImagePath)) {
+                using (var rotatedPix = img.Rotate((float)expectedOrientationDegrees / 360 * (float)Math.PI * 2)) {
+                    using (var page = engine.Process(rotatedPix, PageSegMode.OsdOnly)) {
+                        Orientation orientation;
+                        float confidence;
+
+                        page.DetectBestOrientation(out orientation, out confidence);
+                        
+                        Orientation expectedOrientation;
+                        float expectedDeskew;
+                        ExpectedOrientation(expectedOrientationDegrees, out expectedOrientation, out expectedDeskew);
+
+                        Assert.That(orientation, Is.EqualTo(expectedOrientation));
+                    }
+                }
+            }
+        }
+
 
         [Test]
         public void GetImage(

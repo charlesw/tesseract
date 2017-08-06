@@ -186,10 +186,63 @@ namespace Tesseract
         /// deskew angle which isn't available when just performing orientation detection.
         /// </remarks>
         /// <param name="orientation">The page orientation.</param>
-        /// <param name="confidence">The corresponding confidence score that the detected orientation is correct.</param>
-        /// <param name="scriptName">The script name<param>
-        /// <param name="scriptConfidence">The script confidence</param>
-        public void DetectBestOrientation(out int orientation, out float confidence, out string scriptName, out float scriptConfidence)
+        /// <param name="confidence">The confidence level of the orientation (15 is reasonably confident).</param>
+        /// 
+        [Obsolete("Use DetectBestOrientation(int orientationDegrees, float confidence) that returns orientation in degrees instead.")]
+        public void DetectBestOrientation(out Orientation orientation, out float confidence)
+        {
+            int orientationDegrees;
+            float orientationConfidence;
+            DetectBestOrientation(out orientationDegrees, out orientationConfidence);
+
+            // convert angle to 0-360 (shouldn't be required but do it just o be safe).
+            orientationDegrees = orientationDegrees % 360;
+            if (orientationDegrees < 0) {
+                orientationDegrees += 360;
+            }
+
+            if (orientationDegrees > 315 || orientationDegrees <= 45) {
+                orientation = Orientation.PageUp;
+            } else if (orientationDegrees > 45 && orientationDegrees <= 135) {
+                orientation = Orientation.PageRight;
+            } else if (orientationDegrees > 135 && orientationDegrees <= 225) {
+                orientation = Orientation.PageDown;
+            } else {
+                orientation = Orientation.PageLeft;
+            }
+
+            confidence = orientationConfidence;
+        }
+
+        /// <summary>
+        /// Detects the page orientation, with corresponding confidence when using <see cref="PageSegMode.OsdOnly"/>.
+        /// </summary>
+        /// <remarks>
+        /// If using full page segmentation mode (i.e. AutoOsd) then consider using <see cref="AnalyseLayout"/> instead as this also provides a
+        /// deskew angle which isn't available when just performing orientation detection.
+        /// </remarks>
+        /// <param name="orientation">The detected clockwise page rotation in degrees (0, 90, 180, or 270).</param>
+        /// <param name="confidence">The confidence level of the orientation (15 is reasonably confident).</param>
+        public void DetectBestOrientation(out int orientation, out float confidence)
+        {
+            string scriptName;
+            float scriptConfidence;
+            DetectBestOrientationAndScript(out orientation, out confidence, out scriptName, out scriptConfidence);
+        }
+
+
+        /// <summary>
+        /// Detects the page orientation, with corresponding confidence when using <see cref="PageSegMode.OsdOnly"/>.
+        /// </summary>
+        /// <remarks>
+        /// If using full page segmentation mode (i.e. AutoOsd) then consider using <see cref="AnalyseLayout"/> instead as this also provides a
+        /// deskew angle which isn't available when just performing orientation detection.
+        /// </remarks>
+        /// <param name="orientation">The detected clockwise page rotation in degrees (0, 90, 180, or 270).</param>
+        /// <param name="confidence">The confidence level of the orientation (15 is reasonably confident).</param>
+        /// <param name="scriptName">The name of the script (e.g. Latin)<param>
+        /// <param name="scriptConfidence">The confidence level in the script</param>
+        public void DetectBestOrientationAndScript(out int orientation, out float confidence, out string scriptName, out float scriptConfidence)
         {
             int orient_deg;
             float orient_conf;
@@ -202,10 +255,9 @@ namespace Tesseract
                 confidence = orient_conf;
                 if (script_nameHandle != IntPtr.Zero)
                 {
-                    scriptName = MarshalHelper.PtrToString(script_nameHandle, Encoding.UTF8);
-                    TessApi.Native.DeleteText(script_nameHandle);
-                }
-                else
+                    scriptName = MarshalHelper.PtrToString(script_nameHandle, Encoding.ASCII);
+                    // Don't delete script_nameHandle as it points to internal memory managed by Tesseract.
+                } else
                 {
                     scriptName = null;
                 }
