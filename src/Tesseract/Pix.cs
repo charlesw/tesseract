@@ -160,6 +160,16 @@ namespace Tesseract
         {
             get { return width; }
         }
+	
+	public int XRes
+	{
+	    get { return Interop.LeptonicaApi.Native.pixGetXRes(this.handle); }
+	}
+	
+	public int YRes
+	{
+	    get { return Interop.LeptonicaApi.Native.pixGetYRes(this.handle); }
+	}
 
         internal HandleRef Handle
         {
