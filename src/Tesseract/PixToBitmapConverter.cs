@@ -13,7 +13,10 @@ namespace Tesseract
             var pixelFormat = GetPixelFormat(pix);
             var depth = pix.Depth;
             var img = new Bitmap(pix.Width, pix.Height, pixelFormat);
-            img.SetResolution(pix.XRes, pix.YRes);
+            if (pix.XRes > 1 && pix.YRes > 1)
+            {
+                img.SetResolution(pix.XRes, pix.YRes);
+            }
 
             BitmapData imgData = null;
             PixData pixData = null;
