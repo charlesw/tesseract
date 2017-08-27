@@ -398,102 +398,157 @@ namespace Tesseract
         }
 
         /// <summary>
-        /// Removes horizontal lines from a grayscale image. 
+        /// Removes lines from an image. Grayscale removal only supports horizontal lines.  Bi-tonal images allow
+	/// declaration of the line pattern, allowing removal of either horizontal or vertical.
         /// The algorithm is based on Leptonica <code>lineremoval.c</code> example.
         /// See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
         /// </summary>
-        /// <returns>image with lines removed</returns>
-        public Pix RemoveLines()
+	/// <param name="width">For bi-tonal lines this is the width of the line pattern to be match.  Ignored for grayscale.</param>
+	/// <param name="height">For bi-tonal lines this is the height of the line pattern to be match.  Ignored for grayscale.</param>
+        /// <returns>Image with lines removed</returns>
+	/// <remarks>width=50,height=1 for horizontal. Width=1,heigth=40 for vertical.</remarks>
+        public Pix RemoveLines(int width = 50, int height = 1)
         {
-            float angle, conf;
-            IntPtr pix1, pix2, pix3, pix4, pix5, pix6, pix7, pix8, pix9;
-
-            pix1 = pix2 = pix3 = pix4 = pix5 = pix6 = pix7 = pix8 = pix9 = IntPtr.Zero;
-
-            try
+            if (Depth == 1)
             {
-                /* threshold to binary, extracting much of the lines */
-                pix1 = Interop.LeptonicaApi.Native.pixThresholdToBinary(handle, 170);
+                IntPtr sel, pix1, pix2;
 
-                /* find the skew angle and deskew using an interpolated
-                 * rotator for anti-aliasing (to avoid jaggies) */
-                Interop.LeptonicaApi.Native.pixFindSkew(new HandleRef(this, pix1), out angle, out conf);
-                pix2 = Interop.LeptonicaApi.Native.pixRotateAMGray(handle, (float)(Deg2Rad * angle), (byte)255);
+                sel = pix1 = pix2 = IntPtr.Zero;
 
-                /* extract the lines to be removed */
-                pix3 = Interop.LeptonicaApi.Native.pixCloseGray(new HandleRef(this, pix2), 51, 1);
-
-                /* solidify the lines to be removed */
-                pix4 = Interop.LeptonicaApi.Native.pixErodeGray(new HandleRef(this, pix3), 1, 5);
-
-                /* clean the background of those lines */
-                pix5 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), 210, 255);
-
-                pix6 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix5), 200, 0);
-
-                /* get paint-through mask for changed pixels */
-                pix7 = Interop.LeptonicaApi.Native.pixThresholdToBinary(new HandleRef(this, pix6), 210);
-
-                /* add the inverted, cleaned lines to orig.  Because
-                 * the background was cleaned, the inversion is 0,
-                 * so when you add, it doesn't lighten those pixels.
-                 * It only lightens (to white) the pixels in the lines! */
-                Interop.LeptonicaApi.Native.pixInvert(new HandleRef(this, pix6), new HandleRef(this, pix6));
-                pix8 = Interop.LeptonicaApi.Native.pixAddGray(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix2), new HandleRef(this, pix6));
-
-                pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
-
-                Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
-                if (pix8 == IntPtr.Zero)
+                try
                 {
-                    throw new TesseractException("Failed to remove lines from image.");
-                }
+                    pix1 = Interop.LeptonicaApi.Native.pixCopy(new HandleRef(this, IntPtr.Zero), handle);
+                    if (pix1 == IntPtr.Zero)
+                    {
+                        throw new TesseractException("Source could not be copied. ");
+                    }
 
-                return new Pix(pix8);
-            }
-            finally
-            {
-                // destroy any created intermediate pix's, regardless of if the process 
-                // failed for any reason.
-                if (pix1 != IntPtr.Zero)
-                {
+                    HandleRef cloneRef = new HandleRef(this, pix1);
+                    Interop.LeptonicaApi.Native.pixInvert(cloneRef, cloneRef);
+                    sel = Interop.LeptonicaApi.Native.selCreateBrick(height, width, height/2, width/2, (int)TSelElementTypes.SEL_HIT);
+                    if (sel == IntPtr.Zero)
+                    {
+                        throw new TesseractException("Can't generate sel. ");
+                    }
+
+                    Interop.LeptonicaApi.Native.pixOpen(cloneRef, cloneRef, new HandleRef(this, sel));
+                    pix2 = Interop.LeptonicaApi.Native.pixXor(new HandleRef(this, IntPtr.Zero), handle, cloneRef);
+                    if (pix1 == IntPtr.Zero)
+                    {
+                        throw new TesseractException("Lines could not be removed. ");
+                    }
+
+
                     Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
-                }
+                    pix1 = IntPtr.Zero;
 
-                if (pix2 != IntPtr.Zero)
-                {
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
+                    return new Pix(pix2);
                 }
+                finally
+                {
+                    if (sel != IntPtr.Zero)
+                    {
+                        Interop.LeptonicaApi.Native.selDestroy(ref sel);
+                    }
 
-                if (pix3 != IntPtr.Zero)
-                {
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
+                    if (pix1 != IntPtr.Zero)
+                    {
+                        Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
+                    }
                 }
+            }
+            else
+            {
+		    float angle, conf;
+		    IntPtr pix1, pix2, pix3, pix4, pix5, pix6, pix7, pix8, pix9;
 
-                if (pix4 != IntPtr.Zero)
-                {
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
-                }
+		    pix1 = pix2 = pix3 = pix4 = pix5 = pix6 = pix7 = pix8 = pix9 = IntPtr.Zero;
 
-                if (pix5 != IntPtr.Zero)
-                {
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
-                }
+		    try
+		    {
+			/* threshold to binary, extracting much of the lines */
+			pix1 = Interop.LeptonicaApi.Native.pixThresholdToBinary(handle, 170);
 
-                if (pix6 != IntPtr.Zero)
-                {
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
-                }
+			/* find the skew angle and deskew using an interpolated
+			 * rotator for anti-aliasing (to avoid jaggies) */
+			Interop.LeptonicaApi.Native.pixFindSkew(new HandleRef(this, pix1), out angle, out conf);
+			pix2 = Interop.LeptonicaApi.Native.pixRotateAMGray(handle, (float)(Deg2Rad * angle), (byte)255);
 
-                if (pix7 != IntPtr.Zero)
-                {
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
-                }
+			/* extract the lines to be removed */
+			pix3 = Interop.LeptonicaApi.Native.pixCloseGray(new HandleRef(this, pix2), 51, 1);
 
-                if (pix9 != IntPtr.Zero)
-                {
-                    Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
-                }
+			/* solidify the lines to be removed */
+			pix4 = Interop.LeptonicaApi.Native.pixErodeGray(new HandleRef(this, pix3), 1, 5);
+
+			/* clean the background of those lines */
+			pix5 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), 210, 255);
+
+			pix6 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix5), 200, 0);
+
+			/* get paint-through mask for changed pixels */
+			pix7 = Interop.LeptonicaApi.Native.pixThresholdToBinary(new HandleRef(this, pix6), 210);
+
+			/* add the inverted, cleaned lines to orig.  Because
+			 * the background was cleaned, the inversion is 0,
+			 * so when you add, it doesn't lighten those pixels.
+			 * It only lightens (to white) the pixels in the lines! */
+			Interop.LeptonicaApi.Native.pixInvert(new HandleRef(this, pix6), new HandleRef(this, pix6));
+			pix8 = Interop.LeptonicaApi.Native.pixAddGray(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix2), new HandleRef(this, pix6));
+
+			pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
+
+			Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
+			if (pix8 == IntPtr.Zero)
+			{
+			    throw new TesseractException("Failed to remove lines from image.");
+			}
+
+			return new Pix(pix8);
+		    }
+		    finally
+		    {
+			// destroy any created intermediate pix's, regardless of if the process 
+			// failed for any reason.
+			if (pix1 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
+			}
+
+			if (pix2 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
+			}
+
+			if (pix3 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
+			}
+
+			if (pix4 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
+			}
+
+			if (pix5 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
+			}
+
+			if (pix6 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
+			}
+
+			if (pix7 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
+			}
+
+			if (pix9 != IntPtr.Zero)
+			{
+			    Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
+			}
+		}
             }
         }
 
