@@ -424,7 +424,6 @@ namespace Tesseract
                     }
 
                     HandleRef cloneRef = new HandleRef(this, pix1);
-                    Interop.LeptonicaApi.Native.pixInvert(cloneRef, cloneRef);
                     sel = Interop.LeptonicaApi.Native.selCreateBrick(height, width, height/2, width/2, (int)TSelElementTypes.SEL_HIT);
                     if (sel == IntPtr.Zero)
                     {
@@ -432,7 +431,7 @@ namespace Tesseract
                     }
 
                     Interop.LeptonicaApi.Native.pixOpen(cloneRef, cloneRef, new HandleRef(this, sel));
-                    pix2 = Interop.LeptonicaApi.Native.pixXor(new HandleRef(this, IntPtr.Zero), handle, cloneRef);
+                    pix2 = Interop.LeptonicaApi.Native.pixSubtract(new HandleRef(this, IntPtr.Zero), handle, cloneRef);
                     if (pix1 == IntPtr.Zero)
                     {
                         throw new TesseractException("Lines could not be removed. ");
