@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -20,12 +20,6 @@ namespace Tesseract.Interop
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff")]
         IntPtr pixaReadMultipageTiff(string filename);
-
-        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaCreate")]
-        IntPtr pixaCreate(int n);
-
-        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaAddPix")]
-        int pixaAddPix(HandleRef pixa, Pix pix, int copyflag);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
         int pixaGetCount(HandleRef pixa);
@@ -157,8 +151,20 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCloseGray")]
         IntPtr pixCloseGray(HandleRef pixs, int hsize, int vsize);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCopy")]
+        IntPtr pixCopy(HandleRef pixd, HandleRef pixs);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixErode")]
+        IntPtr pixErode(HandleRef pixd, HandleRef pixs, HandleRef sel);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDilate")]
+        IntPtr pixDilate(HandleRef pixd, HandleRef pixs, HandleRef sel);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixErodeGray")]
         IntPtr pixErodeGray(HandleRef pixs, int hsize, int vsize);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixHMT")]
+        IntPtr pixHMT(HandleRef pixd, HandleRef pixs, HandleRef sel);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixAddGray")]
         IntPtr pixAddGray(HandleRef pixd, HandleRef pixs1, HandleRef pixs2);
@@ -166,8 +172,31 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOpenGray")]
         IntPtr pixOpenGray(HandleRef pixs, int hsize, int vsize);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOpen")]
+        IntPtr pixOpen(HandleRef pixd, HandleRef pixs, HandleRef sel);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCombineMasked")]
         int pixCombineMasked(HandleRef pixd, HandleRef pixs, HandleRef pixm);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSubtract")]
+        IntPtr pixSubtract(HandleRef pixd, HandleRef pixs1, HandleRef pixs2);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCloseSafeBrick")]
+        IntPtr pixCloseSafeBrick(HandleRef pixd, HandleRef pixs, int hsize, int vsize);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixSeedfillBinary")]
+        IntPtr pixSeedfillBinary(HandleRef pixd, HandleRef pixhs, HandleRef pixm, int connectivity);
+
+        // SEL
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "selDestroy")]
+        void selDestroy(ref IntPtr sel);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "selCreateBrick")]
+        IntPtr selCreateBrick(int h, int w, int cy, int cx, int type);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "selCreateFromString")]
+        IntPtr selCreateFromString(string text, int h, int w, string name);
 
         // Threshold
 
@@ -180,7 +209,17 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixInvert")]
         IntPtr pixInvert(HandleRef pixd, HandleRef pixs);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixXor")]
+        IntPtr pixXor(HandleRef pixd, HandleRef pixs1, HandleRef pixs2);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOpenBrick")]
+        IntPtr pixOpenBrick(HandleRef pixd, HandleRef pixs, int hsize, int vsize);
+
         // Binarization - src/binarize.c
+
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixMaskedThreshOnBackgroundNorm")]
+        IntPtr pixMaskedThreshOnBackgroundNorm(HandleRef pixs, HandleRef pixim, int sx, int sy, int thresh, int mincount, int smoothx, int smoothy, float scorefract, out IntPtr pthresh);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOtsuAdaptiveThreshold")]
         int pixOtsuAdaptiveThreshold(HandleRef pix, int sx, int sy, int smoothx, int smoothy, float scorefract, out IntPtr ppixth, out IntPtr ppixd);
