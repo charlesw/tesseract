@@ -125,8 +125,7 @@ namespace Tesseract.Tests.Leptonica
                 }
             }
         }
-
-
+        
         private void AssertAreEquivalent(Bitmap bmp, Pix pix, bool checkAlpha)
         {
             // verify img metadata

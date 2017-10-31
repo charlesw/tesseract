@@ -6,7 +6,7 @@ using Tesseract.Internal;
 
 namespace Tesseract
 {
-    public unsafe sealed class Pix : DisposableBase
+    public unsafe sealed class Pix : DisposableBase, IEquatable<Pix>
     {
         #region Constants
 
@@ -28,15 +28,15 @@ namespace Tesseract
         /// Used to lookup image formats by extension.
         /// </summary>
         private static readonly Dictionary<string, ImageFormat> imageFomatLookup = new Dictionary<string, ImageFormat>
-		{
-			{ ".jpg", ImageFormat.JfifJpeg },
-			{ ".jpeg", ImageFormat.JfifJpeg },
-			{ ".gif", ImageFormat.Gif },
-			{ ".tif", ImageFormat.Tiff },
-			{ ".tiff", ImageFormat.Tiff },
-			{ ".png", ImageFormat.Png },
-			{ ".bmp", ImageFormat.Bmp }
-		};
+        {
+            { ".jpg", ImageFormat.JfifJpeg },
+            { ".jpeg", ImageFormat.JfifJpeg },
+            { ".gif", ImageFormat.Gif },
+            { ".tif", ImageFormat.Tiff },
+            { ".tiff", ImageFormat.Tiff },
+            { ".png", ImageFormat.Png },
+            { ".bmp", ImageFormat.Bmp }
+        };
 
         #endregion Constants
 
@@ -172,6 +172,34 @@ namespace Tesseract
         }
 
         #endregion Properties
+
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            // Check for null values and compare run-time types.
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            return Equals((Pix)obj);
+        }
+
+        public bool Equals(Pix other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            int same;
+            if(Interop.LeptonicaApi.Native.pixEqual(Handle, other.Handle, out same) != 0)
+            {
+                throw new TesseractException("Failed to compare pix");
+            }
+            return same != 0;
+        }
+
+        #endregion
 
         #region Save methods
 
@@ -768,7 +796,6 @@ namespace Tesseract
         #endregion
 
         #region Disposal
-
 
         protected override void Dispose(bool disposing)
         {
