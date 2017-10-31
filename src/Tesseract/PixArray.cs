@@ -30,15 +30,26 @@ namespace Tesseract
 			
 			return new PixArray(pixaHandle);
 		}
-		
-		#endregion
-		
-		#region Enumerator implementation
-		
-		/// <summary>
-		/// Handles enumerating through the <see cref="Pix"/> in the PixArray.
-		/// </summary>
-		private class PixArrayEnumerator : DisposableBase, IEnumerator<Pix>
+
+        public static PixArray Create(int n)
+        {
+            var pixaHandle = Interop.LeptonicaApi.Native.pixaCreate(n);
+            if (pixaHandle == IntPtr.Zero)
+            {
+                throw new IOException("Failed to create PixArray");
+            }
+
+            return new PixArray(pixaHandle);
+        }
+        
+        #endregion
+
+        #region Enumerator implementation
+
+        /// <summary>
+        /// Handles enumerating through the <see cref="Pix"/> in the PixArray.
+        /// </summary>
+        private class PixArrayEnumerator : DisposableBase, IEnumerator<Pix>
 		{
 			#region Fields
 			
@@ -187,18 +198,75 @@ namespace Tesseract
 				return _count; 
 			}
 		}
-		
-		#endregion
-		
-		#region Methods
-		
-		/// <summary>
-		/// Gets the <see cref="Pix"/> located at <paramref name="index"/> using the specified <paramref name="accessType"/>.
-		/// </summary>
-		/// <param name="index">The index of the pix (zero based).</param>
-		/// <param name="accessType">The <see cref="PixArrayAccessType" /> used to retrieve the <see cref="Pix"/>, only Clone or Copy are allowed.</param>
-		/// <returns>The retrieved <see cref="Pix"/>.</returns>
-		public Pix GetPix(int index, PixArrayAccessType accessType = PixArrayAccessType.Clone)
+
+        #endregion
+
+        #region Methods
+        
+        /// <summary>
+        /// Add the specified pix to the end of the pix array.
+        /// </summary>
+        /// <remarks>
+        /// PixArrayAccessType.Insert is not supported as the managed Pix object will attempt to release the pix when
+        /// it goes out of scope creating an access exception.
+        /// </remarks>
+        /// <param name="pix">The pix to add.</param>
+        /// <param name="copyflag">Determines if a clone or copy of the pix is inserted into the array.</param>
+        /// <returns></returns>
+        public bool Add(Pix pix, PixArrayAccessType copyflag = PixArrayAccessType.Clone)
+        {
+            Guard.RequireNotNull("pix", pix);
+            Guard.Require("copyflag", copyflag == PixArrayAccessType.Clone || copyflag == PixArrayAccessType.Copy,
+                "Copy flag must be either copy or clone but was {0}.", copyflag);
+
+            int result = Interop.LeptonicaApi.Native.pixaAddPix(_handle, pix.Handle, copyflag);
+            if (result == 0)
+            {
+                _count = Interop.LeptonicaApi.Native.pixaGetCount(_handle);
+            }
+            return result == 0;
+        }
+
+        /// <summary>
+        /// Removes the pix located at index.
+        /// </summary>
+        /// <remarks>
+        /// Notes:
+        /// * This shifts pixa[i] --> pixa[i - 1] for all i > index.
+        /// * Do not use on large arrays as the functionality is O(n).
+        /// * The corresponding box is removed as well, if it exists.
+        /// </remarks>
+        /// <param name="index">The index of the pix to remove.</param>
+        public void Remove(int index)
+        {
+            Guard.Require("index", index >= 0 && index < Count, "The index {0} must be between 0 and {1}.", index, Count);
+
+            VerifyNotDisposed();
+            if(Interop.LeptonicaApi.Native.pixaRemovePix(_handle, index) == 0)
+            {
+                _count = Interop.LeptonicaApi.Native.pixaGetCount(_handle);
+            }
+        }
+
+        /// <summary>
+        /// Destroys ever pix in the array.
+        /// </summary>
+        public void Clear()
+        {
+            VerifyNotDisposed();
+            if (Interop.LeptonicaApi.Native.pixaClear(_handle) == 0)
+            {
+                _count = Interop.LeptonicaApi.Native.pixaGetCount(_handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Pix"/> located at <paramref name="index"/> using the specified <paramref name="accessType"/>.
+        /// </summary>
+        /// <param name="index">The index of the pix (zero based).</param>
+        /// <param name="accessType">The <see cref="PixArrayAccessType" /> used to retrieve the <see cref="Pix"/>, only Clone or Copy are allowed.</param>
+        /// <returns>The retrieved <see cref="Pix"/>.</returns>
+        public Pix GetPix(int index, PixArrayAccessType accessType = PixArrayAccessType.Clone)
 		{
 			Guard.Require("accessType", accessType == PixArrayAccessType.Clone || accessType == PixArrayAccessType.Copy, "Access type must be either copy or clone but was {0}.", accessType);
 			Guard.Require("index", index >= 0 && index < Count, "The index {0} must be between 0 and {1}.", index, Count);
