@@ -5,9 +5,9 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace InteropDotNet
+namespace Tesseract.Internal
 {
-    static class LibraryLoaderTrace
+    static class Logger
     {
         const bool printToConsole = false;
 		readonly static TraceSource trace = new TraceSource("Tesseract");

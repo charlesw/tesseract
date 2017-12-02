@@ -1,7 +1,8 @@
 ﻿### Version 3.2.0
 
-* Added support for the renderer api (generation of PDF, Text, etc) - [Issue ](https://github.com/charlesw/tesseract/issues/) 
-* Updated to Tesseract 3.04.01
+* Added support for the renderer api (generation of PDF, Text, etc) - [Issue 193](https://github.com/charlesw/tesseract/issues/193) 
+* Added support for the multiple renderers - [Issue 297](https://github.com/charlesw/tesseract/issues/297) 
+* Updated to Tesseract 3.05.1 - [Issue #340](https://github.com/charlesw/tesseract/issues/340)
 * Fixed PolyBlockType definition - [Issue #280](https://github.com/charlesw/tesseract/issues/280)
 
 ### Version 3.1.0

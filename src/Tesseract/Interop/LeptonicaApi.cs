@@ -25,14 +25,20 @@ namespace Tesseract.Interop
         IntPtr pixaCreate(int n);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaAddPix")]
-        int pixaAddPix(HandleRef pixa, Pix pix, int copyflag);
-
-        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
-        int pixaGetCount(HandleRef pixa);
+        int pixaAddPix(HandleRef pixa, HandleRef pix, PixArrayAccessType copyflag);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetPix")]
         IntPtr pixaGetPix(HandleRef pixa, int index, PixArrayAccessType accesstype);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaRemovePix")]
+        int pixaRemovePix(HandleRef pixa, int index);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaClear")]
+        int pixaClear(HandleRef pixa);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaGetCount")]
+        int pixaGetCount(HandleRef pixa);
+       
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaDestroy")]
         void pixaDestroy(ref IntPtr pix);
 
@@ -45,10 +51,12 @@ namespace Tesseract.Interop
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixClone")]
         unsafe IntPtr pixClone(HandleRef pix);
-
-
+        
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixDestroy")]
         void pixDestroy(ref IntPtr pix);
+
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixEqual")]
+        int pixEqual(HandleRef pix1, HandleRef pix2, out int same);
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixGetWidth")]
         int pixGetWidth(HandleRef pix);
