@@ -258,7 +258,7 @@ wordrec_debug_level	0	Debug level for wordrec
 wordrec_max_join_chunks	4	Max number of broken pieces to associate
 segsearch_debug_level	0	SegSearch debug level
 segsearch_max_pain_points	2000	Maximum number of pain points stored in the queue
-segsearch_max_futile_classifications	20	Maximum number of pain point classifications per chunk thatdid not result in finding a better word choice.
+segsearch_max_futile_classifications	20	Maximum number of pain point classifications per chunk that did not result in finding a better word choice.
 language_model_debug_level	0	Language model debug level
 language_model_ngram_order	8	Maximum order of the character ngram model
 language_model_viterbi_list_max_num_prunable	10	Maximum number of prunable (those for which PrunablePath() is true) entries in each viterbi list recorded in BLOB_CHOICEs
@@ -342,12 +342,12 @@ load_bigram_dawg	1	Load dawg with special word bigrams.
 use_only_first_uft8_step	0	Use only the first UTF8 step of the given string when computing log probabilities.
 stopper_no_acceptable_choices	0	Make AcceptableChoice() always return false. Useful when there is a need to explore all segmentations
 save_raw_choices	0	Deprecated- backward compatibility only
-segment_nonalphabetic_script	0	Don't use any alphabetic-specific tricks.Set to true in the traineddata config file for scripts that are cursive or inherently fixed-pitch
+segment_nonalphabetic_script	0	Don't use any alphabetic-specific tricks. Set to true in the traineddata config file for scripts that are cursive or inherently fixed-pitch
 save_doc_words	0	Save Document Words
 merge_fragments_in_matrix	1	Merge the fragments in the ratings matrix and delete them after merging
 wordrec_no_block	0	Don't output block information
 wordrec_enable_assoc	1	Associator Enable
-force_word_assoc	0	force associator to run regardless of what enable_assoc is.This is used for CJK where component grouping is necessary.
+force_word_assoc	0	force associator to run regardless of what enable_assoc is. This is used for CJK where component grouping is necessary.
 fragments_guide_chopper	0	Use information from fragments to guide chopping process
 chop_enable	1	Chop enable
 chop_vertical_creep	0	Vertical creep
@@ -451,7 +451,6 @@ textord_equation_detect	0	Turn on equation detector
 textord_tabfind_vertical_text	1	Enable vertical detection
 textord_tabfind_force_vertical_text	0	Force using vertical text page mode
 preserve_interword_spaces	0	Preserve multiple interword spaces
-include_page_breaks	0	Include page separator string in output text after each image/page.
 textord_tabfind_vertical_horizontal_mix	1	find horizontal lines such as headers in vertical page mode
 load_fixed_length_dawgs	1	Load fixed length dawgs (e.g. for non-space delimited languages)
 permute_debug	0	Debug char permutation process
@@ -543,7 +542,7 @@ speckle_large_max_size	0.3	Max large speckle size
 speckle_rating_penalty	10	Penalty to add to worst rating for noise
 xheight_penalty_subscripts	0.125	Score penalty (0.1 = 10%) added if there are subscripts or superscripts in a word, but it is otherwise OK.
 xheight_penalty_inconsistent	0.25	Score penalty (0.1 = 10%) added if an xheight is inconsistent.
-segment_penalty_dict_frequent_word	1	Score multiplier for word matches which have good case andare frequent in the given language (lower is better).
+segment_penalty_dict_frequent_word	1	Score multiplier for word matches which have good case and are frequent in the given language (lower is better).
 segment_penalty_dict_case_ok	1.1	Score multiplier for word matches that have good case (lower is better).
 segment_penalty_dict_case_bad	1.3125	Default score multiplier for word matches, which may have case issues (lower is better).
 segment_penalty_ngram_best_choice	1.24	Multipler to for the best choice from the ngram model.
@@ -555,7 +554,7 @@ stopper_phase2_certainty_rejection_offset	1	Reject certainty offset
 stopper_certainty_per_char	-0.5	Certainty to add for each dict char above small word size.
 stopper_allowable_character_badness	3	Max certaintly variation allowed in a word (in sigma)
 doc_dict_pending_threshold	0	Worst certainty for using pending dictionary
-doc_dict_certainty_threshold	-2.25	Worst certainty for words that can be inserted into thedocument dictionary
+doc_dict_certainty_threshold	-2.25	Worst certainty for words that can be inserted into the document dictionary
 wordrec_worst_state	1	Worst segmentation state
 tessedit_certainty_threshold	-2.25	Good blob limit
 chop_split_dist_knob	0.5	Split length adjustment
@@ -592,7 +591,7 @@ test_pt_y	100000	ycoord
 tessedit_reject_doc_percent	65	%rej allowed before rej whole doc
 tessedit_reject_block_percent	45	%rej allowed before rej whole block
 tessedit_reject_row_percent	40	%rej allowed before rej whole row
-tessedit_whole_wd_rej_row_percent	70	Number of row rejects in whole word rejectswhich prevents whole row rejection
+tessedit_whole_wd_rej_row_percent	70	Number of row rejects in whole word rejects which prevents whole row rejection
 tessedit_good_doc_still_rowrej_wd	1.1	rej good doc wd if more than this fraction rejected
 quality_rowrej_pc	1.1	good_quality_doc gte good char limit
 crunch_terrible_rating	80	crunch rating lt this
@@ -626,8 +625,8 @@ bestrate_pruning_factor	2	Multiplying factor of current best rate to prune other
 segment_reward_script	0.95	Score multipler for script consistency within a word. Being a 'reward' factor, it should be <= 1. Smaller value implies bigger reward.
 segment_reward_chartype	0.97	Score multipler for char type consistency within a word. 
 segment_reward_ngram_best_choice	0.99	Score multipler for ngram permuter's best choice (only used in the Han script path).
-heuristic_segcost_rating_base	1.25	base factor for adding segmentation cost into word rating.It's a multiplying factor, the larger the value above 1, the bigger the effect of segmentation cost.
-heuristic_weight_rating	1	weight associated with char rating in combined cost ofstate
+heuristic_segcost_rating_base	1.25	Base factor for adding segmentation cost into word rating. It's a multiplying factor, the larger the value above 1, the bigger the effect of segmentation cost.
+heuristic_weight_rating	1	weight associated with char rating in combined cost of state
 heuristic_weight_width	1000	weight associated with width evidence in combined cost of state
 heuristic_weight_seamcut	0	weight associated with seam cut in combined cost of state
 heuristic_max_char_wh_ratio	2	max char width-to-height ratio allowed in segmentation
