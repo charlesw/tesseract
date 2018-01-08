@@ -62,7 +62,7 @@ namespace Tesseract.Tests
         public void CanRenderResultsIntoPdfFile1()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
-            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath))
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false))
             {
                 var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
                 ProcessImageFile(renderer, examplePixPath);
@@ -89,7 +89,7 @@ namespace Tesseract.Tests
         public void CanRenderMultiplePageDocumentToPdfFile1()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
-            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath))
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false))
             {
                 var examplePixPath = this.TestFilePath("processing/multi-page.tif");
                 ProcessImageFile(renderer, examplePixPath);
