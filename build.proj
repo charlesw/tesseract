@@ -60,7 +60,7 @@
     </CreateItem>
   </Target>
   <Target Name="RestorePackages">
-    <Exec Command='$(ToolsDir)\NuGet.exe restore "$(SourceDir)\Tesseract.sln"' />
+    <Exec Command='"$(ToolsDir)\NuGet.exe" restore "$(SourceDir)\Tesseract.sln"' />
   </Target>
   <Target Name="Clean" DependsOnTargets="ExpandFlavors;RestorePackages">
     <MSBuild Projects="@(ProjectToBuild)" Targets="Clean" />
