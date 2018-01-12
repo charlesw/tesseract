@@ -4,7 +4,7 @@
 param($installPath, $toolsPath, $package, $project)
 
 $platformNames = "x86", "x64"
-$fileNames = "libtesseract3051.dll", "liblept1742.dll"
+$fileNames = "libtesseract3051.dll", "liblept1744.dll"
 $propertyName = "CopyToOutputDirectory"
 
 foreach($platformName in $platformNames) {

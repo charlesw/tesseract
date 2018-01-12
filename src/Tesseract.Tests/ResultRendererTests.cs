@@ -59,12 +59,40 @@ namespace Tesseract.Tests
         }
 
         [Test]
+        public void CanRenderResultsIntoPdfFile1()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath))
+            {
+                var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
+                ProcessImageFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
         public void CanRenderMultiplePageDocumentToPdfFile()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
             using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath)) {
                 var examplePixPath = this.TestFilePath("processing/multi-page.tif");
                 ProcessMultipageTiff(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
+        public void CanRenderMultiplePageDocumentToPdfFile1()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath))
+            {
+                var examplePixPath = this.TestFilePath("processing/multi-page.tif");
+                ProcessImageFile(renderer, examplePixPath);
             }
 
             var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
@@ -182,6 +210,46 @@ namespace Tesseract.Tests
                 }
 
                 Assert.AreEqual(renderer.PageNumber, 0);
+            }
+        }
+
+        private void ProcessImageFile(IResultRenderer renderer, string filename)
+        {
+            var imageName = Path.GetFileNameWithoutExtension(filename);
+            using (var pixA = ReadImageFileIntoPixArray(filename))
+            {
+                int expectedPageNumber = -1;
+                using (renderer.BeginDocument(imageName))
+                {
+                    Assert.AreEqual(renderer.PageNumber, expectedPageNumber);
+                    foreach (var pix in pixA)
+                    {
+                        using (var page = _engine.Process(pix, imageName))
+                        {
+                            var addedPage = renderer.AddPage(page);
+                            expectedPageNumber++;
+
+                            Assert.That(addedPage, Is.True);
+                            Assert.That(renderer.PageNumber, Is.EqualTo(expectedPageNumber));
+                        }
+                    }
+                }
+
+                Assert.That(renderer.PageNumber, Is.EqualTo(expectedPageNumber));
+            }
+        }
+
+        private PixArray ReadImageFileIntoPixArray(string filename)
+        {
+            if (filename.ToLower().EndsWith(".tif") || filename.ToLower().EndsWith(".tiff"))
+            {
+                return PixArray.LoadMultiPageTiffFromFile(filename);
+            }
+            else
+            {
+                PixArray pa = PixArray.Create(0);
+                pa.Add(Pix.LoadFromFile(filename));
+                return pa;
             }
         }
     }
