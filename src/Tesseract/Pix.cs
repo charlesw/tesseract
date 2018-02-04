@@ -161,15 +161,17 @@ namespace Tesseract
             get { return width; }
         }
 	
-	public int XRes
-	{
-	    get { return Interop.LeptonicaApi.Native.pixGetXRes(this.handle); }
-	}
+	    public int XRes
+	    {
+	        get { return Interop.LeptonicaApi.Native.pixGetXRes(this.handle); }
+            set { Interop.LeptonicaApi.Native.pixSetXRes(this.handle, value); }
+	    }
 	
-	public int YRes
-	{
-	    get { return Interop.LeptonicaApi.Native.pixGetYRes(this.handle); }
-	}
+	    public int YRes
+	    {
+	        get { return Interop.LeptonicaApi.Native.pixGetYRes(this.handle); }
+            set { Interop.LeptonicaApi.Native.pixSetYRes(this.handle, value); }
+        }
 
         internal HandleRef Handle
         {
