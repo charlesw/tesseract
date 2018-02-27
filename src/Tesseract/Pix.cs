@@ -538,6 +538,71 @@ namespace Tesseract
         }
 
         /// <summary>
+        /// HMT (with just misses) for speckle up to 2x2
+        /// "oooo"
+        /// "oC o"
+        /// "o  o"
+        /// "oooo"
+        /// </summary>
+        public const string SEL_STR2 = "oooooC oo  ooooo";
+
+        /// <summary>
+        /// HMT (with just misses) for speckle up to 3x3
+        /// "oC  o"
+        /// "o   o"
+        /// "o   o"
+        /// "ooooo"
+        /// </summary>
+        public const string SEL_STR3 = "ooooooC  oo   oo   oooooo";
+
+        /// <summary>
+        /// Reduces speckle noise in image. The algorithm is based on Leptonica
+        /// <code>speckle_reg.c</code> example demonstrating morphological method of
+        /// removing speckle.
+        /// </summary>
+        /// <param name="selStr">hit-miss sels in 2D layout; SEL_STR2 and SEL_STR3 are predefined values</param>
+        /// <param name="selSize">2 for 2x2, 3 for 3x3</param>
+        /// <returns></returns>
+        public Pix Despeckle(string selStr, int selSize)
+        {
+            IntPtr pix1, pix2, pix3;
+            IntPtr pix4, pix5, pix6;
+            IntPtr sel1, sel2;
+
+            /*  Normalize for rapidly varying background */
+            pix1 = Interop.LeptonicaApi.Native.pixBackgroundNormFlex(handle, 7, 7, 1, 1, 10);
+
+            /* Remove the background */
+            pix2 = Interop.LeptonicaApi.Native.pixGammaTRCMasked(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix1), new HandleRef(this, IntPtr.Zero), 1.0f, 100, 175);
+            
+            /* Binarize */
+            pix3 = Interop.LeptonicaApi.Native.pixThresholdToBinary(new HandleRef(this, pix2), 180);
+
+            /* Remove the speckle noise up to selSize x selSize */
+            sel1 = Interop.LeptonicaApi.Native.selCreateFromString(selStr, selSize + 2, selSize + 2, "speckle" + selSize);
+            pix4 = Interop.LeptonicaApi.Native.pixHMT(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix3), new HandleRef(this, sel1));
+            sel2 = Interop.LeptonicaApi.Native.selCreateBrick(selSize, selSize, 0, 0, SelType.SEL_HIT);
+            pix5 = Interop.LeptonicaApi.Native.pixDilate(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), new HandleRef(this, sel2));
+            pix6 = Interop.LeptonicaApi.Native.pixSubtract(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix3), new HandleRef(this, pix5));
+
+            Interop.LeptonicaApi.Native.selDestroy(ref sel1);
+            Interop.LeptonicaApi.Native.selDestroy(ref sel2);
+
+            Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
+            Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
+            Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
+            Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
+            Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
+
+            if (pix6 == IntPtr.Zero)
+            {
+                throw new TesseractException("Failed to despeckle image.");
+            }
+
+            return new Pix(pix6);
+        }
+
+        /// <summary>
         /// Determines the scew angle and if confidence is high enough returns the descewed image as the result, otherwise returns clone of original image.
         /// </summary>
         /// <remarks>
