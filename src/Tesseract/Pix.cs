@@ -72,6 +72,22 @@ namespace Tesseract
             }
         }
 
+        public static Pix Create(Bitmap img, int depth)
+        {
+            if (!AllowedDepths.Contains(depth))
+                throw new ArgumentException("Depth must be 1, 2, 4, 8, 16, or 32 bits.", "depth");
+
+            if (img.Width <= 0) throw new ArgumentException("Width must be greater than zero", "width");
+            if (img.Height <= 0) throw new ArgumentException("Height must be greater than zero", "height");
+
+            var handle = Interop.LeptonicaApi.Native.pixCreate(img.Width, img.Height, depth);
+            if (handle == IntPtr.Zero) throw new InvalidOperationException("Failed to create pix, this normally occurs because the requested image size is too large, please check Standard Error Output.");
+            var pix = Create(handle);
+            Interop.LeptonicaApi.Native.pixSetResolution(pix.Handle, (int)img.HorizontalResolution, (int)img.VerticalResolution);
+
+            return pix;
+        }
+
         public static Pix Create(int width, int height, int depth)
         {
             if (!AllowedDepths.Contains(depth))
