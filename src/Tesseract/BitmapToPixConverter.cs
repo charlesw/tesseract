@@ -21,13 +21,11 @@ namespace Tesseract
         public Pix Convert(Bitmap img)
         {
             var pixDepth = GetPixDepth(img.PixelFormat);
-            var pix = Pix.Create(img.Width, img.Height, pixDepth);
+            var pix = Pix.Create(img, pixDepth);
 
             BitmapData imgData = null;
             PixData pixData = null;
             try {
-                // TODO: Set X and Y resolution
-
                 if ((img.PixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed) {
                     CopyColormap(img, pix);
                 }
