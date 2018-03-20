@@ -180,13 +180,13 @@
     <None Include="..\Tesseract.Tests\tessdata\pdf.ttx" Link="tessdata\pdf.ttx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\liblept1742.dll" Link="x64\liblept1742.dll">
+    <None Include="..\Tesseract\x64\liblept1744.dll" Link="x64\liblept1744.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\Tesseract\x64\libtesseract3051.dll" Link="x64\libtesseract3051.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\liblept1742.dll" Link="x86\liblept1742.dll">
+    <None Include="..\Tesseract\x86\liblept1744.dll" Link="x86\liblept1744.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\Tesseract\x86\libtesseract3051.dll" Link="x86\libtesseract3051.dll">
