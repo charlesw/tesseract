@@ -19,8 +19,8 @@ namespace Tesseract.Tests
         [Test]
         public void CanParseMultipageTif()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
-                using (var pixA = PixArray.LoadMultiPageTiffFromFile("./Data/processing/multi-page.tif")) {
+            using (var engine = CreateEngine()) {
+                using (var pixA = PixArray.LoadMultiPageTiffFromFile(TestFilePath("./processing/multi-page.tif"))) {
                     int i = 1;
                     foreach (var pix in pixA) {
                         using (var page = engine.Process(pix)) {
@@ -45,9 +45,9 @@ namespace Tesseract.Tests
         public void CanParseText_UsingMode(PageSegMode mode, String expectedText)
         {
 
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
-                var demoFilename = String.Format("./Data/Ocr/PSM_{0}.png", mode);
-                using (var pix = Pix.LoadFromFile(demoFilename)) {
+            using (var engine = CreateEngine()) {
+                var demoFilename = String.Format("./Ocr/PSM_{0}.png", mode);
+                using (var pix = LoadTestPix(demoFilename)) {
                     using (var page = engine.Process(pix, mode)) {
                         var text = page.GetText().Trim();
 
@@ -61,7 +61,7 @@ namespace Tesseract.Tests
         [Test]
         public void CanParseText()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 using (var img = LoadTestPix(TestImagePath)) {
                     using (var page = engine.Process(img)) {
                         var text = page.GetText();
@@ -78,7 +78,7 @@ namespace Tesseract.Tests
         [Test]
         public void CanParseUznFile()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 var inputFilename = TestFilePath(@"Ocr\uzn-test.png");
                 using (var img = Pix.LoadFromFile(inputFilename)) {
                     using (var page = engine.Process(img, inputFilename, PageSegMode.SingleLine)) {
@@ -93,10 +93,11 @@ namespace Tesseract.Tests
             }
         }
 
+#if NETFULL
         [Test]
         public void CanProcessBitmap()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 var testImgFilename = TestFilePath(@"Ocr\phototest.tif");
                 using (var img = new Bitmap(testImgFilename)) {
                     using (var page = engine.Process(img)) {
@@ -110,11 +111,12 @@ namespace Tesseract.Tests
                 }
             }
         }
+#endif
 
         [Test]
         public void CanProcessDifferentRegionsInSameImage()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 using (var img = LoadTestPix(TestImagePath)) {
                     using (var page = engine.Process(img, Rect.FromCoords(0, 0, img.Width, 188))) {
                         var region1Text = page.GetText();
@@ -141,7 +143,7 @@ namespace Tesseract.Tests
         {
             int expectedCount = 8; // number of text lines in test image
 
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            using (var engine = CreateEngine())
             {
                 var imgPath = TestFilePath(TestImagePath);
                 using (var img = Pix.LoadFromFile(imgPath))
@@ -164,8 +166,8 @@ namespace Tesseract.Tests
         public void CanProcessEmptyPxUsingResultIterator()
         {
             string actualResult;
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
-                using (var img = Pix.LoadFromFile("./data/ocr/empty.png")) {
+            using (var engine = CreateEngine()) {
+                using (var img = LoadTestPix("ocr/empty.png")) {
                     using (var page = engine.Process(img)) {
                         actualResult = WriteResultsToString(page, false);
                     }
@@ -182,7 +184,7 @@ NormaliseNewLine(@"</word></line>
         [Test]
         public void CanProcessMultiplePixs()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 for (int i = 0; i < 3; i++) {
                     using (var img = LoadTestPix(TestImagePath)) {
                         using (var page = engine.Process(img)) {
@@ -204,7 +206,7 @@ NormaliseNewLine(@"</word></line>
             const string ResultPath = @"EngineTests\CanProcessPixUsingResultIterator.txt";
             
             string actualResult;
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 using (var img = LoadTestPix(TestImagePath)) {
                     using (var page = engine.Process(img)) {
                         actualResult = NormaliseNewLine(WriteResultsToString(page, false));
@@ -221,11 +223,12 @@ NormaliseNewLine(@"</word></line>
             }
         }
 
+#if NETFULL
         // Test for [Issue #166](https://github.com/charlesw/tesseract/issues/166)
         [Test]
         public void CanProcessScaledBitmap()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 var imagePath = TestFilePath(TestImagePath);
                 using (var img = Bitmap.FromFile(imagePath)) {
                     using (var scaledImg = new Bitmap(img, new Size(img.Width * 2, img.Height * 2))) {
@@ -241,13 +244,14 @@ NormaliseNewLine(@"</word></line>
                 }
             }
         }
+#endif
 
         [Test]
         public void CanGenerateHOCROutput(
             [Values(true, false)] Boolean useXHtml)
         {
             string actualResult; 
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 using (var img = LoadTestPix(TestImagePath)) {
                     using (var page = engine.Process(img)) {
                         actualResult = NormaliseNewLine(page.GetHOCRText(1, useXHtml));
@@ -275,7 +279,7 @@ NormaliseNewLine(@"</word></line>
         public void CanProcessPixUsingResultIteratorAndChoiceIterator()
         {
             string actualResult;
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
@@ -301,8 +305,7 @@ NormaliseNewLine(@"</word></line>
         [Test]
         public void Initialise_CanLoadConfigFile()
         {
-            var tessDataPath = Path.Combine(Environment.CurrentDirectory, @"tessdata\");
-            using (var engine = new TesseractEngine(tessDataPath, "eng", EngineMode.Default, "bazzar")) {
+            using (var engine = new TesseractEngine(DataPath, "eng", EngineMode.Default, "bazzar")) {
                 // verify that the config file was loaded
                 string user_patterns_suffix;
                 if (engine.TryGetStringVariable("user_words_suffix", out user_patterns_suffix)) {
@@ -330,7 +333,7 @@ NormaliseNewLine(@"</word></line>
             var initVars = new Dictionary<string, object>() {
                 { "load_system_dawg", false }
             };
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default, Enumerable.Empty<string>(), initVars, false)) {
+            using (var engine = new TesseractEngine(DataPath, "eng", EngineMode.Default, Enumerable.Empty<string>(), initVars, false)) {
                 bool loadSystemDawg;
                 if (!engine.TryGetBoolVariable("load_system_dawg", out loadSystemDawg)) {
                     Assert.Fail("Failed to get 'load_system_dawg'.");
@@ -342,7 +345,7 @@ NormaliseNewLine(@"</word></line>
         [Test, Ignore("Missing russian language data")]
         public void Initialise_Rus_ShouldStartEngine()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "rus", EngineMode.Default)) {
+            using (var engine = new TesseractEngine(DataPath, "rus", EngineMode.Default)) {
             }
         }
 
@@ -358,33 +361,20 @@ NormaliseNewLine(@"</word></line>
         public void Initialise_ShouldThrowErrorIfDatapathNotCorrect()
         {
             Assert.That(() => {
-                using (var engine = new TesseractEngine(@"./IDontExist", "eng", EngineMode.Default)) {
+                using (var engine = new TesseractEngine(AbsolutePath(@"./IDontExist"), "eng", EngineMode.Default)) {
                 }
             }, Throws.InstanceOf(typeof(TesseractException)));
         }
 
-        [Test]
-        public void Initialise_WithTessDataPrefixSet()
-        {
-            Environment.SetEnvironmentVariable("TESSDATA_PREFIX", Environment.CurrentDirectory);
-            using (var engine = new TesseractEngine(null, "eng", EngineMode.Default)) {
-            }
-        }
-
-        private IEnumerable<string> DataPaths()
+        private static IEnumerable<string> DataPaths()
         {
             return new string[] {
-                null,
-                @".",
-                @".\",
-                @"./",
-                @"./tessdata",
-                @"./tessdata/",
-                @".\tessdata\",
-                Path.Combine(Environment.CurrentDirectory, @"tessdata"),
-                Path.Combine(Environment.CurrentDirectory, @"tessdata\"),
-                Path.Combine(Environment.CurrentDirectory, @"tessdata/"),
-                Environment.CurrentDirectory
+                AbsolutePath(@"."),
+                AbsolutePath(@".\"),
+                AbsolutePath(@"./"),
+                AbsolutePath(@"./tessdata"),
+                AbsolutePath(@"./tessdata/"),
+                AbsolutePath(@".\tessdata\")
             };
         }
 
@@ -494,7 +484,7 @@ NormaliseNewLine(@"</word></line>
         public void CanSetBooleanVariable(bool variableValue)
         {
             const string VariableName = "classify_enable_learning";
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 var variableWasSet = engine.SetVariable(VariableName, variableValue);
                 Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", VariableName);
                 bool result;
@@ -512,10 +502,10 @@ NormaliseNewLine(@"</word></line>
         [Test]
         public void CanSetClassifyBlnNumericModeVariable()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 engine.SetVariable("classify_bln_numeric_mode", 1);
 
-                using (var img = Pix.LoadFromFile("./Data/processing/numbers.png")) {
+                using (var img = Pix.LoadFromFile(TestFilePath("./processing/numbers.png"))) {
                     using (var page = engine.Process(img)) {
                         var text = page.GetText();
 
@@ -533,7 +523,7 @@ NormaliseNewLine(@"</word></line>
         [TestCase("edges_boxarea", -0.9)]
         public void CanSetDoubleVariable(string variableName, double variableValue)
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 var variableWasSet = engine.SetVariable(variableName, variableValue);
                 Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", variableName);
                 double result;
@@ -552,7 +542,7 @@ NormaliseNewLine(@"</word></line>
         [TestCase("textord_testregion_left", -20)]
         public void CanSetIntegerVariable(string variableName, int variableValue)
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 var variableWasSet = engine.SetVariable(variableName, variableValue);
                 Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", variableName);
                 int result;
@@ -571,7 +561,7 @@ NormaliseNewLine(@"</word></line>
         [TestCase("tessedit_char_whitelist", "chinese 漢字")] // Issue 68
         public void CanSetStringVariable(string variableName, string variableValue)
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 var variableWasSet = engine.SetVariable(variableName, variableValue);
                 Assert.That(variableWasSet, Is.True, "Failed to set variable '{0}'.", variableName);
                 string result;
@@ -586,7 +576,7 @@ NormaliseNewLine(@"</word></line>
         [Test]
         public void CanGetStringVariableThatDoesNotExist()
         {
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default)) {
+            using (var engine = CreateEngine()) {
                 String result;
                 Boolean success = engine.TryGetStringVariable("illegal-variable", out result);
                 Assert.That(success, Is.False);
@@ -602,7 +592,7 @@ NormaliseNewLine(@"</word></line>
         public void CanPrintVariables()
         {
             const string ResultFilename = @"EngineTests\CanPrintVariables.txt";
-            using (var engine = new TesseractEngine(@"./tessdata", "eng")) {
+            using (var engine = CreateEngine()) {
                 var actualResultsFilename = TestResultRunFile(ResultFilename);
                 Assert.That(engine.TryPrintVariablesToFile(actualResultsFilename), Is.True);
                 var actualResult = NormaliseNewLine(File.ReadAllText(actualResultsFilename));

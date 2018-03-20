@@ -275,6 +275,8 @@ namespace Tesseract
             return page;
         }
 
+#if NETFULL
+
         /// <summary>
         /// Process the specified bitmap image.
         /// </summary>
@@ -345,7 +347,9 @@ namespace Tesseract
             new PageDisposalHandle(page, pix);
             return page;
         }
-        
+
+#endif
+
         protected override void Dispose(bool disposing)
         {
             if (handle.Handle != IntPtr.Zero)

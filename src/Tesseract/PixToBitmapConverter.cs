@@ -1,9 +1,12 @@
-﻿using System;
+﻿#if NETFULL
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
 using SD = System.Drawing;
+
 namespace Tesseract
 {
     public class PixToBitmapConverter
@@ -160,3 +163,5 @@ namespace Tesseract
         }
     }
 }
+
+#endif
