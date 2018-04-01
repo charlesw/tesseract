@@ -63,5 +63,8 @@
     <Content Include="x86\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x86">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Tesseract.targets" Pack="true" PackageCopyToOutput="true" PackagePath="build/">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
