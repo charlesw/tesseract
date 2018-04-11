@@ -10,37 +10,41 @@ namespace Tesseract.Tests
 {
     public abstract class TesseractTestBase
     {
-        protected TesseractEngine CreateEngine(string lang = "eng", EngineMode mode = EngineMode.Default)
+        protected static TesseractEngine CreateEngine(string lang = "eng", EngineMode mode = EngineMode.Default)
         {
             var datapath = DataPath;
             return new TesseractEngine(datapath, lang, mode);
         }
 
-        protected string DataPath
+        protected static string DataPath
         {
-            get {  return Path.Combine(Environment.CurrentDirectory, "tessdata"); }
+            get {  return AbsolutePath("tessdata"); }
         }
 
+        protected static string AbsolutePath(string relativePath)
+        {
+            return Path.Combine(TestContext.CurrentContext.WorkDirectory, relativePath);
+        }
+        
         #region File Helpers
-
-        protected string TestFilePath(string path)
+        
+        protected static string TestFilePath(string path)
         {
-            var basePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data");
+            var basePath = AbsolutePath("Data");
 
             return Path.Combine(basePath, path);
         }
 
-        protected string TestResultPath(string path)
+        protected static string TestResultPath(string path)
         {
-            var basePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Results");
+            var basePath = AbsolutePath("Results");
 
             return Path.Combine(basePath, path);
         }
 
-        protected string TestResultRunDirectory(string path)
+        protected static string TestResultRunDirectory(string path)
         {
-            var runPath = Path.Combine(
-                TestContext.CurrentContext.WorkDirectory, 
+            var runPath = AbsolutePath(
                 String.Format("Runs/{0:yyyyMMddTHHmmss}", TestRun.Current.StartedAt)
             );
             var testResultRunDirectory = Path.Combine(runPath, path);        
@@ -49,7 +53,7 @@ namespace Tesseract.Tests
             return testResultRunDirectory;
         }
         
-        protected string TestResultRunFile(string path)
+        protected static string TestResultRunFile(string path)
         {
             var testRunDirectory = TestResultRunDirectory(Path.GetDirectoryName(path));
             var testFileName = Path.GetFileName(path);
@@ -57,7 +61,7 @@ namespace Tesseract.Tests
             return Path.Combine(testRunDirectory, testFileName);
         }
 
-        protected Pix LoadTestPix(string filename)
+        protected static Pix LoadTestPix(string filename)
         {
             var testFilename = TestFilePath(filename);
             return Pix.LoadFromFile(testFilename);
@@ -68,7 +72,7 @@ namespace Tesseract.Tests
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        protected string NormaliseNewLine(string text)
+        protected static string NormaliseNewLine(string text)
         {
             return text
                 .Replace("\r\n", "\n")

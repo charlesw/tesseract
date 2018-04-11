@@ -21,7 +21,11 @@ namespace InteropDotNet
                 throw new Exception(string.Format("The interface {0} should be public", interfaceType.Name));
 
             var assemblyName = GetAssemblyName(interfaceType);
+#if NETFULL
             var assemblyBuilder = Thread.GetDomain().DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
+#elif NETSTANDARD
+             var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
+#endif
             var moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName);
 
             var typeName = GetImplementationTypeName(assemblyName, interfaceType);
@@ -34,11 +38,16 @@ namespace InteropDotNet
             ImplementMethods(typeBuilder, methods);
             ImplementConstructor(typeBuilder, methods);
 
+#if NETFULL
             var implementationType = typeBuilder.CreateType();
             return (T)Activator.CreateInstance(implementationType, LibraryLoader.Instance);
+#elif NETSTANDARD
+            var implementationType = typeBuilder.CreateTypeInfo();
+            return (T)Activator.CreateInstance(implementationType, LibraryLoader.Instance);
+#endif
         }
 
-        #region Main steps
+#region Main steps
 
         private static MethodItem[] BuildMethods(Type interfaceType)
         {
@@ -120,7 +129,11 @@ namespace InteropDotNet
             methodBuilder.SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
 
             // Create type
-            return delegateBuilder.CreateType();
+#if NETFULL
+           return delegateBuilder.CreateType();
+#elif NETSTANDARD
+            return delegateBuilder.CreateTypeInfo();
+#endif
         }
 
         private static void ImplementFields(TypeBuilder typeBuilder, IEnumerable<MethodItem> methods)
@@ -244,9 +257,9 @@ namespace InteropDotNet
             ilGen.Emit(OpCodes.Ret);
         }
 
-        #endregion
+#endregion
 
-        #region Reflection and emit helpers
+#region Reflection and emit helpers
 
         private static RuntimeDllImportAttribute GetRuntimeDllImportAttribute(MethodInfo methodInfo)
         {
@@ -288,9 +301,9 @@ namespace InteropDotNet
             return methodBuilder;
         }
 
-        #endregion
+#endregion
 
-        #region Method helpers
+#region Method helpers
 
         private class MethodItem
         {
@@ -358,9 +371,9 @@ namespace InteropDotNet
             return typeArray;
         }
 
-        #endregion
+#endregion
 
-        #region Name helpers
+#region Name helpers
 
         private static string GetAssemblyName(Type interfaceType)
         {
@@ -385,6 +398,6 @@ namespace InteropDotNet
             return string.Format("{0}.{1}Delegate", assemblyName, methodInfo.Name);
         }
 
-        #endregion
+#endregion
     }
 }

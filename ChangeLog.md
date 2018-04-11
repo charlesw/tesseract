@@ -1,8 +1,13 @@
 ﻿### Version 3.2.0
 
-* Added support for the renderer api (generation of PDF, Text, etc) - [Issue ](https://github.com/charlesw/tesseract/issues/) 
-* Updated to Tesseract 3.04.01
+* Support for .Net Standard 2.0 (.net Core 2) - [Issue ]()
+* Removed support for TESSDATA environment variable 
+* Added support for the renderer api (generation of PDF, Text, etc) - [Issue 193](https://github.com/charlesw/tesseract/issues/193) 
+* Added support for the multiple renderers - [Issue 297](https://github.com/charlesw/tesseract/issues/297) 
+* Updated to Tesseract 3.05.1 - [Issue #340](https://github.com/charlesw/tesseract/issues/340)
+* Added support Adding pix to, Removing pix from, and clearing PixA - [Issue #340](https://github.com/charlesw/tesseract/issues/340)
 * Fixed PolyBlockType definition - [Issue #280](https://github.com/charlesw/tesseract/issues/280)
+* Added support for Font attributes to Result Iterator - [Issue #9](https://github.com/charlesw/tesseract/issues/9)
 
 ### Version 3.1.0
 

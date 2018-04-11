@@ -1,9 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Tesseract.Internal;
 
 namespace Tesseract
 {
+    /// <summary>
+    /// Rendered formats supported by Tesseract.
+    /// </summary>
+    public enum RenderedFormat
+    {
+        TEXT, HOCR, PDF, UNLV, BOX
+    }
+
     /// <summary>
     /// Represents a native result renderer (e.g. text, pdf, etc).
     /// </summary>
@@ -15,6 +24,77 @@ namespace Tesseract
     public abstract class ResultRenderer : DisposableBase, IResultRenderer
     {
         #region Factory Methods
+
+        /// <summary>
+        /// Creates renderers for specified output formats.
+        /// </summary>
+        /// <param name="outputbase"></param>
+        /// <param name="dataPath">The directory containing the pdf font data, normally same as your tessdata directory.</param>
+        /// <param name="outputFormats"></param>
+        /// <returns></returns>
+        public static IResultRenderer CreateRenderers(string outputbase, string dataPath, List<RenderedFormat> outputFormats)
+        {
+            IResultRenderer renderer = null;
+
+            foreach (RenderedFormat format in outputFormats)
+            {
+                switch (format)
+                {
+                    case RenderedFormat.TEXT:
+                        if (renderer == null)
+                        {
+                            renderer = CreateTextRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new TextResultRenderer(outputbase).Handle);
+                        }
+                        break;
+                    case RenderedFormat.HOCR:
+                        if (renderer == null)
+                        {
+                            renderer = CreateHOcrRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new HOcrResultRenderer(outputbase).Handle);
+                        }
+                        break;
+                    case RenderedFormat.PDF:
+                        if (renderer == null)
+                        {
+                            renderer = CreatePdfRenderer(outputbase, dataPath, false);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new PdfResultRenderer(outputbase, dataPath, false).Handle);
+                        }
+                        break;
+                    case RenderedFormat.BOX:
+                        if (renderer == null)
+                        {
+                            renderer = CreateBoxRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new BoxResultRenderer(outputbase).Handle);
+                        }
+                        break;
+                    case RenderedFormat.UNLV:
+                        if (renderer == null)
+                        {
+                            renderer = CreateUnlvRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new UnlvResultRenderer(outputbase).Handle);
+                        }
+                        break;
+                }
+            }
+
+            return renderer;
+        }
 
         /// <summary>
         /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a searchable
