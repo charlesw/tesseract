@@ -388,11 +388,6 @@ namespace Tesseract
                 {
                     datapath = datapath.Substring(0, datapath.Length - 1);
                 }
-                // remove 'tessdata', if it exists, tesseract will add it when building up the tesseract path
-                if (datapath.EndsWith("tessdata", StringComparison.OrdinalIgnoreCase))
-                {
-                    datapath = datapath.Substring(0, datapath.Length - TessDataDirectory.Length);
-                }
             }
 
             if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles ?? new List<string>(), initialValues ?? new Dictionary<string, object>(), setOnlyNonDebugVariables) != 0)

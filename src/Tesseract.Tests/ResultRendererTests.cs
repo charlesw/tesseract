@@ -70,7 +70,7 @@ namespace Tesseract.Tests
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
             using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false))
             {
-                var examplePixPath = this.TestFilePath("Ocr/phototest.tif");
+                var examplePixPath = TestFilePath("Ocr/phototest.tif");
                 ProcessImageFile(renderer, examplePixPath);
             }
 
@@ -103,7 +103,7 @@ namespace Tesseract.Tests
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
             using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false))
             {
-                var examplePixPath = this.TestFilePath("processing/multi-page.tif");
+                var examplePixPath = TestFilePath("processing/multi-page.tif");
                 ProcessImageFile(renderer, examplePixPath);
             }
 

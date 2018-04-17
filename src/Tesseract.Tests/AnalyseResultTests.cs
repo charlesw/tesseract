@@ -53,15 +53,17 @@ namespace Tesseract.Tests
                 using (var rotatedImage = angle.HasValue ? img.Rotate(MathHelper.ToRadians(angle.Value)) : img.Clone()) {
                     rotatedImage.Save(TestResultRunFile(String.Format(@"AnalyseResult\AnalyseLayout_RotateImage_{0}.png", angle)));
 
-
                     engine.DefaultPageSegMode = PageSegMode.AutoOsd;
                     using (var page = engine.Process(rotatedImage)) {
                         using (var pageLayout = page.GetIterator()) {
                             pageLayout.Begin();
                             do {
                                 var result = pageLayout.GetProperties();
-                                // Note: The orientation always seem to be 'PageUp' in Tesseract 3.04 according to this test.
-                                Assert.That(result.Orientation, Is.EqualTo(Orientation.PageUp));
+                                Orientation orient;
+                                float deskew;
+
+                                ExpectedOrientation(angle.HasValue? angle.Value : 0, out orient, out deskew);
+                                Assert.That(result.Orientation, Is.EqualTo(orient));
 
                                 if(angle.HasValue) {
                                     if (angle == 180f) {
@@ -69,8 +71,8 @@ namespace Tesseract.Tests
                                         Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.LeftToRight));
                                         Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.TopToBottom));
                                     } else if (angle == 90f) {
-                                        Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.TopToBottom));
-                                        Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.RightToLeft));
+                                        Assert.That(result.WritingDirection, Is.EqualTo(WritingDirection.LeftToRight));
+                                        Assert.That(result.TextLineOrder, Is.EqualTo(TextLineOrder.TopToBottom));
                                     } else {
                                         Assert.Fail("Angle not supported.");
                                     }
