@@ -181,6 +181,27 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorConfidence")]
         float ResultIteratorGetConfidence(HandleRef handle, PageIteratorLevel level);
 
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordFontAttributes")]
+        IntPtr ResultIteratorWordFontAttributes(HandleRef handle, out bool isBold, out bool isItalic, out bool isUnderlined, out bool isMonospace, out bool isSerif, out bool isSmallCaps, out int pointSize, out int fontId);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsFromDictionary")]
+        bool ResultIteratorWordIsFromDictionary(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsNumeric")]
+        bool ResultIteratorWordIsNumeric(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordRecognitionLanguage")]
+        IntPtr ResultIteratorWordRecognitionLanguageInternal(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSuperscript")]
+        bool ResultIteratorSymbolIsSuperscript(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSubscript")]
+        bool ResultIteratorSymbolIsSubscript(HandleRef handle);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsDropcap")]
+        bool ResultIteratorSymbolIsDropcap(HandleRef handle);
+
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetPageIterator")]
         IntPtr ResultIteratorGetPageIterator(HandleRef handle);
 
@@ -246,7 +267,7 @@ namespace Tesseract.Interop
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPDFRendererCreate")]
         IntPtr PDFRendererCreate(string outputbase, IntPtr datadir, int textonly);
-
+        
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessUnlvRendererCreate")]
         IntPtr UnlvRendererCreate(string outputbase);
 
@@ -438,6 +459,18 @@ namespace Tesseract.Interop
                 LeptonicaApi.Initialize();
                 native = InteropRuntimeImplementer.CreateInstance<ITessApiSignatures>();
             }
+        }
+
+        public static string ResultIteratorWordRecognitionLanguage(HandleRef handle)
+        {
+            // per docs (ltrresultiterator.h:118 as of 4897796 in github:tesseract-ocr/tesseract)
+            // this return value should *NOT* be deleted.
+            IntPtr txtHandle =
+                Native.ResultIteratorWordRecognitionLanguageInternal(handle);
+
+            return txtHandle != IntPtr.Zero
+                ? MarshalHelper.PtrToString(txtHandle, Encoding.UTF8)
+                : null;
         }
 
         public static string ResultIteratorGetUTF8Text(HandleRef handle, PageIteratorLevel level)

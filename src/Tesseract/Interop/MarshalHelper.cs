@@ -31,6 +31,11 @@ namespace Tesseract.Interop
         /// </summary>
         public static int StrLength(IntPtr handle)
         {
+            if(handle == IntPtr.Zero)
+            {
+                return 0;
+            }
+
             var ptr = (byte*)handle.ToPointer();
             int length = 0;
             while (*(ptr + length) != 0) {

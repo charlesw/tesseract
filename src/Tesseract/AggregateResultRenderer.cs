@@ -125,25 +125,15 @@ namespace Tesseract
                 return _currentDocumentHandle;
             } catch (Exception error) {
                 // Dispose of all previously created child document's iff an error occured to prevent a memory leak.
-                List<Exception> childDisposalErrors = new List<Exception>();
                 foreach (var child in children) {
                     try {
                         child.Dispose();
-                    } catch (Exception childDisposalError) {
-                        childDisposalErrors.Add(childDisposalError);
+                    } catch (Exception disposalError) {
+                        Logger.TraceError("Failed to dispose of child document {0}: {1}", child, disposalError.Message);
                     }
                 }
 
-                if (childDisposalErrors.Count > 0) {
-                    // If one or more the child document fail to be disposed of then return an aggregate of all the errors, including the initial error.
-                    var errors = new List<Exception>(childDisposalErrors.Count + 1);
-                    errors.Add(error);
-                    errors.AddRange(childDisposalErrors);
-
-                    throw new AggregateException(error.Message, errors);
-                } else {
-                    throw error;
-                }
+                throw error;
             }
         }
 

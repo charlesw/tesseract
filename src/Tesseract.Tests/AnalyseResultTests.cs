@@ -10,7 +10,11 @@ namespace Tesseract.Tests
     [TestFixture]
     public class AnalyseResultTests : TesseractTestBase
     {
-        private const string ResultsDirectory = @"Results\Analysis\";
+        private string ResultsDirectory
+        {
+            get { return TestResultPath(@"Analysis\"); }
+        }
+
         private const string ExampleImagePath = @"Ocr\phototest.tif";
 
         #region Setup\TearDown
@@ -31,7 +35,7 @@ namespace Tesseract.Tests
         {
             if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
 
-            engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default);
+            engine = CreateEngine();
         }
 
         #endregion Setup\TearDown
@@ -44,7 +48,7 @@ namespace Tesseract.Tests
         [TestCase(180f)]
         public void AnalyseLayout_RotatedImage(float? angle)
         {
-            var exampleImagePath = this.TestFilePath("Ocr/phototest.tif");
+            var exampleImagePath = TestFilePath("Ocr/phototest.tif");
             using (var img = LoadTestImage(ExampleImagePath)) {
                 using (var rotatedImage = angle.HasValue ? img.Rotate(MathHelper.ToRadians(angle.Value)) : img.Clone()) {
                     rotatedImage.Save(TestResultRunFile(String.Format(@"AnalyseResult\AnalyseLayout_RotateImage_{0}.png", angle)));
@@ -216,7 +220,7 @@ namespace Tesseract.Tests
 
         private Pix LoadTestImage(string path)
         {
-            var fullExampleImagePath = this.TestFilePath(path);
+            var fullExampleImagePath = TestFilePath(path);
             return Pix.LoadFromFile(fullExampleImagePath);
         }
 
