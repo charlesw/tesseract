@@ -168,6 +168,9 @@
     <None Include="..\Tesseract.Tests\tessdata\eng.traineddata" Link="tessdata\eng.traineddata">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Tesseract.Tests\tessdata\osd.traineddata" Link="tessdata\osd.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>    
     <None Include="..\Tesseract.Tests\tessdata\eng.user-patterns" Link="tessdata\eng.user-patterns">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
