@@ -18,16 +18,16 @@ namespace Tesseract.Tests
 
         protected static string DataPath
         {
-            get {  return AbsolutePath("tessdata"); }
+            get { return AbsolutePath("tessdata"); }
         }
 
         protected static string AbsolutePath(string relativePath)
         {
             return Path.Combine(TestContext.CurrentContext.WorkDirectory, relativePath);
         }
-        
+
         #region File Helpers
-        
+
         protected static string TestFilePath(string path)
         {
             var basePath = AbsolutePath("Data");
@@ -47,12 +47,12 @@ namespace Tesseract.Tests
             var runPath = AbsolutePath(
                 String.Format("Runs/{0:yyyyMMddTHHmmss}", TestRun.Current.StartedAt)
             );
-            var testResultRunDirectory = Path.Combine(runPath, path);        
+            var testResultRunDirectory = Path.Combine(runPath, path);
             Directory.CreateDirectory(testResultRunDirectory);
 
             return testResultRunDirectory;
         }
-        
+
         protected static string TestResultRunFile(string path)
         {
             var testRunDirectory = TestResultRunDirectory(Path.GetDirectoryName(path));
@@ -71,7 +71,6 @@ namespace Tesseract.Tests
         /// Normalise new line characters to unix (\n) so they are all the same.
         /// </summary>
         /// <param name="text"></param>
-        /// <returns></returns>
         protected static string NormaliseNewLine(string text)
         {
             return text

@@ -25,11 +25,13 @@ namespace Tesseract
 
             protected override void Dispose(bool disposing)
             {
-                if (disposing) {
+                if (disposing)
+                {
                     Guard.Verify(_renderer._currentDocumentHandle == this, "Expected the Result Render's active document to be this document.");
 
                     // End the renderer
-                    foreach (var child in _children) {
+                    foreach (var child in _children)
+                    {
                         child.Dispose();
                     }
                     _children = null;
@@ -83,16 +85,17 @@ namespace Tesseract
         /// <summary>
         /// Adds a page to each of the child result renderers.
         /// </summary>
-        /// <param name="page"></param>
-        /// <returns></returns>
+        /// <param name="page"></param>        
         public bool AddPage(Page page)
         {
             Guard.RequireNotNull("page", page);
             VerifyNotDisposed();
 
             _pageNumber++;
-            foreach (var renderer in ResultRenderers) {
-                if (!renderer.AddPage(page)) {
+            foreach (var renderer in ResultRenderers)
+            {
+                if (!renderer.AddPage(page))
+                {
                     return false;
                 }
             }
@@ -103,8 +106,7 @@ namespace Tesseract
         /// <summary>
         /// Begins a new document with the specified title.
         /// </summary>
-        /// <param name="title">The title of the document.</param>
-        /// <returns></returns>
+        /// <param name="title">The title of the document.</param>        
         public IDisposable BeginDocument(string title)
         {
             Guard.RequireNotNull("title", title);
@@ -116,19 +118,27 @@ namespace Tesseract
 
             // Begin the document on each child renderer.
             List<IDisposable> children = new List<IDisposable>();
-            try {
-                foreach (var renderer in ResultRenderers) {
+            try
+            {
+                foreach (var renderer in ResultRenderers)
+                {
                     children.Add(renderer.BeginDocument(title));
                 }
 
                 _currentDocumentHandle = new EndDocumentOnDispose(this, children);
                 return _currentDocumentHandle;
-            } catch (Exception error) {
+            }
+            catch (Exception error)
+            {
                 // Dispose of all previously created child document's iff an error occured to prevent a memory leak.
-                foreach (var child in children) {
-                    try {
+                foreach (var child in children)
+                {
+                    try
+                    {
                         child.Dispose();
-                    } catch (Exception disposalError) {
+                    }
+                    catch (Exception disposalError)
+                    {
                         Logger.TraceError("Failed to dispose of child document {0}: {1}", child, disposalError.Message);
                     }
                 }
@@ -139,17 +149,23 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            try {
-                if (disposing) {
+            try
+            {
+                if (disposing)
+                {
                     // Ensure that if the renderer has an active document when disposed it too is disposed off.
-                    if (_currentDocumentHandle != null) {
+                    if (_currentDocumentHandle != null)
+                    {
                         _currentDocumentHandle.Dispose();
                         _currentDocumentHandle = null;
                     }
                 }
-            } finally {
+            }
+            finally
+            {
                 // dispose of result renderers
-                foreach (var renderer in ResultRenderers) {
+                foreach (var renderer in ResultRenderers)
+                {
                     renderer.Dispose();
                 }
                 _resultRenderers = null;

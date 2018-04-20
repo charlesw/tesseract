@@ -19,7 +19,7 @@ namespace InteropDotNet
             this.logic = logic;
         }
 
-        private readonly object syncLock = new object();        
+        private readonly object syncLock = new object();
         private readonly Dictionary<string, IntPtr> loadedAssemblies = new Dictionary<string, IntPtr>();
         private string customSearchPath;
 
@@ -30,7 +30,7 @@ namespace InteropDotNet
         }
 
         public IntPtr LoadLibrary(string fileName, string platformName = null)
-        {            
+        {
             fileName = FixUpLibraryName(fileName);
             lock (syncLock)
             {
@@ -38,9 +38,9 @@ namespace InteropDotNet
                 {
                     if (platformName == null)
                         platformName = SystemManager.GetPlatformName();
-                    
+
                     Logger.TraceInformation("Current platform: " + platformName);
-                                        
+
                     IntPtr dllHandle = CheckCustomSearchPath(fileName, platformName);
                     if (dllHandle == IntPtr.Zero)
                         dllHandle = CheckExecutingAssemblyDomain(fileName, platformName);
@@ -64,10 +64,13 @@ namespace InteropDotNet
         private IntPtr CheckCustomSearchPath(string fileName, string platformName)
         {
             var baseDirectory = CustomSearchPath;
-            if (!String.IsNullOrEmpty(baseDirectory)) {
+            if (!String.IsNullOrEmpty(baseDirectory))
+            {
                 Logger.TraceInformation("Checking custom search location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
                 return InternalLoadLibrary(baseDirectory, platformName, fileName);
-            } else {
+            }
+            else
+            {
                 Logger.TraceInformation("Custom search path is not defined, skipping.");
                 return IntPtr.Zero;
             }
@@ -100,15 +103,17 @@ namespace InteropDotNet
         /// </list>
         /// </remarks>
         /// <param name="fileName"></param>
-        /// <param name="platformName"></param>
-        /// <returns></returns>
+        /// <param name="platformName"></param>        
         private IntPtr CheckCurrentAppDomainBin(string fileName, string platformName)
         {
             var baseDirectory = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "bin");
-            if (Directory.Exists(baseDirectory)) {
+            if (Directory.Exists(baseDirectory))
+            {
                 Logger.TraceInformation("Checking current application domain's bin location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
                 return InternalLoadLibrary(baseDirectory, platformName, fileName);
-            } else {
+            }
+            else
+            {
                 Logger.TraceInformation("No bin directory exists under the current application domain's location, skipping.");
                 return IntPtr.Zero;
             }

@@ -20,7 +20,7 @@ namespace Tesseract
         internal PageIterator(Page page, IntPtr handle)
         {
             this.page = page;
-        	this.handle = new HandleRef(this, handle);
+            this.handle = new HandleRef(this, handle);
         }
 
         /// <summary>
@@ -29,7 +29,8 @@ namespace Tesseract
         public void Begin()
         {
             VerifyNotDisposed();
-            if (handle.Handle != IntPtr.Zero) {
+            if (handle.Handle != IntPtr.Zero)
+            {
                 Interop.TessApi.Native.PageIteratorBegin(handle);
             }
         }
@@ -41,7 +42,6 @@ namespace Tesseract
         /// 
         /// </remarks>
         /// <param name="level"></param>
-        /// <returns></returns>
         public bool Next(PageIteratorLevel level)
         {
             VerifyNotDisposed();
@@ -61,9 +61,12 @@ namespace Tesseract
             VerifyNotDisposed();
 
             var isAtFinalElement = IsAtFinalOf(level, element);
-            if (!isAtFinalElement) {
+            if (!isAtFinalElement)
+            {
                 return Next(element);
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
@@ -75,7 +78,6 @@ namespace Tesseract
         /// A possible use is to determin if a call to next(word) moved to the start of a new paragraph.
         /// </remarks>
         /// <param name="level"></param>
-        /// <returns></returns>
         public bool IsAtBeginningOf(PageIteratorLevel level)
         {
             VerifyNotDisposed();
@@ -90,7 +92,6 @@ namespace Tesseract
         /// </summary>
         /// <param name="level"></param>
         /// <param name="element"></param>
-        /// <returns></returns>
         public bool IsAtFinalOf(PageIteratorLevel level, PageIteratorLevel element)
         {
             VerifyNotDisposed();
@@ -115,7 +116,8 @@ namespace Tesseract
         public Pix GetBinaryImage(PageIteratorLevel level)
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return null;
             }
 
@@ -125,7 +127,8 @@ namespace Tesseract
         public Pix GetImage(PageIteratorLevel level, int padding, out int x, out int y)
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 x = 0;
                 y = 0;
 
@@ -140,7 +143,6 @@ namespace Tesseract
         /// </summary>
         /// <param name="level"></param>
         /// <param name="bounds"></param>
-        /// <returns></returns>
         public bool TryGetBoundingBox(PageIteratorLevel level, out Rect bounds)
         {
             VerifyNotDisposed();
@@ -149,7 +151,9 @@ namespace Tesseract
             {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
-            } else {
+            }
+            else
+            {
                 bounds = Rect.Empty;
                 return false;
             }
@@ -163,7 +167,6 @@ namespace Tesseract
         /// WARNING: with vertical text, baselines may be vertical! Returns false if there is no baseline at the current position.</remarks>
         /// <param name="level"></param>
         /// <param name="bounds"></param>
-        /// <returns></returns>
         public bool TryGetBaseline(PageIteratorLevel level, out Rect bounds)
         {
             VerifyNotDisposed();
@@ -172,7 +175,9 @@ namespace Tesseract
             {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
-            } else {
+            }
+            else
+            {
                 bounds = Rect.Empty;
                 return false;
             }
@@ -184,7 +189,8 @@ namespace Tesseract
         public ElementProperties GetProperties()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero) {
+            if (handle.Handle == IntPtr.Zero)
+            {
                 return new ElementProperties(Orientation.PageUp, TextLineOrder.TopToBottom, WritingDirection.LeftToRight, 0f);
             }
 
@@ -200,7 +206,8 @@ namespace Tesseract
 
         protected override void Dispose(bool disposing)
         {
-            if (handle.Handle != IntPtr.Zero) {
+            if (handle.Handle != IntPtr.Zero)
+            {
                 Interop.TessApi.Native.PageIteratorDelete(handle);
             }
         }
