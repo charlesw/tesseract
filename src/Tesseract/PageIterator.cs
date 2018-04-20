@@ -15,7 +15,7 @@ namespace Tesseract
     public class PageIterator : DisposableBase
     {
         protected readonly Page page;
-        protected readonly HandleRef handle;
+        internal readonly HandleRef handle;
 
         internal PageIterator(Page page, IntPtr handle)
         {
