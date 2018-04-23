@@ -9,6 +9,8 @@ namespace Tesseract
 {
     public class WordResult : ResultBase, IEnumerable<SymbolResult>
     {
+        public IEnumerator<SymbolResult> Symbols => GetEnumerator();
+
         public const PageIteratorLevel Level = PageIteratorLevel.Word;
         public readonly FontAttributes FontAttributes;
         public readonly string RecognitionLanguage;

@@ -8,6 +8,9 @@ namespace Tesseract
 {
     public class TextLineResult : ResultBase, IEnumerable<WordResult>
     {
+        public IEnumerator<WordResult> Words => GetEnumerator();
+        public IEnumerator<SymbolResult> Symbols => new Iterator.GenericResultSubIterator<SymbolResult>(Iterator);
+
         public const PageIteratorLevel Level = PageIteratorLevel.TextLine;
         internal TextLineResult(Iterator.ResultIterator iterator)
             : base(iterator) { }

@@ -8,6 +8,11 @@ namespace Tesseract
 {
     public class BlockResult : ResultBase, IEnumerable<ParaResult>
     {
+        public IEnumerator<ParaResult> Params => GetEnumerator();
+        public IEnumerator<TextLineResult> TextLines => new Iterator.GenericResultSubIterator<TextLineResult>(Iterator);
+        public IEnumerator<WordResult> Words => new Iterator.GenericResultSubIterator<WordResult>(Iterator);
+        public IEnumerator<SymbolResult> Symbols => new Iterator.GenericResultSubIterator<SymbolResult>(Iterator);
+
         public const PageIteratorLevel Level = PageIteratorLevel.Block;
         public readonly PolyBlockType BlockType;
 
