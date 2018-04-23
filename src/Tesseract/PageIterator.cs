@@ -75,7 +75,7 @@ namespace Tesseract
         /// Returns <c>True</c> if the iterator is at the first element at the given level.
         /// </summary>
         /// <remarks>
-        /// A possible use is to determin if a call to next(word) moved to the start of a new paragraph.
+        /// A possible use is to determine if a call to next(word) moved to the start of a new paragraph.
         /// </remarks>
         /// <param name="level"></param>
         public bool IsAtBeginningOf(PageIteratorLevel level)
