@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Tesseract.Iterator
 {
-    internal class GenericResultSubIterator<T> : GenericResultIterator<T>, IEnumerator<T> where T : ResultBase
+    internal class GenericResultSubIterator<T> : GenericResultIterator<T>  where T : ResultBase
     {
         private readonly PageIteratorLevel ParentLevel;
 

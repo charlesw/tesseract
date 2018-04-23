@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Tesseract.Iterator
 {
-    internal class GenericResultIterator<T> : ResultIterator, IEnumerator<T> where T : ResultBase
+    internal class GenericResultIterator<T> : ResultIterator, IEnumerator<T>, IEnumerable<T> where T : ResultBase
     {
         private static PageIteratorLevel _GetLevel()
         {
@@ -69,5 +69,8 @@ namespace Tesseract.Iterator
                 Interop.TessApi.Native.PageIteratorDelete(_Handle);
             }
         }
+
+        public IEnumerator<T> GetEnumerator() => this;
+        IEnumerator IEnumerable.GetEnumerator() => this;
     }
 }
