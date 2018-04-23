@@ -20,7 +20,7 @@ namespace Tesseract
     /// 	<item>PageLeft - Page needs to be rotated so the left hand side is up, 90 degrees clockwise, to be readable.</item>
     /// </list>
     /// </remarks>
-    public enum Orientation
+    public enum Orientation: int
     {
         /// <summary>
         /// Page is correctly aligned with up and no rotation is needed.
