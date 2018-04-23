@@ -131,9 +131,9 @@ namespace Tesseract
         /// choices for this symbol and after that is useless.
         /// </summary>
         /// <returns>an instance of a Choice Iterator</returns>
-        public ChoiceIterator GetChoiceIterator()
+        public IEnumerable<Choice> GetChoiceIterator()
         {
-            return new ChoiceIterator(this);
+            return new Iterator.ChoiceIterator(this.handle);
         }
     }
 }

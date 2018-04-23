@@ -3,22 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Tesseract
+namespace Tesseract.Iterator
 {
     /// <summary>
     /// Class to iterate over the classifier choices for a single symbol.
     /// </summary>
-    public sealed class ChoiceIterator : DisposableBase, IEnumerator<Choice>, IEnumerable<Choice>
+    internal sealed class ChoiceIterator : DisposableBase, IEnumerator<Choice>, IEnumerable<Choice>
     {
         private HandleRef _handleRef;
-        private readonly ResultIterator _resultIterator;
+        private readonly HandleRef _resultIterator;
 
         public Choice Current { get; private set; }
         object IEnumerator.Current => Current;
 
-        internal ChoiceIterator(ResultIterator resultIterator)
+        internal ChoiceIterator(HandleRef resultIterator)
         {
             _resultIterator = resultIterator;
+            Reset();
         }
 
         protected override void Dispose(bool disposing)
@@ -47,9 +48,12 @@ namespace Tesseract
 
         public void Reset()
         {
-            IntPtr choiceIteratorHandle = Interop.TessApi.Native.ResultIteratorGetChoiceIterator(_resultIterator.handle);
-            if (choiceIteratorHandle != IntPtr.Zero)
-                _handleRef = new HandleRef(this, choiceIteratorHandle);
+            if (_resultIterator.Handle != IntPtr.Zero)
+            {
+                IntPtr choiceIteratorHandle = Interop.TessApi.Native.ResultIteratorGetChoiceIterator(_resultIterator);
+                if (choiceIteratorHandle != IntPtr.Zero)
+                    _handleRef = new HandleRef(this, choiceIteratorHandle);
+            }
         }
 
         public IEnumerator<Choice> GetEnumerator() => this;

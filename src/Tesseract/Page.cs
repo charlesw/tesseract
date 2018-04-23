@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -11,7 +12,7 @@ using Tesseract.Interop;
 
 namespace Tesseract
 {
-    public sealed class Page : DisposableBase
+    public sealed class Page : DisposableBase, IEnumerable<BlockResult>
     {
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
@@ -317,5 +318,13 @@ namespace Tesseract
                 Interop.TessApi.Native.BaseAPIClear(Engine.Handle);
             }
         }
+
+        public IEnumerator<BlockResult> GetEnumerator()
+        {
+            Recognize();
+            return new Iterator.GenericResultIterator<BlockResult>(Engine);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
