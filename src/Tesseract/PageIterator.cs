@@ -15,7 +15,7 @@ namespace Tesseract
     public class PageIterator : DisposableBase
     {
         protected readonly Page page;
-        internal readonly HandleRef handle;
+        protected readonly HandleRef handle;
 
         internal PageIterator(Page page, IntPtr handle)
         {
@@ -189,18 +189,7 @@ namespace Tesseract
         public ElementProperties GetProperties()
         {
             VerifyNotDisposed();
-            if (handle.Handle == IntPtr.Zero)
-            {
-                return new ElementProperties(Orientation.PageUp, TextLineOrder.TopToBottom, WritingDirection.LeftToRight, 0f);
-            }
-
-            Orientation orientation;
-            WritingDirection writing_direction;
-            TextLineOrder textLineOrder;
-            float deskew_angle;
-            Interop.TessApi.Native.PageIteratorOrientation(handle, out orientation, out writing_direction, out textLineOrder, out deskew_angle);
-
-            return new ElementProperties(orientation, textLineOrder, writing_direction, deskew_angle);
+            return new ElementProperties(handle);
         }
 
 
