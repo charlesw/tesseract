@@ -43,7 +43,6 @@ namespace Tesseract
             {
                 Interop.TessApi.Native.PageIteratorOrientation(handle, out Orientation, out WritingDirection, out TextLineOrder, out DeskewAngle);
             }
-
         }
     }
 }
