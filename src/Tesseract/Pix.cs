@@ -6,7 +6,9 @@ using Tesseract.Internal;
 
 namespace Tesseract
 {
+#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
     public unsafe sealed class Pix : DisposableBase, IEquatable<Pix>
+#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
     {
         #region Constants
 
@@ -178,10 +180,11 @@ namespace Tesseract
         public override bool Equals(object obj)
         {
             // Check for null values and compare run-time types.
-            if (obj == null || GetType() != obj.GetType())
+            Pix pix = obj as Pix;
+            if (pix == null)
                 return false;
-
-            return Equals((Pix)obj);
+            else
+                return Equals(pix);
         }
 
         public bool Equals(Pix other)
@@ -192,11 +195,14 @@ namespace Tesseract
             }
 
             int same;
-            if(Interop.LeptonicaApi.Native.pixEqual(Handle, other.Handle, out same) != 0)
+            if (Interop.LeptonicaApi.Native.pixEqual(Handle, other.Handle, out same) == 0)
+            {
+                return same != 0;
+            }
+            else
             {
                 throw new TesseractException("Failed to compare pix");
             }
-            return same != 0;
         }
 
         #endregion
