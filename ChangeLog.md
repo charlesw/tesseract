@@ -1,4 +1,8 @@
-﻿### Version 3.2.0
+﻿### Version 3.3.0
+* Updated to Tesseract 3.05.2
+* Updated to Leptonica 1.75.3
+
+### Version 3.2.0
 
 * Support for .Net Standard 2.0 (.net Core 2) - [Issue ]()
 * Removed support for TESSDATA environment variable 

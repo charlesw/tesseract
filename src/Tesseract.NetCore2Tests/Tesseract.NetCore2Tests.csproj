@@ -168,6 +168,9 @@
     <None Include="..\Tesseract.Tests\tessdata\eng.traineddata" Link="tessdata\eng.traineddata">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Tesseract.Tests\tessdata\osd.traineddata" Link="tessdata\osd.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>    
     <None Include="..\Tesseract.Tests\tessdata\eng.user-patterns" Link="tessdata\eng.user-patterns">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -180,16 +183,16 @@
     <None Include="..\Tesseract.Tests\tessdata\pdf.ttx" Link="tessdata\pdf.ttx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\liblept1744.dll" Link="x64\liblept1744.dll">
+    <None Include="..\Tesseract\x64\liblept1753.dll" Link="x64\liblept1753.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\libtesseract3051.dll" Link="x64\libtesseract3051.dll">
+    <None Include="..\Tesseract\x64\libtesseract3052.dll" Link="x64\libtesseract3052.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\liblept1744.dll" Link="x86\liblept1744.dll">
+    <None Include="..\Tesseract\x86\liblept1753.dll" Link="x86\liblept1753.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\libtesseract3051.dll" Link="x86\libtesseract3051.dll">
+    <None Include="..\Tesseract\x86\libtesseract3052.dll" Link="x86\libtesseract3052.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
