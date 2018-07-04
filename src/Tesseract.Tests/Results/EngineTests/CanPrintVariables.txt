@@ -493,7 +493,7 @@ textord_noise_rejwords	1	Reject noise-like words
 textord_noise_rejrows	1	Reject noise-like rows
 textord_noise_debug	0	Debug row garbage detector
 m_data_sub_dir	tessdata/	Directory for data files
-tessedit_module_name	libtesseract3051.dll	Module colocated with tessdata dir
+tessedit_module_name	libtesseract3052.dll	Module colocated with tessdata dir
 classify_learn_debug_str		Class str to debug learning
 user_words_file		A filename of user-provided words.
 user_words_suffix		A suffix of user-provided words located in tessdata.
