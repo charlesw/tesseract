@@ -266,7 +266,7 @@ language_model_viterbi_list_max_size	500	Maximum size of viterbi lists recorded 
 language_model_min_compound_length	3	Minimum length of compound words
 wordrec_display_segmentations	0	Display Segmentations
 tessedit_pageseg_mode	6	Page seg mode: 0=osd only, 1=auto+osd, 2=auto, 3=col, 4=block, 5=line, 6=word, 7=char (Values from PageSegMode enum in publictypes.h)
-tessedit_ocr_engine_mode	0	Which OCR engine(s) to run (Tesseract, LSTM, both). Defaults to loading and running the most accurate available.
+tessedit_ocr_engine_mode	1	Which OCR engine(s) to run (Tesseract, LSTM, both). Defaults to loading and running the most accurate available.
 pageseg_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing page-segmentation.
 ocr_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing ocr.
 bidi_debug	0	Debug level for BiDi
@@ -303,9 +303,6 @@ tessedit_image_border	2	Rej blbs near image edge limit
 min_sane_x_ht_pixels	8	Reject any x-ht lt or eq than this
 tessedit_page_number	-1	-1 -> All pages , else specific page to process
 tessedit_parallelize	0	Run in parallel where possible
-tessedit_ok_mode	5	Acceptance decision algorithm
-segment_debug	0	Debug the whole segmentation process
-language_model_fixed_length_choices_depth	3	Depth of blob choice lists to explore when fixed length dawgs are on
 tosp_debug_level	0	Debug data
 tosp_enough_space_samples_for_median	3	or should we use mean
 tosp_redo_kern_limit	10	No.samples reqd to reestimate for row
@@ -341,7 +338,6 @@ load_number_dawg	1	Load dawg with number patterns.
 load_bigram_dawg	1	Load dawg with special word bigrams.
 use_only_first_uft8_step	0	Use only the first UTF8 step of the given string when computing log probabilities.
 stopper_no_acceptable_choices	0	Make AcceptableChoice() always return false. Useful when there is a need to explore all segmentations
-save_raw_choices	0	Deprecated- backward compatibility only
 segment_nonalphabetic_script	0	Don't use any alphabetic-specific tricks. Set to true in the traineddata config file for scripts that are cursive or inherently fixed-pitch
 save_doc_words	0	Save Document Words
 merge_fragments_in_matrix	1	Merge the fragments in the ratings matrix and delete them after merging
@@ -413,7 +409,7 @@ crunch_leave_ok_strings	1	Don't touch sensible strings
 crunch_accept_ok	1	Use acceptability in okstring
 crunch_leave_accept_strings	0	Don't pot crunch sensible strings
 crunch_include_numerals	0	Fiddle alpha figures
-tessedit_prefer_joined_punct	0	Reward punctation joins
+tessedit_prefer_joined_punct	0	Reward punctuation joins
 tessedit_write_block_separators	0	Write block separators in output
 tessedit_write_rep_codes	0	Write repetition char code
 tessedit_write_unlv	0	Write .unlv output file
@@ -451,17 +447,6 @@ textord_equation_detect	0	Turn on equation detector
 textord_tabfind_vertical_text	1	Enable vertical detection
 textord_tabfind_force_vertical_text	0	Force using vertical text page mode
 preserve_interword_spaces	0	Preserve multiple interword spaces
-textord_tabfind_vertical_horizontal_mix	1	find horizontal lines such as headers in vertical page mode
-load_fixed_length_dawgs	1	Load fixed length dawgs (e.g. for non-space delimited languages)
-permute_debug	0	Debug char permutation process
-permute_script_word	0	Turn on word script consistency permuter
-segment_segcost_rating	0	incorporate segmentation cost in word rating?
-permute_fixed_length_dawg	0	Turn on fixed-length phrasebook search permuter
-permute_chartype_word	0	Turn on character type (property) consistency permuter
-ngram_permuter_activated	0	Activate character-level n-gram-based permuter
-permute_only_top	0	Run only the top choice permuter
-use_new_state_cost	0	use new state cost heuristics for segmentation state evaluation
-enable_new_segsearch	0	Enable new segmentation search path.
 textord_single_height_mode	0	Script has no xheight, so use a single mode
 tosp_old_to_method	0	Space stats use prechopping?
 tosp_old_to_constrain_sp_kn	0	Constrain relative values of inter and intra-word gaps for old_to_method.
@@ -490,7 +475,6 @@ textord_show_boxes	0	Display unsorted blobs
 textord_noise_rejwords	1	Reject noise-like words
 textord_noise_rejrows	1	Reject noise-like rows
 textord_noise_debug	0	Debug row garbage detector
-m_data_sub_dir	tessdata/	Directory for data files
 tessedit_module_name	libtesseract400.dll	Module colocated with tessdata dir
 classify_learn_debug_str		Class str to debug learning
 user_words_file		A filename of user-provided words.
@@ -545,7 +529,6 @@ xheight_penalty_inconsistent	0.25	Score penalty (0.1 = 10%) added if an xheight 
 segment_penalty_dict_frequent_word	1	Score multiplier for word matches which have good case and are frequent in the given language (lower is better).
 segment_penalty_dict_case_ok	1.1	Score multiplier for word matches that have good case (lower is better).
 segment_penalty_dict_case_bad	1.3125	Default score multiplier for word matches, which may have case issues (lower is better).
-segment_penalty_ngram_best_choice	1.24	Multipler to for the best choice from the ngram model.
 segment_penalty_dict_nonword	1.25	Score multiplier for glyph fragment segmentations which do not match a dictionary word (lower is better).
 segment_penalty_garbage	1.5	Score multiplier for poorly cased strings that are not in the dictionary and generally look like garbage (lower is better).
 certainty_scale	20	Certainty scaling factor
@@ -621,16 +604,6 @@ rej_whole_of_mostly_reject_word_fract	0.85	if >this fract
 min_orientation_margin	7	Min acceptable orientation margin
 textord_tabfind_vertical_text_ratio	0.5	Fraction of textlines deemed vertical to use vertical page mode
 textord_tabfind_aligned_gap_fraction	0.75	Fraction of height used as a minimum gap for aligned blobs.
-bestrate_pruning_factor	2	Multiplying factor of current best rate to prune other hypotheses
-segment_reward_script	0.95	Score multipler for script consistency within a word. Being a 'reward' factor, it should be <= 1. Smaller value implies bigger reward.
-segment_reward_chartype	0.97	Score multipler for char type consistency within a word. 
-segment_reward_ngram_best_choice	0.99	Score multipler for ngram permuter's best choice (only used in the Han script path).
-heuristic_segcost_rating_base	1.25	Base factor for adding segmentation cost into word rating. It's a multiplying factor, the larger the value above 1, the bigger the effect of segmentation cost.
-heuristic_weight_rating	1	weight associated with char rating in combined cost of state
-heuristic_weight_width	1000	weight associated with width evidence in combined cost of state
-heuristic_weight_seamcut	0	weight associated with seam cut in combined cost of state
-heuristic_max_char_wh_ratio	2	max char width-to-height ratio allowed in segmentation
-segsearch_max_fixed_pitch_char_wh_ratio	2	Maximum character width-to-height ratio for fixed-pitch fonts
 tosp_old_sp_kn_th_factor	2	Factor for defining space threshold in terms of space and kern sizes
 tosp_threshold_bias1	0	how far between kern and space?
 tosp_threshold_bias2	0	how far between kern and space?

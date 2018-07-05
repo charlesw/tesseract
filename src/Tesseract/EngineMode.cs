@@ -9,8 +9,6 @@ namespace Tesseract
 		TesseractOnly = 0, 
         LstmOnly,
         TesseractAndLstm,
-        Default,
-		CubeOnly, 
-		TesseractAndCube
+        Default
 	}
 }

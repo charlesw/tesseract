@@ -123,6 +123,9 @@
     <None Include="..\Tesseract.Tests\Data\processing\table.png" Link="Data\processing\table.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Tesseract.Tests\Data\processing\w91frag.jpg" Link="Data\processing\w91frag.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Tesseract.Tests\Data\Scew\scewed-phototest.png" Link="Data\Scew\scewed-phototest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -144,30 +147,6 @@
     <None Include="..\Tesseract.Tests\tessdata\Configs\bazzar" Link="tessdata\Configs\bazzar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.cube.bigrams" Link="tessdata\eng.cube.bigrams">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.cube.fold" Link="tessdata\eng.cube.fold">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.cube.lm" Link="tessdata\eng.cube.lm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.cube.nn" Link="tessdata\eng.cube.nn">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.cube.params" Link="tessdata\eng.cube.params">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.cube.size" Link="tessdata\eng.cube.size">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.cube.word-freq" Link="tessdata\eng.cube.word-freq">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract.Tests\tessdata\eng.tesseract_cube.nn" Link="tessdata\eng.tesseract_cube.nn">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\Tesseract.Tests\tessdata\eng.traineddata" Link="tessdata\eng.traineddata">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -177,19 +156,19 @@
     <None Include="..\Tesseract.Tests\tessdata\eng.user-words" Link="tessdata\eng.user-words">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Tesseract.Tests\tessdata\osd.traineddata" Link="tessdata\osd.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Tesseract.Tests\tessdata\pdf.ttf" Link="tessdata\pdf.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract.Tests\tessdata\pdf.ttx" Link="tessdata\pdf.ttx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Tesseract\x64\liblept1744.dll" Link="x64\liblept1744.dll">
+    <None Include="..\Tesseract\x64\liblept1760.dll" Link="x64\liblept1760.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\Tesseract\x64\libtesseract400.dll" Link="x64\libtesseract400.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\liblept1744.dll" Link="x86\liblept1744.dll">
+    <None Include="..\Tesseract\x86\liblept1760.dll" Link="x86\liblept1760.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\Tesseract\x86\libtesseract400.dll" Link="x86\libtesseract400.dll">

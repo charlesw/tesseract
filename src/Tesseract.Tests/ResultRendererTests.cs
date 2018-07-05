@@ -65,6 +65,20 @@ namespace Tesseract.Tests
         }
 
         [Test]
+        public void CanRenderResultsIntoPdfFile1()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false))
+            {
+                var examplePixPath = TestFilePath("Ocr/phototest.tif");
+                ProcessImageFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
         public void CanRenderMultiplePageDocumentToPdfFile()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
@@ -80,6 +94,20 @@ namespace Tesseract.Tests
                 ProcessImageFile(renderer, examplePixPath);
             }
             
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
+        public void CanRenderMultiplePageDocumentToPdfFile1()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\PDF\multi-page");
+            using (var renderer = ResultRenderer.CreatePdfRenderer(resultPath, DataPath, false))
+            {
+                var examplePixPath = TestFilePath("processing/multi-page.tif");
+                ProcessImageFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "pdf");
             Assert.That(File.Exists(expectedOutputFilename), $"Expected a PDF file \"{expectedOutputFilename}\" to have been created; but none was found.");
         }
 

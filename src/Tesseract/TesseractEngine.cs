@@ -14,7 +14,7 @@ namespace Tesseract
     /// </summary>
     public class TesseractEngine : DisposableBase
     {
-        private const string TesseractVersion = "3.04.01";
+        private const string TesseractVersion = "4.00.00";
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
         private HandleRef handle;
@@ -387,11 +387,6 @@ namespace Tesseract
                 if (datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal))
                 {
                     datapath = datapath.Substring(0, datapath.Length - 1);
-                }
-                // remove 'tessdata', if it exists, tesseract will add it when building up the tesseract path
-                if (datapath.EndsWith("tessdata", StringComparison.OrdinalIgnoreCase))
-                {
-                    datapath = datapath.Substring(0, datapath.Length - TessDataDirectory.Length);
                 }
             }
 

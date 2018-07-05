@@ -143,7 +143,22 @@ namespace Tesseract.Tests.Leptonica.PixTests
                 }
             }
         }
-   
+
+        [Test]
+        public void DespeckleTest()
+        {
+            var sourcePixFilename = TestFilePath(@"processing\w91frag.jpg");
+            using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
+            {
+                // remove speckles
+                using (var result = sourcePix.Despeckle(Pix.SEL_STR2, 2))
+                {
+                    // TODO: Visualy confirm successful despeckle and then setup an assertion to compare that result is the same.
+                    SaveResult(result, "w91frag-despeckled.png");
+                }
+            }
+        }
+
         [Test]
         public void Scale_RGB_ShouldBeScaledBySpecifiedFactor(
             [Values(0.25f, 0.5f, 0.75f, 1, 1.25f, 1.5f, 1.75f, 2, 4, 8)]  float scale)
