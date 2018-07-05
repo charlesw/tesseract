@@ -409,7 +409,7 @@ crunch_leave_ok_strings	1	Don't touch sensible strings
 crunch_accept_ok	1	Use acceptability in okstring
 crunch_leave_accept_strings	0	Don't pot crunch sensible strings
 crunch_include_numerals	0	Fiddle alpha figures
-tessedit_prefer_joined_punct	0	Reward punctation joins
+tessedit_prefer_joined_punct	0	Reward punctuation joins
 tessedit_write_block_separators	0	Write block separators in output
 tessedit_write_rep_codes	0	Write repetition char code
 tessedit_write_unlv	0	Write .unlv output file
