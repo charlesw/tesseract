@@ -447,6 +447,7 @@ textord_equation_detect	0	Turn on equation detector
 textord_tabfind_vertical_text	1	Enable vertical detection
 textord_tabfind_force_vertical_text	0	Force using vertical text page mode
 preserve_interword_spaces	0	Preserve multiple interword spaces
+glyph_confidences	0	Allows to include glyph confidences in the hOCR output
 textord_single_height_mode	0	Script has no xheight, so use a single mode
 tosp_old_to_method	0	Space stats use prechopping?
 tosp_old_to_constrain_sp_kn	0	Constrain relative values of inter and intra-word gaps for old_to_method.
