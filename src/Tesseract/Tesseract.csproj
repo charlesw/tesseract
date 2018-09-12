@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="TesseractException.cs" />
     <Compile Include="TextLineOrder.cs" />
+    <Compile Include="TiffReader.cs" />
     <Compile Include="WritingDirection.cs" />
   </ItemGroup>
   <ItemGroup>
