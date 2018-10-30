@@ -295,6 +295,9 @@ debug_fix_space_level	0	Contextual fixspace debug
 x_ht_acceptance_tolerance	8	Max allowed deviation of blob top outside of font data
 x_ht_min_change	8	Min change in xht before actually trying it
 superscript_debug	0	Debug level for sub & superscript fixer
+jpg_quality	85	Set JPEG quality level
+user_defined_dpi	0	Specify DPI for input image
+min_characters_to_try	50	Specify minimum characters to try during OSD
 suspect_level	99	Suspect marker level
 suspect_space_level	100	Min suspect level for rejecting spaces
 suspect_short_words	2	Don't suspect dict wds longer than this
@@ -303,6 +306,7 @@ tessedit_image_border	2	Rej blbs near image edge limit
 min_sane_x_ht_pixels	8	Reject any x-ht lt or eq than this
 tessedit_page_number	-1	-1 -> All pages , else specific page to process
 tessedit_parallelize	0	Run in parallel where possible
+lstm_choice_mode	0	Allows to include alternative symbols choices in the hOCR output. Valid input values are 0, 1 and 2. 0 is the default value. With 1 the alternative symbol choices per timestep are included. With 2 the alternative symbol choices are accumulated per character.
 tosp_debug_level	0	Debug data
 tosp_enough_space_samples_for_median	3	or should we use mean
 tosp_redo_kern_limit	10	No.samples reqd to reestimate for row
@@ -399,7 +403,7 @@ tessedit_reject_bad_qual_wds	1	Reject all bad quality wds
 tessedit_debug_doc_rejection	0	Page stats
 tessedit_debug_quality_metrics	0	Output data to debug file
 bland_unrej	0	unrej potential with no checks
-unlv_tilde_crunching	1	Mark v.bad words for tilde crunch
+unlv_tilde_crunching	0	Mark v.bad words for tilde crunch
 hocr_font_info	0	Add font info to hocr output
 crunch_early_merge_tess_fails	1	Before word crunch?
 crunch_early_convert_bad_unlv_chs	0	Take out ~^ early?
@@ -447,7 +451,6 @@ textord_equation_detect	0	Turn on equation detector
 textord_tabfind_vertical_text	1	Enable vertical detection
 textord_tabfind_force_vertical_text	0	Force using vertical text page mode
 preserve_interword_spaces	0	Preserve multiple interword spaces
-glyph_confidences	0	Allows to include glyph confidences in the hOCR output
 textord_single_height_mode	0	Script has no xheight, so use a single mode
 tosp_old_to_method	0	Space stats use prechopping?
 tosp_old_to_constrain_sp_kn	0	Constrain relative values of inter and intra-word gaps for old_to_method.
