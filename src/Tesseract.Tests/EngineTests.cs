@@ -259,7 +259,7 @@ NormaliseNewLine(@"</word></line>
                 }
             }
 
-            var resultFilename = String.Format("/EngineTests/CanGenerateHOCROutput_{0}.txt", useXHtml);
+            var resultFilename = String.Format("./EngineTests/CanGenerateHOCROutput_{0}.txt", useXHtml);
             string expectedFilename = TestResultPath(resultFilename);
             if (File.Exists(expectedFilename)) {
                 var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
