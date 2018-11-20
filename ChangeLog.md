@@ -1,10 +1,12 @@
 ﻿### Version 3.3.0
+
 * Updated to Tesseract 3.05.2
 * Updated to Leptonica 1.75.3
+* Added support for setting Pix resolution - [Issue 366](https://github.com/charlesw/tesseract/issues/366)
 
 ### Version 3.2.0
 
-* Support for .Net Standard 2.0 (.net Core 2) - [Issue ]()
+* Support for .Net Standard 2.0 (.net Core 2) - [Issue 298](https://github.com/charlesw/tesseract/issues/298)
 * Removed support for TESSDATA environment variable 
 * Added support for the renderer api (generation of PDF, Text, etc) - [Issue 193](https://github.com/charlesw/tesseract/issues/193) 
 * Added support for the multiple renderers - [Issue 297](https://github.com/charlesw/tesseract/issues/297) 
