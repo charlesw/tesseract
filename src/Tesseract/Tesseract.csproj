@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45;net40;net20</TargetFrameworks>
   </PropertyGroup>
@@ -40,6 +40,12 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
 	  <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>.\Tesseract.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>.\Tesseract.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Reflection.Emit">
       <Version>4.3.0</Version>
@@ -51,10 +57,6 @@
     <CSFile Include="*.cs" Exclude="obj\**\.cs" />
 
     <Folder Include="x86\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="liblept1742.dll" />
-    <None Remove="libtesseract3051.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="x64\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x64">
