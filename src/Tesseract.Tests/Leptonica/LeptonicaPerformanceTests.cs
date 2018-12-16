@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if NETFULL
+
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -7,13 +9,10 @@ using NUnit.Framework;
 
 namespace Tesseract.Tests.Leptonica
 {
-	[TestFixture]
+	[TestFixture, Ignore("Performance tests are disabled by default, theres probably a better way of doing this but for now it's ok")]
 	public class LeptonicaPerformanceTests
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		[Test, Ignore]
+        [Test]
 		public void ConvertToBitmap()
 		{
 			const double BaseRunTime = 793.382;
@@ -45,3 +44,5 @@ namespace Tesseract.Tests.Leptonica
 		}
 	}
 }
+
+#endif

@@ -1,77 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
-		<Version>3.0.2.0</Version>
-		<ReleaseVersion>3.0.2.0</ReleaseVersion>
-		<SourceDir>$(MSBuildProjectDirectory)\src</SourceDir>
-		<BuildDir>$(MSBuildProjectDirectory)\bin</BuildDir>
-		<ReleaseDir>$(MSBuildProjectDirectory)\release</ReleaseDir>
-		<ToolsDir>$(MSBuildProjectDirectory)\tools</ToolsDir>
-		<ExtensionTasksPath>$(ToolsDir)\MSBuild.ExtensionPack\</ExtensionTasksPath>
-	</PropertyGroup>
-    <Import Project="$(ExtensionTasksPath)\MSBuild.ExtensionPack.tasks"/> 
-	<ItemGroup>
-		<Template Include="$(SourceDir)\AssemblyVersionInfo.template.cs" />
-		
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug451</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release451</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug45</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release45</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug40</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release40</Configuration>
-		</Flavor>		
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug40Client</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release40Client</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug35</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release35</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Debug20</Configuration>
-		</Flavor>
-		<Flavor Include="$(SourceDir)\Tesseract.sln">
-			<Configuration>Release20</Configuration>
-		</Flavor>
-	</ItemGroup>
-	<Target Name="PrepareBuild">
-		<Copy SourceFiles="$(SourceDir)\AssemblyVersionInfo.template.cs" DestinationFiles="$(SourceDir)\AssemblyVersionInfo.cs" />
-    <MSBuild.ExtensionPack.FileSystem.File TaskAction="Replace" RegexPattern="\$\(Version\)" Replacement="$(Version)" Files="$(SourceDir)\AssemblyVersionInfo.cs"/> 
-	</Target>
-	<Target Name="ExpandFlavors" DependsOnTargets="PrepareBuild">
-		<CreateItem Include="@(Flavor)" AdditionalMetadata="Properties=Configuration=%(Flavor.Configuration)%3BPlatform=Any CPU%3BOutDir=$(BuildDir)\%(Flavor.Configuration)\">
-			<Output TaskParameter="Include" ItemName="ProjectToBuild" />
-		</CreateItem>
-	</Target>
-  <Target Name="RestorePackages">
-    <Exec Command='$(ToolsDir)\NuGet.exe restore "$(SourceDir)\Tesseract.sln"'/>
-  </Target>
-	<Target Name="Clean" DependsOnTargets="ExpandFlavors;RestorePackages">
-		<MSBuild Projects="@(ProjectToBuild)" Targets="Clean" />
-		<RemoveDir Directories="$(BuildDir)" />
-	</Target>
-	<Target Name="Build" DependsOnTargets="ExpandFlavors;RestorePackages">
-		<MSBuild Projects="@(ProjectToBuild)" Targets="Build" />
-	</Target>
-	<Target Name="Package" DependsOnTargets="Build">
-		<MakeDir Directories='$(ReleaseDir)'/>		
-		<Exec Command='$(ToolsDir)\NuGet.exe pack "$(SourceDir)\Tesseract.nuspec" -BasePath "$(BuildDir)" -Version $(ReleaseVersion) -o "$(ReleaseDir)"'/>
-	</Target>
+  <PropertyGroup>
+    <Version>3.3.0.0</Version>
+    <ReleaseVersion>3.3.0</ReleaseVersion>
+    <SourceDir>$(MSBuildProjectDirectory)\src</SourceDir>
+    <BuildDir>$(MSBuildProjectDirectory)\bin</BuildDir>
+    <ReleaseDir>$(MSBuildProjectDirectory)\release</ReleaseDir>
+    <ToolsDir>$(MSBuildProjectDirectory)\tools</ToolsDir>
+    <ExtensionTasksPath>$(ToolsDir)\MSBuild.ExtensionPack\</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="$(ExtensionTasksPath)\MSBuild.ExtensionPack.tasks" />
+  <ItemGroup>
+    <Template Include="$(SourceDir)\AssemblyVersionInfo.template.cs" />
 
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Debug451</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Release451</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Debug45</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Release45</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Debug40</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Release40</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Debug40Client</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Release40Client</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Debug35</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Release35</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Debug20</Configuration>
+    </Flavor>
+    <Flavor Include="$(SourceDir)\Tesseract.sln">
+      <Configuration>Release20</Configuration>
+    </Flavor>
+  </ItemGroup>
+  <Target Name="PrepareBuild">
+    <Copy SourceFiles="$(SourceDir)\AssemblyVersionInfo.template.cs" DestinationFiles="$(SourceDir)\AssemblyVersionInfo.cs" />
+    <MSBuild.ExtensionPack.FileSystem.File TaskAction="Replace" RegexPattern="\$\(Version\)" Replacement="$(Version)" Files="$(SourceDir)\AssemblyVersionInfo.cs" />
+  </Target>
+  <Target Name="ExpandFlavors" DependsOnTargets="PrepareBuild">
+    <CreateItem Include="@(Flavor)" AdditionalMetadata="Properties=Configuration=%(Flavor.Configuration)%3BPlatform=Any CPU%3BOutDir=$(BuildDir)\%(Flavor.Configuration)\">
+      <Output TaskParameter="Include" ItemName="ProjectToBuild" />
+    </CreateItem>
+  </Target>
+  <Target Name="RestorePackages">
+    <Exec Command='"$(ToolsDir)\NuGet.exe" restore "$(SourceDir)\Tesseract.sln"' />
+  </Target>
+  <Target Name="Clean" DependsOnTargets="ExpandFlavors;RestorePackages">
+    <MSBuild Projects="@(ProjectToBuild)" Targets="Clean" />
+    <RemoveDir Directories="$(BuildDir)" />
+  </Target>
+  <Target Name="Build" DependsOnTargets="ExpandFlavors;RestorePackages">
+    <MSBuild Projects="@(ProjectToBuild)" Targets="Build" />
+  </Target>
+  <Target Name="Package" DependsOnTargets="Build">
+    <MakeDir Directories='$(ReleaseDir)' />
+    <Exec Command='$(ToolsDir)\NuGet.exe pack "$(SourceDir)\Tesseract.nuspec" -BasePath "$(BuildDir)" -Version $(ReleaseVersion) -o "$(ReleaseDir)"' />
+  </Target>
 </Project>

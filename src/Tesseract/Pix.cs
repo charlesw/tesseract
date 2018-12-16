@@ -6,9 +6,11 @@ using Tesseract.Internal;
 
 namespace Tesseract
 {
-    public unsafe sealed class Pix : DisposableBase
+    public unsafe sealed class Pix : DisposableBase, IEquatable<Pix>
     {
         #region Constants
+
+        public const float Deg2Rad = (float)(Math.PI / 180.0);
 
         // Skew Defaults
         public const int DefaultBinarySearchReduction = 2; // binary search part
@@ -26,15 +28,15 @@ namespace Tesseract
         /// Used to lookup image formats by extension.
         /// </summary>
         private static readonly Dictionary<string, ImageFormat> imageFomatLookup = new Dictionary<string, ImageFormat>
-		{
-			{ ".jpg", ImageFormat.JfifJpeg },
-			{ ".jpeg", ImageFormat.JfifJpeg },
-			{ ".gif", ImageFormat.Gif },
-			{ ".tif", ImageFormat.Tiff },
-			{ ".tiff", ImageFormat.Tiff },
-			{ ".png", ImageFormat.Png },
-			{ ".bmp", ImageFormat.Bmp }
-		};
+        {
+            { ".jpg", ImageFormat.JfifJpeg },
+            { ".jpeg", ImageFormat.JfifJpeg },
+            { ".gif", ImageFormat.Gif },
+            { ".tif", ImageFormat.Tiff },
+            { ".tiff", ImageFormat.Tiff },
+            { ".png", ImageFormat.Png },
+            { ".bmp", ImageFormat.Bmp }
+        };
 
         #endregion Constants
 
@@ -67,7 +69,8 @@ namespace Tesseract
             this.depth = Interop.LeptonicaApi.Native.pixGetDepth(this.handle);
 
             var colorMapHandle = Interop.LeptonicaApi.Native.pixGetColormap(this.handle);
-            if (colorMapHandle != IntPtr.Zero) {
+            if (colorMapHandle != IntPtr.Zero)
+            {
                 this.colormap = new PixColormap(colorMapHandle);
             }
         }
@@ -96,7 +99,8 @@ namespace Tesseract
         public static Pix LoadFromFile(string filename)
         {
             var pixHandle = Interop.LeptonicaApi.Native.pixRead(filename);
-            if (pixHandle == IntPtr.Zero) {
+            if (pixHandle == IntPtr.Zero)
+            {
                 throw new IOException(String.Format("Failed to load image '{0}'.", filename));
             }
             return Create(pixHandle);
@@ -105,10 +109,12 @@ namespace Tesseract
         public static Pix LoadTiffFromMemory(byte[] bytes)
         {
             IntPtr handle;
-            fixed (byte* ptr = bytes) {
+            fixed (byte* ptr = bytes)
+            {
                 handle = Interop.LeptonicaApi.Native.pixReadMemTiff(ptr, bytes.Length, 0);
             }
-            if (handle == IntPtr.Zero) {
+            if (handle == IntPtr.Zero)
+            {
                 throw new IOException("Failed to load image from memory.");
             }
             return Create(handle);
@@ -123,12 +129,17 @@ namespace Tesseract
             get { return colormap; }
             set
             {
-                if (value != null) {
-                    if (Interop.LeptonicaApi.Native.pixSetColormap(handle, value.Handle) == 0) {
+                if (value != null)
+                {
+                    if (Interop.LeptonicaApi.Native.pixSetColormap(handle, value.Handle) == 0)
+                    {
                         colormap = value;
                     }
-                } else {
-                    if (Interop.LeptonicaApi.Native.pixDestroyColormap(handle) == 0) {
+                }
+                else
+                {
+                    if (Interop.LeptonicaApi.Native.pixDestroyColormap(handle) == 0)
+                    {
                         colormap = null;
                     }
                 }
@@ -150,6 +161,18 @@ namespace Tesseract
             get { return width; }
         }
 
+        public int XRes
+        {
+            get { return Interop.LeptonicaApi.Native.pixGetXRes(this.handle); }
+            set { Interop.LeptonicaApi.Native.pixSetXRes(this.handle, value); }
+        }
+
+        public int YRes
+        {
+            get { return Interop.LeptonicaApi.Native.pixGetYRes(this.handle); }
+            set { Interop.LeptonicaApi.Native.pixSetYRes(this.handle, value); }
+        }
+
         internal HandleRef Handle
         {
             get { return handle; }
@@ -162,6 +185,34 @@ namespace Tesseract
 
         #endregion Properties
 
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            // Check for null values and compare run-time types.
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            return Equals((Pix)obj);
+        }
+
+        public bool Equals(Pix other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            int same;
+            if(Interop.LeptonicaApi.Native.pixEqual(Handle, other.Handle, out same) != 0)
+            {
+                throw new TesseractException("Failed to compare pix");
+            }
+            return same != 0;
+        }
+
+        #endregion
+
         #region Save methods
 
         /// <summary>
@@ -172,17 +223,22 @@ namespace Tesseract
         public void Save(string filename, ImageFormat? format = null)
         {
             ImageFormat actualFormat;
-            if (!format.HasValue) {
+            if (!format.HasValue)
+            {
                 var extension = Path.GetExtension(filename).ToLowerInvariant();
-                if (!imageFomatLookup.TryGetValue(extension, out actualFormat)) {
+                if (!imageFomatLookup.TryGetValue(extension, out actualFormat))
+                {
                     // couldn't find matching format, perhaps there is no extension or it's not recognised, fallback to default.
                     actualFormat = ImageFormat.Default;
                 }
-            } else {
+            }
+            else
+            {
                 actualFormat = format.Value;
             }
 
-            if (Interop.LeptonicaApi.Native.pixWrite(filename, handle, actualFormat) != 0) {
+            if (Interop.LeptonicaApi.Native.pixWrite(filename, handle, actualFormat) != 0)
+            {
                 throw new IOException(String.Format("Failed to save image '{0}'.", filename));
             }
         }
@@ -237,7 +293,8 @@ namespace Tesseract
             IntPtr ppixth, ppixd;
             int result = Interop.LeptonicaApi.Native.pixOtsuAdaptiveThreshold(handle, sx, sy, smoothx, smoothy, scorefract, out ppixth, out ppixd);
 
-            if (ppixth != IntPtr.Zero) {
+            if (ppixth != IntPtr.Zero)
+            {
                 // free memory held by ppixth, an array of threshold values found for each tile
                 Interop.LeptonicaApi.Native.pixDestroy(ref ppixth);
             }
@@ -291,15 +348,18 @@ namespace Tesseract
 
             // Free memory held by other unused pix's
 
-            if (ppixm != IntPtr.Zero) {
+            if (ppixm != IntPtr.Zero)
+            {
                 Interop.LeptonicaApi.Native.pixDestroy(ref ppixm);
             }
 
-            if (ppixsd != IntPtr.Zero) {
+            if (ppixsd != IntPtr.Zero)
+            {
                 Interop.LeptonicaApi.Native.pixDestroy(ref ppixsd);
             }
 
-            if (ppixth != IntPtr.Zero) {
+            if (ppixth != IntPtr.Zero)
+            {
                 Interop.LeptonicaApi.Native.pixDestroy(ref ppixth);
             }
 
@@ -340,7 +400,8 @@ namespace Tesseract
             int result = Interop.LeptonicaApi.Native.pixSauvolaBinarizeTiled(handle, whsize, factor, nx, ny, out ppixth, out ppixd);
 
             // Free memory held by other unused pix's
-            if (ppixth != IntPtr.Zero) {
+            if (ppixth != IntPtr.Zero)
+            {
                 Interop.LeptonicaApi.Native.pixDestroy(ref ppixth);
             }
 
@@ -374,6 +435,106 @@ namespace Tesseract
         public Pix ConvertRGBToGray()
         {
             return ConvertRGBToGray(0, 0, 0);
+        }
+
+        /// <summary>
+        /// Removes horizontal lines from a grayscale image. 
+        /// The algorithm is based on Leptonica <code>lineremoval.c</code> example.
+        /// See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
+        /// </summary>
+        /// <returns>image with lines removed</returns>
+        public Pix RemoveLines()
+        {
+            float angle, conf;
+            IntPtr pix1, pix2, pix3, pix4, pix5, pix6, pix7, pix8, pix9;
+
+            pix1 = pix2 = pix3 = pix4 = pix5 = pix6 = pix7 = pix8 = pix9 = IntPtr.Zero;
+
+            try
+            {
+                /* threshold to binary, extracting much of the lines */
+                pix1 = Interop.LeptonicaApi.Native.pixThresholdToBinary(handle, 170);
+
+                /* find the skew angle and deskew using an interpolated
+                 * rotator for anti-aliasing (to avoid jaggies) */
+                Interop.LeptonicaApi.Native.pixFindSkew(new HandleRef(this, pix1), out angle, out conf);
+                pix2 = Interop.LeptonicaApi.Native.pixRotateAMGray(handle, (float)(Deg2Rad * angle), (byte)255);
+
+                /* extract the lines to be removed */
+                pix3 = Interop.LeptonicaApi.Native.pixCloseGray(new HandleRef(this, pix2), 51, 1);
+
+                /* solidify the lines to be removed */
+                pix4 = Interop.LeptonicaApi.Native.pixErodeGray(new HandleRef(this, pix3), 1, 5);
+
+                /* clean the background of those lines */
+                pix5 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix4), 210, 255);
+
+                pix6 = Interop.LeptonicaApi.Native.pixThresholdToValue(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix5), 200, 0);
+
+                /* get paint-through mask for changed pixels */
+                pix7 = Interop.LeptonicaApi.Native.pixThresholdToBinary(new HandleRef(this, pix6), 210);
+
+                /* add the inverted, cleaned lines to orig.  Because
+                 * the background was cleaned, the inversion is 0,
+                 * so when you add, it doesn't lighten those pixels.
+                 * It only lightens (to white) the pixels in the lines! */
+                Interop.LeptonicaApi.Native.pixInvert(new HandleRef(this, pix6), new HandleRef(this, pix6));
+                pix8 = Interop.LeptonicaApi.Native.pixAddGray(new HandleRef(this, IntPtr.Zero), new HandleRef(this, pix2), new HandleRef(this, pix6));
+
+                pix9 = Interop.LeptonicaApi.Native.pixOpenGray(new HandleRef(this, pix8), 1, 9);
+
+                Interop.LeptonicaApi.Native.pixCombineMasked(new HandleRef(this, pix8), new HandleRef(this, pix9), new HandleRef(this, pix7));
+                if (pix8 == IntPtr.Zero)
+                {
+                    throw new TesseractException("Failed to remove lines from image.");
+                }
+
+                return new Pix(pix8);
+            }
+            finally
+            {
+                // destroy any created intermediate pix's, regardless of if the process 
+                // failed for any reason.
+                if (pix1 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix1);
+                }
+
+                if (pix2 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix2);
+                }
+
+                if (pix3 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix3);
+                }
+
+                if (pix4 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix4);
+                }
+
+                if (pix5 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix5);
+                }
+
+                if (pix6 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix6);
+                }
+
+                if (pix7 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix7);
+                }
+
+                if (pix9 != IntPtr.Zero)
+                {
+                    Interop.LeptonicaApi.Native.pixDestroy(ref pix9);
+                }
+            }
         }
 
         /// <summary>
@@ -466,32 +627,51 @@ namespace Tesseract
         /// Please note there is an implicit assumption about RGB component ordering.
         /// </para>
         /// </remarks>
-        /// <param name="angle">The angle to rotate by, in radians; clockwise is positive.</param>
+        /// <param name="angleInRadians">The angle to rotate by, in radians; clockwise is positive.</param>
         /// <param name="method">The rotation method to use.</param>
         /// <param name="fillColor">The fill color to use for pixels that are brought in from the outside.</param>
         /// <param name="width">The original width; use 0 to avoid embedding</param>
         /// <param name="height">The original height; use 0 to avoid embedding</param>
         /// <returns>The image rotated around it's centre.</returns>
-        public Pix Rotate(float angle, RotationMethod method = RotationMethod.AreaMap, RotationFill fillColor = RotationFill.White, int? width = null, int? height = null)
+        public Pix Rotate(float angleInRadians, RotationMethod method = RotationMethod.AreaMap, RotationFill fillColor = RotationFill.White, int? width = null, int? height = null)
         {
             if (width == null) width = this.Width;
             if (height == null) height = this.Height;
 
-            if (Math.Abs(angle) < VerySmallAngle) return this.Clone();
+            if (Math.Abs(angleInRadians) < VerySmallAngle) return this.Clone();
 
             IntPtr resultHandle;
 
-            var rotations = 2 * angle / Math.PI;
-            if (Math.Abs(rotations - Math.Floor(rotations)) < VerySmallAngle) {
+            var rotations = 2 * angleInRadians / Math.PI;
+            if (Math.Abs(rotations - Math.Floor(rotations)) < VerySmallAngle)
+            {
                 // handle special case of orthoganal rotations (90, 180, 270)
                 resultHandle = Interop.LeptonicaApi.Native.pixRotateOrth(handle, (int)rotations);
-            } else {
+            }
+            else
+            {
                 // handle general case
-                resultHandle = Interop.LeptonicaApi.Native.pixRotate(handle, angle, method, fillColor, width.Value, height.Value);
+                resultHandle = Interop.LeptonicaApi.Native.pixRotate(handle, angleInRadians, method, fillColor, width.Value, height.Value);
             }
 
-            if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around it's centre.");
+            if (resultHandle == IntPtr.Zero) throw new LeptonicaException("Failed to rotate image around its centre.");
 
+            return new Pix(resultHandle);
+        }
+
+        /// <summary>
+        /// 90 degree rotation.
+        /// </summary>
+        /// <param name="direction">1 = clockwise,  -1 = counter-clockwise</param>
+        /// <returns>rotated image</returns>
+        public Pix Rotate90(int direction)
+        {
+            IntPtr resultHandle = Interop.LeptonicaApi.Native.pixRotate90(handle, direction);
+
+            if (resultHandle == IntPtr.Zero)
+            {
+                throw new LeptonicaException("Failed to rotate image.");
+            }
             return new Pix(resultHandle);
         }
 
@@ -628,7 +808,6 @@ namespace Tesseract
         #endregion
 
         #region Disposal
-
 
         protected override void Dispose(bool disposing)
         {

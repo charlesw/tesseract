@@ -46,9 +46,13 @@ namespace Tesseract
 
         public uint ToRGBA()
         {
-            return BitmapHelper.EncodeAsRGBA(red, green, blue, alpha);
+            return (uint)((red << 24) |
+               (green << 16) |
+               (blue << 8) |
+               alpha);
         }
 
+#if NETFULL
         public static explicit operator System.Drawing.Color(PixColor color)
         {
             return System.Drawing.Color.FromArgb(color.alpha, color.red, color.green, color.blue);
@@ -58,9 +62,10 @@ namespace Tesseract
         {
             return new PixColor(color.R, color.G, color.B, color.A);
         }
+#endif
 
 
-        #region Equals and GetHashCode implementation
+#region Equals and GetHashCode implementation
         public override bool Equals(object obj)
 		{
 			return (obj is PixColor) && Equals((PixColor)obj);
@@ -92,7 +97,7 @@ namespace Tesseract
 		{
 			return !(lhs == rhs);
 		}
-        #endregion
+#endregion
 
         public override string ToString()
         {

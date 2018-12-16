@@ -1,0 +1,207 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+	  <DefineConstants>NET45;NETFULL</DefineConstants>
+	  <RootNamespace>Tesseract.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Tesseract.Tests\AnalyseResultTests.cs" Link="AnalyseResultTests.cs" />
+    <Compile Include="..\Tesseract.Tests\BaseApiTests.cs" Link="BaseApiTests.cs" />
+    <Compile Include="..\Tesseract.Tests\EngineTests.cs" Link="EngineTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\BitmapHelperTests.cs" Link="Leptonica\BitmapHelperTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\ColorTests.cs" Link="Leptonica\ColorTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\ConvertBitmapToPixTests.cs" Link="Leptonica\ConvertBitmapToPixTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\LeptonicaPerformanceTests.cs" Link="Leptonica\LeptonicaPerformanceTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\LoadFromFileTests.cs" Link="Leptonica\LoadFromFileTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\PixATests.cs" Link="Leptonica\PixATests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\PixTests\ImageManipulationTests.cs" Link="Leptonica\PixTests\ImageManipulationTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\PixTests\PixDataAccessTests.cs" Link="Leptonica\PixTests\PixDataAccessTests.cs" />
+    <Compile Include="..\Tesseract.Tests\ResultRendererTests.cs" Link="ResultRendererTests.cs" />
+    <Compile Include="..\Tesseract.Tests\TesseractResultSet.cs" Link="TesseractResultSet.cs" />
+    <Compile Include="..\Tesseract.Tests\TesseractTestBase.cs" Link="TesseractTestBase.cs" />
+    <Compile Include="..\Tesseract.Tests\TestRun.cs" Link="TestRun.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.11.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tesseract\Tesseract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Tesseract.Tests\Data\Binarization\neo-32bit.png" Link="Data\Binarization\neo-32bit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Binarization\neo-8bit-grayscale.png" Link="Data\Binarization\neo-8bit-grayscale.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Binarization\neo-8bit.png" Link="Data\Binarization\neo-8bit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_grayscale_1bpp.tif" Link="Data\Conversion\photo_grayscale_1bpp.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_grayscale_4bpp.tif" Link="Data\Conversion\photo_grayscale_4bpp.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_palette_1bpp.tif" Link="Data\Conversion\photo_palette_1bpp.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_palette_4bpp.tif" Link="Data\Conversion\photo_palette_4bpp.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_palette_8bpp.png" Link="Data\Conversion\photo_palette_8bpp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_palette_8bpp.tif" Link="Data\Conversion\photo_palette_8bpp.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_rgb_32bpp.tif" Link="Data\Conversion\photo_rgb_32bpp.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\blank.tif" Link="Data\Ocr\blank.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\empty.png" Link="Data\Ocr\empty.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\Fonts.tif" Link="Data\Ocr\Fonts.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\phototest.tif" Link="Data\Ocr\phototest.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\PSM_SingleBlock.png" Link="Data\Ocr\PSM_SingleBlock.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\PSM_SingleBlockVertText.png" Link="Data\Ocr\PSM_SingleBlockVertText.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\PSM_SingleChar.png" Link="Data\Ocr\PSM_SingleChar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\PSM_SingleColumn.png" Link="Data\Ocr\PSM_SingleColumn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\PSM_SingleLine.png" Link="Data\Ocr\PSM_SingleLine.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\PSM_SingleWord.png" Link="Data\Ocr\PSM_SingleWord.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\uzn-test.png" Link="Data\Ocr\uzn-test.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Ocr\uzn-test.uzn" Link="Data\Ocr\uzn-test.uzn">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\processing\dave-orig.png" Link="Data\processing\dave-orig.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\processing\multi-page.tif" Link="Data\processing\multi-page.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\processing\numbers.png" Link="Data\processing\numbers.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\processing\table.png" Link="Data\processing\table.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Data\Scew\scewed-phototest.png" Link="Data\Scew\scewed-phototest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateHOCROutput_False.txt" Link="Results\EngineTests\CanGenerateHOCROutput_False.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateHOCROutput_True.txt" Link="Results\EngineTests\CanGenerateHOCROutput_True.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanPrintVariables.txt" Link="Results\EngineTests\CanPrintVariables.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanProcessPixUsingResultIterator.txt" Link="Results\EngineTests\CanProcessPixUsingResultIterator.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanProcessPixUsingResultIteratorAndChoiceIterator.txt" Link="Results\EngineTests\CanProcessPixUsingResultIteratorAndChoiceIterator.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\Configs\bazzar" Link="tessdata\Configs\bazzar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.cube.bigrams" Link="tessdata\eng.cube.bigrams">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.cube.fold" Link="tessdata\eng.cube.fold">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.cube.lm" Link="tessdata\eng.cube.lm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.cube.nn" Link="tessdata\eng.cube.nn">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.cube.params" Link="tessdata\eng.cube.params">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.cube.size" Link="tessdata\eng.cube.size">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.cube.word-freq" Link="tessdata\eng.cube.word-freq">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.tesseract_cube.nn" Link="tessdata\eng.tesseract_cube.nn">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.traineddata" Link="tessdata\eng.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\osd.traineddata" Link="tessdata\osd.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.user-patterns" Link="tessdata\eng.user-patterns">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\eng.user-words" Link="tessdata\eng.user-words">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\pdf.ttf" Link="tessdata\pdf.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\tessdata\pdf.ttx" Link="tessdata\pdf.ttx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract\x64\liblept1753.dll" Link="x64\liblept1753.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract\x64\libtesseract3052.dll" Link="x64\libtesseract3052.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract\x86\liblept1753.dll" Link="x86\liblept1753.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract\x86\libtesseract3052.dll" Link="x86\libtesseract3052.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+</Project>

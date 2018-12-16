@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if NETFULL
+
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -21,7 +23,9 @@ namespace Tesseract
         public Pix Convert(Bitmap img)
         {
             var pixDepth = GetPixDepth(img.PixelFormat);
-            var pix = Pix.Create(img.Width, img.Height, pixDepth);
+            var pix = Pix.Create(img.Width, img.Height, pixDepth);            
+            pix.XRes = (int) Math.Round(img.HorizontalResolution);
+            pix.YRes = (int) Math.Round(img.VerticalResolution);
 
             BitmapData imgData = null;
             PixData pixData = null;
@@ -165,3 +169,5 @@ namespace Tesseract
         }
     }
 }
+
+#endif

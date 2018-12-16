@@ -10,26 +10,19 @@ using System.Threading.Tasks;
 
 namespace Tesseract.Tests.Leptonica
 {
-    public class ConvertBitmapToPixTests
+    public class ConvertBitmapToPixTests : TesseractTestBase
     {
-        const string DataDirectory = @"Data\Conversion\";
-        const string ResultsDirectory = @"Results\Conversion\";
-
         // Test for [Issue #166](https://github.com/charlesw/tesseract/issues/166)
         [Test]
         public unsafe void Convert_ScaledBitmapToPix()
-        {
-            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
-
-            var sourceFile = "photo_rgb_32bpp.tif";
-            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+        {            
+            var sourceFilePath = TestFilePath("Conversion/photo_rgb_32bpp.tif");
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFilePath)) {
                 using (var scaledSource = new Bitmap(source, new Size(source.Width * 2, source.Height * 2))) {
                     Assert.That(BitmapHelper.GetBPP(scaledSource), Is.EqualTo(32));
                     using (var dest = bitmapConverter.Convert(scaledSource)) {
-                        var destFilename = "ScaledBitmapToPix_rgb_32bpp.tif";
-                        dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
+                        dest.Save(TestResultRunFile("Conversion/ScaledBitmapToPix_rgb_32bpp.tif"), ImageFormat.Tiff);
 
                         AssertAreEquivalent(scaledSource, dest, true);
                     }
@@ -39,26 +32,24 @@ namespace Tesseract.Tests.Leptonica
 
         [Test]
         [TestCase(1)] // Note: 1bpp will not save pixmap when writing out the result, this is a limitation of leptonica (see pixWriteToTiffStream)
-        [TestCase(4, Ignore = true, Reason = "4bpp images not supported.")]
+        [TestCase(4, Ignore = "4bpp images not supported.")]
         [TestCase(8)]
         [TestCase(32)]
         public unsafe void Convert_BitmapToPix(int depth)
         {
-            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
-
             string pixType;
             if (depth < 16) pixType = "palette";
             else if (depth == 16) pixType = "grayscale";
             else pixType = "rgb";
 
-            var sourceFile = String.Format("photo_{0}_{1}bpp.tif", pixType, depth);
-            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var sourceFile = String.Format("Conversion/photo_{0}_{1}bpp.tif", pixType, depth);
+            var sourceFilePath = TestFilePath(sourceFile);
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFilePath)) {
                 Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(depth));
                 using (var dest = bitmapConverter.Convert(source)) {
-                    var destFilename = String.Format("BitmapToPix_{0}_{1}bpp.tif", pixType, depth);
-                    dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Tiff);
+                    var destFilename = String.Format("Conversion/BitmapToPix_{0}_{1}bpp.tif", pixType, depth);
+                    dest.Save(TestResultRunFile(destFilename), ImageFormat.Tiff);
 
                     AssertAreEquivalent(source, dest, true);
                 }
@@ -71,17 +62,14 @@ namespace Tesseract.Tests.Leptonica
         [Test]
         public unsafe void Convert_BitmapToPix_Format8bppIndexed()
         {
-            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
-
-            var sourceFile = "photo_palette_8bpp.png";
-            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var sourceFile = TestFilePath("Conversion/photo_palette_8bpp.png");
             var bitmapConverter = new BitmapToPixConverter();
-            using (var source = new Bitmap(sourceFilePath)) {
+            using (var source = new Bitmap(sourceFile)) {
                 Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(8));
                 Assert.That(source.PixelFormat, Is.EqualTo(PixelFormat.Format8bppIndexed));
                 using (var dest = bitmapConverter.Convert(source)) {
-                    var destFilename = "BitmapToPix_palette_8bpp.png";
-                    dest.Save(Path.Combine(ResultsDirectory, destFilename), ImageFormat.Png);
+                    var destFilename = TestResultRunFile("Conversion/BitmapToPix_palette_8bpp.png");
+                    dest.Save(destFilename, ImageFormat.Png);
 
                     AssertAreEquivalent(source, dest, true);
                 }
@@ -91,26 +79,23 @@ namespace Tesseract.Tests.Leptonica
         [Test]
         [TestCase(1, true, false)]
         [TestCase(1, false, false)]
-        [TestCase(4, false, false, Ignore = true, Reason = "4bpp images not supported.")]
-        [TestCase(4, true, false, Ignore = true, Reason = "4bpp images not supported.")]
+        [TestCase(4, false, false, Ignore = "4bpp images not supported.")]
+        [TestCase(4, true, false, Ignore = "4bpp images not supported.")]
         [TestCase(8, false, false)]
-        [TestCase(8, true, false, Ignore = true, Reason = "Haven't yet created a 8bpp grayscale test image.")]
+        [TestCase(8, true, false, Ignore = "Haven't yet created a 8bpp grayscale test image.")]
         [TestCase(32, false, true)]
         [TestCase(32, false, false)]
         public unsafe void Convert_PixToBitmap(int depth, bool isGrayscale, bool includeAlpha)
         {
-            if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
-
             bool hasPalette = depth < 16 && !isGrayscale;
             string pixType;
             if (isGrayscale) pixType = "grayscale";
             else if (hasPalette) pixType = "palette";
             else pixType = "rgb";
 
-            var sourceFile = String.Format("photo_{0}_{1}bpp.tif", pixType, depth);
-            var sourceFilePath = Path.Combine(DataDirectory, sourceFile);
+            var sourceFile = TestFilePath(String.Format("Conversion/photo_{0}_{1}bpp.tif", pixType, depth));
             var converter = new PixToBitmapConverter();
-            using (var source = Pix.LoadFromFile(sourceFilePath)) {
+            using (var source = Pix.LoadFromFile(sourceFile)) {
                 Assert.That(source.Depth, Is.EqualTo(depth));
                 if (hasPalette) {
                     Assert.That(source.Colormap, Is.Not.Null, "Expected source image to have color map\\palette.");
@@ -118,15 +103,14 @@ namespace Tesseract.Tests.Leptonica
                     Assert.That(source.Colormap, Is.Null, "Expected source image to be grayscale.");
                 }
                 using (var dest = converter.Convert(source, includeAlpha)) {
-                    var destFilename = String.Format("PixToBitmap_{0}_{1}bpp.tif", pixType, depth);
-                    dest.Save(Path.Combine(ResultsDirectory, destFilename), System.Drawing.Imaging.ImageFormat.Tiff);
+                    var destFilename = TestResultRunFile(String.Format("Conversion/PixToBitmap_{0}_{1}bpp.tif", pixType, depth));
+                    dest.Save(destFilename, System.Drawing.Imaging.ImageFormat.Tiff);
 
                     AssertAreEquivalent(dest, source, includeAlpha);
                 }
             }
         }
-
-
+        
         private void AssertAreEquivalent(Bitmap bmp, Pix pix, bool checkAlpha)
         {
             // verify img metadata

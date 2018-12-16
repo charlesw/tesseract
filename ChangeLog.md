@@ -1,4 +1,26 @@
-﻿### Version 3.0.2
+﻿### Version 3.3.0
+
+* Updated to Tesseract 3.05.2
+* Updated to Leptonica 1.75.3
+* Added support for setting Pix resolution - [Issue 366](https://github.com/charlesw/tesseract/issues/366)
+
+### Version 3.2.0
+
+* Support for .Net Standard 2.0 (.net Core 2) - [Issue 298](https://github.com/charlesw/tesseract/issues/298)
+* Removed support for TESSDATA environment variable 
+* Added support for the renderer api (generation of PDF, Text, etc) - [Issue 193](https://github.com/charlesw/tesseract/issues/193) 
+* Added support for the multiple renderers - [Issue 297](https://github.com/charlesw/tesseract/issues/297) 
+* Updated to Tesseract 3.05.1 - [Issue #340](https://github.com/charlesw/tesseract/issues/340)
+* Added support Adding pix to, Removing pix from, and clearing PixA - [Issue #340](https://github.com/charlesw/tesseract/issues/340)
+* Fixed PolyBlockType definition - [Issue #280](https://github.com/charlesw/tesseract/issues/280)
+* Added support for Font attributes to Result Iterator - [Issue #9](https://github.com/charlesw/tesseract/issues/9)
+
+### Version 3.1.0
+
+* Support for printing list of available variables - [Issue 256](https://github.com/charlesw/tesseract/issues/256)
+* Support for line removal - [Issue 268](https://github.com/charlesw/tesseract/issues/256)
+
+### Version 3.0.2
 
 * Fixed intermittent crash on initialisation - [Issue 231](https://github.com/charlesw/tesseract/issues/231)
 * Upgraded native tesseract libraries to those provided by https://github.com/charlesw/tesseract-vs (Visual Studio 2015)

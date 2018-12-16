@@ -1,4 +1,4 @@
-A .NET wrapper for [tesseract-ocr] 3.04.
+A .NET wrapper for [tesseract-ocr] 3.05.02
 
 ## Dependencies
 
@@ -9,13 +9,13 @@ Since tesseract and leptonica binaries are compiled with Visual Studio 2015 you'
 
 ### Tesseract language data
 
-You will also need to download the language data files for tesseract 3.04 from [tesseract-ocr].
+You will also need to download the language data files for tesseract 3.05.02 from [tesseract-ocr].
 
 ## Getting started quickly
 
 1. Add the ``Tesseract`` NuGet Package by running ``Install-Package Tesseract`` from the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console).
 2. Ensure you have Visual Studio 2015 x86 & x64 runtimes installed (see note above).
-3. Download language data files for tesseract 3.04 from the [tessdata repository](https://github.com/tesseract-ocr/tessdata/releases/tag/3.04.00) and add them to your project, 
+3. Download language data files for tesseract 3.05 from the [tessdata repository](https://github.com/tesseract-ocr/tessdata/releases/tag/3.04.00) and add them to your project, 
    ensure 'Copy to output directory' is set to Always.
 4. Check out the Samples solution ``~/src/Tesseract.Samples.sln`` in the [tesseract-samples](https://github.com/charlesw/tesseract-samples) repository for a working example.
 
@@ -27,7 +27,7 @@ Please create your pull requests to target the "develop" branch. "Master" is onl
 
 ## License
 
-Copyright 2012-2016 Charles Weld.
+Copyright 2012-2018 Charles Weld.
 
 Licensed under the [Apache License, Version 2.0][apache2] (the "License"); you
 may not use this software except in compliance with the License. You may obtain
