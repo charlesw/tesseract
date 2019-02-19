@@ -47,6 +47,9 @@
     <DocumentationFile>.\Tesseract.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Drawing.Common">
+      <Version>4.5.1</Version>
+    </PackageReference>
     <PackageReference Include="System.Reflection.Emit">
       <Version>4.3.0</Version>
     </PackageReference>

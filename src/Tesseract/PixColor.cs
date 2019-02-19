@@ -52,7 +52,6 @@ namespace Tesseract
                alpha);
         }
 
-#if NETFULL
         public static explicit operator System.Drawing.Color(PixColor color)
         {
             return System.Drawing.Color.FromArgb(color.alpha, color.red, color.green, color.blue);
@@ -62,8 +61,6 @@ namespace Tesseract
         {
             return new PixColor(color.R, color.G, color.B, color.A);
         }
-#endif
-
 
 #region Equals and GetHashCode implementation
         public override bool Equals(object obj)
