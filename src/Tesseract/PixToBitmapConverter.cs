@@ -1,6 +1,4 @@
-﻿#if NETFULL
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -19,33 +17,47 @@ namespace Tesseract
 
             BitmapData imgData = null;
             PixData pixData = null;
-            try {
+            try
+            {
                 // TODO: Set X and Y resolution
 
                 // transfer pixel data
-                if ((pixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed) {
+                if ((pixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed)
+                {
                     TransferPalette(pix, img);
                 }
 
                 // transfer data
                 pixData = pix.GetData();
                 imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height), ImageLockMode.WriteOnly, pixelFormat);
-                
-                if (depth == 32) {
+
+                if (depth == 32)
+                {
                     TransferData32(pixData, imgData, includeAlpha ? 0 : 255);
-                } else if (depth == 16) {
+                }
+                else if (depth == 16)
+                {
                     TransferData16(pixData, imgData);
-                } else if (depth == 8) {
+                }
+                else if (depth == 8)
+                {
                     TransferData8(pixData, imgData);
-                } else if (depth == 1) {
+                }
+                else if (depth == 1)
+                {
                     TransferData1(pixData, imgData);
                 }
                 return img;
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 img.Dispose();
                 throw;
-            } finally {
-                if (imgData != null) {
+            }
+            finally
+            {
+                if (imgData != null)
+                {
                     img.UnlockBits(imgData);
                 }
             }
@@ -57,11 +69,13 @@ namespace Tesseract
             var height = imgData.Height;
             var width = imgData.Width;
 
-            for (int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++)
+            {
                 byte* imgLine = (byte*)imgData.Scan0 + (y * imgData.Stride);
                 uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
 
-                for (int x = 0; x < width; x++) {
+                for (int x = 0; x < width; x++)
+                {
                     var pixVal = PixColor.FromRgba(pixLine[x]);
 
                     byte* pixelPtr = imgLine + (x << 2);
@@ -69,7 +83,7 @@ namespace Tesseract
                     pixelPtr[1] = pixVal.Green;
                     pixelPtr[2] = pixVal.Red;
                     pixelPtr[3] = (byte)(alphaMask | pixVal.Alpha); // Allow user to include alpha or not
-                 }
+                }
             }
         }
 
@@ -79,11 +93,13 @@ namespace Tesseract
             var height = imgData.Height;
             var width = imgData.Width;
 
-            for (int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++)
+            {
                 uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
                 ushort* imgLine = (ushort*)imgData.Scan0 + (y * imgData.Stride);
 
-                for (int x = 0; x < width; x++) {
+                for (int x = 0; x < width; x++)
+                {
                     ushort pixVal = (ushort)PixData.GetDataTwoByte(pixLine, x);
 
                     imgLine[x] = pixVal;
@@ -97,11 +113,13 @@ namespace Tesseract
             var height = imgData.Height;
             var width = imgData.Width;
 
-            for (int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++)
+            {
                 uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
                 byte* imgLine = (byte*)imgData.Scan0 + (y * imgData.Stride);
 
-                for (int x = 0; x < width; x++) {
+                for (int x = 0; x < width; x++)
+                {
                     byte pixVal = (byte)PixData.GetDataByte(pixLine, x);
 
                     imgLine[x] = pixVal;
@@ -113,13 +131,15 @@ namespace Tesseract
         {
             var imgFormat = imgData.PixelFormat;
             var height = imgData.Height;
-            var width = imgData.Width/8;
+            var width = imgData.Width / 8;
 
-            for (int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++)
+            {
                 uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
                 byte* imgLine = (byte*)imgData.Scan0 + (y * imgData.Stride);
 
-                for (int x = 0; x < width; x++) {
+                for (int x = 0; x < width; x++)
+                {
                     byte pixVal = (byte)PixData.GetDataByte(pixLine, x);
 
                     imgLine[x] = pixVal;
@@ -133,13 +153,18 @@ namespace Tesseract
             var maxColors = pallete.Entries.Length;
             var lastColor = maxColors - 1;
             var colormap = pix.Colormap;
-            if (colormap != null && colormap.Count <= maxColors) {
+            if (colormap != null && colormap.Count <= maxColors)
+            {
                 var colormapCount = colormap.Count;
-                for (int i = 0; i < colormapCount; i++) {
+                for (int i = 0; i < colormapCount; i++)
+                {
                     pallete.Entries[i] = (SD.Color)colormap[i];
                 }
-            } else {
-                for (int i = 0; i < maxColors; i++) {
+            }
+            else
+            {
+                for (int i = 0; i < maxColors; i++)
+                {
                     var value = (byte)(i * 255 / lastColor);
                     pallete.Entries[i] = SD.Color.FromArgb(value, value, value);
                 }
@@ -151,7 +176,8 @@ namespace Tesseract
 
         private PixelFormat GetPixelFormat(Pix pix)
         {
-            switch (pix.Depth) {
+            switch (pix.Depth)
+            {
                 case 1: return PixelFormat.Format1bppIndexed;
                 //case 2: return PixelFormat.Format4bppIndexed;
                 //case 4: return PixelFormat.Format4bppIndexed;
@@ -163,5 +189,3 @@ namespace Tesseract
         }
     }
 }
-
-#endif

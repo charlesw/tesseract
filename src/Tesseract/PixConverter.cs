@@ -1,6 +1,4 @@
-﻿#if NETFULL
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -36,5 +34,3 @@ namespace Tesseract
         }
     }
 }
-
-#endif
