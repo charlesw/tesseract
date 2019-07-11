@@ -35,7 +35,7 @@ namespace Tesseract.Tests
         {
             if (!Directory.Exists(ResultsDirectory)) Directory.CreateDirectory(ResultsDirectory);
 
-            engine = CreateEngine();
+            engine = CreateEngine("osd");
         }
 
         #endregion Setup\TearDown

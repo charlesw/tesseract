@@ -368,9 +368,6 @@ NormaliseNewLine(@"</word></line>
         private static IEnumerable<string> DataPaths()
         {
             return new string[] {
-                AbsolutePath(@"."),
-                AbsolutePath(@".\"),
-                AbsolutePath(@"./"),
                 AbsolutePath(@"./tessdata"),
                 AbsolutePath(@"./tessdata/"),
                 AbsolutePath(@".\tessdata\")

@@ -162,16 +162,16 @@
     <None Include="..\Tesseract.Tests\tessdata\pdf.ttf" Link="tessdata\pdf.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\liblept1760.dll" Link="x64\liblept1760.dll">
+    <None Include="..\Tesseract\x64\liblept1780.dll" Link="x64\liblept1780.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\libtesseract400.dll" Link="x64\libtesseract400.dll">
+    <None Include="..\Tesseract\x64\libtesseract410.dll" Link="x64\libtesseract410.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\liblept1760.dll" Link="x86\liblept1760.dll">
+    <None Include="..\Tesseract\x86\liblept1780.dll" Link="x86\liblept1780.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\libtesseract400.dll" Link="x86\libtesseract400.dll">
+    <None Include="..\Tesseract\x86\libtesseract410.dll" Link="x86\libtesseract410.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

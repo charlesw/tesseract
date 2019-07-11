@@ -35,8 +35,8 @@
       <span class='ocrx_word' id='word_2_21' title='bbox 541 127 618 157; x_wconf 96'>types</span>
      </span>
      <span class='ocr_line' id='line_2_3' title="bbox 36 160 223 184; baseline 0 0; x_size 31.214842; x_descenders 7.2148418; x_ascenders 6">
-      <span class='ocrx_word' id='word_2_22' title='bbox 36 166 52 184; x_wconf 96'>of</span>
-      <span class='ocrx_word' id='word_2_23' title='bbox 53 160 113 184; x_wconf 96'>file</span>
+      <span class='ocrx_word' id='word_2_22' title='bbox 36 160 64 184; x_wconf 96'>of</span>
+      <span class='ocrx_word' id='word_2_23' title='bbox 72 160 113 184; x_wconf 96'>file</span>
       <span class='ocrx_word' id='word_2_24' title='bbox 123 160 223 184; x_wconf 96'>format.</span>
      </span>
     </p>
@@ -72,8 +72,8 @@
      </span>
      <span class='ocr_line' id='line_2_7' title="bbox 43 296 561 327; baseline 0 -7; x_size 31; x_descenders 7; x_ascenders 6">
       <span class='ocrx_word' id='word_2_47' title='bbox 43 296 150 327; x_wconf 96'>jumped</span>
-      <span class='ocrx_word' id='word_2_48' title='bbox 162 302 213 320; x_wconf 96'>over</span>
-      <span class='ocrx_word' id='word_2_49' title='bbox 216 296 279 320; x_wconf 96'>the</span>
+      <span class='ocrx_word' id='word_2_48' title='bbox 162 302 226 320; x_wconf 96'>over</span>
+      <span class='ocrx_word' id='word_2_49' title='bbox 235 296 279 320; x_wconf 96'>the</span>
       <span class='ocrx_word' id='word_2_50' title='bbox 292 296 347 327; x_wconf 96'>lazy</span>
       <span class='ocrx_word' id='word_2_51' title='bbox 357 296 407 320; x_wconf 96'>fox.</span>
       <span class='ocrx_word' id='word_2_52' title='bbox 420 296 475 320; x_wconf 96'>The</span>
@@ -83,8 +83,8 @@
       <span class='ocrx_word' id='word_2_54' title='bbox 37 330 122 354; x_wconf 96'>brown</span>
       <span class='ocrx_word' id='word_2_55' title='bbox 135 330 187 361; x_wconf 96'>dog</span>
       <span class='ocrx_word' id='word_2_56' title='bbox 196 330 304 361; x_wconf 96'>jumped</span>
-      <span class='ocrx_word' id='word_2_57' title='bbox 316 336 367 354; x_wconf 96'>over</span>
-      <span class='ocrx_word' id='word_2_58' title='bbox 370 330 433 354; x_wconf 96'>the</span>
+      <span class='ocrx_word' id='word_2_57' title='bbox 316 336 379 354; x_wconf 96'>over</span>
+      <span class='ocrx_word' id='word_2_58' title='bbox 388 330 433 354; x_wconf 96'>the</span>
       <span class='ocrx_word' id='word_2_59' title='bbox 445 330 500 361; x_wconf 96'>lazy</span>
       <span class='ocrx_word' id='word_2_60' title='bbox 511 330 561 354; x_wconf 96'>fox.</span>
      </span>

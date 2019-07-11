@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net47;net45;net40;net20</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net48;net47;net45;net40;net20</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -15,8 +15,8 @@
     <PackageProjectUrl>https://github.com/charlesw/tesseract/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/charlesw/tesseract/</RepositoryUrl>
     <PackageTags>Tesseract Ocr</PackageTags>
-    <Version>4.0.0</Version>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <Version>4.1.0</Version>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <NeutralLanguage></NeutralLanguage>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
   </PropertyGroup>
@@ -41,6 +41,11 @@
     <DefineConstants>NET47;NETFULL</DefineConstants>
   </PropertyGroup>
 
+  <!-- .NET 4.8 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48'">
+    <DefineConstants>NET48;NETFULL</DefineConstants>
+  </PropertyGroup>
+
   <!-- .NET Standard 2.0 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
 	  <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
@@ -54,8 +59,6 @@
     <Folder Include="Properties\" />
 
     <CSFile Include="*.cs" Exclude="obj\**\.cs" />
-
-    <Folder Include="x86\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="x64\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x64">
@@ -64,6 +67,8 @@
     <Content Include="x86\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x86">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Remove="x86\liblept1780.dll" />
+    <Content Remove="x86\libtesseract410.dll" />
     <Content Include="Tesseract.targets" Pack="true" PackageCopyToOutput="true" PackagePath="build/">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
