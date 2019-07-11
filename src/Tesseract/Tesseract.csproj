@@ -67,8 +67,8 @@
     <Content Include="x86\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x86">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Remove="x86\liblept1780.dll" />
-    <Content Remove="x86\libtesseract410.dll" />
+    <None Remove="x86\liblept1780.dll" />
+    <None Remove="x86\libtesseract410.dll" />
     <Content Include="Tesseract.targets" Pack="true" PackageCopyToOutput="true" PackagePath="build/">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>

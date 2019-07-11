@@ -51,7 +51,25 @@ namespace Tesseract.Interop
         int BaseApiGetDoubleVariable(HandleRef handle, string name, out double value);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetHOCRText")]
-        IntPtr BaseAPIGetHOCRTextInternal(HandleRef handle, int pageNum);
+        IntPtr BaseApiGetHOCRTextInternal(HandleRef handle, int pageNum);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetAltoText")]
+        IntPtr BaseApiGetAltoTextInternal(HandleRef handle, int pageNum);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetTsvText")]
+        IntPtr BaseApiGetTsvTextInternal(HandleRef handle, int pageNum);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetBoxText")]
+        IntPtr BaseApiGetBoxTextInternal(HandleRef handle, int pageNum);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetLSTMBoxText")]
+        IntPtr BaseApiGetLSTMBoxTextInternal(HandleRef handle, int pageNum);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetWordStrBoxText")]
+        IntPtr BaseApiGetWordStrBoxTextInternal(HandleRef handle, int pageNum);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUNLVText")]
+        IntPtr BaseApiGetUNLVTextInternal(HandleRef handle);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetIntVariable")]
         int BaseApiGetIntVariable(HandleRef handle, string name, out int value);
@@ -259,6 +277,12 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessTextRendererCreate")]
         IntPtr TextRendererCreate(string outputbase);
 
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessAltoRendererCreate")]
+        IntPtr AltoRendererCreate(string outputbase);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessTsvRendererCreate")]
+        IntPtr TsvRendererCreate(string outputbase);
+
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessHOcrRendererCreate")]
         IntPtr HOcrRendererCreate(string outputbase);
 
@@ -273,6 +297,12 @@ namespace Tesseract.Interop
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBoxTextRendererCreate")]
         IntPtr BoxTextRendererCreate(string outputbase);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessLSTMBoxRendererCreate")]
+        IntPtr LSTMBoxRendererCreate(string outputbase);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessWordStrBoxRendererCreate")]
+        IntPtr WordStrBoxRendererCreate(string outputbase);
 
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteResultRenderer")]
         void DeleteResultRenderer(HandleRef renderer);
@@ -348,7 +378,7 @@ namespace Tesseract.Interop
 
         public static string BaseAPIGetHOCRText(HandleRef handle, int pageNum)
         {
-            IntPtr txtHandle = Native.BaseAPIGetHOCRTextInternal(handle, pageNum);
+            IntPtr txtHandle = Native.BaseApiGetHOCRTextInternal(handle, pageNum);
             if (txtHandle != IntPtr.Zero) {
                 var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
                 TessApi.Native.DeleteText(txtHandle);
@@ -361,12 +391,96 @@ namespace Tesseract.Interop
         //Just Copied:
         public static string BaseAPIGetHOCRText2(HandleRef handle, int pageNum)
         {
-            IntPtr txtHandle = Native.BaseAPIGetHOCRTextInternal(handle, pageNum);
+            IntPtr txtHandle = Native.BaseApiGetHOCRTextInternal(handle, pageNum);
             if (txtHandle != IntPtr.Zero) {
                 var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
                 TessApi.Native.DeleteText(txtHandle);
                 return xhtmlBeginTag + result + xhtmlEndTag;
             } else {
+                return null;
+            }
+        }
+
+        public static string BaseAPIGetAltoText(HandleRef handle, int pageNum)
+        {
+            IntPtr txtHandle = Native.BaseApiGetAltoTextInternal(handle, pageNum);
+            if (txtHandle != IntPtr.Zero) {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.Native.DeleteText(txtHandle);
+                return result;
+            } else {
+                return null;
+            }
+        }
+
+        public static string BaseAPIGetTsvText(HandleRef handle, int pageNum)
+        {
+            IntPtr txtHandle = Native.BaseApiGetTsvTextInternal(handle, pageNum);
+            if (txtHandle != IntPtr.Zero) {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.Native.DeleteText(txtHandle);
+                return result;
+            } else {
+                return null;
+            }
+        }
+
+        public static string BaseAPIGetBoxText(HandleRef handle, int pageNum)
+        {
+            IntPtr txtHandle = Native.BaseApiGetBoxTextInternal(handle, pageNum);
+            if (txtHandle != IntPtr.Zero)
+            {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.Native.DeleteText(txtHandle);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static string BaseAPIGetLSTMBoxText(HandleRef handle, int pageNum)
+        {
+            IntPtr txtHandle = Native.BaseApiGetLSTMBoxTextInternal(handle, pageNum);
+            if (txtHandle != IntPtr.Zero)
+            {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.Native.DeleteText(txtHandle);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static string BaseAPIGetWordStrBoxText(HandleRef handle, int pageNum)
+        {
+            IntPtr txtHandle = Native.BaseApiGetWordStrBoxTextInternal(handle, pageNum);
+            if (txtHandle != IntPtr.Zero)
+            {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.Native.DeleteText(txtHandle);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static string BaseAPIGetUNLVText(HandleRef handle)
+        {
+            IntPtr txtHandle = Native.BaseApiGetUNLVTextInternal(handle);
+            if (txtHandle != IntPtr.Zero)
+            {
+                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
+                TessApi.Native.DeleteText(txtHandle);
+                return result;
+            }
+            else
+            {
                 return null;
             }
         }
