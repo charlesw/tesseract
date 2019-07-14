@@ -135,6 +135,24 @@
     <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateHOCROutput_True.txt" Link="Results\EngineTests\CanGenerateHOCROutput_True.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateAltoOutput.txt" Link="Results\EngineTests\CanGenerateAltoOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateBoxOutput.txt" Link="Results\EngineTests\CanGenerateBoxOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateLSTMBoxOutput.txt" Link="Results\EngineTests\CanGenerateLSTMBoxOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateTsvOutput.txt" Link="Results\EngineTests\CanGenerateTsvOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateWordStrBoxOutput.txt" Link="Results\EngineTests\CanGenerateWordStrBoxOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateUNLVOutput.txt" Link="Results\EngineTests\CanGenerateUNLVOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Tesseract.Tests\Results\EngineTests\CanPrintVariables.txt" Link="Results\EngineTests\CanPrintVariables.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
