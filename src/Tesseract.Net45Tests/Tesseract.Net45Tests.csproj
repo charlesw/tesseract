@@ -135,6 +135,24 @@
     <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateHOCROutput_True.txt" Link="Results\EngineTests\CanGenerateHOCROutput_True.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateAltoOutput.txt" Link="Results\EngineTests\CanGenerateAltoOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateBoxOutput.txt" Link="Results\EngineTests\CanGenerateBoxOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateLSTMBoxOutput.txt" Link="Results\EngineTests\CanGenerateLSTMBoxOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateTsvOutput.txt" Link="Results\EngineTests\CanGenerateTsvOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateWordStrBoxOutput.txt" Link="Results\EngineTests\CanGenerateWordStrBoxOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Tesseract.Tests\Results\EngineTests\CanGenerateUNLVOutput.txt" Link="Results\EngineTests\CanGenerateUNLVOutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Tesseract.Tests\Results\EngineTests\CanPrintVariables.txt" Link="Results\EngineTests\CanPrintVariables.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -162,16 +180,16 @@
     <None Include="..\Tesseract.Tests\tessdata\pdf.ttf" Link="tessdata\pdf.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\liblept1760.dll" Link="x64\liblept1760.dll">
+    <None Include="..\Tesseract\x64\liblept1780.dll" Link="x64\liblept1780.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\libtesseract400.dll" Link="x64\libtesseract400.dll">
+    <None Include="..\Tesseract\x64\libtesseract410.dll" Link="x64\libtesseract410.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\liblept1760.dll" Link="x86\liblept1760.dll">
+    <None Include="..\Tesseract\x86\liblept1780.dll" Link="x86\liblept1780.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\libtesseract400.dll" Link="x86\libtesseract400.dll">
+    <None Include="..\Tesseract\x86\libtesseract410.dll" Link="x86\libtesseract410.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

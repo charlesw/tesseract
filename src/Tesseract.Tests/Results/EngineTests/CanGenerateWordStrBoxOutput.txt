@@ -1,0 +1,16 @@
+WordStr 36 358 580 388 1 #This is a lot of 12 point text to test the 
+	 581 358 585 388 1
+WordStr 36 323 618 354 1 #ocr code and see if it works on all types 
+	 619 323 623 354 1
+WordStr 36 296 223 320 1 #of file format. 
+	 224 296 228 320 1
+WordStr 36 255 585 286 1 #The quick brown dog jumped over the 
+	 586 255 590 286 1
+WordStr 37 221 585 252 1 #lazy fox. The quick brown dog jumped 
+	 586 221 590 252 1
+WordStr 36 187 597 218 1 #over the lazy fox. The quick brown dog 
+	 598 187 602 218 1
+WordStr 43 153 561 184 1 #jumped over the lazy fox. The quick 
+	 562 153 566 184 1
+WordStr 37 119 561 150 1 #brown dog jumped over the lazy fox. 
+	 562 119 566 150 1

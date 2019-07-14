@@ -276,6 +276,216 @@ NormaliseNewLine(@"</word></line>
         }
 
         [Test]
+        public void CanGenerateAltoOutput()
+        {
+            string actualResult;
+            using (var engine = CreateEngine())
+            {
+                using (var img = LoadTestPix(TestImagePath))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        actualResult = NormaliseNewLine(page.GetAltoText(1));
+                    }
+                }
+            }
+
+            var resultFilename = String.Format("EngineTests/CanGenerateAltoOutput.txt");
+            string expectedFilename = TestResultPath(resultFilename);
+            if (File.Exists(expectedFilename))
+            {
+                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
+                if (expectedResult != actualResult)
+                {
+                    var actualFilename = TestResultRunFile(resultFilename);
+                    File.WriteAllText(actualFilename, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
+                }
+            }
+            else
+            {
+                var actualFilename = TestResultRunFile(resultFilename);
+                File.WriteAllText(actualFilename, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
+            }
+        }
+
+        [Test]
+        public void CanGenerateTsvOutput()
+        {
+            string actualResult;
+            using (var engine = CreateEngine())
+            {
+                using (var img = LoadTestPix(TestImagePath))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        actualResult = NormaliseNewLine(page.GetTsvText(1));
+                    }
+                }
+            }
+
+            var resultFilename = String.Format("EngineTests/CanGenerateTsvOutput.txt");
+            string expectedFilename = TestResultPath(resultFilename);
+            if (File.Exists(expectedFilename))
+            {
+                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
+                if (expectedResult != actualResult)
+                {
+                    var actualFilename = TestResultRunFile(resultFilename);
+                    File.WriteAllText(actualFilename, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
+                }
+            }
+            else
+            {
+                var actualFilename = TestResultRunFile(resultFilename);
+                File.WriteAllText(actualFilename, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
+            }
+        }
+
+        [Test]
+        public void CanGenerateBoxOutput()
+        {
+            string actualResult;
+            using (var engine = CreateEngine())
+            {
+                using (var img = LoadTestPix(TestImagePath))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        actualResult = NormaliseNewLine(page.GetBoxText(1));
+                    }
+                }
+            }
+
+            var resultFilename = String.Format("EngineTests/CanGenerateBoxOutput.txt");
+            string expectedFilename = TestResultPath(resultFilename);
+            if (File.Exists(expectedFilename))
+            {
+                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
+                if (expectedResult != actualResult)
+                {
+                    var actualFilename = TestResultRunFile(resultFilename);
+                    File.WriteAllText(actualFilename, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
+                }
+            }
+            else
+            {
+                var actualFilename = TestResultRunFile(resultFilename);
+                File.WriteAllText(actualFilename, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
+            }
+        }
+
+        [Test]
+        public void CanGenerateLSTMBoxOutput()
+        {
+            string actualResult;
+            using (var engine = CreateEngine())
+            {
+                using (var img = LoadTestPix(TestImagePath))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        actualResult = NormaliseNewLine(page.GetLSTMBoxText(1));
+                    }
+                }
+            }
+
+            var resultFilename = String.Format("EngineTests/CanGenerateLSTMBoxOutput.txt");
+            string expectedFilename = TestResultPath(resultFilename);
+            if (File.Exists(expectedFilename))
+            {
+                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
+                if (expectedResult != actualResult)
+                {
+                    var actualFilename = TestResultRunFile(resultFilename);
+                    File.WriteAllText(actualFilename, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
+                }
+            }
+            else
+            {
+                var actualFilename = TestResultRunFile(resultFilename);
+                File.WriteAllText(actualFilename, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
+            }
+        }
+
+        [Test]
+        public void CanGenerateWordStrBoxOutput()
+        {
+            string actualResult;
+            using (var engine = CreateEngine())
+            {
+                using (var img = LoadTestPix(TestImagePath))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        actualResult = NormaliseNewLine(page.GetWordStrBoxText(1));
+                    }
+                }
+            }
+
+            var resultFilename = String.Format("EngineTests/CanGenerateWordStrBoxOutput.txt");
+            string expectedFilename = TestResultPath(resultFilename);
+            if (File.Exists(expectedFilename))
+            {
+                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
+                if (expectedResult != actualResult)
+                {
+                    var actualFilename = TestResultRunFile(resultFilename);
+                    File.WriteAllText(actualFilename, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
+                }
+            }
+            else
+            {
+                var actualFilename = TestResultRunFile(resultFilename);
+                File.WriteAllText(actualFilename, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
+            }
+        }
+
+        [Test]
+        public void CanGenerateUNLVOutput()
+        {
+            string actualResult;
+            using (var engine = CreateEngine())
+            {
+                using (var img = LoadTestPix(TestImagePath))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        actualResult = NormaliseNewLine(page.GetUNLVText());
+                    }
+                }
+            }
+
+            var resultFilename = String.Format("EngineTests/CanGenerateUNLVOutput.txt");
+            string expectedFilename = TestResultPath(resultFilename);
+            if (File.Exists(expectedFilename))
+            {
+                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
+                if (expectedResult != actualResult)
+                {
+                    var actualFilename = TestResultRunFile(resultFilename);
+                    File.WriteAllText(actualFilename, actualResult);
+                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
+                }
+            }
+            else
+            {
+                var actualFilename = TestResultRunFile(resultFilename);
+                File.WriteAllText(actualFilename, actualResult);
+                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
+            }
+        }
+
+        [Test]
         public void CanProcessPixUsingResultIteratorAndChoiceIterator()
         {
             string actualResult;
@@ -368,9 +578,6 @@ NormaliseNewLine(@"</word></line>
         private static IEnumerable<string> DataPaths()
         {
             return new string[] {
-                AbsolutePath(@"."),
-                AbsolutePath(@".\"),
-                AbsolutePath(@"./"),
                 AbsolutePath(@"./tessdata"),
                 AbsolutePath(@"./tessdata/"),
                 AbsolutePath(@".\tessdata\")
