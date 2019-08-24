@@ -31,21 +31,24 @@ namespace Tesseract.Tests.Leptonica
         }
 
         [Test]
-        [TestCase(1)] // Note: 1bpp will not save pixmap when writing out the result, this is a limitation of leptonica (see pixWriteToTiffStream)
-        [TestCase(4, Ignore = "4bpp images not supported.")]
-        [TestCase(8)]
-        [TestCase(32)]
-        public unsafe void Convert_BitmapToPix(int depth)
+        [TestCase(PixelFormat.Format1bppIndexed)] // Note: 1bpp will not save pixmap when writing out the result, this is a limitation of leptonica (see pixWriteToTiffStream)
+        [TestCase(PixelFormat.Format4bppIndexed, Ignore = "4bpp images not supported.")]
+        [TestCase(PixelFormat.Format8bppIndexed)]
+        [TestCase(PixelFormat.Format32bppRgb)]
+        [TestCase(PixelFormat.Format32bppArgb)]
+        public unsafe void Convert_BitmapToPix(PixelFormat pixelFormat)
         {
+            int depth = Image.GetPixelFormatSize(pixelFormat);
             string pixType;
             if (depth < 16) pixType = "palette";
             else if (depth == 16) pixType = "grayscale";
-            else pixType = "rgb";
+            else pixType = Image.IsAlphaPixelFormat(pixelFormat) ? "argb" : "rgb";
 
             var sourceFile = String.Format("Conversion/photo_{0}_{1}bpp.tif", pixType, depth);
             var sourceFilePath = TestFilePath(sourceFile);
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFilePath)) {
+                Assert.That(source.PixelFormat, Is.EqualTo(pixelFormat));
                 Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(depth));
                 using (var dest = bitmapConverter.Convert(source)) {
                     var destFilename = String.Format("Conversion/BitmapToPix_{0}_{1}bpp.tif", pixType, depth);
