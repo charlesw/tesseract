@@ -72,6 +72,9 @@
     <None Include="..\Tesseract.Tests\Data\Conversion\photo_palette_8bpp.tif" Link="Data\Conversion\photo_palette_8bpp.tif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Tesseract.Tests\Data\Conversion\photo_argb_32bpp.tif" Link="Data\Conversion\photo_argb_32bpp.tif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Tesseract.Tests\Data\Conversion\photo_rgb_32bpp.tif" Link="Data\Conversion\photo_rgb_32bpp.tif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
