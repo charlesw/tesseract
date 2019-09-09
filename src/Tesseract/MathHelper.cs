@@ -9,8 +9,7 @@ namespace Tesseract
         /// <summary>
         /// Convert a degrees to radians.
         /// </summary>
-        /// <param name="angleInDegrees"></param>
-        /// <returns></returns>
+        /// <param name="angleInDegrees"></param>        
         public static float ToRadians(float angleInDegrees)
         {
             return (float)ToRadians((double)angleInDegrees);
@@ -19,8 +18,7 @@ namespace Tesseract
         /// <summary>
         /// Convert a degrees to radians.
         /// </summary>
-        /// <param name="angleInDegrees"></param>
-        /// <returns></returns>
+        /// <param name="angleInDegrees"></param>        
         public static double ToRadians(double angleInDegrees)
         {
             return angleInDegrees * Math.PI / 180.0;
@@ -33,8 +31,8 @@ namespace Tesseract
         public static int DivRoundUp(int dividend, int divisor)
         {
             var result = dividend / divisor;
-            
-            
+
+
             return (dividend % divisor != 0 && divisor > 0 == dividend > 0) ? result + 1 : result;
         }
     }

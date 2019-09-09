@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace Tesseract.Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct OSBestResult
     {
-        public int OrientationId;
+        public Orientation OrientationId;
         public int ScriptId;
         public float SConfidence;
         public float OConfidence;
@@ -49,14 +50,10 @@ namespace Tesseract.Interop
 
         public void GetBestOrientation(out Orientation orientation, out float confidence)
         {
-            switch (_bestResult.OrientationId) {
-                case 0: orientation = Orientation.PageUp; break;
-                case 1: orientation = Orientation.PageRight; break;
-                case 2: orientation = Orientation.PageDown; break;
-                case 3: orientation = Orientation.PageLeft; break;
-                default: throw new InvalidOperationException("Best orientation must be between 0 and 3 but was " + _bestResult.OrientationId + ".");
-            }
+            Debug.Assert(((int)_bestResult.OrientationId >= 0) && ((int)_bestResult.OrientationId <= 3),
+                "Best orientation must be between 0 and 3 but was " + _bestResult.OrientationId + ".");
 
+            orientation = _bestResult.OrientationId;
             confidence = _bestResult.OConfidence;
         }
     }

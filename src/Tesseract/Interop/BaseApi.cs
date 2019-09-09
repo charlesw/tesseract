@@ -29,7 +29,6 @@ namespace Tesseract.Interop
         /// <summary>
         /// Creates a new BaseAPI instance
         /// </summary>
-        /// <returns></returns>
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPICreate")]
         IntPtr BaseApiCreate();
 
@@ -37,7 +36,6 @@ namespace Tesseract.Interop
         /// <summary>
         /// Deletes a base api instance.
         /// </summary>
-        /// <returns></returns>
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDelete")]
         void BaseApiDelete(HandleRef ptr);
 
@@ -214,8 +212,7 @@ namespace Tesseract.Interop
         /// <summary>
         /// Native API call to TessResultIteratorGetChoiceIterator
         /// </summary>
-        /// <param name="handle"></param>
-        /// <returns></returns>
+        /// <param name="handle"></param>        
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetChoiceIterator")]
         IntPtr ResultIteratorGetChoiceIterator(HandleRef handle);
 
@@ -229,24 +226,21 @@ namespace Tesseract.Interop
         /// <summary>
         /// Native API call to TessChoiceIteratorNext
         /// </summary>
-        /// <param name="handle"></param>
-        /// <returns></returns>
+        /// <param name="handle"></param>        
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorNext")]
         int ChoiceIteratorNext(HandleRef handle);
 
         /// <summary>
         /// Native API call to TessChoiceIteratorGetUTF8Text
         /// </summary>
-        /// <param name="handle"></param>
-        /// <returns></returns>
+        /// <param name="handle"></param>        
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorGetUTF8Text")]
         IntPtr ChoiceIteratorGetUTF8TextInternal(HandleRef handle);
 
         /// <summary>
         /// Native API call to TessChoiceIteratorConfidence
         /// </summary>
-        /// <param name="handle"></param>
-        /// <returns></returns>
+        /// <param name="handle"></param>        
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorConfidence")]
         float ChoiceIteratorGetConfidence(HandleRef handle);
 
@@ -353,11 +347,14 @@ namespace Tesseract.Interop
         public static string BaseAPIGetHOCRText(HandleRef handle, int pageNum)
         {
             IntPtr txtHandle = Native.BaseAPIGetHOCRTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero) {
+            if (txtHandle != IntPtr.Zero)
+            {
                 var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
                 TessApi.Native.DeleteText(txtHandle);
                 return htmlBeginTag + result + htmlEndTag;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
@@ -366,11 +363,14 @@ namespace Tesseract.Interop
         public static string BaseAPIGetHOCRText2(HandleRef handle, int pageNum)
         {
             IntPtr txtHandle = Native.BaseAPIGetHOCRTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero) {
+            if (txtHandle != IntPtr.Zero)
+            {
                 var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
                 TessApi.Native.DeleteText(txtHandle);
                 return xhtmlBeginTag + result + xhtmlEndTag;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
@@ -378,9 +378,12 @@ namespace Tesseract.Interop
         public static string BaseApiGetStringVariable(HandleRef handle, string name)
         {
             var resultHandle = Native.BaseApiGetStringVariableInternal(handle, name);
-            if (resultHandle != IntPtr.Zero) {
+            if (resultHandle != IntPtr.Zero)
+            {
                 return MarshalHelper.PtrToString(resultHandle, Encoding.UTF8);
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
@@ -388,11 +391,14 @@ namespace Tesseract.Interop
         public static string BaseAPIGetUTF8Text(HandleRef handle)
         {
             IntPtr txtHandle = Native.BaseAPIGetUTF8TextInternal(handle);
-            if (txtHandle != IntPtr.Zero) {
+            if (txtHandle != IntPtr.Zero)
+            {
                 var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
                 TessApi.Native.DeleteText(txtHandle);
                 return result;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
@@ -409,15 +415,19 @@ namespace Tesseract.Interop
             string[] varNames = new string[initialValues.Count];
             string[] varValues = new string[initialValues.Count];
             int i = 0;
-            foreach (var pair in initialValues) {
+            foreach (var pair in initialValues)
+            {
                 Guard.Require("initialValues", !String.IsNullOrEmpty(pair.Key), "Variable must have a name.");
 
                 Guard.Require("initialValues", pair.Value != null, "Variable '{0}': The type '{1}' is not supported.", pair.Key, pair.Value.GetType());
                 varNames[i] = pair.Key;
                 string varValue;
-                if (TessConvert.TryToString(pair.Value, out varValue)) {
+                if (TessConvert.TryToString(pair.Value, out varValue))
+                {
                     varValues[i] = varValue;
-                } else {
+                }
+                else
+                {
                     throw new ArgumentException(
                         String.Format("Variable '{0}': The type '{1}' is not supported.", pair.Key, pair.Value.GetType()),
                         "initialValues"
@@ -434,11 +444,15 @@ namespace Tesseract.Interop
         public static int BaseApiSetDebugVariable(HandleRef handle, string name, string value)
         {
             IntPtr valuePtr = IntPtr.Zero;
-            try {
+            try
+            {
                 valuePtr = MarshalHelper.StringToPtr(value, Encoding.UTF8);
                 return Native.BaseApiSetDebugVariable(handle, name, valuePtr);
-            } finally {
-                if (valuePtr != IntPtr.Zero) {
+            }
+            finally
+            {
+                if (valuePtr != IntPtr.Zero)
+                {
                     Marshal.FreeHGlobal(valuePtr);
                 }
             }
@@ -447,11 +461,15 @@ namespace Tesseract.Interop
         public static int BaseApiSetVariable(HandleRef handle, string name, string value)
         {
             IntPtr valuePtr = IntPtr.Zero;
-            try {
+            try
+            {
                 valuePtr = MarshalHelper.StringToPtr(value, Encoding.UTF8);
                 return Native.BaseApiSetVariable(handle, name, valuePtr);
-            } finally {
-                if (valuePtr != IntPtr.Zero) {
+            }
+            finally
+            {
+                if (valuePtr != IntPtr.Zero)
+                {
                     Marshal.FreeHGlobal(valuePtr);
                 }
             }
@@ -459,7 +477,8 @@ namespace Tesseract.Interop
 
         public static void Initialize()
         {
-            if (native == null) {
+            if (native == null)
+            {
                 LeptonicaApi.Initialize();
                 native = InteropRuntimeImplementer.CreateInstance<ITessApiSignatures>();
             }
@@ -480,11 +499,14 @@ namespace Tesseract.Interop
         public static string ResultIteratorGetUTF8Text(HandleRef handle, PageIteratorLevel level)
         {
             IntPtr txtHandle = Native.ResultIteratorGetUTF8TextInternal(handle, level);
-            if (txtHandle != IntPtr.Zero) {
+            if (txtHandle != IntPtr.Zero)
+            {
                 var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
                 TessApi.Native.DeleteText(txtHandle);
                 return result;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
