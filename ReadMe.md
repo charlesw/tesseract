@@ -27,7 +27,7 @@ Please create your pull requests to target the "develop" branch. "Master" is onl
 
 ## License
 
-Copyright 2012-2016 Charles Weld.
+Copyright 2012-2019 Charles Weld.
 
 Licensed under the [Apache License, Version 2.0][apache2] (the "License"); you
 may not use this software except in compliance with the License. You may obtain

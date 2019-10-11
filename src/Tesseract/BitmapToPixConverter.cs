@@ -23,7 +23,7 @@ namespace Tesseract
         public Pix Convert(Bitmap img)
         {
             var pixDepth = GetPixDepth(img.PixelFormat);
-            var pix = Pix.Create(img.Width, img.Height, pixDepth);
+            var pix = Pix.Create(img.Width, img.Height, pixDepth);            
             pix.XRes = (int) Math.Round(img.HorizontalResolution);
             pix.YRes = (int) Math.Round(img.VerticalResolution);
 
@@ -42,6 +42,8 @@ namespace Tesseract
 
                 if (imgData.PixelFormat == PixelFormat.Format32bppArgb) {
                     TransferDataFormat32bppArgb(imgData, pixData);
+                } else if (imgData.PixelFormat == PixelFormat.Format32bppRgb) {
+                    TransferDataFormat32bppRgb(imgData, pixData);
                 } else if (imgData.PixelFormat == PixelFormat.Format24bppRgb) {
                     TransferDataFormat24bppRgb(imgData, pixData);
                 } else if (imgData.PixelFormat == PixelFormat.Format8bppIndexed) {
@@ -88,6 +90,7 @@ namespace Tesseract
                     return 8;
 
                 case PixelFormat.Format32bppArgb:
+                case PixelFormat.Format32bppRgb:
                 case PixelFormat.Format24bppRgb:
                     return 32;
 
@@ -131,7 +134,7 @@ namespace Tesseract
             }
         }
 
-        private unsafe void TransferDataFormat32bppArgb(BitmapData imgData, PixData pixData)
+        private unsafe void TransferDataFormat32bppRgb(BitmapData imgData, PixData pixData)
         {
             var imgFormat = imgData.PixelFormat;
             var height = imgData.Height;
@@ -142,6 +145,28 @@ namespace Tesseract
                 uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
 
                 for (int x = 0; x < width; x++) {
+                    byte* pixelPtr = imgLine + (x << 2);
+                    byte blue = *pixelPtr;
+                    byte green = *(pixelPtr + 1);
+                    byte red = *(pixelPtr + 2);
+                    PixData.SetDataFourByte(pixLine, x, BitmapHelper.EncodeAsRGBA(red, green, blue, 255));
+                }
+            }
+        }
+
+        private unsafe void TransferDataFormat32bppArgb(BitmapData imgData, PixData pixData)
+        {
+            var imgFormat = imgData.PixelFormat;
+            var height = imgData.Height;
+            var width = imgData.Width;
+
+            for (int y = 0; y < height; y++)
+            {
+                byte* imgLine = (byte*)imgData.Scan0 + (y * imgData.Stride);
+                uint* pixLine = (uint*)pixData.Data + (y * pixData.WordsPerLine);
+
+                for (int x = 0; x < width; x++)
+                {
                     byte* pixelPtr = imgLine + (x << 2);
                     byte blue = *pixelPtr;
                     byte green = *(pixelPtr + 1);
