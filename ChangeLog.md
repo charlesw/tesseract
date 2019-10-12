@@ -1,8 +1,18 @@
 ﻿### Version 4.1.0
 
+Note: As of version 4.1.0 this wrapper will now match Tesseract's version to the first two numbers 
+(Major.Minor) with the last number (Patch) reserved for changes in the wrapper. This is to avoid 
+confusion with what version of tesseract is used. This does that semantic versioning is no longer 
+used however breaking changes will be kept to the absolute minimum, even between major tesseract 
+releases, and clearly denoted here if they are required.
+
 * Updated to Tesseract 4.1.0  [Issue 321](https://github.com/charlesw/tesseract/issues/321)
+* Support integration with System.Drawing in .net core using Tesseract.Drawing [#477](https://github.com/charlesw/tesseract/issues/477)
+
+#### Breaking Changes
+
 * Requires VC++ 2019 runtime
-* Removed support for .net framework 2.0 [491](https://github.com/charlesw/tesseract/issues/491)
+* Dropped support for .net framework 2.0 [491](https://github.com/charlesw/tesseract/issues/491)
 
 #### Known issues
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -14,7 +13,7 @@ namespace Tesseract
     /// </summary>
     public class TesseractEngine : DisposableBase
     {
-        private const string TesseractVersion = "4.00.00";
+        private const string TesseractVersion = "4.1.0.00";
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
         private HandleRef handle;
@@ -274,82 +273,7 @@ namespace Tesseract
             page.Disposed += OnIteratorDisposed;
             return page;
         }
-
-#if NETFULL
-
-        /// <summary>
-        /// Process the specified bitmap image.
-        /// </summary>
-        /// <remarks>
-        /// Please consider <see cref="Process(Pix, PageSegMode?)"/> instead. This is because
-        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
-        /// Leptonica also supports a large number of image pre-processing functions as well.
-        /// </remarks>
-        /// <param name="image">The image to process.</param>
-        /// <param name="pageSegMode">The page segmentation mode.</param>
-        /// <returns></returns>
-        public Page Process(Bitmap image, PageSegMode? pageSegMode = null)
-        {
-            return Process(image, new Rect(0, 0, image.Width, image.Height), pageSegMode);
-        }
-
-        /// <summary>
-        /// Process the specified bitmap image.
-        /// </summary>
-        /// <remarks>
-        /// Please consider <see cref="Process(Pix, String, PageSegMode?)"/> instead. This is because
-        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
-        /// Leptonica also supports a large number of image pre-processing functions as well.
-        /// </remarks>
-        /// <param name="image">The image to process.</param>
-        /// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
-        /// <param name="pageSegMode">The page segmentation mode.</param>
-        /// <returns></returns>
-        public Page Process(Bitmap image, string inputName, PageSegMode? pageSegMode = null)
-        {
-            return Process(image, inputName, new Rect(0, 0, image.Width, image.Height), pageSegMode);
-        }
-
-        /// <summary>
-        /// Process the specified bitmap image.
-        /// </summary>
-        /// <remarks>
-        /// Please consider <see cref="TesseractEngine.Process(Pix, Rect, PageSegMode?)"/> instead. This is because
-        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
-        /// Leptonica also supports a large number of image pre-processing functions as well.
-        /// </remarks>
-        /// <param name="image">The image to process.</param>
-        /// <param name="region">The region of the image to process.</param>
-        /// <param name="pageSegMode">The page segmentation mode.</param>
-        /// <returns></returns>
-        public Page Process(Bitmap image, Rect region, PageSegMode? pageSegMode = null)
-        {
-            return Process(image, null, region, pageSegMode);
-        }
-
-        /// <summary>
-        /// Process the specified bitmap image.
-        /// </summary>
-        /// <remarks>
-        /// Please consider <see cref="TesseractEngine.Process(Pix, String, Rect, PageSegMode?)"/> instead. This is because
-        /// this method must convert the bitmap to a pix for processing which will add additional overhead.
-        /// Leptonica also supports a large number of image pre-processing functions as well.
-        /// </remarks>
-        /// <param name="image">The image to process.</param>
-        /// <param name="inputName">Sets the input file's name, only needed for training or loading a uzn file.</param>
-        /// <param name="region">The region of the image to process.</param>
-        /// <param name="pageSegMode">The page segmentation mode.</param>
-        /// <returns></returns>
-        public Page Process(Bitmap image, string inputName, Rect region, PageSegMode? pageSegMode = null)
-        {
-            var pix = PixConverter.ToPix(image);
-            var page = Process(pix, inputName, region, pageSegMode);
-            new PageDisposalHandle(page, pix);
-            return page;
-        }
-
-#endif
-
+        
         protected override void Dispose(bool disposing)
         {
             if (handle.Handle != IntPtr.Zero)
@@ -402,7 +326,7 @@ namespace Tesseract
         /// <summary>
         /// Ties the specified pix to the lifecycle of a page.
         /// </summary>
-        private class PageDisposalHandle
+        public class PageDisposalHandle
         {
             private readonly Page page;
             private readonly Pix pix;

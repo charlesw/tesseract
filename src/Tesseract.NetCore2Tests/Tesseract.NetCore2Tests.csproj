@@ -25,6 +25,7 @@
     <Compile Include="..\Tesseract.Tests\TestRun.cs" Link="TestRun.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\BitmapHelperTests.cs" Link="Leptonica\BitmapHelperTests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\ColorTests.cs" Link="Leptonica\ColorTests.cs" />
+    <Compile Include="..\Tesseract.Tests\Leptonica\ConvertBitmapToPixTests.cs" Link="Leptonica\ConvertBitmapToPixTests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\LoadFromFileTests.cs" Link="Leptonica\LoadFromFileTests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\PixATests.cs" Link="Leptonica\PixATests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\PixTests\ImageManipulationTests.cs" Link="Leptonica\PixTests\ImageManipulationTests.cs" />
@@ -38,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Tesseract.Drawing\Tesseract.Drawing.csproj" />
     <ProjectReference Include="..\Tesseract\Tesseract.csproj" />
   </ItemGroup>
 

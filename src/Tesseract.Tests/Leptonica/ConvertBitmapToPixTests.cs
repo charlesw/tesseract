@@ -20,7 +20,7 @@ namespace Tesseract.Tests.Leptonica
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFilePath)) {
                 using (var scaledSource = new Bitmap(source, new Size(source.Width * 2, source.Height * 2))) {
-                    Assert.That(BitmapHelper.GetBPP(scaledSource), Is.EqualTo(32));
+                    Assert.That(scaledSource.GetBPP(), Is.EqualTo(32));
                     using (var dest = bitmapConverter.Convert(scaledSource)) {
                         dest.Save(TestResultRunFile("Conversion/ScaledBitmapToPix_rgb_32bpp.tif"), ImageFormat.Tiff);
 
@@ -49,7 +49,7 @@ namespace Tesseract.Tests.Leptonica
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFilePath)) {
                 Assert.That(source.PixelFormat, Is.EqualTo(pixelFormat));
-                Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(depth));
+                Assert.That(source.GetBPP(), Is.EqualTo(depth));
                 using (var dest = bitmapConverter.Convert(source)) {
                     var destFilename = String.Format("Conversion/BitmapToPix_{0}_{1}bpp.tif", pixType, depth);
                     dest.Save(TestResultRunFile(destFilename), ImageFormat.Tiff);
@@ -68,7 +68,7 @@ namespace Tesseract.Tests.Leptonica
             var sourceFile = TestFilePath("Conversion/photo_palette_8bpp.png");
             var bitmapConverter = new BitmapToPixConverter();
             using (var source = new Bitmap(sourceFile)) {
-                Assert.That(BitmapHelper.GetBPP(source), Is.EqualTo(8));
+                Assert.That(source.GetBPP(), Is.EqualTo(8));
                 Assert.That(source.PixelFormat, Is.EqualTo(PixelFormat.Format8bppIndexed));
                 using (var dest = bitmapConverter.Convert(source)) {
                     var destFilename = TestResultRunFile("Conversion/BitmapToPix_palette_8bpp.png");
@@ -127,7 +127,7 @@ namespace Tesseract.Tests.Leptonica
             var width = pix.Width;
             for (int y = 0; y < height; y += height) {
                 for (int x = 0; x < width; x += width) {
-                    PixColor sourcePixel = (PixColor)bmp.GetPixel(x, y);
+                    PixColor sourcePixel = bmp.GetPixel(x, y).ToPixColor();
                     PixColor destPixel = GetPixel(pix, x, y);
                     if (checkAlpha) {
                         Assert.That(destPixel, Is.EqualTo(sourcePixel), "Expected pixel at <{0},{1}> to be same in both source and dest.", x, y);

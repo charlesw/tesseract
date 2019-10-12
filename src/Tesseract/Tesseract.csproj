@@ -15,7 +15,7 @@
     <PackageProjectUrl>https://github.com/charlesw/tesseract/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/charlesw/tesseract/</RepositoryUrl>
     <PackageTags>Tesseract Ocr</PackageTags>
-    <Version>4.1.0</Version>
+    <Version>4.1.0-beta1</Version>
     <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <NeutralLanguage></NeutralLanguage>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -23,12 +23,12 @@
   
   <!-- .NET 4.0 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
-	  <DefineConstants>NET40;NETFULL</DefineConstants>
+	  <DefineConstants>NET40;NETFULL;SYSTEM_DRAWING_SUPPORT</DefineConstants>
   </PropertyGroup>
   
   <!-- .NET 4.5 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
-	  <DefineConstants>NET45;NETFULL</DefineConstants>
+	  <DefineConstants>NET45;NETFULL;SYSTEM_DRAWING_SUPPORT</DefineConstants>
   </PropertyGroup>
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->

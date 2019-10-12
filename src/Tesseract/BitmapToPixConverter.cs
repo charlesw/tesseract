@@ -1,4 +1,4 @@
-﻿#if NETFULL
+﻿#if SYSTEM_DRAWING_SUPPORT
 
 using System;
 using System.Drawing;
@@ -69,7 +69,7 @@ namespace Tesseract
             var pixColormap = PixColormap.Create(pix.Depth);
             try {
                 for (int i = 0; i < imgPaletteEntries.Length; i++) {
-                    if (!pixColormap.AddColor((PixColor)imgPaletteEntries[i])) {
+                    if (!pixColormap.AddColor(imgPaletteEntries[i].ToPixColor())) {
                         throw new InvalidOperationException(String.Format("Failed to add colormap entry {0}.", i));
                     }
                 }

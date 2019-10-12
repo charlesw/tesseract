@@ -1,4 +1,4 @@
-﻿#if NETFULL
+﻿#if SYSTEM_DRAWING_SUPPORT
 
 using System;
 using System.Collections.Generic;
