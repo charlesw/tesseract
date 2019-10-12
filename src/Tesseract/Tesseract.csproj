@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45;net40;net20</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45;net40</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -19,11 +19,6 @@
     <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <NeutralLanguage></NeutralLanguage>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-  </PropertyGroup>
-  
-  <!-- .NET 2.0 references, compilation flags and build options -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net20'">
-	  <DefineConstants>NET20;NETFULL</DefineConstants>
   </PropertyGroup>
   
   <!-- .NET 4.0 references, compilation flags and build options -->

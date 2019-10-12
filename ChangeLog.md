@@ -1,7 +1,8 @@
 ﻿### Version 4.1.0
 
-* Updated to Tesseract 4.1.0
+* Updated to Tesseract 4.1.0  [Issue 321](https://github.com/charlesw/tesseract/issues/321)
 * Requires VC++ 2019 runtime
+* Removed support for .net framework 2.0 [491](https://github.com/charlesw/tesseract/issues/491)
 
 #### Known issues
 
@@ -10,7 +11,7 @@
 
 ### Version 4.0.0 (never officially released)
 
-* Updated to Tesseract 4.0.0
+* Updated to Tesseract 4.0.0 [Issue 321](https://github.com/charlesw/tesseract/issues/321)
 * Requires VC++ 2017 runtime
 
 ### Version 3.2.0
