@@ -12,70 +12,71 @@ namespace Tesseract
         /// <summary>
         /// Orientation and script detection (OSD) only.
         /// </summary>
-        OsdOnly,
+        OsdOnly = 0,
 
         /// <summary>
         /// Automatic page sementation with orientantion and script detection (OSD).
         /// </summary>
-        AutoOsd,
+        AutoOsd = 1,
 
         /// <summary>
         /// Automatic page segmentation, but no OSD, or OCR.
         /// </summary>
-        AutoOnly,
+        AutoOnly = 2,
 
         /// <summary>
         /// Fully automatic page segmentation, but no OSD.
         /// </summary>
-        Auto,
+        Auto = 3,
 
         /// <summary>
         /// Assume a single column of text of variable sizes.
         /// </summary>
-        SingleColumn,
+        SingleColumn = 4,
 
         /// <summary>
         /// Assume a single uniform block of vertically aligned text.
         /// </summary>
-        SingleBlockVertText,
+        SingleBlockVertText = 5,
 
         /// <summary>
         /// Assume a single uniform block of text.
         /// </summary>
-        SingleBlock,
+        SingleBlock = 6,
 
         /// <summary>
         /// Treat the image as a single text line.
         /// </summary>
-        SingleLine,
+        SingleLine = 7,
 
         /// <summary>
         /// Treat the image as a single word.
         /// </summary>
-        SingleWord,
+        SingleWord = 8,
 
         /// <summary>
         /// Treat the image as a single word in a circle.
         /// </summary>
-        CircleWord,
+        CircleWord = 9,
 
         /// <summary>
         /// Treat the image as a single character.
         /// </summary>
-        SingleChar,
+        SingleChar = 10,
 
         /// <summary>
-        SparseText,
+        SparseText = 11,
 
         /// <summary>
         /// Sparse text with orientation and script detection.
         /// </summary>
-        SparseTextOsd,
-
+        SparseTextOsd = 12,
+        
         /// <summary>
-        /// Treat the image as a single text line, bypassing hacks that are Tesseract-specific.
+        /// Treat the image as a single text line, bypassing hacks that are
+        /// specific to Tesseract.
         /// </summary>
-        RawLine,
+        RawLine = 13,
 
         /// <summary>        
         /// Number of enum entries.

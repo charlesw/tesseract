@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
@@ -183,16 +183,16 @@
     <None Include="..\Tesseract.Tests\tessdata\pdf.ttf" Link="tessdata\pdf.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\liblept1780.dll" Link="x64\liblept1780.dll">
+    <None Include="..\Tesseract\x64\leptonica-1.78.0.dll" Link="x64\leptonica-1.78.0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\libtesseract410.dll" Link="x64\libtesseract410.dll">
+    <None Include="..\Tesseract\x64\tesseract41.dll" Link="x64\tesseract41.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\liblept1780.dll" Link="x86\liblept1780.dll">
+    <None Include="..\Tesseract\x86\leptonica-1.78.0.dll" Link="x86\leptonica-1.78.0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\libtesseract410.dll" Link="x86\libtesseract410.dll">
+    <None Include="..\Tesseract\x86\tesseract41.dll" Link="x86\tesseract41.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

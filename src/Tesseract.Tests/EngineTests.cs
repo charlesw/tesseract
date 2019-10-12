@@ -45,7 +45,7 @@ namespace Tesseract.Tests
         public void CanParseText_UsingMode(PageSegMode mode, String expectedText)
         {
 
-            using (var engine = CreateEngine()) {
+            using (var engine = CreateEngine(mode:EngineMode.TesseractAndLstm)) {
                 var demoFilename = String.Format("./Ocr/PSM_{0}.png", mode);
                 using (var pix = LoadTestPix(demoFilename)) {
                     using (var page = engine.Process(pix, mode)) {
@@ -112,6 +112,25 @@ namespace Tesseract.Tests
             }
         }
 #endif
+        [Test]
+        public void CanProcessSpecifiedRegionInImage()
+        {
+            using (var engine = CreateEngine(mode:EngineMode.LstmOnly))
+            {
+                using (var img = LoadTestPix(TestImagePath))
+                {
+                    using (var page = engine.Process(img, Rect.FromCoords(0, 0, img.Width, 188)))
+                    {
+                        var region1Text = page.GetText();
+
+                        const string expectedTextRegion1 =
+                            "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.\n";
+
+                        Assert.That(region1Text, Is.EqualTo(expectedTextRegion1));
+                    }
+                }
+            }
+        }
 
         [Test]
         public void CanProcessDifferentRegionsInSameImage()

@@ -1,3 +1,18 @@
+editor_image_xpos	590	Editor image X Pos
+editor_image_ypos	10	Editor image Y Pos
+editor_image_menuheight	50	Add to image height for menu bar
+editor_image_word_bb_color	7	Word bounding box colour
+editor_image_blob_bb_color	4	Blob bounding box colour
+editor_image_text_color	2	Correct text colour
+editor_dbwin_xpos	50	Editor debug window X Pos
+editor_dbwin_ypos	500	Editor debug window Y Pos
+editor_dbwin_height	24	Editor debug window height
+editor_dbwin_width	80	Editor debug window width
+editor_word_xpos	60	Word window X Pos
+editor_word_ypos	510	Word window Y Pos
+editor_word_height	240	Word window height
+editor_word_width	655	Word window width
+classify_num_cp_levels	3	Number of Class Pruner Levels
 textord_debug_tabfind	0	Debug tab finding
 textord_debug_bugs	0	Turn on output related to bugs in tab finding
 textord_testregion_left	-1	Left edge of debug reporting rectangle
@@ -14,7 +29,6 @@ edges_min_nonhole	12	Min pixels for potential char in box
 edges_patharea_ratio	40	Max lensq/area for acceptable child outline
 textord_fp_chop_error	2	Max allowed bending of chop cells
 textord_tabfind_show_images	0	Show image blobs
-classify_num_cp_levels	3	Number of Class Pruner Levels
 textord_skewsmooth_offset	4	For smooth factor
 textord_skewsmooth_offset2	1	For smooth factor
 textord_test_x	-2147483647	coord of test pt
@@ -26,20 +40,6 @@ textord_max_blob_overlaps	4	Max number of blobs a big blob can overlap
 textord_min_xheight	10	Min credible pixel xheight
 textord_lms_line_trials	12	Number of linew fits to do
 oldbl_holed_losscount	10	Max lost before fallback line used
-editor_image_xpos	590	Editor image X Pos
-editor_image_ypos	10	Editor image Y Pos
-editor_image_menuheight	50	Add to image height for menu bar
-editor_image_word_bb_color	7	Word bounding box colour
-editor_image_blob_bb_color	4	Blob bounding box colour
-editor_image_text_color	2	Correct text colour
-editor_dbwin_xpos	50	Editor debug window X Pos
-editor_dbwin_ypos	500	Editor debug window Y Pos
-editor_dbwin_height	24	Editor debug window height
-editor_dbwin_width	80	Editor debug window width
-editor_word_xpos	60	Word window X Pos
-editor_word_ypos	510	Word window Y Pos
-editor_word_height	240	Word window height
-editor_word_width	655	Word window width
 pitsync_linear_version	6	Use new fast algorithm
 pitsync_fake_depth	1	Max advance fake generation
 textord_tabfind_show_strokewidths	0	Show stroke widths
@@ -47,8 +47,14 @@ textord_dotmatrix_gap	3	Max pixel gap for broken pixed pitch
 textord_debug_block	0	Block to do debug on
 textord_pitch_range	2	Max range test on pitch
 textord_words_veto_power	5	Rows required to outvote a veto
+equationdetect_save_bi_image	0	Save input bi image
+equationdetect_save_spt_image	0	Save special character image
+equationdetect_save_seed_image	0	Save the seed image
+equationdetect_save_merged_image	0	Save the merged image
+poly_debug	0	Debug old poly
+poly_wide_objects_better	1	More accurate approx on wide things
+wordrec_display_splits	0	Display splits
 textord_debug_printable	0	Make debug windows printable
-stream_filelist	0	Stream a filelist from stdin
 textord_space_size_is_variable	0	If true, word delimiter spaces are assumed to have variable width, even though characters have fixed pitch.
 textord_tabfind_show_initial_partitions	0	Show partition bounds
 textord_tabfind_show_reject_blobs	0	Show blobs rejected as noise
@@ -61,10 +67,6 @@ textord_show_fixed_cuts	0	Draw fixed pitch cell boundaries
 edges_use_new_outline_complexity	0	Use the new outline complexity module
 edges_debug	0	turn on debugging for this module
 edges_children_fix	0	Remove boxy parents of char-like children
-equationdetect_save_bi_image	0	Save input bi image
-equationdetect_save_spt_image	0	Save special character image
-equationdetect_save_seed_image	0	Save the seed image
-equationdetect_save_merged_image	0	Save the merged image
 gapmap_debug	0	Say which blocks have tables
 gapmap_use_ends	0	Use large space at start and end of rows
 gapmap_no_isolated_quanta	0	Ensure gaps not less than 2quanta wide
@@ -95,12 +97,6 @@ textord_oldbl_merge_parts	1	Merge suspect partitions
 oldbl_corrfix	1	Improve correlation of heights
 oldbl_xhfix	0	Fix bug in modes threshold for xheights
 textord_ocropus_mode	0	Make baselines for ocropus
-poly_debug	0	Debug old poly
-poly_wide_objects_better	1	More accurate approx on wide things
-wordrec_display_all_blobs	0	Display Blobs
-wordrec_display_all_words	0	Display Words
-wordrec_blob_pause	0	Blob pause
-wordrec_display_splits	0	Display splits
 textord_tabfind_only_strokewidths	0	Only run stroke widths
 textord_tabfind_show_initialtabs	0	Show tab candidates
 textord_tabfind_show_finaltabs	0	Show tab vectors
@@ -129,19 +125,18 @@ textord_restore_underlines	1	Chop underlines & put back
 textord_fp_chopping	1	Do fixed pitch chopping
 textord_force_make_prop_words	0	Force proportional word segmentation on all rows
 textord_chopper_test	0	Chopper is being tested.
-classify_font_name	UnknownFont	Default font name to be used in training
-fx_debugfile	FXDebug	Name of debugfile
+wordrec_display_all_blobs	0	Display Blobs
+wordrec_display_all_words	0	Display Words
+wordrec_blob_pause	0	Blob pause
+stream_filelist	0	Stream a filelist from stdin
+dotproduct	auto	Function used for calculation of dot product
 editor_image_win_name	EditorImage	Editor image window name
 editor_dbwin_name	EditorDBWin	Editor debug window name
 editor_word_name	BlnWords	BL normalized word window
 editor_debug_config_file		Config file to apply to single words
 debug_file		File to send tprintf output to
-dotproduct	auto	Function used for calculation of dot product
-textord_underline_threshold	0.5	Fraction of width occupied
-edges_childarea	0.5	Min area fraction of child outline
-edges_boxarea	0.875	Min area fraction of grandchild for box
-textord_fp_chop_snap	0.5	Max distance of chop pt from vertex
-gapmap_big_gaps	1.75	xht multiplier
+classify_font_name	UnknownFont	Default font name to be used in training
+fx_debugfile	FXDebug	Name of debugfile
 classify_cp_angle_pad_loose	45	Class Pruner Angle Pad Loose
 classify_cp_angle_pad_medium	20	Class Pruner Angle Pad Medium
 classify_cp_angle_pad_tight	10	CLass Pruner Angle Pad Tight
@@ -154,6 +149,16 @@ classify_cp_side_pad_tight	0.6	Class Pruner Side Pad Tight
 classify_pp_angle_pad	45	Proto Pruner Angle Pad
 classify_pp_end_pad	0.5	Proto Prune End Pad
 classify_pp_side_pad	2.5	Proto Pruner Side Pad
+classify_min_slope	0.414214	Slope below which lines are called horizontal
+classify_max_slope	2.41421	Slope above which lines are called vertical
+classify_norm_adj_midpoint	32	Norm adjust midpoint ...
+classify_norm_adj_curl	2	Norm adjust curl ...
+classify_pico_feature_length	0.05	Pico Feature Length
+textord_underline_threshold	0.5	Fraction of width occupied
+edges_childarea	0.5	Min area fraction of child outline
+edges_boxarea	0.875	Min area fraction of grandchild for box
+textord_fp_chop_snap	0.5	Max distance of chop pt from vertex
+gapmap_big_gaps	1.75	xht multiplier
 textord_spline_shift_fraction	0.02	Fraction of line spacing for quad
 textord_spline_outlier_fraction	0.1	Fraction of line spacing for outlier
 textord_skew_ile	0.5	Ile of gradients for page skew
@@ -177,14 +182,9 @@ textord_ascx_ratio_max	1.8	Max cap/xheight
 textord_descx_ratio_min	0.25	Min desc/xheight
 textord_descx_ratio_max	0.6	Max desc/xheight
 textord_xheight_error_margin	0.1	Accepted variation
-classify_min_slope	0.414214	Slope below which lines are called horizontal
-classify_max_slope	2.41421	Slope above which lines are called vertical
-classify_norm_adj_midpoint	32	Norm adjust midpoint ...
-classify_norm_adj_curl	2	Norm adjust curl ...
 oldbl_xhfract	0.4	Fraction of est allowed in calc
 oldbl_dot_error_size	1.26	Max aspect ratio of a dot
 textord_oldbl_jumplimit	0.15	X fraction for new partition
-classify_pico_feature_length	0.05	Pico Feature Length
 pitsync_joined_edge	0.75	Dist inside big blob for chopping
 pitsync_offset_freecut_fraction	0.25	Fraction of cut for free cuts
 textord_tabvector_vertical_gap_fraction	0.5	max fraction of mean blob width allowed for vertical gaps in vertical text
@@ -265,7 +265,7 @@ language_model_viterbi_list_max_size	500	Maximum size of viterbi lists recorded 
 language_model_min_compound_length	3	Minimum length of compound words
 wordrec_display_segmentations	0	Display Segmentations
 tessedit_pageseg_mode	6	Page seg mode: 0=osd only, 1=auto+osd, 2=auto_only, 3=auto, 4=column, 5=block_vert, 6=block, 7=line, 8=word, 9=word_circle, 10=char,11=sparse_text, 12=sparse_text+osd, 13=raw_line (Values from PageSegMode enum in publictypes.h)
-tessedit_ocr_engine_mode	1	Which OCR engine(s) to run (Tesseract, LSTM, both). Defaults to loading and running the most accurate available.
+tessedit_ocr_engine_mode	2	Which OCR engine(s) to run (Tesseract, LSTM, both). Defaults to loading and running the most accurate available.
 pageseg_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing page-segmentation.
 ocr_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing ocr.
 bidi_debug	0	Debug level for BiDi

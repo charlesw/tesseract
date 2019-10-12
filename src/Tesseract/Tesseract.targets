@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <ItemGroup>
-        <None Include="$(MSBuildThisFileDirectory)\..\x86\liblept1780.dll">
-            <Link>x86\liblept1780.dll</Link>
+        <None Include="$(MSBuildThisFileDirectory)\..\x86\leptonica-1.78.0.dll">
+            <Link>x86\leptonica-1.78.0.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="$(MSBuildThisFileDirectory)\..\x86\libtesseract410.dll">
-            <Link>x86\libtesseract410.dll</Link>
+        <None Include="$(MSBuildThisFileDirectory)\..\x86\tesseract41.dll">
+            <Link>x86\tesseract41.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="$(MSBuildThisFileDirectory)\..\x64\liblept1780.dll">
-            <Link>x64\liblept1780.dll</Link>
+        <None Include="$(MSBuildThisFileDirectory)\..\x64\leptonica-1.78.0.dll">
+            <Link>x64\leptonica-1.78.0.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="$(MSBuildThisFileDirectory)\..\x64\libtesseract410.dll">
-            <Link>x64\libtesseract410.dll</Link>
+        <None Include="$(MSBuildThisFileDirectory)\..\x64\tesseract41.dll">
+            <Link>x64\tesseract41.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

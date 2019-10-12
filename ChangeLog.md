@@ -3,6 +3,11 @@
 * Updated to Tesseract 4.1.0
 * Requires VC++ 2019 runtime
 
+#### Known issues
+
+* Setting regions of interest doesn't work [Issue 489](https://github.com/charlesw/tesseract/issues/489)
+* PageSegMode.SingleBlockVertText does not work [Issue 490](https://github.com/charlesw/tesseract/issues/490)
+
 ### Version 4.0.0 (never officially released)
 
 * Updated to Tesseract 4.0.0
