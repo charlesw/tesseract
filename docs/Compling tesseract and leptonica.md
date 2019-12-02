@@ -39,7 +39,14 @@ The following differ from [[Compiling-Tesseract-and-Leptonica]] in that they use
 	cmake --build . --config Release --target install
 	```
 
-	
+### Building leptonica (master) and tesseract (4.1 branch)
+In order to build the current master branch of leptonica, as of 2019-11-27, "SW_BUILD" must be disabled as it's not available on windows. This can be accomplished by adding `-DSW_BUILD=OFF` to the cmake command line above.
+The same is valid for building tesseract, the 4.1 branch.
+By default the cmake is setup to use the optimization macros, but it is resulting of failing tesseract on some old processors, and therefore the option `-DAUTO_OPTIMIZE=OFF` should be added also when compiling tesseract.
+
+See: [Issue 497 - comment A](https://github.com/charlesw/tesseract/issues/497#issuecomment-559010640)
+[Issue 497 - comment B](https://github.com/charlesw/tesseract/issues/497#issuecomment-560134125)
+
 ### Disabling AVX optimisations
 
 Tesseract will automatically detect and enable the instruction set extensions supported on the machine 
