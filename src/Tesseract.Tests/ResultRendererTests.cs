@@ -138,6 +138,63 @@ namespace Tesseract.Tests
         }
 
         [Test]
+        public void CanRenderResultsIntoAltoFile()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\Alto\phototest");
+            using (var renderer = ResultRenderer.CreateAltoRenderer(resultPath))
+            {
+                var examplePixPath = TestFilePath("Ocr/phototest.tif");
+                ProcessFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "xml");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected an xml file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+
+        [Test]
+        public void CanRenderResultsIntoTsvFile()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\Tsv\phototest");
+            using (var renderer = ResultRenderer.CreateTsvRenderer(resultPath))
+            {
+                var examplePixPath = TestFilePath("Ocr/phototest.tif");
+                ProcessFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "tsv");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a Tsv file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
+        public void CanRenderResultsIntoLSTMBoxFile()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\LSTMBox\phototest");
+            using (var renderer = ResultRenderer.CreateLSTMBoxRenderer(resultPath))
+            {
+                var examplePixPath = TestFilePath("Ocr/phototest.tif");
+                ProcessFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "box");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a box file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
+        public void CanRenderResultsIntoWordStrBoxFile()
+        {
+            var resultPath = TestResultRunFile(@"ResultRenderers\WordStrBox\phototest");
+            using (var renderer = ResultRenderer.CreateWordStrBoxRenderer(resultPath))
+            {
+                var examplePixPath = TestFilePath("Ocr/phototest.tif");
+                ProcessFile(renderer, examplePixPath);
+            }
+
+            var expectedOutputFilename = Path.ChangeExtension(resultPath, "box");
+            Assert.That(File.Exists(expectedOutputFilename), $"Expected a box file \"{expectedOutputFilename}\" to have been created; but none was found.");
+        }
+
+        [Test]
         public void CanRenderResultsIntoBoxFile()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\Box\phototest");
