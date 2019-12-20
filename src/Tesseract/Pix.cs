@@ -134,6 +134,18 @@ namespace Tesseract
             return Create(handle);
         }
 
+        public static Pix pixReadFromMultipageTiff(string filename, ref int offset)
+        {
+            IntPtr handle;
+            handle = Interop.LeptonicaApi.Native.pixReadFromMultipageTiff(filename, ref offset);
+
+            if (handle == IntPtr.Zero)
+            {
+                throw new IOException(String.Format("Failed to load image from multi-page Tiff at offset {0}.", offset));
+            }
+            return Create(handle);
+        }
+
         #endregion Create\Load methods
 
         #region Properties
