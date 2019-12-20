@@ -10,7 +10,7 @@ namespace Tesseract
     /// </summary>
     public enum RenderedFormat
     {
-        TEXT, HOCR, PDF, UNLV, BOX
+        TEXT, HOCR, PDF, UNLV, BOX, ALTO, TSV, LSTMBOX, WORDSTRBOX
     }
 
     /// <summary>
@@ -90,6 +90,46 @@ namespace Tesseract
                             Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new UnlvResultRenderer(outputbase).Handle);
                         }
                         break;
+                    case RenderedFormat.ALTO:
+                        if (renderer == null)
+                        {
+                            renderer = CreateAltoRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new AltoResultRenderer(outputbase).Handle);
+                        }
+                        break;
+                    case RenderedFormat.TSV:
+                        if (renderer == null)
+                        {
+                            renderer = CreateTsvRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new TsvResultRenderer(outputbase).Handle);
+                        }
+                        break;
+                    case RenderedFormat.LSTMBOX:
+                        if (renderer == null)
+                        {
+                            renderer = CreateLSTMBoxRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new LSTMBoxResultRenderer(outputbase).Handle);
+                        }
+                        break;
+                    case RenderedFormat.WORDSTRBOX:
+                        if (renderer == null)
+                        {
+                            renderer = CreateWordStrBoxRenderer(outputbase);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new WordStrBoxResultRenderer(outputbase).Handle);
+                        }
+                        break;
                 }
             }
 
@@ -141,6 +181,50 @@ namespace Tesseract
         public static IResultRenderer CreateUnlvRenderer(string outputFilename)
         {
             return new UnlvResultRenderer(outputFilename);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates an Alto
+        /// file from tesseract's output.
+        /// </summary>
+        /// <param name="outputFilename">The path to the Alto file to be created without the file extension.</param>
+        /// <returns></returns>
+        public static IResultRenderer CreateAltoRenderer(string outputFilename)
+        {
+            return new AltoResultRenderer(outputFilename);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a Tsv
+        /// file from tesseract's output.
+        /// </summary>
+        /// <param name="outputFilename">The path to the Tsv file to be created without the file extension.</param>
+        /// <returns></returns>
+        public static IResultRenderer CreateTsvRenderer(string outputFilename)
+        {
+            return new TsvResultRenderer(outputFilename);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a unlv
+        /// file from tesseract's output.
+        /// </summary>
+        /// <param name="outputFilename">The path to the unlv file to be created without the file extension.</param>
+        /// <returns></returns>
+        public static IResultRenderer CreateLSTMBoxRenderer(string outputFilename)
+        {
+            return new LSTMBoxResultRenderer(outputFilename);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IResultRenderer">result renderer</see> that render that generates a unlv
+        /// file from tesseract's output.
+        /// </summary>
+        /// <param name="outputFilename">The path to the unlv file to be created without the file extension.</param>
+        /// <returns></returns>
+        public static IResultRenderer CreateWordStrBoxRenderer(string outputFilename)
+        {
+            return new WordStrBoxResultRenderer(outputFilename);
         }
 
         /// <summary>
@@ -319,6 +403,42 @@ namespace Tesseract
         public UnlvResultRenderer(string outputFilename)
         {
             var rendererHandle = Interop.TessApi.Native.UnlvRendererCreate(outputFilename);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class AltoResultRenderer : ResultRenderer
+    {
+        public AltoResultRenderer(string outputFilename)
+        {
+            var rendererHandle = Interop.TessApi.Native.AltoRendererCreate(outputFilename);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class TsvResultRenderer : ResultRenderer
+    {
+        public TsvResultRenderer(string outputFilename)
+        {
+            var rendererHandle = Interop.TessApi.Native.TsvRendererCreate(outputFilename);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class LSTMBoxResultRenderer : ResultRenderer
+    {
+        public LSTMBoxResultRenderer(string outputFilename)
+        {
+            var rendererHandle = Interop.TessApi.Native.LSTMBoxRendererCreate(outputFilename);
+            Initialise(rendererHandle);
+        }
+    }
+
+    public sealed class WordStrBoxResultRenderer : ResultRenderer
+    {
+        public WordStrBoxResultRenderer(string outputFilename)
+        {
+            var rendererHandle = Interop.TessApi.Native.WordStrBoxRendererCreate(outputFilename);
             Initialise(rendererHandle);
         }
     }
