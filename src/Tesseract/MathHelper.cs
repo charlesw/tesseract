@@ -4,8 +4,28 @@ using System.Text;
 
 namespace Tesseract
 {
-    public class MathHelper
+    public static class MathHelper
     {
+        /// <summary>
+        /// Convert a degrees to radians.
+        /// </summary>
+        /// <param name="angleInDegrees"></param>
+        /// <returns></returns>
+        public static float ToRadians(float angleInDegrees)
+        {
+            return (float)ToRadians((double)angleInDegrees);
+        }
+
+        /// <summary>
+        /// Convert a degrees to radians.
+        /// </summary>
+        /// <param name="angleInDegrees"></param>
+        /// <returns></returns>
+        public static double ToRadians(double angleInDegrees)
+        {
+            return angleInDegrees * Math.PI / 180.0;
+        }
+
         /// <summary>
         /// Calculates the smallest integer greater than the quotant of dividend and divisor.
         /// </summary>

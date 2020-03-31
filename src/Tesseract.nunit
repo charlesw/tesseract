@@ -1,9 +1,0 @@
-﻿<NUnitProject>
-  <Settings activeconfig="Release" processModel="Default" domainUsage="Default" />
-  <Config name="Debug" binpathtype="Auto">
-    <assembly path="Tesseract.Tests\bin\Debug\Net45\Tesseract.Tests.dll" />
-  </Config>
-  <Config name="Release" binpathtype="Auto">
-    <assembly path="Tesseract.Tests\bin\Release\Net45\Tesseract.Tests.dll" />
-  </Config>
-</NUnitProject>

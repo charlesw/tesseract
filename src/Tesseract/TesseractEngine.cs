@@ -14,6 +14,7 @@ namespace Tesseract
     /// </summary>
     public class TesseractEngine : DisposableBase
     {
+        private const string TesseractVersion = "3.05.02";
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
         private HandleRef handle;
@@ -189,7 +190,7 @@ namespace Tesseract
             {
                 // Get version doesn't work for x64, might be compilation related for now just
                 // return constant so we don't crash.
-                return "3.03";
+                return TesseractVersion;
 
                 // return Interop.TessApi.Native.GetVersion();
             }
@@ -265,13 +266,16 @@ namespace Tesseract
             var actualPageSegmentMode = pageSegMode.HasValue ? pageSegMode.Value : DefaultPageSegMode;
             Interop.TessApi.Native.BaseAPISetPageSegMode(handle, actualPageSegmentMode);
             Interop.TessApi.Native.BaseApiSetImage(handle, image.Handle);
-            if (!String.IsNullOrEmpty(inputName)) {
+            if (!String.IsNullOrEmpty(inputName))
+            {
                 Interop.TessApi.Native.BaseApiSetInputName(handle, inputName);
             }
             var page = new Page(this, image, inputName, region, actualPageSegmentMode);
             page.Disposed += OnIteratorDisposed;
             return page;
         }
+
+#if NETFULL
 
         /// <summary>
         /// Process the specified bitmap image.
@@ -344,9 +348,12 @@ namespace Tesseract
             return page;
         }
 
+#endif
+
         protected override void Dispose(bool disposing)
         {
-            if (handle.Handle != IntPtr.Zero) {
+            if (handle.Handle != IntPtr.Zero)
+            {
                 Interop.TessApi.Native.BaseApiDelete(handle);
                 handle = new HandleRef(this, IntPtr.Zero);
             }
@@ -354,9 +361,12 @@ namespace Tesseract
 
         private string GetTessDataPrefix()
         {
-            try {
+            try
+            {
                 return Environment.GetEnvironmentVariable("TESSDATA_PREFIX");
-            } catch (SecurityException e) {
+            }
+            catch (SecurityException e)
+            {
                 trace.TraceEvent(TraceEventType.Error, 0, "Failed to detect if the environment variable 'TESSDATA_PREFIX' is set: {0}", e.Message);
                 return null;
             }
@@ -368,21 +378,25 @@ namespace Tesseract
             Guard.RequireNotNullOrEmpty("language", language);
 
             // do some minor processing on datapath to fix some common errors (this basically mirrors what tesseract does as of 3.04)
-            if (!String.IsNullOrEmpty(datapath)) {
+            if (!String.IsNullOrEmpty(datapath))
+            {
                 // remove any excess whitespace
                 datapath = datapath.Trim();
 
                 // remove any trialing '\' or '/' characters
-                if (datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal)) {
+                if (datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal))
+                {
                     datapath = datapath.Substring(0, datapath.Length - 1);
                 }
                 // remove 'tessdata', if it exists, tesseract will add it when building up the tesseract path
-                if (datapath.EndsWith("tessdata", StringComparison.OrdinalIgnoreCase)) {
+                if (datapath.EndsWith("tessdata", StringComparison.OrdinalIgnoreCase))
+                {
                     datapath = datapath.Substring(0, datapath.Length - TessDataDirectory.Length);
                 }
             }
 
-            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles ?? new List<string>(), initialValues ?? new Dictionary<string, object>(), setOnlyNonDebugVariables) != 0) {
+            if (Interop.TessApi.BaseApiInit(handle, datapath, language, (int)engineMode, configFiles ?? new List<string>(), initialValues ?? new Dictionary<string, object>(), setOnlyNonDebugVariables) != 0)
+            {
                 // Special case logic to handle cleaning up as init has already released the handle if it fails.
                 handle = new HandleRef(this, IntPtr.Zero);
                 GC.SuppressFinalize(this);
@@ -486,10 +500,13 @@ namespace Tesseract
         public bool TryGetBoolVariable(string name, out bool value)
         {
             int val;
-            if (Interop.TessApi.Native.BaseApiGetBoolVariable(handle, name, out val) != 0) {
+            if (Interop.TessApi.Native.BaseApiGetBoolVariable(handle, name, out val) != 0)
+            {
                 value = (val != 0);
                 return true;
-            } else {
+            }
+            else
+            {
                 value = false;
                 return false;
             }
@@ -527,6 +544,16 @@ namespace Tesseract
         {
             value = Interop.TessApi.BaseApiGetStringVariable(handle, name);
             return value != null;
+        }
+
+        /// <summary>
+        /// Attempts to print the variables to the file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public bool TryPrintVariablesToFile(string filename)
+        {
+            return Interop.TessApi.Native.BaseApiPrintVariablesToFile(handle, filename) != 0;
         }
 
         #endregion Config
