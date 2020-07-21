@@ -150,7 +150,7 @@ namespace Tesseract.Interop
 
         // Helper functions
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessVersion")]
-        string GetVersion();
+        IntPtr GetVersion();
 
         // result iterator
 
@@ -375,6 +375,18 @@ namespace Tesseract.Interop
                     Initialize();
                 return native;
             }
+        }
+
+        public static string BaseApiGetVersion()
+        {
+            IntPtr versionHandle = Native.GetVersion();
+            if (versionHandle != IntPtr.Zero)
+            {
+                var result = MarshalHelper.PtrToString(versionHandle, Encoding.UTF8);
+                return result;
+            }
+
+            return null;
         }
 
         public static string BaseAPIGetHOCRText(HandleRef handle, int pageNum)
