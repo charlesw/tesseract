@@ -46,7 +46,14 @@ namespace Tesseract.Interop
         internal static extern void BaseApiDelete(HandleRef ptr);
 
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDetectOrientationScript", CharSet = CharSet.Ansi)]
-        internal static extern bool TessBaseAPIDetectOrientationScript(HandleRef handle, out int orient_deg, out float orient_conf, [MarshalAs(UnmanagedType.LPUTF8Str)] out string script_name, out float script_conf);
+        internal static extern bool TessBaseAPIDetectOrientationScriptInternal(HandleRef handle, out int orient_deg, out float orient_conf, out IntPtr script_name, out float script_conf); // The script name is internal memory, canut marshall or free will blow up Tesseract
+        internal static bool TessBaseAPIDetectOrientationScript(HandleRef handle, out int orient_deg, out float orient_conf, out string script_name, out float script_conf)
+        {
+            IntPtr script_name_ptr;
+            bool rv = TessBaseAPIDetectOrientationScriptInternal(handle, out orient_deg, out orient_conf, out script_name_ptr, out script_conf);
+            script_name = MarshalHelper.PtrToString(script_name_ptr);
+            return rv;
+        }
 
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetBoolVariable")]
         internal static extern bool BaseApiGetBoolVariable(HandleRef handle, string name, out bool value);
@@ -280,8 +287,11 @@ namespace Tesseract.Interop
         /// <param name="handle"></param>
         /// <returns></returns>
         [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorGetUTF8Text", CharSet = CharSet.Ansi)]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        internal static extern string ChoiceIteratorGetUTF8Text(HandleRef handle);
+        internal static extern IntPtr ChoiceIteratorGetUTF8TextInternal(HandleRef handle); // Returns internal memory
+        internal static string ChoiceIteratorGetUTF8Text(HandleRef handle)
+        {
+            return MarshalHelper.PtrToString(ChoiceIteratorGetUTF8TextInternal(handle));
+        }
 
         /// <summary>
         /// Native API call to TessChoiceIteratorConfidence
