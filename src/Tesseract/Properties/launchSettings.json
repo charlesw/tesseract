@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Tesseract": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

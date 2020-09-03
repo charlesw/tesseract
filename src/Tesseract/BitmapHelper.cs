@@ -40,7 +40,7 @@ namespace Tesseract
 
 #region Bitmap Data Access
 
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public static byte GetDataBit(byte* data, int index)
@@ -48,7 +48,7 @@ namespace Tesseract
 			return (byte)((*(data + (index >> 3)) >> (index & 0x7)) & 1);
 		}
 		
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public static void SetDataBit(byte* data, int index, byte value)
@@ -58,7 +58,7 @@ namespace Tesseract
             *wordPtr |= (byte)((value & 1) << (7 - (index & 7)));		// set bit, if value is 1
 		}
 		
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static byte GetDataQBit(byte* data, int index)
@@ -66,7 +66,7 @@ namespace Tesseract
             return (byte)((*(data + (index >> 1)) >> (4 * (index & 1))) & 0xF);
 		}
 		
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static void SetDataQBit(byte* data, int index, byte value)
@@ -76,7 +76,7 @@ namespace Tesseract
             *wordPtr |= (byte)((value & 0x0F) << (4 - (4 * (index & 1)))); // applys qbit to n
 		}
 
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static byte GetDataByte(byte* data, int index)
@@ -84,7 +84,7 @@ namespace Tesseract
 			return *(data + index);
 		}
 		
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static void SetDataByte(byte* data, int index, byte value)
@@ -92,7 +92,7 @@ namespace Tesseract
 			*(data + index) = value;
 		}
 
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static ushort GetDataUInt16(ushort* data, int index)
@@ -100,7 +100,7 @@ namespace Tesseract
 			return *(data + index);
 		}
 		
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static void SetDataUInt16(ushort* data, int index, ushort value)
@@ -108,7 +108,7 @@ namespace Tesseract
 			*(data + index) = value;
 		}	
 
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static uint GetDataUInt32(uint* data, int index)
@@ -116,7 +116,7 @@ namespace Tesseract
 			return *(data + index);
 		}
 		
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static void SetDataUInt32(uint* data, int index, uint value)
@@ -129,7 +129,7 @@ namespace Tesseract
 
 #region PixelFormat conversion
 
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public static uint ConvertRgb555ToRGBA(uint val)
@@ -144,7 +144,7 @@ namespace Tesseract
                 0xFF;
         }
         
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public static uint ConvertRgb565ToRGBA(uint val)
@@ -160,7 +160,7 @@ namespace Tesseract
         }
 
 
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public static uint ConvertArgb1555ToRGBA(uint val)
@@ -176,7 +176,7 @@ namespace Tesseract
                 ((alpha << 8) - alpha); // effectively alpha * 255, only works as alpha will be either 0 or 1
         }
 
-#if Net45
+#if Net48
        	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public static uint EncodeAsRGBA(byte red, byte green, byte blue, byte alpha)

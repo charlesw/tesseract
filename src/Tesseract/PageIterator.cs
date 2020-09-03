@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using Tesseract.Interop;
 
 namespace Tesseract
 {
@@ -30,7 +31,7 @@ namespace Tesseract
         {
             VerifyNotDisposed();
             if (handle.Handle != IntPtr.Zero) {
-                Interop.TessApi.Native.PageIteratorBegin(handle);
+                TessApiSignatures.PageIteratorBegin(handle);
             }
         }
 
@@ -47,7 +48,7 @@ namespace Tesseract
             VerifyNotDisposed();
             if (handle.Handle == IntPtr.Zero)
                 return false;
-            return Interop.TessApi.Native.PageIteratorNext(handle, level) != 0;
+            return TessApiSignatures.PageIteratorNext(handle, level);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Tesseract
 
             if (handle.Handle == IntPtr.Zero)
                 return false;
-            return Interop.TessApi.Native.PageIteratorIsAtBeginningOf(handle, level) != 0;
+            return TessApiSignatures.PageIteratorIsAtBeginningOf(handle, level);
         }
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace Tesseract
 
             if (handle.Handle == IntPtr.Zero)
                 return false;
-            return Interop.TessApi.Native.PageIteratorIsAtFinalElement(handle, level, element) != 0;
+            return TessApiSignatures.PageIteratorIsAtFinalElement(handle, level, element);
         }
 
         public PolyBlockType BlockType
@@ -108,7 +109,7 @@ namespace Tesseract
 
                 if (handle.Handle == IntPtr.Zero)
                     return PolyBlockType.Unknown;
-                return Interop.TessApi.Native.PageIteratorBlockType(handle);
+                return TessApiSignatures.PageIteratorBlockType(handle);
             }
         }
 
@@ -119,7 +120,7 @@ namespace Tesseract
                 return null;
             }
 
-            return Pix.Create(Interop.TessApi.Native.PageIteratorGetBinaryImage(handle, level));
+            return Pix.Create(TessApiSignatures.PageIteratorGetBinaryImage(handle, level));
         }
 
         public Pix GetImage(PageIteratorLevel level, int padding, out int x, out int y)
@@ -132,7 +133,7 @@ namespace Tesseract
                 return null;
             }
 
-            return Pix.Create(Interop.TessApi.Native.PageIteratorGetImage(handle, level, padding, page.Image.Handle, out x, out y));
+            return Pix.Create(TessApiSignatures.PageIteratorGetImage(handle, level, padding, page.Image.Handle, out x, out y));
         }
 
         /// <summary>
@@ -145,7 +146,7 @@ namespace Tesseract
         {
             VerifyNotDisposed();
             int x1, y1, x2, y2;
-            if (handle.Handle != IntPtr.Zero && Interop.TessApi.Native.PageIteratorBoundingBox(handle, level, out x1, out y1, out x2, out y2) != 0)
+            if (handle.Handle != IntPtr.Zero && TessApiSignatures.PageIteratorBoundingBox(handle, level, out x1, out y1, out x2, out y2))
             {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
@@ -168,7 +169,7 @@ namespace Tesseract
         {
             VerifyNotDisposed();
             int x1, y1, x2, y2;
-            if (handle.Handle != IntPtr.Zero && Interop.TessApi.Native.PageIteratorBaseline(handle, level, out x1, out y1, out x2, out y2) != 0)
+            if (handle.Handle != IntPtr.Zero && TessApiSignatures.PageIteratorBaseline(handle, level, out x1, out y1, out x2, out y2))
             {
                 bounds = Rect.FromCoords(x1, y1, x2, y2);
                 return true;
@@ -192,7 +193,7 @@ namespace Tesseract
             WritingDirection writing_direction;
             TextLineOrder textLineOrder;
             float deskew_angle;
-            Interop.TessApi.Native.PageIteratorOrientation(handle, out orientation, out writing_direction, out textLineOrder, out deskew_angle);
+            TessApiSignatures.PageIteratorOrientation(handle, out orientation, out writing_direction, out textLineOrder, out deskew_angle);
 
             return new ElementProperties(orientation, textLineOrder, writing_direction, deskew_angle);
         }
@@ -201,7 +202,7 @@ namespace Tesseract
         protected override void Dispose(bool disposing)
         {
             if (handle.Handle != IntPtr.Zero) {
-                Interop.TessApi.Native.PageIteratorDelete(handle);
+                TessApiSignatures.PageIteratorDelete(handle);
             }
         }
     }

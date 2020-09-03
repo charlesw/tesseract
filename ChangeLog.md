@@ -1,4 +1,10 @@
-﻿### Version 4.1.0
+﻿### Version 5.0.0
+
+* Updated to v5
+* Updated to .Net Framework 4.8 and .Net Core 3.1
+* Removed old interop
+
+### Version 4.1.0
 
 * Updated to Tesseract 4.1.0
 * Requires VC++ 2019 runtime

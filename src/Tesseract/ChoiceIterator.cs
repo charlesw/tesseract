@@ -24,7 +24,7 @@ namespace Tesseract
             VerifyNotDisposed();
             if (_handleRef.Handle == IntPtr.Zero)
                 return false;
-            return Interop.TessApi.Native.ChoiceIteratorNext(_handleRef) != 0;
+            return Interop.TessApiSignatures.ChoiceIteratorNext(_handleRef) != 0;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Tesseract
             if (_handleRef.Handle == IntPtr.Zero)
                 return 0f;
 
-            return Interop.TessApi.Native.ChoiceIteratorGetConfidence(_handleRef);
+            return Interop.TessApiSignatures.ChoiceIteratorGetConfidence(_handleRef);
         }
 
         /// <summary>
@@ -53,14 +53,14 @@ namespace Tesseract
             if (_handleRef.Handle == IntPtr.Zero)            
                 return String.Empty;
             
-            return Interop.TessApi.ChoiceIteratorGetUTF8Text(_handleRef);
+            return Interop.TessApiSignatures.ChoiceIteratorGetUTF8Text(_handleRef);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (_handleRef.Handle != IntPtr.Zero)
             {
-                Interop.TessApi.Native.ChoiceIteratorDelete(_handleRef);
+                Interop.TessApiSignatures.ChoiceIteratorDelete(_handleRef);
             }
         }
     }
