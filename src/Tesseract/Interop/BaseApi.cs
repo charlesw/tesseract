@@ -1,8 +1,7 @@
-﻿using InteropDotNet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
+using System.Text.RegularExpressions;
 using Tesseract.Internal;
 
 namespace Tesseract.Interop
@@ -15,217 +14,240 @@ namespace Tesseract.Interop
     /// It should be considered an internal interface and is NOT part of the public api and may have
     /// breaking changes between releases.
     /// </remarks>
-    public interface ITessApiSignatures
+    internal class TessApiSignatures
     {
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetComponentImages")]
-        IntPtr BaseAPIGetComponentImages(HandleRef handle, PageIteratorLevel level, int text_only, IntPtr pixa, IntPtr blockids);
+        static TessApiSignatures()
+        {
+            DllLoader.ForceLoadLibrary(Constants.TesseractDllName);
+        }
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIAnalyseLayout")]
-        IntPtr BaseAPIAnalyseLayout(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetComponentImages")]
+        internal static extern IntPtr BaseAPIGetComponentImages(HandleRef handle, PageIteratorLevel level, int text_only, IntPtr pixa, IntPtr blockids);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIClear")]
-        void BaseAPIClear(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIAnalyseLayout")]
+        internal static extern IntPtr BaseAPIAnalyseLayout(HandleRef handle);
+
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIClear")]
+        internal static extern void BaseAPIClear(HandleRef handle);
 
         /// <summary>
         /// Creates a new BaseAPI instance
         /// </summary>
         /// <returns></returns>
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPICreate")]
-        IntPtr BaseApiCreate();
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPICreate")]
+        internal static extern IntPtr BaseApiCreate();
 
         // Base API
         /// <summary>
         /// Deletes a base api instance.
         /// </summary>
         /// <returns></returns>
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDelete")]
-        void BaseApiDelete(HandleRef ptr);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDelete")]
+        internal static extern void BaseApiDelete(HandleRef ptr);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDetectOrientationScript")]
-        int TessBaseAPIDetectOrientationScript(HandleRef handle, out int orient_deg, out float orient_conf, out IntPtr script_name, out float script_conf);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIDetectOrientationScript", CharSet = CharSet.Ansi)]
+        internal static extern bool TessBaseAPIDetectOrientationScript(HandleRef handle, out int orient_deg, out float orient_conf, [MarshalAs(UnmanagedType.LPUTF8Str)] out string script_name, out float script_conf);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetBoolVariable")]
-        int BaseApiGetBoolVariable(HandleRef handle, string name, out int value);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetBoolVariable")]
+        internal static extern bool BaseApiGetBoolVariable(HandleRef handle, string name, out bool value);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetDoubleVariable")]
-        int BaseApiGetDoubleVariable(HandleRef handle, string name, out double value);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetDoubleVariable")]
+        internal static extern bool BaseApiGetDoubleVariable(HandleRef handle, string name, out double value);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetHOCRText")]
-        IntPtr BaseApiGetHOCRTextInternal(HandleRef handle, int pageNum);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetHOCRText", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseApiGetHOCRText(HandleRef handle, int pageNum); // Can auto free, the result is copied into a new buffer
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetAltoText")]
-        IntPtr BaseApiGetAltoTextInternal(HandleRef handle, int pageNum);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetAltoText", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseApiGetAltoText(HandleRef handle, int pageNum); // Can auto free, the result is copied into a new buffer
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetTsvText")]
-        IntPtr BaseApiGetTsvTextInternal(HandleRef handle, int pageNum);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetTsvText", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseApiGetTsvText(HandleRef handle, int pageNum); // Can auto free, the result is copied into a new buffer
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetBoxText")]
-        IntPtr BaseApiGetBoxTextInternal(HandleRef handle, int pageNum);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetBoxText", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseApiGetBoxText(HandleRef handle, int pageNum); // Can auto free, the result is copied into a new buffer
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetLSTMBoxText")]
-        IntPtr BaseApiGetLSTMBoxTextInternal(HandleRef handle, int pageNum);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetLSTMBoxText", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseApiGetLSTMBoxText(HandleRef handle, int pageNum); // Can auto free, the result is copied into a new buffer
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetWordStrBoxText")]
-        IntPtr BaseApiGetWordStrBoxTextInternal(HandleRef handle, int pageNum);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetWordStrBoxText", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseApiGetWordStrBoxText(HandleRef handle, int pageNum); // Can auto free, the result is copied into a new buffer
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUNLVText")]
-        IntPtr BaseApiGetUNLVTextInternal(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUNLVText", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseApiGetUNLVText(HandleRef handle); // Can auto free, the result is copied into a new buffer
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetIntVariable")]
-        int BaseApiGetIntVariable(HandleRef handle, string name, out int value);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetIntVariable")]
+        internal static extern bool BaseApiGetIntVariable(HandleRef handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, out int value);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetIterator")]
-        IntPtr BaseApiGetIterator(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetIterator")]
+        internal static extern IntPtr BaseApiGetIterator(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetPageSegMode")]
-        PageSegMode BaseAPIGetPageSegMode(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetPageSegMode")]
+        internal static extern PageSegMode BaseAPIGetPageSegMode(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetStringVariable")]
-        IntPtr BaseApiGetStringVariableInternal(HandleRef handle, string name);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetStringVariable", CharSet = CharSet.Ansi)]
+        internal static extern IntPtr BaseApiGetStringVariableInternal(HandleRef handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name);
+        internal static string BaseApiGetStringVariable(HandleRef handle, string name)
+        {
+            return MarshalHelper.PtrToString(BaseApiGetStringVariableInternal(handle, name)); // return string cannot be deleted, it comes from a c_str call.
+        }
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetThresholdedImage")]
-        IntPtr BaseAPIGetThresholdedImage(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetThresholdedImage")]
+        internal static extern IntPtr BaseAPIGetThresholdedImage(HandleRef handle);
 
         // The following were causing issues on Linux/MacOsX when used in .net core
-        //[RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIProcessPages")]
+        //[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIProcessPages")]
         //int BaseAPIProcessPages(HandleRef handle, string filename, string retry_config, int timeout_millisec, HandleRef renderer);
 
-        //[RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIProcessPage")]
+        //[DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIProcessPage")]
         //int BaseAPIProcessPage(HandleRef handle, Pix pix, int page_index, string filename, string retry_config, int timeout_millisec, HandleRef renderer);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetInputName")]
-        void BaseAPISetInputName(HandleRef handle, string name);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetInputName")]
+        internal static extern void BaseAPISetInputName(HandleRef handle, string name);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetDatapath")]
-        string BaseAPIGetDatapath(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetDatapath")]
+        internal static extern string BaseAPIGetDatapath(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetOutputName")]
-        void BaseAPISetOutputName(HandleRef handle, string name);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetOutputName")]
+        internal static extern void BaseAPISetOutputName(HandleRef handle, string name);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUTF8Text")]
-        IntPtr BaseAPIGetUTF8TextInternal(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIGetUTF8Text", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string BaseAPIGetUTF8Text(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIInit4")]
-        int BaseApiInit(HandleRef handle, string datapath, string language, int mode,
-                                      string[] configs, int configs_size,
-                                      string[] vars_vec, string[] vars_values, UIntPtr vars_vec_size,
-                                      bool set_only_non_debug_params);
+        // Issue on this becuase of the UnmanagedType.LPArray + UnmanagedType.LPUTF8Str combination.
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIInit4")]
+        internal static extern int BaseApiInit(HandleRef handle,
+            [MarshalAs(UnmanagedType.LPUTF8Str)] string datapath, [MarshalAs(UnmanagedType.LPUTF8Str)] string language, int mode,
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] configs, int configs_size,
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] vars_vec, [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] vars_values,
+            uint vars_vec_size, bool set_only_non_debug_params);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIMeanTextConf")]
-        int BaseAPIMeanTextConf(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIMeanTextConf")]
+        internal static extern int BaseAPIMeanTextConf(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIRecognize")]
-        int BaseApiRecognize(HandleRef handle, HandleRef monitor);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIRecognize")]
+        internal static extern int BaseApiRecognize(HandleRef handle, HandleRef monitor);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetDebugVariable")]
-        int BaseApiSetDebugVariable(HandleRef handle, string name, IntPtr valPtr);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetDebugVariable", CharSet = CharSet.Ansi)]
+        internal static extern bool BaseApiSetDebugVariable(HandleRef handle, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, [MarshalAs(UnmanagedType.LPUTF8Str)]string value);
 
         // image analysis
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage2")]
-        void BaseApiSetImage(HandleRef handle, HandleRef pixHandle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage2")]
+        internal static extern void BaseApiSetImage(HandleRef handle, HandleRef pixHandle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetInputName")]
-        void BaseApiSetInputName(HandleRef handle, string value);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetInputName")]
+        internal static extern void BaseApiSetInputName(HandleRef handle, string value);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetPageSegMode")]
-        void BaseAPISetPageSegMode(HandleRef handle, PageSegMode mode);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetPageSegMode")]
+        internal static extern void BaseAPISetPageSegMode(HandleRef handle, PageSegMode mode);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetRectangle")]
-        void BaseApiSetRectangle(HandleRef handle, int left, int top, int width, int height);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetRectangle")]
+        internal static extern void BaseApiSetRectangle(HandleRef handle, int left, int top, int width, int height);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetVariable")]
-        int BaseApiSetVariable(HandleRef handle, string name, IntPtr valPtr);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetVariable", CharSet = CharSet.Ansi)]
+        internal static extern bool BaseApiSetVariable(HandleRef handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string valPtr);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteBlockList")]
-        void DeleteBlockList(IntPtr arr);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteIntArray")]
+        internal static extern void DeleteIntArray(IntPtr arr);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteIntArray")]
-        void DeleteIntArray(IntPtr arr);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteText")]
+        internal static extern void DeleteText(IntPtr textPtr);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteText")]
-        void DeleteText(IntPtr textPtr);
-
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteTextArray")]
-        void DeleteTextArray(IntPtr arr);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteTextArray")]
+        internal static extern void DeleteTextArray(IntPtr arr);
 
         // Helper functions
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessVersion")]
-        string GetVersion();
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessVersion", CharSet = CharSet.Ansi)]
+        internal static extern IntPtr GetVersionInternal();
+        internal static string GetVersion()
+        {
+            return MarshalHelper.PtrToString(GetVersionInternal()); // Do not free as it is a constant on the stack
+        }
 
         // result iterator
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBaseline")]
-        int PageIteratorBaseline(HandleRef handle, PageIteratorLevel level, out int x1, out int y1, out int x2, out int y2);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBaseline")]
+        internal static extern bool PageIteratorBaseline(HandleRef handle, PageIteratorLevel level, out int x1, out int y1, out int x2, out int y2);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBegin")]
-        void PageIteratorBegin(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBegin")]
+        internal static extern void PageIteratorBegin(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBlockType")]
-        PolyBlockType PageIteratorBlockType(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBlockType")]
+        internal static extern PolyBlockType PageIteratorBlockType(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBoundingBox")]
-        int PageIteratorBoundingBox(HandleRef handle, PageIteratorLevel level, out int left, out int top, out int right, out int bottom);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorBoundingBox")]
+        internal static extern bool PageIteratorBoundingBox(HandleRef handle, PageIteratorLevel level, out int left, out int top, out int right, out int bottom);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorCopy")]
-        IntPtr PageIteratorCopy(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorCopy")]
+        internal static extern HandleRef PageIteratorCopy(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorDelete")]
-        void PageIteratorDelete(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorDelete")]
+        internal static extern void PageIteratorDelete(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorGetBinaryImage")]
-        IntPtr PageIteratorGetBinaryImage(HandleRef handle, PageIteratorLevel level);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorGetBinaryImage")]
+        internal static extern IntPtr PageIteratorGetBinaryImage(HandleRef handle, PageIteratorLevel level);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorGetImage")]
-        IntPtr PageIteratorGetImage(HandleRef handle, PageIteratorLevel level, int padding, HandleRef originalImage, out int left, out int top);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorGetImage")]
+        internal static extern IntPtr PageIteratorGetImage(HandleRef handle, PageIteratorLevel level, int padding, HandleRef originalImage, out int left, out int top);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorIsAtBeginningOf")]
-        int PageIteratorIsAtBeginningOf(HandleRef handle, PageIteratorLevel level);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorIsAtBeginningOf")]
+        internal static extern bool PageIteratorIsAtBeginningOf(HandleRef handle, PageIteratorLevel level);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorIsAtFinalElement")]
-        int PageIteratorIsAtFinalElement(HandleRef handle, PageIteratorLevel level, PageIteratorLevel element);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorIsAtFinalElement")]
+        internal static extern bool PageIteratorIsAtFinalElement(HandleRef handle, PageIteratorLevel level, PageIteratorLevel element);
 
         // page iterator
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorNext")]
-        int PageIteratorNext(HandleRef handle, PageIteratorLevel level);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorNext")]
+        internal static extern bool PageIteratorNext(HandleRef handle, PageIteratorLevel level);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorOrientation")]
-        void PageIteratorOrientation(HandleRef handle, out Orientation orientation, out WritingDirection writing_direction, out TextLineOrder textLineOrder, out float deskew_angle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPageIteratorOrientation")]
+        internal static extern void PageIteratorOrientation(HandleRef handle, out Orientation orientation, out WritingDirection writing_direction, out TextLineOrder textLineOrder, out float deskew_angle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorCopy")]
-        IntPtr ResultIteratorCopy(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorCopy")]
+        internal static extern IntPtr ResultIteratorCopy(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorDelete")]
-        void ResultIteratorDelete(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorDelete")]
+        internal static extern void ResultIteratorDelete(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorConfidence")]
-        float ResultIteratorGetConfidence(HandleRef handle, PageIteratorLevel level);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorConfidence")]
+        internal static extern float ResultIteratorGetConfidence(HandleRef handle, PageIteratorLevel level);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordFontAttributes")]
-        IntPtr ResultIteratorWordFontAttributes(HandleRef handle, out bool isBold, out bool isItalic, out bool isUnderlined, out bool isMonospace, out bool isSerif, out bool isSmallCaps, out int pointSize, out int fontId);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordFontAttributes")]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string ResultIteratorWordFontAttributes(HandleRef handle, out bool isBold, out bool isItalic, out bool isUnderlined, out bool isMonospace, out bool isSerif, out bool isSmallCaps, out int pointSize, out int fontId);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsFromDictionary")]
-        bool ResultIteratorWordIsFromDictionary(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsFromDictionary")]
+        internal static extern bool ResultIteratorWordIsFromDictionary(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsNumeric")]
-        bool ResultIteratorWordIsNumeric(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordIsNumeric")]
+        internal static extern bool ResultIteratorWordIsNumeric(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordRecognitionLanguage")]
-        IntPtr ResultIteratorWordRecognitionLanguageInternal(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorWordRecognitionLanguage", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string ResultIteratorWordRecognitionLanguage(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSuperscript")]
-        bool ResultIteratorSymbolIsSuperscript(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSuperscript")]
+        internal static extern bool ResultIteratorSymbolIsSuperscript(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSubscript")]
-        bool ResultIteratorSymbolIsSubscript(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsSubscript")]
+        internal static extern bool ResultIteratorSymbolIsSubscript(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsDropcap")]
-        bool ResultIteratorSymbolIsDropcap(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorSymbolIsDropcap")]
+        internal static extern bool ResultIteratorSymbolIsDropcap(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetPageIterator")]
-        IntPtr ResultIteratorGetPageIterator(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetPageIterator")]
+        internal static extern IntPtr ResultIteratorGetPageIterator(HandleRef handle);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetUTF8Text")]
-        IntPtr ResultIteratorGetUTF8TextInternal(HandleRef handle, PageIteratorLevel level);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetUTF8Text", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string ResultIteratorGetUTF8Text(HandleRef handle, PageIteratorLevel level);
 
         #region Choice Iterator
 
@@ -234,280 +256,110 @@ namespace Tesseract.Interop
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetChoiceIterator")]
-        IntPtr ResultIteratorGetChoiceIterator(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultIteratorGetChoiceIterator")]
+        internal static extern IntPtr ResultIteratorGetChoiceIterator(HandleRef handle);
 
         /// <summary>
         /// Native API call to TessChoiceIteratorDelete
         /// </summary>
         /// <param name="handle"></param>
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorDelete")]
-        void ChoiceIteratorDelete(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorDelete")]
+        internal static extern void ChoiceIteratorDelete(HandleRef handle);
 
         /// <summary>
         /// Native API call to TessChoiceIteratorNext
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorNext")]
-        int ChoiceIteratorNext(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorNext")]
+        internal static extern int ChoiceIteratorNext(HandleRef handle);
 
         /// <summary>
         /// Native API call to TessChoiceIteratorGetUTF8Text
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorGetUTF8Text")]
-        IntPtr ChoiceIteratorGetUTF8TextInternal(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorGetUTF8Text", CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        internal static extern string ChoiceIteratorGetUTF8Text(HandleRef handle);
 
         /// <summary>
         /// Native API call to TessChoiceIteratorConfidence
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorConfidence")]
-        float ChoiceIteratorGetConfidence(HandleRef handle);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessChoiceIteratorConfidence")]
+        internal static extern float ChoiceIteratorGetConfidence(HandleRef handle);
 
         #endregion Choice Iterator
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIPrintVariablesToFile")]
-        int BaseApiPrintVariablesToFile(HandleRef handle, string filename);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIPrintVariablesToFile")]
+        internal static extern int BaseApiPrintVariablesToFile(HandleRef handle, string filename);
 
         #region Renderer API
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessTextRendererCreate")]
-        IntPtr TextRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessTextRendererCreate")]
+        internal static extern IntPtr TextRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessAltoRendererCreate")]
-        IntPtr AltoRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessAltoRendererCreate")]
+        internal static extern IntPtr AltoRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessTsvRendererCreate")]
-        IntPtr TsvRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessTsvRendererCreate")]
+        internal static extern IntPtr TsvRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessHOcrRendererCreate")]
-        IntPtr HOcrRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessHOcrRendererCreate")]
+        internal static extern IntPtr HOcrRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessHOcrRendererCreate2")]
-        IntPtr HOcrRendererCreate2(string outputbase, int font_info);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessHOcrRendererCreate2")]
+        internal static extern IntPtr HOcrRendererCreate2(string outputbase, int font_info);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPDFRendererCreate")]
-        IntPtr PDFRendererCreate(string outputbase, IntPtr datadir, int textonly);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessPDFRendererCreate")]
+        internal static extern IntPtr PDFRendererCreate(string outputbase, IntPtr datadir, int textonly);
         
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessUnlvRendererCreate")]
-        IntPtr UnlvRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessUnlvRendererCreate")]
+        internal static extern IntPtr UnlvRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBoxTextRendererCreate")]
-        IntPtr BoxTextRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBoxTextRendererCreate")]
+        internal static extern IntPtr BoxTextRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessLSTMBoxRendererCreate")]
-        IntPtr LSTMBoxRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessLSTMBoxRendererCreate")]
+        internal static extern IntPtr LSTMBoxRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessWordStrBoxRendererCreate")]
-        IntPtr WordStrBoxRendererCreate(string outputbase);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessWordStrBoxRendererCreate")]
+        internal static extern IntPtr WordStrBoxRendererCreate(string outputbase);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteResultRenderer")]
-        void DeleteResultRenderer(HandleRef renderer);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessDeleteResultRenderer")]
+        internal static extern void DeleteResultRenderer(HandleRef renderer);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererInsert")]
-        void ResultRendererInsert(HandleRef renderer, HandleRef next);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererInsert")]
+        internal static extern void ResultRendererInsert(HandleRef renderer, HandleRef next);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererNext")]
-        IntPtr ResultRendererNext(HandleRef renderer);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererNext")]
+        internal static extern IntPtr ResultRendererNext(HandleRef renderer);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererBeginDocument")]
-        int ResultRendererBeginDocument(HandleRef renderer, IntPtr titlePtr);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererBeginDocument")]
+        internal static extern int ResultRendererBeginDocument(HandleRef renderer, IntPtr titlePtr);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererAddImage")]
-        int ResultRendererAddImage(HandleRef renderer, HandleRef api);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererAddImage")]
+        internal static extern int ResultRendererAddImage(HandleRef renderer, HandleRef api);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererEndDocument")]
-        int ResultRendererEndDocument(HandleRef renderer);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererEndDocument")]
+        internal static extern int ResultRendererEndDocument(HandleRef renderer);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererExtention")]
-        IntPtr ResultRendererExtention(HandleRef renderer);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererExtention")]
+        internal static extern IntPtr ResultRendererExtention(HandleRef renderer);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererTitle")]
-        IntPtr ResultRendererTitle(HandleRef renderer);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererTitle")]
+        internal static extern IntPtr ResultRendererTitle(HandleRef renderer);
 
-        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererImageNum")]
-        int ResultRendererImageNum(HandleRef renderer);
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessResultRendererImageNum")]
+        internal static extern int ResultRendererImageNum(HandleRef renderer);
 
         #endregion Renderer API
     }
 
     internal static class TessApi
     {
-        //XHTML Begin Tag:
-        public const string xhtmlBeginTag =
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n"
-            + "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
-            + "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" "
-            + "lang=\"en\">\n <head>\n  <title></title>\n"
-            + "<meta http-equiv=\"Content-Type\" content=\"text/html;"
-            + "charset=utf-8\" />\n"
-            + "  <meta name='ocr-system' content='tesseract' />\n"
-            + "  <meta name='ocr-capabilities' content='ocr_page ocr_carea ocr_par"
-            + " ocr_line ocrx_word"
-            + "'/>\n"
-            + "</head>\n<body>\n";
-
-        //XHTML End Tag:
-        public const string xhtmlEndTag = " </body>\n</html>\n";
-
-        public const string htmlBeginTag =
-            "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
-            + " \"http://www.w3.org/TR/html4/loose.dtd\">\n"
-            + "<html>\n<head>\n<title></title>\n"
-            + "<meta http-equiv=\"Content-Type\" content=\"text/html;"
-            + "charset=utf-8\" />\n<meta name='ocr-system' content='tesseract'/>\n"
-            + "</head>\n<body>\n";
-
-        public const string htmlEndTag = "</body>\n</html>\n";
-
-        private static ITessApiSignatures native;
-
-        public static ITessApiSignatures Native
-        {
-            get
-            {
-                if (native == null)
-                    Initialize();
-                return native;
-            }
-        }
-
-        public static string BaseAPIGetHOCRText(HandleRef handle, int pageNum)
-        {
-            IntPtr txtHandle = Native.BaseApiGetHOCRTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero) {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return htmlBeginTag + result + htmlEndTag;
-            } else {
-                return null;
-            }
-        }
-
-        //Just Copied:
-        public static string BaseAPIGetHOCRText2(HandleRef handle, int pageNum)
-        {
-            IntPtr txtHandle = Native.BaseApiGetHOCRTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero) {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return xhtmlBeginTag + result + xhtmlEndTag;
-            } else {
-                return null;
-            }
-        }
-
-        public static string BaseAPIGetAltoText(HandleRef handle, int pageNum)
-        {
-            IntPtr txtHandle = Native.BaseApiGetAltoTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero) {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            } else {
-                return null;
-            }
-        }
-
-        public static string BaseAPIGetTsvText(HandleRef handle, int pageNum)
-        {
-            IntPtr txtHandle = Native.BaseApiGetTsvTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero) {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            } else {
-                return null;
-            }
-        }
-
-        public static string BaseAPIGetBoxText(HandleRef handle, int pageNum)
-        {
-            IntPtr txtHandle = Native.BaseApiGetBoxTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero)
-            {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static string BaseAPIGetLSTMBoxText(HandleRef handle, int pageNum)
-        {
-            IntPtr txtHandle = Native.BaseApiGetLSTMBoxTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero)
-            {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static string BaseAPIGetWordStrBoxText(HandleRef handle, int pageNum)
-        {
-            IntPtr txtHandle = Native.BaseApiGetWordStrBoxTextInternal(handle, pageNum);
-            if (txtHandle != IntPtr.Zero)
-            {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static string BaseAPIGetUNLVText(HandleRef handle)
-        {
-            IntPtr txtHandle = Native.BaseApiGetUNLVTextInternal(handle);
-            if (txtHandle != IntPtr.Zero)
-            {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static string BaseApiGetStringVariable(HandleRef handle, string name)
-        {
-            var resultHandle = Native.BaseApiGetStringVariableInternal(handle, name);
-            if (resultHandle != IntPtr.Zero) {
-                return MarshalHelper.PtrToString(resultHandle, Encoding.UTF8);
-            } else {
-                return null;
-            }
-        }
-
-        public static string BaseAPIGetUTF8Text(HandleRef handle)
-        {
-            IntPtr txtHandle = Native.BaseAPIGetUTF8TextInternal(handle);
-            if (txtHandle != IntPtr.Zero) {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            } else {
-                return null;
-            }
-        }
-
         public static int BaseApiInit(HandleRef handle, string datapath, string language, int mode, IEnumerable<string> configFiles, IDictionary<string, object> initialValues, bool setOnlyNonDebugParams)
         {
             Guard.Require("handle", handle.Handle != IntPtr.Zero, "Handle for BaseApi, created through BaseApiCreate is required.");
@@ -530,92 +382,31 @@ namespace Tesseract.Interop
                     varValues[i] = varValue;
                 } else {
                     throw new ArgumentException(
-                        String.Format("Variable '{0}': The type '{1}' is not supported.", pair.Key, pair.Value.GetType()),
+                        string.Format("Variable '{0}': The type '{1}' is not supported.", pair.Key, pair.Value.GetType()),
                         "initialValues"
                     );
                 }
                 i++;
             }
 
-            return Native.BaseApiInit(handle, datapath, language, mode,
-                configFilesArray, configFilesArray.Length,
-                varNames, varValues, new UIntPtr((uint)varNames.Length), setOnlyNonDebugParams);
-        }
-
-        public static int BaseApiSetDebugVariable(HandleRef handle, string name, string value)
-        {
-            IntPtr valuePtr = IntPtr.Zero;
-            try {
-                valuePtr = MarshalHelper.StringToPtr(value, Encoding.UTF8);
-                return Native.BaseApiSetDebugVariable(handle, name, valuePtr);
-            } finally {
-                if (valuePtr != IntPtr.Zero) {
-                    Marshal.FreeHGlobal(valuePtr);
-                }
-            }
-        }
-
-        public static int BaseApiSetVariable(HandleRef handle, string name, string value)
-        {
-            IntPtr valuePtr = IntPtr.Zero;
-            try {
-                valuePtr = MarshalHelper.StringToPtr(value, Encoding.UTF8);
-                return Native.BaseApiSetVariable(handle, name, valuePtr);
-            } finally {
-                if (valuePtr != IntPtr.Zero) {
-                    Marshal.FreeHGlobal(valuePtr);
-                }
-            }
-        }
-
-        public static void Initialize()
-        {
-            if (native == null) {
-                LeptonicaApi.Initialize();
-                native = InteropRuntimeImplementer.CreateInstance<ITessApiSignatures>();
-            }
-        }
-
-        public static string ResultIteratorWordRecognitionLanguage(HandleRef handle)
-        {
-            // per docs (ltrresultiterator.h:118 as of 4897796 in github:tesseract-ocr/tesseract)
-            // this return value should *NOT* be deleted.
-            IntPtr txtHandle =
-                Native.ResultIteratorWordRecognitionLanguageInternal(handle);
-
-            return txtHandle != IntPtr.Zero
-                ? MarshalHelper.PtrToString(txtHandle, Encoding.UTF8)
-                : null;
-        }
-
-        public static string ResultIteratorGetUTF8Text(HandleRef handle, PageIteratorLevel level)
-        {
-            IntPtr txtHandle = Native.ResultIteratorGetUTF8TextInternal(handle, level);
-            if (txtHandle != IntPtr.Zero) {
-                var result = MarshalHelper.PtrToString(txtHandle, Encoding.UTF8);
-                TessApi.Native.DeleteText(txtHandle);
-                return result;
-            } else {
-                return null;
-            }
+            return TessApiSignatures.BaseApiInit(handle, datapath, language, mode,
+                checkNonAscii(configFilesArray), configFilesArray.Length,
+                checkNonAscii(varNames), checkNonAscii(varValues), (uint)varNames.Length, setOnlyNonDebugParams);
         }
 
         /// <summary>
-        /// Returns the null terminated UTF-8 encoded text string for the current choice
+        /// Check for any non-ascii characters in an array of strings. This is because .Net won't allow an array to be marshalled as a subtype of UTF8string.
+        /// Since the tesseract functions can't handle w_char types, we'll need to check that all strings are asicc (which is in UTF8).
         /// </summary>
-        /// <remarks>
-        /// NOTE: Unlike LTRResultIterator::GetUTF8Text, the return points to an
-        /// internal structure and should NOT be delete[]ed to free after use.
-        /// </remarks>
-        /// <param name="choiceIteratorHandle"></param>
-        /// <returns>string</returns>
-        internal static string ChoiceIteratorGetUTF8Text(HandleRef choiceIteratorHandle)
+        /// <param name="arr"></param>
+        private static string[] checkNonAscii(string[] arr)
         {
-            Guard.Require("choiceIteratorHandle", choiceIteratorHandle.Handle != IntPtr.Zero, "ChoiceIterator Handle cannot be a null IntPtr and is required");
-            IntPtr txtChoiceHandle = Native.ChoiceIteratorGetUTF8TextInternal(choiceIteratorHandle);
-            return MarshalHelper.PtrToString(txtChoiceHandle, Encoding.UTF8);
+            Regex asciiRegex = new Regex(@"^\p{IsBasicLatin}*$");
+            foreach (string s in arr)
+            {
+                if (0 == asciiRegex.Matches(s).Count) throw new ArgumentException("Cannot handle non-ascii arguments due to C# interop limitations");
+            }
+            return arr;
         }
-
-        // hOCR Extension
     }
 }

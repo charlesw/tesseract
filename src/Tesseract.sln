@@ -1,18 +1,19 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract", "Tesseract\Tesseract.csproj", "{AB8F7CF1-E75B-4BD3-8853-2348ECDEA969}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{15BA8F27-7868-4A18-BDC6-EBC93A76A18C}"
 	ProjectSection(SolutionItems) = preProject
 		..\ChangeLog.md = ..\ChangeLog.md
+		..\CompilingTesseract.md = ..\CompilingTesseract.md
 		..\ReadMe.md = ..\ReadMe.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.Net45Tests", "Tesseract.Net45Tests\Tesseract.Net45Tests.csproj", "{0B087299-D0A5-47F1-B313-820481F29DA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.Net48Tests", "Tesseract.Net48Tests\Tesseract.Net48Tests.csproj", "{0B087299-D0A5-47F1-B313-820481F29DA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.NetCore2Tests", "Tesseract.NetCore2Tests\Tesseract.NetCore2Tests.csproj", "{74F4ACED-886F-4B1B-B524-6DF28A274226}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.NetCore31Tests", "Tesseract.NetCore31Tests\Tesseract.NetCore31Tests.csproj", "{74F4ACED-886F-4B1B-B524-6DF28A274226}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

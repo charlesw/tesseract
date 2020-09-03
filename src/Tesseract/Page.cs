@@ -65,7 +65,7 @@ namespace Tesseract
                     regionOfInterest = value;
 
                     // update region of interest in image
-                    Interop.TessApi.Native.BaseApiSetRectangle(Engine.Handle, regionOfInterest.X1, regionOfInterest.Y1, regionOfInterest.Width, regionOfInterest.Height);
+                    TessApiSignatures.BaseApiSetRectangle(Engine.Handle, regionOfInterest.X1, regionOfInterest.Y1, regionOfInterest.Width, regionOfInterest.Height);
 
                     // request rerun of recognition on the next call that requires recognition
                     runRecognitionPhase = false;
@@ -81,7 +81,7 @@ namespace Tesseract
         {
             Recognize();
 
-            var pixHandle = Interop.TessApi.Native.BaseAPIGetThresholdedImage(Engine.Handle);
+            var pixHandle = TessApiSignatures.BaseAPIGetThresholdedImage(Engine.Handle);
             if (pixHandle == IntPtr.Zero) {
                 throw new TesseractException("Failed to get thresholded image.");
             }
@@ -97,7 +97,7 @@ namespace Tesseract
         {
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot analyse image layout when using OSD only page segmentation, please use DetectBestOrientation instead.");
 
-            var resultIteratorHandle = Interop.TessApi.Native.BaseAPIAnalyseLayout(Engine.Handle);
+            var resultIteratorHandle = TessApiSignatures.BaseAPIAnalyseLayout(Engine.Handle);
             return new PageIterator(this, resultIteratorHandle);
         }
 
@@ -108,7 +108,7 @@ namespace Tesseract
         public ResultIterator GetIterator()
         {
             Recognize();
-            var resultIteratorHandle = Interop.TessApi.Native.BaseApiGetIterator(Engine.Handle);
+            var resultIteratorHandle = TessApiSignatures.BaseApiGetIterator(Engine.Handle);
             return new ResultIterator(this, resultIteratorHandle);
         }
 
@@ -119,7 +119,7 @@ namespace Tesseract
         public string GetText()
         {
             Recognize();
-            return Interop.TessApi.BaseAPIGetUTF8Text(Engine.Handle);
+            return TessApiSignatures.BaseAPIGetUTF8Text(Engine.Handle);
         }
 
         /// <summary>
@@ -133,11 +133,39 @@ namespace Tesseract
             //Why Not Use 'nameof(pageNum)' instead of '"pageNum"'
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-            if(useXHtml)
-                return Interop.TessApi.BaseAPIGetHOCRText2(Engine.Handle, pageNum);
-            else
-                return Interop.TessApi.BaseAPIGetHOCRText(Engine.Handle, pageNum);
+            string text = TessApiSignatures.BaseApiGetHOCRText(Engine.Handle, pageNum);
+            return useXHtml ? xhtmlBeginTag + text + xhtmlEndTag : htmlBeginTag + text + htmlEndTag;
         }
+
+        //XHTML Begin Tag:
+        private const string xhtmlBeginTag =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n"
+            + "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+            + "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" "
+            + "lang=\"en\">\n <head>\n  <title></title>\n"
+            + "<meta http-equiv=\"Content-Type\" content=\"text/html;"
+            + "charset=utf-8\" />\n"
+            + "  <meta name='ocr-system' content='tesseract' />\n"
+            + "  <meta name='ocr-capabilities' content='ocr_page ocr_carea ocr_par"
+            + " ocr_line ocrx_word"
+            + "'/>\n"
+            + "</head>\n<body>\n";
+
+        //XHTML End Tag:
+        private const string xhtmlEndTag = " </body>\n</html>\n";
+        
+        //HTML Begin Tag:
+        private const string htmlBeginTag =
+            "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
+            + " \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+            + "<html>\n<head>\n<title></title>\n"
+            + "<meta http-equiv=\"Content-Type\" content=\"text/html;"
+            + "charset=utf-8\" />\n<meta name='ocr-system' content='tesseract'/>\n"
+            + "</head>\n<body>\n";
+        
+        //HTML End Tag:
+        private const string htmlEndTag = "</body>\n</html>\n";
 
         /// <summary>
         /// Gets the page's content as an Alto text.
@@ -148,7 +176,7 @@ namespace Tesseract
         {
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-            return Interop.TessApi.BaseAPIGetAltoText(Engine.Handle, pageNum);
+            return TessApiSignatures.BaseApiGetAltoText(Engine.Handle, pageNum);
         }
 
         /// <summary>
@@ -160,7 +188,7 @@ namespace Tesseract
         {
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-            return Interop.TessApi.BaseAPIGetTsvText(Engine.Handle, pageNum);
+            return TessApiSignatures.BaseApiGetTsvText(Engine.Handle, pageNum);
         }
 
         /// <summary>
@@ -172,7 +200,7 @@ namespace Tesseract
         {
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-            return Interop.TessApi.BaseAPIGetBoxText(Engine.Handle, pageNum);
+            return TessApiSignatures.BaseApiGetBoxText(Engine.Handle, pageNum);
         }
 
         /// <summary>
@@ -184,7 +212,7 @@ namespace Tesseract
         {
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-            return Interop.TessApi.BaseAPIGetLSTMBoxText(Engine.Handle, pageNum);
+            return TessApiSignatures.BaseApiGetLSTMBoxText(Engine.Handle, pageNum);
         }
 
         /// <summary>
@@ -196,18 +224,17 @@ namespace Tesseract
         {
             Guard.Require("pageNum", pageNum >= 0, "Page number must be greater than or equal to zero (0).");
             Recognize();
-            return Interop.TessApi.BaseAPIGetWordStrBoxText(Engine.Handle, pageNum);
+            return TessApiSignatures.BaseApiGetWordStrBoxText(Engine.Handle, pageNum);
         }
 
         /// <summary>
         /// Gets the page's content as an UNLV text.
         /// </summary>
-        /// <param name="pageNum">The page number (zero based).</param>
         /// <returns>The OCR'd output as an UNLV text string.</returns>
         public string GetUNLVText()
         {
             Recognize();
-            return Interop.TessApi.BaseAPIGetUNLVText(Engine.Handle);
+            return TessApiSignatures.BaseApiGetUNLVText(Engine.Handle);
         }
 
         /// <summary>
@@ -217,7 +244,7 @@ namespace Tesseract
         public float GetMeanConfidence()
         {
             Recognize();
-            return Interop.TessApi.Native.BaseAPIMeanTextConf(Engine.Handle) / 100.0f;
+            return TessApiSignatures.BaseAPIMeanTextConf(Engine.Handle) / 100.0f;
         }
 
         /// <summary>
@@ -227,24 +254,24 @@ namespace Tesseract
         /// <returns></returns>
         public List<Rectangle> GetSegmentedRegions(PageIteratorLevel pageIteratorLevel)
         {
-            var boxArray = Interop.TessApi.Native.BaseAPIGetComponentImages(Engine.Handle, pageIteratorLevel, Interop.Constants.TRUE, IntPtr.Zero, IntPtr.Zero);
-            int boxCount = Interop.LeptonicaApi.Native.boxaGetCount(new HandleRef(this, boxArray));
+            var boxArray = TessApiSignatures.BaseAPIGetComponentImages(Engine.Handle, pageIteratorLevel, Constants.TRUE, IntPtr.Zero, IntPtr.Zero);
+            int boxCount = LeptonicaApiSignatures.boxaGetCount(new HandleRef(this, boxArray));
 
             List<Rectangle> boxList = new List<Rectangle>();
 
             for (int i = 0; i < boxCount; i++) {
-                var box = Interop.LeptonicaApi.Native.boxaGetBox(new HandleRef(this, boxArray), i, PixArrayAccessType.Clone);
+                var box = LeptonicaApiSignatures.boxaGetBox(new HandleRef(this, boxArray), i, PixArrayAccessType.Clone);
                 if (box == IntPtr.Zero) {
                     continue;
                 }
 
                 int px, py, pw, ph;
-                Interop.LeptonicaApi.Native.boxGetGeometry(new HandleRef(this, box), out px, out py, out pw, out ph);
+                LeptonicaApiSignatures.boxGetGeometry(new HandleRef(this, box), out px, out py, out pw, out ph);
                 boxList.Add(new Rectangle(px, py, pw, ph));
-                Interop.LeptonicaApi.Native.boxDestroy(ref box);
+                LeptonicaApiSignatures.boxDestroy(ref box);
             }
 
-            Interop.LeptonicaApi.Native.boxaDestroy(ref boxArray);
+            LeptonicaApiSignatures.boxaDestroy(ref boxArray);
 
             return boxList;
         }
@@ -311,27 +338,18 @@ namespace Tesseract
         /// </remarks>
         /// <param name="orientation">The detected clockwise page rotation in degrees (0, 90, 180, or 270).</param>
         /// <param name="confidence">The confidence level of the orientation (15 is reasonably confident).</param>
-        /// <param name="scriptName">The name of the script (e.g. Latin)<param>
+        /// <param name="scriptName">The name of the script (e.g. Latin)</param>
         /// <param name="scriptConfidence">The confidence level in the script</param>
         public void DetectBestOrientationAndScript(out int orientation, out float confidence, out string scriptName, out float scriptConfidence)
         {
             int orient_deg;
             float orient_conf;
-            IntPtr script_nameHandle;
             float script_conf;
 
-            if (Interop.TessApi.Native.TessBaseAPIDetectOrientationScript(Engine.Handle, out orient_deg, out orient_conf, out script_nameHandle, out script_conf) != 0)
+            if (TessApiSignatures.TessBaseAPIDetectOrientationScript(Engine.Handle, out orient_deg, out orient_conf, out scriptName, out script_conf))
             {
                 orientation = orient_deg;
                 confidence = orient_conf;
-                if (script_nameHandle != IntPtr.Zero)
-                {
-                    scriptName = MarshalHelper.PtrToString(script_nameHandle, Encoding.ASCII);
-                    // Don't delete script_nameHandle as it points to internal memory managed by Tesseract.
-                } else
-                {
-                    scriptName = null;
-                }
                 scriptConfidence = script_conf;
             }
             else
@@ -344,7 +362,7 @@ namespace Tesseract
         {
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead.");
             if (!runRecognitionPhase) {
-                if (Interop.TessApi.Native.BaseApiRecognize(Engine.Handle, new HandleRef(this, IntPtr.Zero)) != 0) {
+                if (TessApiSignatures.BaseApiRecognize(Engine.Handle, new HandleRef(this, IntPtr.Zero)) != 0) {
                     throw new InvalidOperationException("Recognition of image failed.");
                 }
 
@@ -369,7 +387,7 @@ namespace Tesseract
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                Interop.TessApi.Native.BaseAPIClear(Engine.Handle);
+                TessApiSignatures.BaseAPIClear(Engine.Handle);
             }
         }
     }

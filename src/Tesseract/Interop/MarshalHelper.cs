@@ -5,10 +5,13 @@ using System.Text;
 
 namespace Tesseract.Interop
 {
-    unsafe static class MarshalHelper
+    unsafe internal static class MarshalHelper
     {
-    	public static IntPtr StringToPtr(string value, Encoding encoding)
+        private static readonly Encoding defaultEncoding = new UTF8Encoding(false);
+
+        internal static IntPtr StringToPtr(string value, Encoding encoding = null)
         {
+            encoding = encoding ?? defaultEncoding;
             var encoder = encoding.GetEncoder();
             var length = encoding.GetByteCount(value);
             // The encoded value is null terminated that's the reason for the '+1'.
@@ -19,17 +22,19 @@ namespace Tesseract.Interop
             return handle;
         }
 
-    	        
-        public static string PtrToString(IntPtr handle, Encoding encoding)
+
+        internal static string PtrToString(IntPtr handle, Encoding encoding = null)
         {
+            encoding = encoding ?? defaultEncoding;
+            if (IntPtr.Zero == handle) return null;
             var length = StrLength(handle);
-            return new String((sbyte*)handle.ToPointer(), 0, length, encoding);
+            return new string((sbyte*)handle.ToPointer(), 0, length, encoding);
         }
 
         /// <summary>
         /// Gets the number of bytes in a null terminated byte array.
         /// </summary>
-        public static int StrLength(IntPtr handle)
+        internal static int StrLength(IntPtr handle)
         {
             if(handle == IntPtr.Zero)
             {
@@ -43,7 +48,5 @@ namespace Tesseract.Interop
             }
             return length;
         }
-
-
     }
 }

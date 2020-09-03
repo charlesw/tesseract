@@ -1,18 +1,18 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Diagnostics;
 
 namespace Tesseract.Tests
 {
     [TestFixture]
-    public class BaseApiTests
+    public class BaseApiTests : TesseractTestBase
     {
-        [Test,
-         Ignore("GetVersion doesn't work for x64, probably compilation related.")]
-        public void GetVersion_Is410()
+        [Test]
+        public void GetVersion_Is500()
         {
-            var version = Interop.TessApi.Native.GetVersion();
-            Assert.That(version, Does.StartWith("4.1.0"));
+            using (var engine = CreateEngine())
+            {
+                var version = engine.Version;
+                Assert.That(version, Does.StartWith("5.0.0"));
+            }
         }
     }
 }

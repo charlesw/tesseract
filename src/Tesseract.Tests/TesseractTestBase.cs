@@ -76,7 +76,8 @@ namespace Tesseract.Tests
         {
             return text
                 .Replace("\r\n", "\n")
-                .Replace("\r", "\n");
+                .Replace("\r", "\n")
+                .Trim();
         }
 
         #endregion File Helpers
