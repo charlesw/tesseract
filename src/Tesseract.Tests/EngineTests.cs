@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -41,7 +40,7 @@ namespace Tesseract.Tests
         [TestCase(PageSegMode.SingleLine, "This is a lot of 12 point text to test the")]
         [TestCase(PageSegMode.SingleWord, "This")]
         [TestCase(PageSegMode.SingleChar, "T")]
-        [TestCase(PageSegMode.SingleBlockVertText, "A line of text")]
+        [TestCase(PageSegMode.SingleBlockVertText, "A line of text", Ignore = "#490")]
         public void CanParseText_UsingMode(PageSegMode mode, String expectedText)
         {
 
@@ -112,7 +111,7 @@ namespace Tesseract.Tests
             }
         }
 #endif
-        [Test]
+        [Test, Ignore("#489")]
         public void CanProcessSpecifiedRegionInImage()
         {
             using (var engine = CreateEngine(mode:EngineMode.LstmOnly))
@@ -132,7 +131,7 @@ namespace Tesseract.Tests
             }
         }
 
-        [Test]
+        [Test, Ignore("#489")]
         public void CanProcessDifferentRegionsInSameImage()
         {
             using (var engine = CreateEngine()) {
@@ -188,13 +187,13 @@ namespace Tesseract.Tests
             using (var engine = CreateEngine()) {
                 using (var img = LoadTestPix("ocr/empty.png")) {
                     using (var page = engine.Process(img)) {
-                        actualResult = WriteResultsToString(page, false);
+                        actualResult = PageSerializer.Serialize(page, false);
                     }
                 }
             }
 
             Assert.That(actualResult, Is.EqualTo(
-NormaliseNewLine(@"</word></line>
+TestUtils.NormaliseNewLine(@"</word></line>
 </para>
 </block>
 ")));
@@ -223,23 +222,18 @@ NormaliseNewLine(@"</word></line>
         public void CanProcessPixUsingResultIterator()
         {
             const string ResultPath = @"EngineTests\CanProcessPixUsingResultIterator.txt";
-            
-            string actualResult;
+            var actualResultPath = TestResultRunFile(ResultPath);
+
             using (var engine = CreateEngine()) {
                 using (var img = LoadTestPix(TestImagePath)) {
                     using (var page = engine.Process(img)) {
-                        actualResult = NormaliseNewLine(WriteResultsToString(page, false));
+                        var pageString = PageSerializer.Serialize(page, false);
+                        File.WriteAllText(actualResultPath, pageString);
                     }
                 }
             }
 
-            var expectedResultPath = TestResultPath(ResultPath); 
-            var expectedResult = NormaliseNewLine(File.ReadAllText(expectedResultPath));
-            if (expectedResult != actualResult) {
-                var actualResultPath = TestResultRunFile(ResultPath);
-                File.WriteAllText(actualResultPath, actualResult);
-                Assert.Fail("Expected results to be \"{0}\" but was \"{1}\".", expectedResultPath, actualResultPath);
-            }
+            CheckResult(ResultPath);
         }
 
 #if NETFULL
@@ -269,266 +263,157 @@ NormaliseNewLine(@"</word></line>
         public void CanGenerateHOCROutput(
             [Values(true, false)] Boolean useXHtml)
         {
-            string actualResult; 
+            var resultFilename = String.Format("EngineTests/CanGenerateHOCROutput_{0}.txt", useXHtml);
+
             using (var engine = CreateEngine()) {
                 using (var img = LoadTestPix(TestImagePath)) {
                     using (var page = engine.Process(img)) {
-                        actualResult = NormaliseNewLine(page.GetHOCRText(1, useXHtml));
+                        var actualResult = TestUtils.NormaliseNewLine(page.GetHOCRText(1, useXHtml));
+                        File.WriteAllText(TestResultRunFile(resultFilename), actualResult);
                     }
                 }
             }
 
-            var resultFilename = String.Format("EngineTests/CanGenerateHOCROutput_{0}.txt", useXHtml);
-            string expectedFilename = TestResultPath(resultFilename);
-            if (File.Exists(expectedFilename)) {
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
-                if (expectedResult != actualResult) {
-                    var actualFilename = TestResultRunFile(resultFilename);
-                    File.WriteAllText(actualFilename, actualResult);
-                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
-                }
-            } else {
-                var actualFilename = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualFilename, actualResult);
-                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
-            }
+            CheckResult(resultFilename);
         }
 
         [Test]
         public void CanGenerateAltoOutput()
         {
-            string actualResult;
+            var resultFilename = String.Format("EngineTests/CanGenerateAltoOutput.txt");
+
             using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
                     using (var page = engine.Process(img))
                     {
-                        actualResult = NormaliseNewLine(page.GetAltoText(1));
+                        var actualResult = TestUtils.NormaliseNewLine(page.GetAltoText(1));
+                        File.WriteAllText(TestResultRunFile(resultFilename), actualResult);
                     }
                 }
             }
 
-            var resultFilename = String.Format("EngineTests/CanGenerateAltoOutput.txt");
-            string expectedFilename = TestResultPath(resultFilename);
-            if (File.Exists(expectedFilename))
-            {
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
-                if (expectedResult != actualResult)
-                {
-                    var actualFilename = TestResultRunFile(resultFilename);
-                    File.WriteAllText(actualFilename, actualResult);
-                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
-                }
-            }
-            else
-            {
-                var actualFilename = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualFilename, actualResult);
-                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
-            }
+            CheckResult(resultFilename);
         }
 
         [Test]
         public void CanGenerateTsvOutput()
         {
-            string actualResult;
+            var resultFilename = String.Format("EngineTests/CanGenerateTsvOutput.txt");
+
             using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
                     using (var page = engine.Process(img))
                     {
-                        actualResult = NormaliseNewLine(page.GetTsvText(1));
+                        var actualResult = TestUtils.NormaliseNewLine(page.GetTsvText(1));
+                        File.WriteAllText(TestResultRunFile(resultFilename), actualResult);
                     }
                 }
             }
 
-            var resultFilename = String.Format("EngineTests/CanGenerateTsvOutput.txt");
-            string expectedFilename = TestResultPath(resultFilename);
-            if (File.Exists(expectedFilename))
-            {
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
-                if (expectedResult != actualResult)
-                {
-                    var actualFilename = TestResultRunFile(resultFilename);
-                    File.WriteAllText(actualFilename, actualResult);
-                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
-                }
-            }
-            else
-            {
-                var actualFilename = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualFilename, actualResult);
-                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
-            }
+            CheckResult(resultFilename);
         }
 
         [Test]
         public void CanGenerateBoxOutput()
         {
-            string actualResult;
+            var resultFilename = String.Format("EngineTests/CanGenerateBoxOutput.txt");
             using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
                     using (var page = engine.Process(img))
                     {
-                        actualResult = NormaliseNewLine(page.GetBoxText(1));
+                        var actualResult = TestUtils.NormaliseNewLine(page.GetBoxText(1));
+                        File.WriteAllText(TestResultRunFile(resultFilename), actualResult);
                     }
                 }
             }
 
-            var resultFilename = String.Format("EngineTests/CanGenerateBoxOutput.txt");
-            string expectedFilename = TestResultPath(resultFilename);
-            if (File.Exists(expectedFilename))
-            {
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
-                if (expectedResult != actualResult)
-                {
-                    var actualFilename = TestResultRunFile(resultFilename);
-                    File.WriteAllText(actualFilename, actualResult);
-                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
-                }
-            }
-            else
-            {
-                var actualFilename = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualFilename, actualResult);
-                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
-            }
+            CheckResult(resultFilename);
         }
 
         [Test]
         public void CanGenerateLSTMBoxOutput()
         {
-            string actualResult;
+            var resultFilename = String.Format("EngineTests/CanGenerateLSTMBoxOutput.txt");
+
             using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
                     using (var page = engine.Process(img))
                     {
-                        actualResult = NormaliseNewLine(page.GetLSTMBoxText(1));
+                        var actualResult = TestUtils.NormaliseNewLine(page.GetLSTMBoxText(1));
+                        File.WriteAllText(TestResultRunFile(resultFilename), actualResult);
                     }
                 }
             }
 
-            var resultFilename = String.Format("EngineTests/CanGenerateLSTMBoxOutput.txt");
-            string expectedFilename = TestResultPath(resultFilename);
-            if (File.Exists(expectedFilename))
-            {
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
-                if (expectedResult != actualResult)
-                {
-                    var actualFilename = TestResultRunFile(resultFilename);
-                    File.WriteAllText(actualFilename, actualResult);
-                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
-                }
-            }
-            else
-            {
-                var actualFilename = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualFilename, actualResult);
-                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
-            }
+            CheckResult(resultFilename);
         }
 
         [Test]
         public void CanGenerateWordStrBoxOutput()
         {
-            string actualResult;
+            var resultFilename = "EngineTests/CanGenerateWordStrBoxOutput.txt";
+
             using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
                     using (var page = engine.Process(img))
                     {
-                        actualResult = NormaliseNewLine(page.GetWordStrBoxText(1));
+                        var actualResult = TestUtils.NormaliseNewLine(page.GetWordStrBoxText(1));
+                        File.WriteAllText(TestResultRunFile(resultFilename), actualResult);
                     }
                 }
             }
 
-            var resultFilename = String.Format("EngineTests/CanGenerateWordStrBoxOutput.txt");
-            string expectedFilename = TestResultPath(resultFilename);
-            if (File.Exists(expectedFilename))
-            {
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
-                if (expectedResult != actualResult)
-                {
-                    var actualFilename = TestResultRunFile(resultFilename);
-                    File.WriteAllText(actualFilename, actualResult);
-                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
-                }
-            }
-            else
-            {
-                var actualFilename = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualFilename, actualResult);
-                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
-            }
+            CheckResult(resultFilename);
         }
 
         [Test]
         public void CanGenerateUNLVOutput()
         {
-            string actualResult;
+            var resultFilename = "EngineTests/CanGenerateUNLVOutput.txt";
+
             using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
                     using (var page = engine.Process(img))
                     {
-                        actualResult = NormaliseNewLine(page.GetUNLVText());
+                        var actualResult = TestUtils.NormaliseNewLine(page.GetUNLVText());
+                        File.WriteAllText(TestResultRunFile(resultFilename), actualResult);
                     }
                 }
             }
 
-            var resultFilename = String.Format("EngineTests/CanGenerateUNLVOutput.txt");
-            string expectedFilename = TestResultPath(resultFilename);
-            if (File.Exists(expectedFilename))
-            {
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedFilename));
-                if (expectedResult != actualResult)
-                {
-                    var actualFilename = TestResultRunFile(resultFilename);
-                    File.WriteAllText(actualFilename, actualResult);
-                    Assert.Fail("Expected results to be {0} but was {1}", expectedFilename, actualFilename);
-                }
-            }
-            else
-            {
-                var actualFilename = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualFilename, actualResult);
-                Assert.Fail("Expected result did not exist, actual results saved to {0}", actualFilename);
-            }
+            CheckResult(resultFilename);
         }
 
         [Test]
         public void CanProcessPixUsingResultIteratorAndChoiceIterator()
         {
-            string actualResult;
+            const string resultFilename = @"EngineTests\CanProcessPixUsingResultIteratorAndChoiceIterator.txt";
+
             using (var engine = CreateEngine())
             {
                 using (var img = LoadTestPix(TestImagePath))
                 {
                     using (var page = engine.Process(img))
                     {
-                        actualResult = WriteResultsToString(page, true);
+                        var pageString = PageSerializer.Serialize(page, true);
+                        File.WriteAllText(TestResultRunFile(resultFilename), pageString);
                     }
                 }
             }
 
-            const string resultFilename = @"EngineTests\CanProcessPixUsingResultIteratorAndChoiceIterator.txt";
-            string expectedResultFilename = TestResultPath(resultFilename);         
-            var expectedResult = NormaliseNewLine(File.ReadAllText(expectedResultFilename));
-                        
-            if (expectedResult != actualResult)
-            {
-                var actualResultPath = TestResultRunFile(resultFilename);
-                File.WriteAllText(actualResultPath, actualResult);
-                Assert.Fail("Expected results to be {0} but was {1}", expectedResultFilename, actualResultPath);
-            }            
+            CheckResult(resultFilename);
         }
 
         [Test]
@@ -601,104 +486,6 @@ NormaliseNewLine(@"</word></line>
                 AbsolutePath(@"./tessdata/"),
                 AbsolutePath(@".\tessdata\")
             };
-        }
-
-        private string WriteResultsToString(Page page, bool outputChoices)
-        {
-            var output = new StringBuilder();
-            using (var iter = page.GetIterator()) {
-                iter.Begin();
-                do {
-                    do {
-                        do {
-                            do {
-                                do {
-                                    if (iter.IsAtBeginningOf(PageIteratorLevel.Block)) {
-                                        var confidence = iter.GetConfidence(PageIteratorLevel.Block) / 100;
-                                        Rect bounds;
-                                        if (iter.TryGetBoundingBox(PageIteratorLevel.Block, out bounds)) {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<block confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
-                                        } else {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<block confidence=\"{0:P}\">", confidence);
-                                        }
-                                        output.AppendLine();
-                                    }
-                                    if (iter.IsAtBeginningOf(PageIteratorLevel.Para)) {
-                                        var confidence = iter.GetConfidence(PageIteratorLevel.Para) / 100;
-                                        Rect bounds;
-                                        if (iter.TryGetBoundingBox(PageIteratorLevel.Para, out bounds)) {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<para confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
-                                        } else {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<para confidence=\"{0:P}\">", confidence);
-                                        }
-                                        output.AppendLine();
-                                    }
-                                    if (iter.IsAtBeginningOf(PageIteratorLevel.TextLine)) {
-                                        var confidence = iter.GetConfidence(PageIteratorLevel.TextLine) / 100;
-                                        Rect bounds;
-                                        if (iter.TryGetBoundingBox(PageIteratorLevel.TextLine, out bounds)) {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<line confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
-                                        } else {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<line confidence=\"{0:P}\">", confidence);
-                                        }
-                                    }
-                                    if (iter.IsAtBeginningOf(PageIteratorLevel.Word)) {
-                                        var confidence = iter.GetConfidence(PageIteratorLevel.Word) / 100;
-                                        Rect bounds;
-                                        if (iter.TryGetBoundingBox(PageIteratorLevel.Word, out bounds)) {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<word confidence=\"{0:P}\" bounds=\"{1}, {2}, {3}, {4}\">", confidence, bounds.X1, bounds.Y1, bounds.X2, bounds.Y2);
-                                        } else {
-                                            output.AppendFormat(CultureInfo.InvariantCulture, "<word confidence=\"{0:P}\">", confidence);
-                                        }
-                                    }
-
-                                    // symbol and choices
-                                    if (outputChoices)
-                                    {
-                                        using (var choiceIter = iter.GetChoiceIterator())
-                                        {
-                                            var symbolConfidence = iter.GetConfidence(PageIteratorLevel.Symbol)/100;
-                                            if (choiceIter != null)
-                                            {
-                                                output.AppendFormat(CultureInfo.InvariantCulture, "<symbol text=\"{0}\" confidence=\"{1:P}\">", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
-                                                output.Append("<choices>");
-                                                do
-                                                {
-                                                    var choiceConfidence = choiceIter.GetConfidence()/100;
-                                                    output.AppendFormat(CultureInfo.InvariantCulture, "<choice text=\"{0}\" confidence\"{1:P}\"/>", choiceIter.GetText(), choiceConfidence);
-
-                                                } while (choiceIter.Next());
-                                                output.Append("</choices>");
-                                                output.Append("</symbol>");
-                                            }
-                                            else
-                                            {
-                                                output.AppendFormat(CultureInfo.InvariantCulture, "<symbol text=\"{0}\" confidence=\"{1:P}\"/>", iter.GetText(PageIteratorLevel.Symbol), symbolConfidence);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        output.Append(iter.GetText(PageIteratorLevel.Symbol));   
-                                    }                                    
-                                    if (iter.IsAtFinalOf(PageIteratorLevel.Word, PageIteratorLevel.Symbol)) {
-                                        output.Append("</word>");
-                                    }
-                                } while (iter.Next(PageIteratorLevel.Word, PageIteratorLevel.Symbol));
-
-                                if (iter.IsAtFinalOf(PageIteratorLevel.TextLine, PageIteratorLevel.Word)) {
-                                    output.AppendLine("</line>");
-                                }
-                            } while (iter.Next(PageIteratorLevel.TextLine, PageIteratorLevel.Word));
-                            if (iter.IsAtFinalOf(PageIteratorLevel.Para, PageIteratorLevel.TextLine)) {
-                                output.AppendLine("</para>");
-                            }
-                        } while (iter.Next(PageIteratorLevel.Para, PageIteratorLevel.TextLine));
-                    } while (iter.Next(PageIteratorLevel.Block, PageIteratorLevel.Para));
-                    output.AppendLine("</block>");
-                } while (iter.Next(PageIteratorLevel.Block));
-            }
-            return NormaliseNewLine(output.ToString());
         }
         
         #region Variable set\get
@@ -820,14 +607,9 @@ NormaliseNewLine(@"</word></line>
             using (var engine = CreateEngine()) {
                 var actualResultsFilename = TestResultRunFile(ResultFilename);
                 Assert.That(engine.TryPrintVariablesToFile(actualResultsFilename), Is.True);
-                var actualResult = NormaliseNewLine(File.ReadAllText(actualResultsFilename));
 
                 // Load the expected results and verify that they match
-                var expectedResultFilename = TestResultPath(ResultFilename);
-                var expectedResult = NormaliseNewLine(File.ReadAllText(expectedResultFilename));
-                if (expectedResult != actualResult) {
-                    Assert.Fail("Expected results to be \"{0}\" but was \"{1}\".", expectedResultFilename, actualResultsFilename);
-                }
+                CheckResult(ResultFilename);
             }
         }
 

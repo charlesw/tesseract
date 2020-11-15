@@ -61,7 +61,6 @@ textord_tabfind_show_reject_blobs	0	Show blobs rejected as noise
 textord_tabfind_show_columns	0	Show column bounds
 textord_tabfind_show_blocks	0	Show final block bounds
 textord_tabfind_find_tables	1	run table detection
-textord_tabfind_show_color_fit	0	Show stroke widths
 devanagari_split_debugimage	0	Whether to create a debug image for split shiro-rekha process.
 textord_show_fixed_cuts	0	Draw fixed pitch cell boundaries
 edges_use_new_outline_complexity	0	Use the new outline complexity module
@@ -126,17 +125,16 @@ textord_fp_chopping	1	Do fixed pitch chopping
 textord_force_make_prop_words	0	Force proportional word segmentation on all rows
 textord_chopper_test	0	Chopper is being tested.
 wordrec_display_all_blobs	0	Display Blobs
-wordrec_display_all_words	0	Display Words
 wordrec_blob_pause	0	Blob pause
 stream_filelist	0	Stream a filelist from stdin
-dotproduct	auto	Function used for calculation of dot product
 editor_image_win_name	EditorImage	Editor image window name
 editor_dbwin_name	EditorDBWin	Editor debug window name
 editor_word_name	BlnWords	BL normalized word window
-editor_debug_config_file		Config file to apply to single words
 debug_file		File to send tprintf output to
 classify_font_name	UnknownFont	Default font name to be used in training
 fx_debugfile	FXDebug	Name of debugfile
+document_title		Title of output document (used for hOCR and PDF output)
+dotproduct	auto	Function used for calculation of dot product
 classify_cp_angle_pad_loose	45	Class Pruner Angle Pad Loose
 classify_cp_angle_pad_medium	20	Class Pruner Angle Pad Medium
 classify_cp_angle_pad_tight	10	CLass Pruner Angle Pad Tight
@@ -233,14 +231,11 @@ classify_class_pruner_threshold	229	Class Pruner Threshold 0-255
 classify_class_pruner_multiplier	15	Class Pruner Multiplier 0-255:       
 classify_cp_cutoff_strength	7	Class Pruner CutoffStrength:         
 classify_integer_matcher_multiplier	10	Integer Matcher Multiplier  0-255:   
-il1_adaption_test	0	Don't adapt to i/I at beginning of word
 dawg_debug_level	0	Set to 1 for general debug info, to 2 for more details, to 3 to see all the debug messages
 hyphen_debug_level	0	Debug level for hyphenated words.
-max_viterbi_list_size	10	Maximum size of viterbi list.
 stopper_smallword_size	2	Size of dict word to be treated as non-dict word
 stopper_debug_level	0	Stopper debug level
 tessedit_truncate_wordchoice_log	10	Max words to keep in list
-fragments_debug	0	Debug character fragments
 max_permuter_attempts	10000	Maximum number of different character choices to consider during permutation. This limit is especially useful when user patterns are specified, since overly generic patterns can result in dawg search exploring an overly large number of options.
 repair_unchopped_blobs	1	Fix blobs that aren't chopped
 chop_debug	0	Chop debug
@@ -252,7 +247,6 @@ chop_inside_angle	-50	Min Inside Angle Bend
 chop_min_outline_area	2000	Min Outline Area
 chop_centered_maxwidth	90	Width of (smaller) chopped blobs above which we don't care that a chop is not near the center.
 chop_x_y_weight	3	X / Y  length weight
-segment_adjust_debug	0	Segmentation adjustment debug
 wordrec_debug_level	0	Debug level for wordrec
 wordrec_max_join_chunks	4	Max number of broken pieces to associate
 segsearch_debug_level	0	SegSearch debug level
@@ -278,7 +272,6 @@ noise_maxperword	16	Max diacritics to apply to a word
 debug_x_ht_level	0	Reestimate debug
 quality_min_initial_alphas_reqd	2	alphas in a good word
 tessedit_tess_adaption_mode	39	Adaptation decision algorithm for tess
-tessedit_test_adaption_mode	3	Adaptation decision algorithm for tess
 multilang_debug_level	0	Print multilang debug info.
 paragraph_debug_level	0	Print paragraph debug info.
 tessedit_preserve_min_wd_len	2	Only preserve wds longer than this
@@ -298,12 +291,11 @@ jpg_quality	85	Set JPEG quality level
 user_defined_dpi	0	Specify DPI for input image
 min_characters_to_try	50	Specify minimum characters to try during OSD
 suspect_level	99	Suspect marker level
-suspect_space_level	100	Min suspect level for rejecting spaces
 suspect_short_words	2	Don't suspect dict wds longer than this
 tessedit_reject_mode	0	Rejection algorithm
 tessedit_image_border	2	Rej blbs near image edge limit
 min_sane_x_ht_pixels	8	Reject any x-ht lt or eq than this
-tessedit_page_number	-1	-1 -> All pages , else specific page to process
+tessedit_page_number	-1	-1 -> All pages, else specific page to process
 tessedit_parallelize	0	Run in parallel where possible
 lstm_choice_mode	0	Allows to include alternative symbols choices in the hOCR output. Valid input values are 0, 1, 2 and 3. 0 is the default value. With 1 the alternative symbol choices per timestep are included. With 2 the alternative symbol choices are accumulated per character. 
 tosp_debug_level	0	Debug data
@@ -317,7 +309,6 @@ textord_baseline_debug	0	Baseline debug level
 textord_noise_sizefraction	10	Fraction of size for maxima
 textord_noise_translimit	16	Transitions for normal blob
 textord_noise_sncount	1	super norm blobs to save row
-use_definite_ambigs_for_classifier	0	Use definite ambiguities when running character classifier
 use_ambigs_for_adaption	0	Use ambigs for deciding whether to adapt to a character
 allow_blob_division	1	Use divisible blobs chopping
 prioritize_division	0	Prioritize blob division over chopping
@@ -344,10 +335,8 @@ stopper_no_acceptable_choices	0	Make AcceptableChoice() always return false. Use
 segment_nonalphabetic_script	0	Don't use any alphabetic-specific tricks. Set to true in the traineddata config file for scripts that are cursive or inherently fixed-pitch
 save_doc_words	0	Save Document Words
 merge_fragments_in_matrix	1	Merge the fragments in the ratings matrix and delete them after merging
-wordrec_no_block	0	Don't output block information
 wordrec_enable_assoc	1	Associator Enable
 force_word_assoc	0	force associator to run regardless of what enable_assoc is. This is used for CJK where component grouping is necessary.
-fragments_guide_chopper	0	Use information from fragments to guide chopping process
 chop_enable	1	Chop enable
 chop_vertical_creep	0	Vertical creep
 chop_new_seam_pile	1	Use new seam_pile
@@ -366,6 +355,7 @@ tessedit_train_from_boxes	0	Generate training data from boxed chars
 tessedit_make_boxes_from_boxes	0	Generate more boxes from boxed chars
 tessedit_train_line_recognizer	0	Break input into lines and remap boxes if present
 tessedit_dump_pageseg_images	0	Dump intermediate images made during page segmentation
+tessedit_do_invert	1	Try inverting the image in `LSTMRecognizeWord`
 tessedit_ambigs_training	0	Perform training for ambiguities
 tessedit_adaption_debug	0	Generate and print debug information for adaption
 applybox_learn_chars_and_char_frags_mode	0	Learn both character fragments (as is done in the special low exposure mode) as well as unfragmented characters.
@@ -376,21 +366,17 @@ tessedit_timing_debug	0	Print timing stats
 tessedit_fix_fuzzy_spaces	1	Try to improve fuzzy spaces
 tessedit_unrej_any_wd	0	Don't bother with word plausibility
 tessedit_fix_hyphens	1	Crunch double hyphens?
-tessedit_redo_xheight	1	Check/Correct x-height
 tessedit_enable_doc_dict	1	Add words to the document dictionary
 tessedit_debug_fonts	0	Output font info per char
 tessedit_debug_block_rejection	0	Block and Row stats
 tessedit_enable_bigram_correction	1	Enable correction based on the word bigram dictionary.
 tessedit_enable_dict_correction	0	Enable single word correction based on the dictionary.
 enable_noise_removal	1	Remove and conditionally reassign small outlines when they confuse layout analysis, determining diacritics vs noise
-debug_acceptable_wds	0	Dump word pass/fail chk
 tessedit_minimal_rej_pass1	0	Do minimal rejection on pass 1 output
 tessedit_test_adaption	0	Test adaption criteria
-tessedit_matcher_log	0	Log matcher activity
 test_pt	0	Test for point
 paragraph_text_based	1	Run paragraph detection on the post-text-recognition (more accurate)
 lstm_use_matrix	1	Use ratings matrix/beam search with lstm
-docqual_excuse_outline_errs	0	Allow outline errs in unrejection?
 tessedit_good_quality_unrej	1	Reduce rejection on good docs
 tessedit_use_reject_spaces	1	Reject spaces?
 tessedit_preserve_blk_rej_perfect_wds	1	Only rej partially rejected words in block rejection
@@ -408,7 +394,6 @@ hocr_char_boxes	0	Add coordinates for each character to hocr output
 crunch_early_merge_tess_fails	1	Before word crunch?
 crunch_early_convert_bad_unlv_chs	0	Take out ~^ early?
 crunch_terrible_garbage	1	As it says
-crunch_pot_garbage	1	POTENTIAL crunch garbage
 crunch_leave_ok_strings	1	Don't touch sensible strings
 crunch_accept_ok	1	Use acceptability in okstring
 crunch_leave_accept_strings	0	Don't pot crunch sensible strings
@@ -430,7 +415,6 @@ tessedit_minimal_rejection	0	Only reject tess failures
 tessedit_zero_rejection	0	Don't reject ANYTHING
 tessedit_word_for_word	0	Make output have exactly one word per WERD
 tessedit_zero_kelvin_rejection	0	Don't reject ANYTHING AT ALL
-tessedit_consistent_reps	1	Force all rep chars the same
 tessedit_rejection_debug	0	Adaption debug
 tessedit_flip_0O	1	Contextual 0O O0 flips
 rej_trust_doc_dawg	0	Use DOC dawg in 11l conf. detector
@@ -454,6 +438,7 @@ textord_equation_detect	0	Turn on equation detector
 textord_tabfind_vertical_text	1	Enable vertical detection
 textord_tabfind_force_vertical_text	0	Force using vertical text page mode
 preserve_interword_spaces	0	Preserve multiple interword spaces
+pageseg_apply_music_mask	1	Detect music staff and remove intersecting components
 textord_single_height_mode	0	Script has no xheight, so use a single mode
 tosp_old_to_method	0	Space stats use prechopping?
 tosp_old_to_constrain_sp_kn	0	Constrain relative values of inter and intra-word gaps for old_to_method.
@@ -489,7 +474,6 @@ user_patterns_file		A filename of user-provided patterns.
 user_patterns_suffix		A suffix of user-provided patterns located in tessdata.
 output_ambig_words_file		Output file for ambiguities found in the dictionary
 word_to_debug		Word for which stopper debug information should be printed to stdout
-word_to_debug_lengths		Lengths of unichars in word_to_debug
 tessedit_char_blacklist		Blacklist of chars not to recognize
 tessedit_char_whitelist		Whitelist of chars to recognize
 tessedit_char_unblacklist		List of chars to override tessedit_char_blacklist
@@ -508,10 +492,6 @@ file_type	.tif	Filename extension
 tessedit_load_sublangs		List of languages to load with this one
 page_separator		Page separator (default is form feed control character)
 classify_char_norm_range	0.2	Character Normalization Range ...
-classify_min_norm_scale_x	0	Min char x-norm scale ...
-classify_max_norm_scale_x	0.325	Max char x-norm scale ...
-classify_min_norm_scale_y	0	Min char y-norm scale ...
-classify_max_norm_scale_y	0.325	Max char y-norm scale ...
 classify_max_rating_ratio	1.5	Veto ratio between classifier ratings
 classify_max_certainty_margin	5.5	Veto difference between classifier certainties
 matcher_good_threshold	0.125	Good Match (0-1)
@@ -544,7 +524,6 @@ stopper_certainty_per_char	-0.5	Certainty to add for each dict char above small 
 stopper_allowable_character_badness	3	Max certaintly variation allowed in a word (in sigma)
 doc_dict_pending_threshold	0	Worst certainty for using pending dictionary
 doc_dict_certainty_threshold	-2.25	Worst certainty for words that can be inserted into the document dictionary
-wordrec_worst_state	1	Worst segmentation state
 tessedit_certainty_threshold	-2.25	Good blob limit
 chop_split_dist_knob	0.5	Split length adjustment
 chop_overlap_knob	0.9	Split overlap adjustment
@@ -643,9 +622,7 @@ tosp_dont_fool_with_small_kerns	-1	Limit use of xht gap with odd small kns
 tosp_near_lh_edge	0	Don't reduce box if the top left is non blank
 tosp_silly_kn_sp_gap	0.2	Don't let sp minus kn get too small
 tosp_pass_wide_fuzz_sp_to_context	0.75	How wide fuzzies need context
-textord_blob_size_bigile	95	Percentile for large blobs
 textord_noise_area_ratio	0.7	Fraction of bounding box for noise
-textord_blob_size_smallile	20	Percentile for small blobs
 textord_initialx_ile	0.75	Ile of sizes for xheight guess
 textord_initialasc_ile	0.9	Ile of sizes for xheight guess
 textord_noise_sizelimit	0.5	Fraction of x for big t count

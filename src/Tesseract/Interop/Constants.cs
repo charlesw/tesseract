@@ -7,7 +7,7 @@ namespace Tesseract.Interop
     /// </summary>
     internal static class Constants
     {
-        public const string LeptonicaDllName = "leptonica-1.78.0";
+        public const string LeptonicaDllName = "leptonica-1.80.0";
         public const string TesseractDllName = "tesseract41";
         
         // tesseract uses an int to represent true false values.

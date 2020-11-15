@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.Net45Tests", "Tesseract.Net45Tests\Tesseract.Net45Tests.csproj", "{0B087299-D0A5-47F1-B313-820481F29DA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.NetCore2Tests", "Tesseract.NetCore2Tests\Tesseract.NetCore2Tests.csproj", "{74F4ACED-886F-4B1B-B524-6DF28A274226}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.NetCore31Tests", "Tesseract.NetCore2Tests\Tesseract.NetCore31Tests.csproj", "{74F4ACED-886F-4B1B-B524-6DF28A274226}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesseract.Drawing", "Tesseract.Drawing\Tesseract.Drawing.csproj", "{76C430BF-86EA-4EE0-8B33-BB4AB5AEABD5}"
 EndProject

@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Text;
 
 namespace Tesseract.Tests
 {
