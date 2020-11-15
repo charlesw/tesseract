@@ -16,6 +16,15 @@ namespace Tesseract.Tests
         private const string TestImagePath = "Ocr/phototest.tif";
 
         [Test]
+        public void CanGetVersion()
+        {
+            using (var engine = CreateEngine())
+            {
+                Assert.That(engine.Version, Does.StartWith("4.1.1"));
+            }
+        }
+
+        [Test]
         public void CanParseMultipageTif()
         {
             using (var engine = CreateEngine()) {

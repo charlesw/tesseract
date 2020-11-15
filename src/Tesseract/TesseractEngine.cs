@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
 using Tesseract.Internal;
+using Tesseract.Interop;
 
 namespace Tesseract
 {
@@ -13,7 +14,6 @@ namespace Tesseract
     /// </summary>
     public class TesseractEngine : DisposableBase
     {
-        private const string TesseractVersion = "4.1.0.00";
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
         private HandleRef handle;
@@ -189,9 +189,7 @@ namespace Tesseract
             {
                 // Get version doesn't work for x64, might be compilation related for now just
                 // return constant so we don't crash.
-                return TesseractVersion;
-
-                // return Interop.TessApi.Native.GetVersion();
+                return TessApi.BaseApiGetVersion();
             }
         }
 

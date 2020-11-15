@@ -9,7 +9,7 @@
     <Company />
     <Product>Tesseract.Drawing</Product>
     <Description>Adds support for interop with System.Drawing to Tesseract such as passing Bitmap to Tesseract.</Description>
-    <Copyright>Copyright 2019 Charles Weld</Copyright>
+    <Copyright>Copyright 2019-2020 Charles Weld</Copyright>
     <PackageReleaseNotes>https://github.com/charlesw/tesseract/blob/master/ChangeLog.md</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/charlesw/tesseract/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/charlesw/tesseract/</RepositoryUrl>
@@ -35,7 +35,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

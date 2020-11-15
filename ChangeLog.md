@@ -1,4 +1,14 @@
-﻿### Version 4.1.0
+﻿### Version 4.1.1
+
+* Upgraded to Tesseract 4.1.1 [Issue 528](https://github.com/charlesw/tesseract/issues/528)
+* Fixed Interop.TessApi.BaseApiGetVersion [Issue 522](https://github.com/charlesw/tesseract/issues/522)
+
+#### Known issues
+
+* Setting regions of interest doesn't work [Issue 489](https://github.com/charlesw/tesseract/issues/489)
+* PageSegMode.SingleBlockVertText does not work [Issue 490](https://github.com/charlesw/tesseract/issues/490)
+
+### Version 4.1.0
 
 Note: As of version 4.1.0 this wrapper will now match Tesseract's version to the first two numbers 
 (Major.Minor) with the last number (Patch) reserved for changes in the wrapper. This is to avoid 

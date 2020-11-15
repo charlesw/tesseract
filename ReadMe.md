@@ -1,4 +1,4 @@
-A .NET wrapper for [tesseract-ocr] 4.1.0.
+A .NET wrapper for [tesseract-ocr] 4.1.1.
 
 ## Dependencies
 
