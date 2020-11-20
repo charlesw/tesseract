@@ -121,6 +121,9 @@ namespace Tesseract.Interop
         int BaseApiSetDebugVariable(HandleRef handle, string name, IntPtr valPtr);
 
         // image analysis
+        [DllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage")]
+        void BaseApiSetImage(HandleRef handle, IntPtr imagedata, int width, int height, int bytes_per_pixel, int bytes_per_line);
+		
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPISetImage2")]
         void BaseApiSetImage(HandleRef handle, HandleRef pixHandle);
 
