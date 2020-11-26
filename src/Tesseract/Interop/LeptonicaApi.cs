@@ -138,6 +138,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixConvertRGBToGray")]
         IntPtr pixConvertRGBToGray(HandleRef pix, float rwt, float gwt, float bwt);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixConvertTo8")]
+        IntPtr pixConvertTo8(HandleRef pix, int cmapflag);
+
 
         // image analysis and manipulation functions
 
