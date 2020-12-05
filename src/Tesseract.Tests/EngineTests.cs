@@ -20,18 +20,41 @@ namespace Tesseract.Tests
         public void CanParseMultipageTif()
         {
             using (var engine = CreateEngine()) {
+                // load all pages at once
                 using (var pixA = PixArray.LoadMultiPageTiffFromFile(TestFilePath("./processing/multi-page.tif"))) {
-                    int i = 1;
+                    int i = 0;
                     foreach (var pix in pixA) {
                         using (var page = engine.Process(pix)) {
                             var text = page.GetText().Trim();
 
-                            string expectedText = String.Format("Page {0}", i);
+                            string expectedText = String.Format("Page {0}", ++i);
                             Assert.That(text, Is.EqualTo(expectedText));
                         }
-                        i++;
                     }
                 }
+            }
+        }
+
+        [Test]
+        public void CanParseMultipageTifOneByOne()
+        {
+            using (var engine = CreateEngine())
+            {
+                int offset = 0;
+                int i = 0;
+                do
+                {
+                    // read pages one at a time
+                    using (var img = Pix.pixReadFromMultipageTiff(TestFilePath("./processing/multi-page.tif"), ref offset))
+                    {
+                        using (var page = engine.Process(img))
+                        {
+                            var text = page.GetText().Trim();
+                            string expectedText = String.Format("Page {0}", ++i);
+                            Assert.That(text, Is.EqualTo(expectedText));
+                        }
+                    }         
+                } while (offset != 0);
             }
         }
 
