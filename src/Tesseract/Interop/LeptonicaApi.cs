@@ -160,6 +160,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixRotate90")]
         IntPtr pixRotate90(HandleRef pixs, int direction);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixOrientCorrect")]
+        IntPtr pixOrientCorrect(HandleRef pixs, float minupconf, float minratio, out float pupconf, out float pleftconf, out int protation, int debug);
+
         // Grayscale
 
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixCloseGray")]

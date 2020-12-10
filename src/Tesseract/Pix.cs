@@ -754,6 +754,43 @@ namespace Tesseract
             return new Pix(resultHandle);
         }
 
+
+        /// <summary>
+        /// Method to detect if Roman text is in reading orientation, and to rotate the image accordingly if not.
+        /// </summary>
+        /// <remarks>
+        /// This pix should be deskewed, English text, 150 - 300 ppi
+        /// Returns a clone of the original pix if no rotation is needed.
+        /// See notes for pixOrientDetect() and pixOrientDecision().
+        /// Use 0.0 for default values for %minupconf and %minratio
+        /// Optional output of intermediate confidence results and the rotation performed on pixs.
+        /// </remarks>
+        /// <param name="minUpConf">Minimum value for which a decision can be made</param>
+        /// <param name="minRatio">Minimum conf ratio required for a decision</param>
+        /// <param name="upConf">The normalized difference between up ascenders
+        /// and down ascenders. The image is analyzed without rotation
+        /// for being rightside-up or upside-down</param>
+        /// <param name="leftConf">The normalized difference between up ascenders
+        /// and down ascenders in the image after it has been
+        /// rotated 90 degrees clockwise.  With that rotation, ascenders
+        /// projecting to the left in the source image will project up
+        /// in the rotated image.  We compute this by rotating 90 degrees
+        /// clockwise and testing for up and down ascenders</param>
+        /// <param name="rotation">The rotation performed, in clock-wise degrees</param>
+        /// <param name="debug">Debug flag. 1 for debug output 0 for no debug output</param>
+        /// <returns>A rotated image or a clone if no rotation was performed</returns>
+        /// <exception cref="LeptonicaException">Pix uses more than 1 bpp</exception>
+        public Pix OrientCorrect(float minUpConf, float minRatio, out float upConf, out float leftConf, out int rotation, int debug)
+        {
+            IntPtr resultHandle = Interop.LeptonicaApi.Native.pixOrientCorrect(handle, minUpConf, minRatio, out upConf, out leftConf, out rotation, debug);
+
+            if (resultHandle == IntPtr.Zero)
+            {
+                throw new LeptonicaException("Failed to correct orientation.");
+            }
+            return new Pix(resultHandle);
+        }
+
         #endregion Image manipulation
 
         #region Scaling
