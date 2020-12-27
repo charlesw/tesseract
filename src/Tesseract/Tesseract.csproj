@@ -16,9 +16,10 @@
     <RepositoryUrl>https://github.com/charlesw/tesseract/</RepositoryUrl>
     <PackageTags>Tesseract Ocr</PackageTags>
     <Version>4.1.1</Version>
-    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.1</AssemblyVersion>
     <NeutralLanguage></NeutralLanguage>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <FileVersion>4.1.1.1</FileVersion>
   </PropertyGroup>
   <!-- .NET 4.0 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
@@ -57,6 +58,7 @@
     <Content Include="x86\*.dll" Pack="true" PackageCopyToOutput="true" PackagePath="x86">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <CSFile Remove="RemoveColorMap.cs" />
     <Content Include="Tesseract.targets" Pack="true" PackageCopyToOutput="true" PackagePath="build/">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>

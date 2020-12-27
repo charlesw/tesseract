@@ -452,6 +452,32 @@ namespace Tesseract
         }
 
         /// <summary>
+        /// Convert pix to not use a colormap
+        /// </summary>
+        /// <remarks>
+        /// (1) If pix does not have a colormap, a clone is returned.
+        /// (2) Otherwise, the input pixs is restricted to 1, 2, 4 or 8 bpp.
+        /// (3) Use REMOVE_CMAP_TO_BINARY only on 1 bpp pix.
+        /// (4) For grayscale conversion from RGB, use a weighted average
+        ///     of RGB values, and always return an 8 bpp pix, regardless
+        ///     of whether the input pixs depth is 2, 4 or 8 bpp.
+        /// (5) REMOVE_CMAP_TO_FULL_COLOR ignores the alpha component and
+        ///     returns a 32 bpp pix with spp == 3 and the alpha bytes are 0.
+        /// (6) For REMOVE_CMAP_BASED_ON_SRC, if there is no color, this
+        ///     returns either a 1 bpp or 8 bpp grayscale pix.
+        ///     If there is color, this returns a 32 bpp pix, with either:
+        ///      * 3 spp, if the alpha values are all 255 (opaque), or
+        ///      * 4 spp (preserving the alpha), if any alpha values are not 255.
+        /// </remarks>
+        /// <returns> pix without colormap</returns>
+        public Pix RemoveColorMap(RemoveColorMap removeColorMap)
+        {
+            var resultPixHandle = Interop.LeptonicaApi.Native.pixRemoveColormap(Handle, (int)removeColorMap);
+            if (resultPixHandle == IntPtr.Zero) throw new TesseractException("Failed to remove colormap.");
+            return new Pix(resultPixHandle);
+        }
+
+        /// <summary>
         /// Removes horizontal lines from a grayscale image. 
         /// The algorithm is based on Leptonica <code>lineremoval.c</code> example.
         /// See <a href="http://www.leptonica.com/line-removal.html">line-removal</a>.
@@ -750,6 +776,43 @@ namespace Tesseract
             if (resultHandle == IntPtr.Zero)
             {
                 throw new LeptonicaException("Failed to rotate image.");
+            }
+            return new Pix(resultHandle);
+        }
+
+
+        /// <summary>
+        /// Method to detect if Roman text is in reading orientation, and to rotate the image accordingly if not.
+        /// </summary>
+        /// <remarks>
+        /// This pix should be deskewed, English text, 150 - 300 ppi
+        /// Returns a clone of the original pix if no rotation is needed.
+        /// See notes for pixOrientDetect() and pixOrientDecision().
+        /// Use 0.0 for default values for %minupconf and %minratio
+        /// Optional output of intermediate confidence results and the rotation performed on pixs.
+        /// </remarks>
+        /// <param name="minUpConf">Minimum value for which a decision can be made</param>
+        /// <param name="minRatio">Minimum conf ratio required for a decision</param>
+        /// <param name="upConf">The normalized difference between up ascenders
+        /// and down ascenders. The image is analyzed without rotation
+        /// for being rightside-up or upside-down</param>
+        /// <param name="leftConf">The normalized difference between up ascenders
+        /// and down ascenders in the image after it has been
+        /// rotated 90 degrees clockwise.  With that rotation, ascenders
+        /// projecting to the left in the source image will project up
+        /// in the rotated image.  We compute this by rotating 90 degrees
+        /// clockwise and testing for up and down ascenders</param>
+        /// <param name="rotation">The rotation performed, in clock-wise degrees</param>
+        /// <param name="debug">Debug flag. 1 for debug output 0 for no debug output</param>
+        /// <returns>A rotated image or a clone if no rotation was performed</returns>
+        /// <exception cref="LeptonicaException">Pix uses more than 1 bpp</exception>
+        public Pix OrientCorrect(float minUpConf, float minRatio, out float upConf, out float leftConf, out int rotation, int debug)
+        {
+            IntPtr resultHandle = Interop.LeptonicaApi.Native.pixOrientCorrect(handle, minUpConf, minRatio, out upConf, out leftConf, out rotation, debug);
+
+            if (resultHandle == IntPtr.Zero)
+            {
+                throw new LeptonicaException("Failed to correct orientation.");
             }
             return new Pix(resultHandle);
         }
