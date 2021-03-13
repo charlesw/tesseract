@@ -187,7 +187,7 @@ namespace Tesseract
             set { Interop.LeptonicaApi.Native.pixSetYRes(this.handle, value); }
         }
 
-        internal HandleRef Handle
+        public HandleRef Handle
         {
             get { return handle; }
         }

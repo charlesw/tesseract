@@ -335,7 +335,7 @@ namespace Tesseract.Interop
         #endregion Renderer API
     }
 
-    internal static class TessApi
+    public static class TessApi
     {
         //XHTML Begin Tag:
         public const string xhtmlBeginTag =
