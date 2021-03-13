@@ -10,7 +10,6 @@ namespace Tesseract.Tests.Leptonica
     [TestFixture]
     public class ColorTests
     {
-#if NETFULL
         [TestCase]
         public void Color_CastColorToNetColor()
         {
@@ -21,7 +20,6 @@ namespace Tesseract.Tests.Leptonica
             Assert.That(castColor.B, Is.EqualTo(color.Blue));
             Assert.That(castColor.A, Is.EqualTo(color.Alpha));
         }
-#endif  
         
         [TestCase]
         public void Color_ConvertColorToNetColor()

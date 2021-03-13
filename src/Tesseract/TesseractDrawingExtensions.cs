@@ -1,5 +1,4 @@
-﻿#if SYSTEM_DRAWING_SUPPORT
-
+﻿
 using System;
 using System.Drawing;
 
@@ -118,4 +117,3 @@ namespace Tesseract
     }
 }
 
-#endif

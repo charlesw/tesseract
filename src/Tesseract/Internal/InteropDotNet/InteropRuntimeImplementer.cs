@@ -21,10 +21,10 @@ namespace InteropDotNet
                 throw new Exception(string.Format("The interface {0} should be public", interfaceType.Name));
 
             var assemblyName = GetAssemblyName(interfaceType);
-#if NETFULL
+#if NET40
             var assemblyBuilder = Thread.GetDomain().DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
-#elif NETSTANDARD
-             var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
+#else
+            var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
 #endif
             var moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName);
 
@@ -37,11 +37,10 @@ namespace InteropDotNet
             ImplementFields(typeBuilder, methods);
             ImplementMethods(typeBuilder, methods);
             ImplementConstructor(typeBuilder, methods);
-
-#if NETFULL
+#if NET40
             var implementationType = typeBuilder.CreateType();
             return (T)Activator.CreateInstance(implementationType, LibraryLoader.Instance);
-#elif NETSTANDARD
+#else
             var implementationType = typeBuilder.CreateTypeInfo();
             return (T)Activator.CreateInstance(implementationType, LibraryLoader.Instance);
 #endif
@@ -97,9 +96,9 @@ namespace InteropDotNet
                 },
                 new object[]
                 {
-                    importAttribute.CharSet, 
-                    importAttribute.BestFitMapping, 
-                    importAttribute.ThrowOnUnmappableChar, 
+                    importAttribute.CharSet,
+                    importAttribute.BestFitMapping,
+                    importAttribute.ThrowOnUnmappableChar,
                     importAttribute.SetLastError
                 });
             delegateBuilder.SetCustomAttribute(attributeBuilder);
@@ -129,9 +128,9 @@ namespace InteropDotNet
             methodBuilder.SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
 
             // Create type
-#if NETFULL
-           return delegateBuilder.CreateType();
-#elif NETSTANDARD
+#if NET40
+            return delegateBuilder.CreateType();
+#else
             return delegateBuilder.CreateTypeInfo();
 #endif
         }

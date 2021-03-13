@@ -1,5 +1,4 @@
-﻿#if NETFULL
-
+﻿
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -45,4 +44,3 @@ namespace Tesseract.Tests.Leptonica
 	}
 }
 
-#endif
