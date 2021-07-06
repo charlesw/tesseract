@@ -11,6 +11,8 @@ Since tesseract and leptonica binaries are compiled with Visual Studio 2019 you'
 
 You will also need to download the language data files for tesseract 4.1.0 from [tesseract-ocr].
 
+## [Docs](./docs/readme.md)
+
 ## Getting started quickly
 
 1. Add the ``Tesseract`` NuGet Package by running ``Install-Package Tesseract`` from the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console).
