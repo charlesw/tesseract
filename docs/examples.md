@@ -45,7 +45,24 @@ using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default
       }
 ```
 
-## Image to txt searchable pdf
-* (pending)
-* cli seems to support it `tesseract words.png out -l deu PDF`
-* maybe need to extend this wrapper
+## Image to txt searchable pdf using paths
+```cs
+using (IResultRenderer renderer = Tesseract.PdfResultRenderer.CreatePdfRenderer(@"test.pdf", @"./tessdata", false))
+    {
+        // PDF Title
+        using (renderer.BeginDocument("Serachablepdftest"))
+        {
+            string configurationFilePath = @"C:\tessdata";
+            using (TesseractEngine engine2 = new TesseractEngine(configurationFilePath, "eng", EngineMode.TesseractAndLstm))
+            {
+                using (var img = Pix.LoadFromFile(@"C:\file-page1.jpg"))
+                {
+                    using (var page = engine2.Process(img, "Serachablepdftest"))
+                    {
+                        renderer.AddPage(page);
+                    }
+                }
+            }
+        }
+    }
+```
