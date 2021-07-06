@@ -1,4 +1,4 @@
-# Compling_tesseract_and_leptonica.md
+# Compling tesseract and leptonica.md
 * [Index](./ReadMe.md)
 
 ## Notes
