@@ -47,3 +47,5 @@ using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default
 
 ## Image to txt searchable pdf
 * (pending)
+* cli seems to support it `tesseract words.png out -l deu PDF`
+* maybe need to extend this wrapper
