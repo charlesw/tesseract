@@ -1,3 +1,7 @@
+# Compling_tesseract_and_leptonica.md
+* [Index](./ReadMe.md)
+
+## Notes
 Build instructions for Tesseract 4.1.1 and leptonica 1.80.0. Please note that build systems do change so while the following
 has been tested with the listed versions building against any other versions including master may not work as expected and
 aren't supported.
