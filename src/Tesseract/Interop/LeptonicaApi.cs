@@ -21,6 +21,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMultipageTiff")]
         IntPtr pixaReadMultipageTiff(string filename);
 
+        [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaReadMemMultipageTiff")]
+        unsafe IntPtr pixaReadMemMultipageTiff(byte* data, int length);
+
         [RuntimeDllImport(Constants.LeptonicaDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "pixaCreate")]
         IntPtr pixaCreate(int n);
 
