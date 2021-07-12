@@ -44,6 +44,30 @@ namespace Tesseract.Tests
         }
 
         [Test]
+        public void CanParseMultipageTifMemory()
+        {
+            using (var engine = CreateEngine())
+            {
+                var data = File.ReadAllBytes(TestFilePath("./processing/multi-page.tif"));
+                using (var pixA = PixArray.LoadMultiPageTiffFromMemory(data))
+                {
+                    int i = 1;
+                    foreach (var pix in pixA)
+                    {
+                        using (var page = engine.Process(pix))
+                        {
+                            var text = page.GetText().Trim();
+
+                            string expectedText = String.Format("Page {0}", i);
+                            Assert.That(text, Is.EqualTo(expectedText));
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+
+        [Test]
         [TestCase(PageSegMode.SingleBlock, "This is a lot of 12 point text to test the\nocr code and see if it works on all types\nof file format.")]
         [TestCase(PageSegMode.SingleColumn, "This is a lot of 12 point text to test the")]
         [TestCase(PageSegMode.SingleLine, "This is a lot of 12 point text to test the")]
