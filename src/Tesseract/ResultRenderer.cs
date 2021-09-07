@@ -61,13 +61,23 @@ namespace Tesseract
                         }
                         break;
                     case RenderedFormat.PDF:
-                        if (renderer == null)
+                        bool textonly = false;
+                        int val;
+                        if (Interop.TessApi.Native.BaseApiGetBoolVariable(((ResultRenderer)renderer)._handle, "textonly_pdf", out val) != 0)
                         {
-                            renderer = CreatePdfRenderer(outputbase, dataPath, false);
+                            textonly = (val != 0);
                         }
                         else
                         {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new PdfResultRenderer(outputbase, dataPath, false).Handle);
+                            textonly = false;
+                        }
+                        if (renderer == null)
+                        {
+                            renderer = CreatePdfRenderer(outputbase, dataPath, textonly);
+                        }
+                        else
+                        {
+                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new PdfResultRenderer(outputbase, dataPath, textonly).Handle);
                         }
                         break;
                     case RenderedFormat.BOX:
