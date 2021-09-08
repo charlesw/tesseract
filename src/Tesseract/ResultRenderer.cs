@@ -10,7 +10,7 @@ namespace Tesseract
     /// </summary>
     public enum RenderedFormat
     {
-        TEXT, HOCR, PDF, UNLV, BOX, ALTO, TSV, LSTMBOX, WORDSTRBOX
+        TEXT, HOCR, PDF, PDF_TEXTONLY, UNLV, BOX, ALTO, TSV, LSTMBOX, WORDSTRBOX
     }
 
     /// <summary>
@@ -61,16 +61,9 @@ namespace Tesseract
                         }
                         break;
                     case RenderedFormat.PDF:
-                        bool textonly = false;
-                        int val;
-                        if (Interop.TessApi.Native.BaseApiGetBoolVariable(((ResultRenderer)renderer)._handle, "textonly_pdf", out val) != 0)
-                        {
-                            textonly = (val != 0);
-                        }
-                        else
-                        {
-                            textonly = false;
-                        }
+                    case RenderedFormat.PDF_TEXTONLY:
+                        bool textonly = (format == RenderedFormat.PDF_TEXTONLY);
+
                         if (renderer == null)
                         {
                             renderer = CreatePdfRenderer(outputbase, dataPath, textonly);

@@ -211,7 +211,7 @@ namespace Tesseract.Tests
         public void CanRenderResultsIntoMultipleOutputFormats()
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
-            List<RenderedFormat> formats = new List<RenderedFormat> { RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT };
+            List<RenderedFormat> formats = new List<RenderedFormat> { RenderedFormat.HOCR, RenderedFormat.PDF_TEXTONLY, RenderedFormat.TEXT };
             using (var renderer = ResultRenderer.CreateRenderers(resultPath, DataPath, formats))
             {
                 var examplePixPath = TestFilePath("Ocr/phototest.tif");
