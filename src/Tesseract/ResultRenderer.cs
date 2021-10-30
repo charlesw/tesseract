@@ -32,111 +32,50 @@ namespace Tesseract
         /// <param name="dataPath">The directory containing the pdf font data, normally same as your tessdata directory.</param>
         /// <param name="outputFormats"></param>
         /// <returns></returns>
-        public static IResultRenderer CreateRenderers(string outputbase, string dataPath, List<RenderedFormat> outputFormats)
+        public static IEnumerable<IResultRenderer> CreateRenderers(string outputbase, string dataPath, List<RenderedFormat> outputFormats)
         {
-            IResultRenderer renderer = null;
+            List<IResultRenderer> renderers = new List<IResultRenderer>();
 
             foreach (RenderedFormat format in outputFormats)
             {
+                IResultRenderer renderer = null;
+
                 switch (format)
                 {
                     case RenderedFormat.TEXT:
-                        if (renderer == null)
-                        {
-                            renderer = CreateTextRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new TextResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateTextRenderer(outputbase);
                         break;
                     case RenderedFormat.HOCR:
-                        if (renderer == null)
-                        {
-                            renderer = CreateHOcrRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new HOcrResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateHOcrRenderer(outputbase);
                         break;
                     case RenderedFormat.PDF:
                     case RenderedFormat.PDF_TEXTONLY:
                         bool textonly = (format == RenderedFormat.PDF_TEXTONLY);
-
-                        if (renderer == null)
-                        {
-                            renderer = CreatePdfRenderer(outputbase, dataPath, textonly);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new PdfResultRenderer(outputbase, dataPath, textonly).Handle);
-                        }
+                        renderer = CreatePdfRenderer(outputbase, dataPath, textonly);
                         break;
                     case RenderedFormat.BOX:
-                        if (renderer == null)
-                        {
-                            renderer = CreateBoxRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new BoxResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateBoxRenderer(outputbase);
                         break;
                     case RenderedFormat.UNLV:
-                        if (renderer == null)
-                        {
-                            renderer = CreateUnlvRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new UnlvResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateUnlvRenderer(outputbase);
                         break;
                     case RenderedFormat.ALTO:
-                        if (renderer == null)
-                        {
-                            renderer = CreateAltoRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new AltoResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateAltoRenderer(outputbase);
                         break;
                     case RenderedFormat.TSV:
-                        if (renderer == null)
-                        {
-                            renderer = CreateTsvRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new TsvResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateTsvRenderer(outputbase);
                         break;
                     case RenderedFormat.LSTMBOX:
-                        if (renderer == null)
-                        {
-                            renderer = CreateLSTMBoxRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new LSTMBoxResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateLSTMBoxRenderer(outputbase);
                         break;
                     case RenderedFormat.WORDSTRBOX:
-                        if (renderer == null)
-                        {
-                            renderer = CreateWordStrBoxRenderer(outputbase);
-                        }
-                        else
-                        {
-                            Interop.TessApi.Native.ResultRendererInsert(((ResultRenderer)renderer).Handle, new WordStrBoxResultRenderer(outputbase).Handle);
-                        }
+                        renderer = CreateWordStrBoxRenderer(outputbase);
                         break;
                 }
+                renderers.Add(renderer);
             }
 
-            return renderer;
+            return renderers;
         }
 
         /// <summary>

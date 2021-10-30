@@ -212,7 +212,7 @@ namespace Tesseract.Tests
         {
             var resultPath = TestResultRunFile(@"ResultRenderers\PDF\phototest");
             List<RenderedFormat> formats = new List<RenderedFormat> { RenderedFormat.HOCR, RenderedFormat.PDF_TEXTONLY, RenderedFormat.TEXT };
-            using (var renderer = ResultRenderer.CreateRenderers(resultPath, DataPath, formats))
+            using (var renderer = new AggregateResultRenderer(ResultRenderer.CreateRenderers(resultPath, DataPath, formats)))
             {
                 var examplePixPath = TestFilePath("Ocr/phototest.tif");
                 ProcessFile(renderer, examplePixPath);
