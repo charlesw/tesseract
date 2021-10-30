@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net40;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net40;net45;net48</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -28,6 +28,11 @@
   <!-- .NET 4.5 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
 	  <DefineConstants>NET45;NETFULL;SYSTEM_DRAWING_SUPPORT</DefineConstants>
+  </PropertyGroup>
+
+  <!-- .NET 4.8 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48'">
+    <DefineConstants>NET48;NETFULL;SYSTEM_DRAWING_SUPPORT</DefineConstants>
   </PropertyGroup>
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->

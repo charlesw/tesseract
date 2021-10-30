@@ -49,7 +49,7 @@ namespace Tesseract
         private HandleRef handle;
 
         #endregion Fields
-
+        
         #region Create\Load methods
 
         /// <summary>
@@ -130,6 +130,18 @@ namespace Tesseract
             if (handle == IntPtr.Zero)
             {
                 throw new IOException("Failed to load image from memory.");
+            }
+            return Create(handle);
+        }
+
+        public static Pix pixReadFromMultipageTiff(string filename, ref int offset)
+        {
+            IntPtr handle;
+            handle = Interop.LeptonicaApi.Native.pixReadFromMultipageTiff(filename, ref offset);
+
+            if (handle == IntPtr.Zero)
+            {
+                throw new IOException(String.Format("Failed to load image from multi-page Tiff at offset {0}.", offset));
             }
             return Create(handle);
         }
@@ -750,6 +762,35 @@ namespace Tesseract
             if (resultHandle == IntPtr.Zero)
             {
                 throw new LeptonicaException("Failed to rotate image.");
+            }
+            return new Pix(resultHandle);
+        }
+        /// <summary>
+        /// Inverts pix.
+        /// </summary>
+        /// <returns></returns>
+        public Pix Invert()
+        {
+            IntPtr resultHandle = Interop.LeptonicaApi.Native.pixInvert(new HandleRef(this, IntPtr.Zero), handle);
+
+            if (resultHandle == IntPtr.Zero)
+            {
+                throw new LeptonicaException("Failed to invert image.");
+            }
+            return new Pix(resultHandle);
+        }
+        /// <summary>
+        /// Top-level conversion to 8 bpp.
+        /// </summary>
+        /// <param name="cmapflag"></param>
+        /// <returns></returns>
+        public Pix ConvertTo8(int cmapflag)
+        {
+            IntPtr resultHandle = Interop.LeptonicaApi.Native.pixConvertTo8(handle, cmapflag);
+
+            if (resultHandle == IntPtr.Zero)
+            {
+                throw new LeptonicaException("Failed to convert image to 8 bpp.");
             }
             return new Pix(resultHandle);
         }

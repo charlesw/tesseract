@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
 
     <IsPackable>false</IsPackable>
-	  <DefineConstants>NET45;NETFULL</DefineConstants>
+	  <DefineConstants>NET48;NETFULL</DefineConstants>
 	  <RootNamespace>Tesseract.Tests</RootNamespace>
   </PropertyGroup>
 
