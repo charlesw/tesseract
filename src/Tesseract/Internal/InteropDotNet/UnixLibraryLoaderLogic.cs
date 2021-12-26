@@ -1,4 +1,4 @@
-//  Copyright (c) 2014 Andrey Akinshin
+﻿//  Copyright (c) 2014 Andrey Akinshin
 //  Project URL: https://github.com/AndreyAkinshin/InteropDotNet
 //  Distributed under the MIT License: http://opensource.org/licenses/MIT
 using System;
@@ -55,12 +55,14 @@ namespace InteropDotNet
             return functionHandle;
         }
 
+        private static readonly string FileExtension = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? ".dylib" : ".so";
+
         public string FixUpLibraryName(string fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
             {
-                if (!fileName.EndsWith(".so", StringComparison.OrdinalIgnoreCase))
-                    fileName += ".so";
+                if (!fileName.EndsWith(FileExtension, StringComparison.OrdinalIgnoreCase))
+                    fileName += FileExtension;
                 if (!fileName.StartsWith("lib", StringComparison.OrdinalIgnoreCase))
                     fileName = "lib" + fileName;
             }
