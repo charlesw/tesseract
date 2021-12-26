@@ -1,4 +1,4 @@
-﻿//  Copyright (c) 2014 Andrey Akinshin
+//  Copyright (c) 2014 Andrey Akinshin
 //  Project URL: https://github.com/AndreyAkinshin/InteropDotNet
 //  Distributed under the MIT License: http://opensource.org/licenses/MIT
 using System;
@@ -69,16 +69,16 @@ namespace InteropDotNet
 
         const int RTLD_NOW = 2;
 
-        [DllImport("libdl.so", EntryPoint = "dlopen")]
+        [DllImport("libdl", EntryPoint = "dlopen")]
         private static extern IntPtr UnixLoadLibrary(String fileName, int flags);
 
-        [DllImport("libdl.so", EntryPoint = "dlclose", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("libdl", EntryPoint = "dlclose", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int UnixFreeLibrary(IntPtr handle);
 
-        [DllImport("libdl.so", EntryPoint = "dlsym", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("libdl", EntryPoint = "dlsym", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern IntPtr UnixGetProcAddress(IntPtr handle, String symbol);
 
-        [DllImport("libdl.so", EntryPoint = "dlerror", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("libdl", EntryPoint = "dlerror", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern IntPtr UnixGetLastError();
     }
 }
