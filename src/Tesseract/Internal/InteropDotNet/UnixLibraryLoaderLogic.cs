@@ -55,7 +55,7 @@ namespace InteropDotNet
             return functionHandle;
         }
 
-        private static readonly string FileExtension = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? ".dylib" : ".so";
+        private static readonly string FileExtension = SystemManager.GetOperatingSystem() == OperatingSystem.MacOSX ? ".dylib" : ".so";
 
         public string FixUpLibraryName(string fileName)
         {
