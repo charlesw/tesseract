@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ 'ci-test' ]
+    branches: [ 'macos-fix' ]
   pull_request:
     branches: [ 'main', 'develop' ]
     paths:
