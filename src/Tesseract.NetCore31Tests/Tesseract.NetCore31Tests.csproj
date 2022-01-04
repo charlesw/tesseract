@@ -206,4 +206,13 @@
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
+  <Target Name="SymlinkLinuxDependencies" AfterTargets="AfterBuild" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/liblept.so $(OutDir)x64/libleptonica-1.80.0.so"/>
+    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/libtesseract.so.4 $(OutDir)x64/libtesseract41.so"/>
+  </Target>
+
+  <Target Name="SymlinkMacOSDependencies" AfterTargets="AfterBuild" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
+    <Exec Command="ln -sf /usr/local/lib/liblept.dylib $(OutDir)x64/libleptonica-1.80.0.dylib"/>
+    <Exec Command="ln -sf /usr/local/Cellar/tesseract/4.1.3/lib/libtesseract.dylib $(OutDir)x64/libtesseract41.dylib"/>
+  </Target>
 </Project>
