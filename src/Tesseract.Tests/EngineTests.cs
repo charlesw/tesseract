@@ -110,7 +110,7 @@ namespace Tesseract.Tests
         public void CanParseUznFile()
         {
             using (var engine = CreateEngine()) {
-                var inputFilename = TestFilePath(@"Ocr\uzn-test.png");
+                var inputFilename = TestFilePath(@"Ocr/uzn-test.png");
                 using (var img = Pix.LoadFromFile(inputFilename)) {
                     using (var page = engine.Process(img, inputFilename, PageSegMode.SingleLine)) {
                         var text = page.GetText();
@@ -129,7 +129,7 @@ namespace Tesseract.Tests
         public void CanProcessBitmap()
         {
             using (var engine = CreateEngine()) {
-                var testImgFilename = TestFilePath(@"Ocr\phototest.tif");
+                var testImgFilename = TestFilePath(@"Ocr/phototest.tif");
                 using (var img = new Bitmap(testImgFilename)) {
                     using (var page = engine.Process(img)) {
                         var text = page.GetText();
@@ -217,7 +217,7 @@ namespace Tesseract.Tests
         {
             string actualResult;
             using (var engine = CreateEngine()) {
-                using (var img = LoadTestPix("ocr/empty.png")) {
+                using (var img = LoadTestPix("Ocr/empty.png")) {
                     using (var page = engine.Process(img)) {
                         actualResult = PageSerializer.Serialize(page, false);
                     }
@@ -253,7 +253,7 @@ TestUtils.NormaliseNewLine(@"</word></line>
         [Test]
         public void CanProcessPixUsingResultIterator()
         {
-            const string ResultPath = @"EngineTests\CanProcessPixUsingResultIterator.txt";
+            const string ResultPath = @"EngineTests/CanProcessPixUsingResultIterator.txt";
             var actualResultPath = TestResultRunFile(ResultPath);
 
             using (var engine = CreateEngine()) {
@@ -431,7 +431,7 @@ TestUtils.NormaliseNewLine(@"</word></line>
         [Test]
         public void CanProcessPixUsingResultIteratorAndChoiceIterator()
         {
-            const string resultFilename = @"EngineTests\CanProcessPixUsingResultIteratorAndChoiceIterator.txt";
+            const string resultFilename = @"EngineTests/CanProcessPixUsingResultIteratorAndChoiceIterator.txt";
 
             using (var engine = CreateEngine())
             {
@@ -628,14 +628,14 @@ TestUtils.NormaliseNewLine(@"</word></line>
             }
         }
 
-        #endregion Variable set\get
+        #endregion Variable set/get
 
         #region Variable print
 
         [Test]
         public void CanPrintVariables()
         {
-            const string ResultFilename = @"EngineTests\CanPrintVariables.txt";
+            const string ResultFilename = @"EngineTests/CanPrintVariables.txt";
             using (var engine = CreateEngine()) {
                 var actualResultsFilename = TestResultRunFile(ResultFilename);
                 Assert.That(engine.TryPrintVariablesToFile(actualResultsFilename), Is.True);
