@@ -214,6 +214,6 @@
 
   <Target Name="SymlinkMacOSDependencies" AfterTargets="AfterBuild" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
     <Exec Command="ln -sf /usr/local/lib/liblept.dylib $(OutDir)x64/libleptonica-1.80.0.dylib"/>
-    <Exec Command="ln -sf /usr/local/Cellar/tesseract/4.1.3/lib/libtesseract.dylib $(OutDir)x64/libtesseract41.dylib"/>
+    <Exec Command="ln -sf /usr/local/lib/libtesseract.dylib $(OutDir)x64/libtesseract41.dylib"/>
   </Target>
 </Project>
