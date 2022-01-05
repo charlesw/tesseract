@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net40;net45</TargetFrameworks>
-	  <Version>14.1.1</Version>
+    <Version>14.1.2</Version>
   </PropertyGroup>
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -10,15 +11,13 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
     <DefineConstants>NET40;NETFULL;SYSTEM_DRAWING_SUPPORT</DefineConstants>
   </PropertyGroup>
-  
   <!-- .NET 4.5 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
-	  <DefineConstants>NET45;NETFULL;SYSTEM_DRAWING_SUPPORT</DefineConstants>
+    <DefineConstants>NET45;NETFULL;SYSTEM_DRAWING_SUPPORT</DefineConstants>
   </PropertyGroup>
-
   <!-- .NET Standard 2.0 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-	  <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <DocumentationFile>.\Tesseract.xml</DocumentationFile>
@@ -32,7 +31,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-
     <CSFile Include="*.cs" Exclude="obj\**\.cs" />
   </ItemGroup>
   <ItemGroup>
