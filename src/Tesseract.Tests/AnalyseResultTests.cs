@@ -9,10 +9,10 @@ namespace Tesseract.Tests
     {
         private string ResultsDirectory
         {
-            get { return TestResultPath(@"Analysis\"); }
+            get { return TestResultPath(@"Analysis/"); }
         }
 
-        private const string ExampleImagePath = @"Ocr\phototest.tif";
+        private const string ExampleImagePath = @"Ocr/phototest.tif";
 
         #region Setup\TearDown
 
@@ -48,7 +48,7 @@ namespace Tesseract.Tests
             var exampleImagePath = TestFilePath("Ocr/phototest.tif");
             using (var img = LoadTestImage(ExampleImagePath)) {
                 using (var rotatedImage = angle.HasValue ? img.Rotate(MathHelper.ToRadians(angle.Value)) : img.Clone()) {
-                    rotatedImage.Save(TestResultRunFile(String.Format(@"AnalyseResult\AnalyseLayout_RotateImage_{0}.png", angle)));
+                    rotatedImage.Save(TestResultRunFile(String.Format(@"AnalyseResult/AnalyseLayout_RotateImage_{0}.png", angle)));
 
                     engine.DefaultPageSegMode = PageSegMode.AutoOsd;
                     using (var page = engine.Process(rotatedImage)) {
@@ -179,7 +179,7 @@ namespace Tesseract.Tests
                         // get symbol
                         int x, y;
                         using (var elementImg = pageLayout.GetImage(level, padding, out x, out y)) {
-                            var elementImgFilename = String.Format(@"AnalyseResult\GetImage\ResultIterator_Image_{0}_{1}_at_({2},{3}).png", level, padding, x, y);
+                            var elementImgFilename = String.Format(@"AnalyseResult/GetImage/ResultIterator_Image_{0}_{1}_at_({2},{3}).png", level, padding, x, y);
 
                             // TODO: Ensure generated pix is equal to expected pix, only saving it if it's not.
                             var destFilename = TestResultRunFile(elementImgFilename);

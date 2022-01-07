@@ -55,12 +55,14 @@ namespace InteropDotNet
             return functionHandle;
         }
 
+        private static readonly string FileExtension = SystemManager.GetOperatingSystem() == OperatingSystem.MacOSX ? ".dylib" : ".so";
+
         public string FixUpLibraryName(string fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
             {
-                if (!fileName.EndsWith(".so", StringComparison.OrdinalIgnoreCase))
-                    fileName += ".so";
+                if (!fileName.EndsWith(FileExtension, StringComparison.OrdinalIgnoreCase))
+                    fileName += FileExtension;
                 if (!fileName.StartsWith("lib", StringComparison.OrdinalIgnoreCase))
                     fileName = "lib" + fileName;
             }
@@ -69,16 +71,16 @@ namespace InteropDotNet
 
         const int RTLD_NOW = 2;
 
-        [DllImport("libdl.so", EntryPoint = "dlopen")]
+        [DllImport("libdl", EntryPoint = "dlopen")]
         private static extern IntPtr UnixLoadLibrary(String fileName, int flags);
 
-        [DllImport("libdl.so", EntryPoint = "dlclose", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("libdl", EntryPoint = "dlclose", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int UnixFreeLibrary(IntPtr handle);
 
-        [DllImport("libdl.so", EntryPoint = "dlsym", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("libdl", EntryPoint = "dlsym", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern IntPtr UnixGetProcAddress(IntPtr handle, String symbol);
 
-        [DllImport("libdl.so", EntryPoint = "dlerror", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("libdl", EntryPoint = "dlerror", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern IntPtr UnixGetLastError();
     }
 }
