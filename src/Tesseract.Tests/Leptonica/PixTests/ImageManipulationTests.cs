@@ -12,12 +12,12 @@ namespace Tesseract.Tests.Leptonica.PixTests
     [TestFixture]
     public class ImageManipulationTests : TesseractTestBase
     {
-        const string ResultsDirectory = @"Results\ImageManipulation\";
+        const string ResultsDirectory = @"Results/ImageManipulation/";
 
         [Test]
         public void DescewTest()
         {
-            var sourcePixPath = TestFilePath(@"Scew\scewed-phototest.png");
+            var sourcePixPath = TestFilePath(@"Scew/scewed-phototest.png");
             using (var sourcePix = Pix.LoadFromFile(sourcePixPath))
             {
                 Scew scew;
@@ -34,7 +34,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
         [Test]
         public void OtsuBinarizationTest()
         {
-            var sourcePixFilename = TestFilePath(@"Binarization\neo-8bit.png");
+            var sourcePixFilename = TestFilePath(@"Binarization/neo-8bit.png");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             {
                 using (var binarizedImage = sourcePix.BinarizeOtsuAdaptiveThreshold(200, 200, 10, 10, 0.1F))
@@ -49,7 +49,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
         [Test]
         public void SauvolaBinarizationTest()
         {
-            string sourcePixFilename = TestFilePath(@"Binarization\neo-8bit-grayscale.png");
+            string sourcePixFilename = TestFilePath(@"Binarization/neo-8bit-grayscale.png");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             {
                 using (var grayscalePix = sourcePix.ConvertRGBToGray(1, 1, 1))
@@ -67,7 +67,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
         [Test]
         public void SauvolaTiledBinarizationTest()
         {
-            string sourcePixFilename = TestFilePath(@"Binarization\neo-8bit-grayscale.png");
+            string sourcePixFilename = TestFilePath(@"Binarization/neo-8bit-grayscale.png");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             {
                 using (var grayscalePix = sourcePix.ConvertRGBToGray(1, 1, 1))
@@ -85,7 +85,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
         [Test]
         public void ConvertRGBToGrayTest()
         {
-            var sourcePixFilename = TestFilePath(@"Conversion\photo_rgb_32bpp.tif");
+            var sourcePixFilename = TestFilePath(@"Conversion/photo_rgb_32bpp.tif");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             using (var grayscaleImage = sourcePix.ConvertRGBToGray())
             {
@@ -105,7 +105,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
             const string FileNameFormat = "rotation_{0}degrees.jpg";
             float angleAsRadians = MathHelper.ToRadians(angle);
 
-            var sourcePixFilename = TestFilePath(@"Conversion\photo_rgb_32bpp.tif");
+            var sourcePixFilename = TestFilePath(@"Conversion/photo_rgb_32bpp.tif");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             {
                 using (var result = sourcePix.Rotate(angleAsRadians, RotationMethod.AreaMap))
@@ -120,7 +120,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
         [Test]
         public void RemoveLinesTest()
         {
-            var sourcePixFilename = TestFilePath(@"processing\table.png");
+            var sourcePixFilename = TestFilePath(@"processing/table.png");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             {
                 // remove horizontal lines
@@ -147,7 +147,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
         [Test]
         public void DespeckleTest()
         {
-            var sourcePixFilename = TestFilePath(@"processing\w91frag.jpg");
+            var sourcePixFilename = TestFilePath(@"processing/w91frag.jpg");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             {
                 // remove speckles
@@ -165,7 +165,7 @@ namespace Tesseract.Tests.Leptonica.PixTests
         {
             const string FileNameFormat = "scale_{0}.jpg";
 
-            var sourcePixFilename = TestFilePath(@"Conversion\photo_rgb_32bpp.tif");
+            var sourcePixFilename = TestFilePath(@"Conversion/photo_rgb_32bpp.tif");
             using (var sourcePix = Pix.LoadFromFile(sourcePixFilename))
             {
                 using (var result = sourcePix.Scale(scale, scale))

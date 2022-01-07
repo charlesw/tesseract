@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [ 'macos-fix' ]
+  pull_request:
+    branches: [ 'main', 'develop' ]
+    paths:
+    - '**.cs'
+    - '**.csproj'
+
+env:
+  DOTNET_NOLOGO: true
+
+jobs:
+  build-and-test:
+    name: build-and-test-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ 'ubuntu-latest', 'windows-latest', 'macOS-latest' ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core 3.1.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+
+    - name: Setup .NET 6.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Install Ubuntu dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update &&
+        sudo apt-get install -y tesseract-ocr libleptonica-dev && 
+        ls -la /usr/local/lib && 
+        ls -la /usr/lib/x86_64-linux-gnu
+
+    - name: Install macOS dependencies
+      if: runner.os == 'macOS'
+      run: |
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
+        brew tap-new local/versions &&
+        brew extract --version=4.1.1 tesseract local/versions &&
+        brew install local/versions/tesseract@4.1.1 mono-libgdiplus
+    
+    - name: Install dependencies
+      run: dotnet restore src/Tesseract.sln
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore src/Tesseract.sln
+    
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal --logger trx --results-directory "TestResults" src/Tesseract.sln
+    
+    - name: Upload dotnet test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: dotnet-results
+        path: TestResults
+      if: ${{ always() }}

@@ -17,7 +17,7 @@ namespace Tesseract.Tests.ResultIteratorTests
         public void Init()
         {
             Engine = CreateEngine();
-            TestImage = LoadTestPix("Ocr\\Fonts.tif");
+            TestImage = LoadTestPix("Ocr/Fonts.tif");
         }
 
         [TearDown]

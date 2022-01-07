@@ -2,6 +2,7 @@
 //  Project URL: https://github.com/AndreyAkinshin/InteropDotNet
 //  Distributed under the MIT License: http://opensource.org/licenses/MIT
 using System;
+using System.Runtime.InteropServices;
 
 namespace InteropDotNet
 {
@@ -14,6 +15,17 @@ namespace InteropDotNet
 
         public static OperatingSystem GetOperatingSystem()
         {
+            // Environment.OSVersion.Platform detects MacOS as Unix in .net core environment
+#if NETCORE || NETSTANDARD
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return OperatingSystem.Windows;
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return OperatingSystem.Unix;
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                return OperatingSystem.MacOSX;
+            
+            return OperatingSystem.Unknown;
+#else
             var pid = (int)Environment.OSVersion.Platform;
             switch (pid)
             {
@@ -30,6 +42,7 @@ namespace InteropDotNet
                 default:
                     return OperatingSystem.Unknown;
             }
+#endif
         }
     }
 
