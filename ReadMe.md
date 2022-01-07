@@ -11,13 +11,16 @@ Since tesseract and leptonica binaries are compiled with Visual Studio 2019 you'
 
 You will also need to download the language data files for tesseract 4.1.0 from [tesseract-ocr].
 
+## [Docs](./docs/ReadMe.md)
+
 ## Getting started quickly
 
 1. Add the ``Tesseract`` NuGet Package by running ``Install-Package Tesseract`` from the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console).
-2. Ensure you have Visual Studio 2019 x86 & x64 runtimes installed (see note above).
-3. Download language data files for tesseract 4.00 from the [tessdata repository](https://github.com/tesseract-ocr/tessdata_fast) and add them to your project, 
+2. (Optional) Add the ``Tesseract.Drawing`` NuGet package to support interop with ``System.Drawing`` in .NET Core, for instance to allow passing Bitmap to Tesseract
+3. Ensure you have Visual Studio 2019 x86 & x64 runtimes installed (see note above).
+4. Download language data files for tesseract 4.00 from the [tessdata repository](https://github.com/tesseract-ocr/tessdata_fast) and add them to your project, 
    ensure 'Copy to output directory' is set to Always.
-4. Check out the Samples solution ``~/src/Tesseract.Samples.sln`` in the [tesseract-samples](https://github.com/charlesw/tesseract-samples) repository for a working example.
+5. Check out the Samples solution ``~/src/Tesseract.Samples.sln`` in the [tesseract-samples](https://github.com/charlesw/tesseract-samples) repository for a working example.
 
 If you run into any issues please check out [this](https://github.com/charlesw/tesseract/wiki/Errors) wiki page which details a number common issues and some potential solutions.
 
