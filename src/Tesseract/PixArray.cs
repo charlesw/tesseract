@@ -31,6 +31,21 @@ namespace Tesseract
 			return new PixArray(pixaHandle);
 		}
 
+        public static unsafe PixArray LoadMultiPageTiffFromMemory(byte[] bytes)
+        {
+            IntPtr pixaHandle;
+            fixed (byte* ptr = bytes)
+            {
+                pixaHandle = Interop.LeptonicaApi.Native.pixaReadMemMultipageTiff(ptr, bytes.Length);
+            }
+            if (pixaHandle == IntPtr.Zero)
+            {
+                throw new IOException("Failed to load image from memory.");
+            }
+
+            return new PixArray(pixaHandle);
+        }
+
         public static PixArray Create(int n)
         {
             var pixaHandle = Interop.LeptonicaApi.Native.pixaCreate(n);
