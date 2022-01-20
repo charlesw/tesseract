@@ -1,5 +1,4 @@
-﻿#if SYSTEM_DRAWING_SUPPORT
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -35,6 +34,4 @@ namespace Tesseract
             return bitmapConverter.Convert(img);
         }
     }
-}
-
-#endif
+} 
