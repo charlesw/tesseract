@@ -1,6 +1,7 @@
 ﻿### Version 5.0
 * Upgraded to Tesseract 5.0 [Issue 579](https://github.com/charlesw/tesseract/issues/579)
 * Fixed Fix dynamic linking on macos [Issue #588](https://github.com/charlesw/tesseract/issues/588)
+* Fixed null reference exception when executing assembly is not available [Issue 591](https://github.com/charlesw/tesseract/issues/591)
 
 #### Known issues
 
