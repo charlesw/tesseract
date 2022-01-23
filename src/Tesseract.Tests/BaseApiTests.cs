@@ -11,7 +11,7 @@ namespace Tesseract.Tests
         public void CanGetVersion()
         {
             var version = Interop.TessApi.BaseApiGetVersion();
-            Assert.That(version, Does.StartWith("4.1.1"));
+            Assert.That(version, Does.StartWith("5.0.0"));
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Tesseract.Tests.Leptonica
 
         [Test]
         [TestCase(1, true, false)]
-        [TestCase(1, false, false)]
+        [TestCase(1, false, false, Ignore = "1bpp images with colormap are not supported")]
         [TestCase(4, false, false, Ignore = "4bpp images not supported.")]
         [TestCase(4, true, false, Ignore = "4bpp images not supported.")]
         [TestCase(8, false, false)]

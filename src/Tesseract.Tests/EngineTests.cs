@@ -20,7 +20,7 @@ namespace Tesseract.Tests
         {
             using (var engine = CreateEngine())
             {
-                Assert.That(engine.Version, Does.StartWith("4.1.1"));
+                Assert.That(engine.Version, Does.StartWith("5.0.0"));
             }
         }
 
@@ -106,7 +106,7 @@ namespace Tesseract.Tests
             }
         }
 
-        [Test]
+        [Test, Ignore("See #594")]
         public void CanParseUznFile()
         {
             using (var engine = CreateEngine()) {

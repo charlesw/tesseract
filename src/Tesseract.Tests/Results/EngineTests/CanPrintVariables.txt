@@ -3,23 +3,19 @@ editor_image_ypos	10	Editor image Y Pos
 editor_image_menuheight	50	Add to image height for menu bar
 editor_image_word_bb_color	7	Word bounding box colour
 editor_image_blob_bb_color	4	Blob bounding box colour
-editor_image_text_color	2	Correct text colour
-editor_dbwin_xpos	50	Editor debug window X Pos
-editor_dbwin_ypos	500	Editor debug window Y Pos
-editor_dbwin_height	24	Editor debug window height
-editor_dbwin_width	80	Editor debug window width
 editor_word_xpos	60	Word window X Pos
 editor_word_ypos	510	Word window Y Pos
 editor_word_height	240	Word window height
 editor_word_width	655	Word window width
+log_level	2147483647	Logging level
 classify_num_cp_levels	3	Number of Class Pruner Levels
 textord_debug_tabfind	0	Debug tab finding
 textord_debug_bugs	0	Turn on output related to bugs in tab finding
-textord_testregion_left	-1	Left edge of debug reporting rectangle
-textord_testregion_top	-1	Top edge of debug reporting rectangle
-textord_testregion_right	2147483647	Right edge of debug rectangle
-textord_testregion_bottom	2147483647	Bottom edge of debug rectangle
-textord_tabfind_show_partitions	0	Show partition bounds, waiting if >1
+textord_testregion_left	-1	Left edge of debug reporting rectangle in Leptonica coords (bottom=0/top=height), with horizontal lines x/y-flipped
+textord_testregion_top	2147483647	Top edge of debug reporting rectangle in Leptonica coords (bottom=0/top=height), with horizontal lines x/y-flipped
+textord_testregion_right	2147483647	Right edge of debug rectangle in Leptonica coords (bottom=0/top=height), with horizontal lines x/y-flipped
+textord_testregion_bottom	-1	Bottom edge of debug rectangle in Leptonica coords (bottom=0/top=height), with horizontal lines x/y-flipped
+textord_tabfind_show_partitions	0	Show partition bounds, waiting if >1 (ScrollView)
 devanagari_split_debuglevel	0	Debug level for split shiro-rekha process.
 edges_max_children_per_outline	10	Max number of children inside a character outline
 edges_max_children_layers	5	Max layers of nested children inside a character outline
@@ -41,8 +37,7 @@ textord_min_xheight	10	Min credible pixel xheight
 textord_lms_line_trials	12	Number of linew fits to do
 oldbl_holed_losscount	10	Max lost before fallback line used
 pitsync_linear_version	6	Use new fast algorithm
-pitsync_fake_depth	1	Max advance fake generation
-textord_tabfind_show_strokewidths	0	Show stroke widths
+textord_tabfind_show_strokewidths	0	Show stroke widths (ScrollView)
 textord_dotmatrix_gap	3	Max pixel gap for broken pixed pitch
 textord_debug_block	0	Block to do debug on
 textord_pitch_range	2	Max range test on pitch
@@ -58,8 +53,8 @@ textord_debug_printable	0	Make debug windows printable
 textord_space_size_is_variable	0	If true, word delimiter spaces are assumed to have variable width, even though characters have fixed pitch.
 textord_tabfind_show_initial_partitions	0	Show partition bounds
 textord_tabfind_show_reject_blobs	0	Show blobs rejected as noise
-textord_tabfind_show_columns	0	Show column bounds
-textord_tabfind_show_blocks	0	Show final block bounds
+textord_tabfind_show_columns	0	Show column bounds (ScrollView)
+textord_tabfind_show_blocks	0	Show final block bounds (ScrollView)
 textord_tabfind_find_tables	1	run table detection
 devanagari_split_debugimage	0	Whether to create a debug image for split shiro-rekha process.
 textord_show_fixed_cuts	0	Draw fixed pitch cell boundaries
@@ -99,9 +94,9 @@ textord_ocropus_mode	0	Make baselines for ocropus
 textord_tabfind_only_strokewidths	0	Only run stroke widths
 textord_tabfind_show_initialtabs	0	Show tab candidates
 textord_tabfind_show_finaltabs	0	Show tab vectors
-textord_show_tables	0	Show table regions
-textord_tablefind_show_mark	0	Debug table marking steps in detail
-textord_tablefind_show_stats	0	Show page stats used in table finding
+textord_show_tables	0	Show table regions (ScrollView)
+textord_tablefind_show_mark	0	Debug table marking steps in detail (ScrollView)
+textord_tablefind_show_stats	0	Show page stats used in table finding (ScrollView)
 textord_tablefind_recognize_tables	0	Enables the table recognizer for table layout and filtering.
 textord_all_prop	0	All doc is proportial text
 textord_debug_pitch_test	0	Debug on fixed pitch test
@@ -110,30 +105,22 @@ textord_fast_pitch_test	0	Do even faster pitch algorithm
 textord_debug_pitch_metric	0	Write full metric stuff
 textord_show_row_cuts	0	Draw row-level cuts
 textord_show_page_cuts	0	Draw page-level cuts
-textord_pitch_cheat	0	Use correct answer for fixed/prop
 textord_blockndoc_fixed	0	Attempt whole doc/block fixed pitch
 textord_show_initial_words	0	Display separate words
-textord_show_new_words	0	Display separate words
-textord_show_fixed_words	0	Display forced fixed pitch words
 textord_blocksall_fixed	0	Moan about prop blocks
 textord_blocksall_prop	0	Moan about fixed pitch blocks
-textord_blocksall_testing	0	Dump stats when moaning
-textord_test_mode	0	Do current test
 textord_pitch_scalebigwords	0	Scale scores on big words
 textord_restore_underlines	1	Chop underlines & put back
-textord_fp_chopping	1	Do fixed pitch chopping
 textord_force_make_prop_words	0	Force proportional word segmentation on all rows
 textord_chopper_test	0	Chopper is being tested.
 wordrec_display_all_blobs	0	Display Blobs
 wordrec_blob_pause	0	Blob pause
 stream_filelist	0	Stream a filelist from stdin
 editor_image_win_name	EditorImage	Editor image window name
-editor_dbwin_name	EditorDBWin	Editor debug window name
 editor_word_name	BlnWords	BL normalized word window
 debug_file		File to send tprintf output to
-classify_font_name	UnknownFont	Default font name to be used in training
-fx_debugfile	FXDebug	Name of debugfile
 document_title		Title of output document (used for hOCR and PDF output)
+classify_font_name	UnknownFont	Default font name to be used in training
 dotproduct	auto	Function used for calculation of dot product
 classify_cp_angle_pad_loose	45	Class Pruner Angle Pad Loose
 classify_cp_angle_pad_medium	20	Class Pruner Angle Pad Medium
@@ -155,10 +142,8 @@ classify_pico_feature_length	0.05	Pico Feature Length
 textord_underline_threshold	0.5	Fraction of width occupied
 edges_childarea	0.5	Min area fraction of child outline
 edges_boxarea	0.875	Min area fraction of grandchild for box
-textord_fp_chop_snap	0.5	Max distance of chop pt from vertex
 gapmap_big_gaps	1.75	xht multiplier
 textord_spline_shift_fraction	0.02	Fraction of line spacing for quad
-textord_spline_outlier_fraction	0.1	Fraction of line spacing for outlier
 textord_skew_ile	0.5	Ile of gradients for page skew
 textord_skew_lag	0.02	Lag for skew on row accumulation
 textord_linespace_iqrlimit	0.2	Max iqr/median for linespace
@@ -190,8 +175,6 @@ textord_tabvector_vertical_box_ratio	0.5	Fraction of box matches required to dec
 textord_projection_scale	0.2	Ding rate for mid-cuts
 textord_balance_factor	1	Ding rate for unbalanced char cells
 textord_wordstats_smooth_factor	0.05	Smoothing gap stats
-textord_width_smooth_factor	0.1	Smoothing width stats
-textord_words_width_ile	0.4	Ile of blob widths for space est
 textord_words_maxspace	4	Multiple of xheight
 textord_words_default_maxspace	3.5	Max believable third space
 textord_words_default_minspace	0.6	Fraction of xheight
@@ -210,11 +193,9 @@ words_default_prop_nonspace	0.25	Fraction of xheight
 words_default_fixed_space	0.75	Fraction of xheight
 words_default_fixed_limit	0.6	Allowed size variance
 textord_words_definite_spread	0.3	Non-fuzzy spacing region
-textord_spacesize_ratiofp	2.8	Min ratio space/nonspace
 textord_spacesize_ratioprop	2	Min ratio space/nonspace
 textord_fpiqr_ratio	1.5	Pitch IQR/Gap IQR threshold
 textord_max_pitch_iqr	0.2	Xh fraction noise in pitch
-textord_fp_min_width	0.5	Min width of decent blobs
 textord_underline_offset	0.1	Fraction of x to ignore
 ambigs_debug_level	0	Debug level for unichar ambiguities
 classify_debug_level	0	Classify debug level
@@ -257,14 +238,16 @@ language_model_ngram_order	8	Maximum order of the character ngram model
 language_model_viterbi_list_max_num_prunable	10	Maximum number of prunable (those for which PrunablePath() is true) entries in each viterbi list recorded in BLOB_CHOICEs
 language_model_viterbi_list_max_size	500	Maximum size of viterbi lists recorded in BLOB_CHOICEs
 language_model_min_compound_length	3	Minimum length of compound words
-wordrec_display_segmentations	0	Display Segmentations
-tessedit_pageseg_mode	6	Page seg mode: 0=osd only, 1=auto+osd, 2=auto_only, 3=auto, 4=column, 5=block_vert, 6=block, 7=line, 8=word, 9=word_circle, 10=char,11=sparse_text, 12=sparse_text+osd, 13=raw_line (Values from PageSegMode enum in publictypes.h)
+wordrec_display_segmentations	0	Display Segmentations (ScrollView)
+tessedit_pageseg_mode	6	Page seg mode: 0=osd only, 1=auto+osd, 2=auto_only, 3=auto, 4=column, 5=block_vert, 6=block, 7=line, 8=word, 9=word_circle, 10=char,11=sparse_text, 12=sparse_text+osd, 13=raw_line (Values from PageSegMode enum in tesseract/publictypes.h)
+thresholding_method	0	Thresholding method: 0 = Otsu, 1 = LeptonicaOtsu, 2 = Sauvola
 tessedit_ocr_engine_mode	2	Which OCR engine(s) to run (Tesseract, LSTM, both). Defaults to loading and running the most accurate available.
 pageseg_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing page-segmentation.
 ocr_devanagari_split_strategy	0	Whether to use the top-line splitting process for Devanagari documents while performing ocr.
 bidi_debug	0	Debug level for BiDi
 applybox_debug	1	Debug level
 applybox_page	0	Page number to apply boxes from
+tessedit_font_id	0	Font ID to use or zero
 tessedit_bigram_debug	0	Amount of debug output for bigram correction.
 debug_noise_removal	0	Debug reassignment of small outlines
 noise_maxperblob	8	Max diacritics to apply to a blob
@@ -282,7 +265,7 @@ crunch_leave_uc_strings	4	Don't crunch words with long lower case strings
 crunch_long_repetitions	3	Crunch words with long repetitions
 crunch_debug	0	As it says
 fixsp_non_noise_limit	1	How many non-noise blbs either side?
-fixsp_done_mode	1	What constitues done for spacing
+fixsp_done_mode	1	What constitutes done for spacing
 debug_fix_space_level	0	Contextual fixspace debug
 x_ht_acceptance_tolerance	8	Max allowed deviation of blob top outside of font data
 x_ht_min_change	8	Min change in xht before actually trying it
@@ -297,7 +280,8 @@ tessedit_image_border	2	Rej blbs near image edge limit
 min_sane_x_ht_pixels	8	Reject any x-ht lt or eq than this
 tessedit_page_number	-1	-1 -> All pages, else specific page to process
 tessedit_parallelize	0	Run in parallel where possible
-lstm_choice_mode	0	Allows to include alternative symbols choices in the hOCR output. Valid input values are 0, 1, 2 and 3. 0 is the default value. With 1 the alternative symbol choices per timestep are included. With 2 the alternative symbol choices are accumulated per character. 
+lstm_choice_mode	0	Allows to include alternative symbols choices in the hOCR output. Valid input values are 0, 1 and 2. 0 is the default value. With 1 the alternative symbol choices per timestep are included. With 2 alternative symbol choices are extracted from the CTC process instead of the lattice. The choices are mapped per character.
+lstm_choice_iterations	5	Sets the number of cascading iterations for the Beamsearch in lstm_choice_mode. Note that lstm_choice_mode must be set to a value greater than 0 to produce results.
 tosp_debug_level	0	Debug data
 tosp_enough_space_samples_for_median	3	or should we use mean
 tosp_redo_kern_limit	10	No.samples reqd to reestimate for row
@@ -356,6 +340,7 @@ tessedit_make_boxes_from_boxes	0	Generate more boxes from boxed chars
 tessedit_train_line_recognizer	0	Break input into lines and remap boxes if present
 tessedit_dump_pageseg_images	0	Dump intermediate images made during page segmentation
 tessedit_do_invert	1	Try inverting the image in `LSTMRecognizeWord`
+thresholding_debug	0	Debug the thresholding process
 tessedit_ambigs_training	0	Perform training for ambiguities
 tessedit_adaption_debug	0	Generate and print debug information for adaption
 applybox_learn_chars_and_char_frags_mode	0	Learn both character fragments (as is done in the special low exposure mode) as well as unfragmented characters.
@@ -438,7 +423,7 @@ textord_equation_detect	0	Turn on equation detector
 textord_tabfind_vertical_text	1	Enable vertical detection
 textord_tabfind_force_vertical_text	0	Force using vertical text page mode
 preserve_interword_spaces	0	Preserve multiple interword spaces
-pageseg_apply_music_mask	1	Detect music staff and remove intersecting components
+pageseg_apply_music_mask	0	Detect music staff and remove intersecting components
 textord_single_height_mode	0	Script has no xheight, so use a single mode
 tosp_old_to_method	0	Space stats use prechopping?
 tosp_old_to_constrain_sp_kn	0	Constrain relative values of inter and intra-word gaps for old_to_method.
@@ -546,6 +531,11 @@ language_model_penalty_chartype	0.3	Penalty for inconsistent character type
 language_model_penalty_font	0	Penalty for inconsistent font
 language_model_penalty_spacing	0.05	Penalty for inconsistent spacing
 language_model_penalty_increment	0.01	Penalty increment
+thresholding_window_size	0.33	Window size for measuring local statistics (to be multiplied by image DPI). This parameter is used by the Sauvola thresolding method
+thresholding_kfactor	0.34	Factor for reducing threshold due to variance. This parameter is used by the Sauvola thresolding method. Normal range: 0.2-0.5
+thresholding_tile_size	0.33	Desired tile size (to be multiplied by image DPI). This parameter is used by the LeptonicaOtsu thresolding method
+thresholding_smooth_kernel_size	0	Size of convolution kernel applied to threshold array (to be multiplied by image DPI). Use 0 for no smoothing. This parameter is used by the LeptonicaOtsu thresolding method
+thresholding_score_fraction	0.1	Fraction of the max Otsu score. This parameter is used by the LeptonicaOtsu thresolding method. For standard Otsu use 0.0, otherwise 0.1 is recommended
 noise_cert_basechar	-8	Hingepoint for base char certainty
 noise_cert_disjoint	-1	Hingepoint for disjoint certainty
 noise_cert_punc	-3	Threshold for new punc char certainty
@@ -589,6 +579,7 @@ rej_whole_of_mostly_reject_word_fract	0.85	if >this fract
 min_orientation_margin	7	Min acceptable orientation margin
 textord_tabfind_vertical_text_ratio	0.5	Fraction of textlines deemed vertical to use vertical page mode
 textord_tabfind_aligned_gap_fraction	0.75	Fraction of height used as a minimum gap for aligned blobs.
+lstm_rating_coefficient	5	Sets the rating coefficient for the lstm choices. The smaller the coefficient, the better are the ratings for each choice and less information is lost due to the cut off at 0. The standard value is 5
 tosp_old_sp_kn_th_factor	2	Factor for defining space threshold in terms of space and kern sizes
 tosp_threshold_bias1	0	how far between kern and space?
 tosp_threshold_bias2	0	how far between kern and space?

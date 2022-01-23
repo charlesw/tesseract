@@ -188,16 +188,16 @@
     <None Include="..\Tesseract.Tests\tessdata\pdf.ttf" Link="tessdata\pdf.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\leptonica-1.80.0.dll" Link="x64\leptonica-1.80.0.dll">
+    <None Include="..\Tesseract\x64\leptonica-1.82.0.dll" Link="x64\leptonica-1.82.0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x64\tesseract41.dll" Link="x64\tesseract41.dll">
+    <None Include="..\Tesseract\x64\tesseract50.dll" Link="x64\tesseract50.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\leptonica-1.80.0.dll" Link="x86\leptonica-1.80.0.dll">
+    <None Include="..\Tesseract\x86\leptonica-1.82.0.dll" Link="x86\leptonica-1.82.0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Tesseract\x86\tesseract41.dll" Link="x86\tesseract41.dll">
+    <None Include="..\Tesseract\x86\tesseract50.dll" Link="x86\tesseract50.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -207,12 +207,12 @@
   </ItemGroup>
 
   <Target Name="SymlinkLinuxDependencies" AfterTargets="AfterBuild" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
-    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/liblept.so $(OutDir)x64/libleptonica-1.80.0.so"/>
-    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/libtesseract.so.4 $(OutDir)x64/libtesseract41.so"/>
+    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/liblept.so $(OutDir)x64/libleptonica-1.82.0.so"/>
+    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/libtesseract.so.4 $(OutDir)x64/libtesseract50.so"/>
   </Target>
 
   <Target Name="SymlinkMacOSDependencies" AfterTargets="AfterBuild" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
-    <Exec Command="ln -sf /usr/local/lib/liblept.dylib $(OutDir)x64/libleptonica-1.80.0.dylib"/>
-    <Exec Command="ln -sf /usr/local/lib/libtesseract.dylib $(OutDir)x64/libtesseract41.dylib"/>
+    <Exec Command="ln -sf /usr/local/lib/liblept.dylib $(OutDir)x64/libleptonica-1.82.0.dylib"/>
+    <Exec Command="ln -sf /usr/local/lib/libtesseract.dylib $(OutDir)x64/libtesseract50.dylib"/>
   </Target>
 </Project>

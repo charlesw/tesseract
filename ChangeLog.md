@@ -1,4 +1,14 @@
-﻿### Version 4.1.1
+﻿### Version 5.0
+* Upgraded to Tesseract 5.0 [Issue 579](https://github.com/charlesw/tesseract/issues/579)
+* Fixed Fix dynamic linking on macos [Issue #588](https://github.com/charlesw/tesseract/issues/588)
+
+#### Known issues
+
+* Setting regions of interest doesn't work [Issue 489](https://github.com/charlesw/tesseract/issues/489)
+* PageSegMode.SingleBlockVertText does not work [Issue 490](https://github.com/charlesw/tesseract/issues/490)
+* Unz files don't work [Issue 594](https://github.com/charlesw/tesseract/issues/594)
+
+### Version 4.1.1
 
 * Upgraded to Tesseract 4.1.1 [Issue 528](https://github.com/charlesw/tesseract/issues/528)
 * Fixed Interop.TessApi.BaseApiGetVersion [Issue 522](https://github.com/charlesw/tesseract/issues/522)
