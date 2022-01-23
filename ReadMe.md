@@ -11,7 +11,9 @@ Since tesseract and leptonica binaries are compiled with Visual Studio 2019 you'
 
 You will also need to download the language data files for tesseract 4.1.0 from [tesseract-ocr].
 
-## [Docs](./docs/ReadMe.md)
+## Docs
+
+See [./docs/ReadMe.md](./docs/ReadMe.md)
 
 ## Getting started quickly
 
@@ -23,6 +25,12 @@ You will also need to download the language data files for tesseract 4.1.0 from 
 5. Check out the Samples solution ``~/src/Tesseract.Samples.sln`` in the [tesseract-samples](https://github.com/charlesw/tesseract-samples) repository for a working example.
 
 If you run into any issues please check out [this](https://github.com/charlesw/tesseract/wiki/Errors) wiki page which details a number common issues and some potential solutions.
+
+## Support
+
+Please only file issues for bugs. 
+
+If you have any questions or feature/improvement ideas please ask them on our [forum](https://github.com/charlesw/tesseract/discussions).
 
 ## Note for contributors
 
