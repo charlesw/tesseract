@@ -76,7 +76,13 @@ namespace InteropDotNet
 
         private IntPtr CheckExecutingAssemblyDomain(string fileName, string platformName)
         {
-            var baseDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            if(executingAssembly == null) {
+                // #591 Executing assembly may be null in some cases
+                return IntPtr.Zero;
+            }
+
+            var baseDirectory = Path.GetDirectoryName(executingAssembly.Location);
             Logger.TraceInformation("Checking executing application domain location '{0}' for '{1}' on platform {2}.", baseDirectory, fileName, platformName);
             return InternalLoadLibrary(baseDirectory, platformName, fileName);
         }
