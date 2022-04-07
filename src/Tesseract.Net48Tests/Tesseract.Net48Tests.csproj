@@ -28,6 +28,8 @@
     <Compile Include="..\Tesseract.Tests\Leptonica\PixATests.cs" Link="Leptonica\PixATests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\PixTests\ImageManipulationTests.cs" Link="Leptonica\PixTests\ImageManipulationTests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\PixTests\PixDataAccessTests.cs" Link="Leptonica\PixTests\PixDataAccessTests.cs" />
+	  <Compile Include="..\Tesseract.Tests\ResultIteratorTests\FontAttributesTests.cs" Link="ResultIteratorTests\FontAttributesTests.cs" />
+	  <Compile Include="..\Tesseract.Tests\ResultIteratorTests\OfAnEmptyPixTests.cs" Link="ResultIteratorTests\OfAnEmptyPixTests.cs" />
     <Compile Include="..\Tesseract.Tests\PageSerializer.cs" Link="PageSerializer.cs" />
     <Compile Include="..\Tesseract.Tests\ResultRendererTests.cs" Link="ResultRendererTests.cs" />
     <Compile Include="..\Tesseract.Tests\TesseractResultSet.cs" Link="TesseractResultSet.cs" />

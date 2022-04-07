@@ -16,7 +16,7 @@ namespace Tesseract.Tests.ResultIteratorTests
         [SetUp]
         public void Init()
         {
-            Engine = CreateEngine();
+            Engine = CreateEngine(mode: EngineMode.TesseractOnly);
             TestImage = LoadTestPix("Ocr/Fonts.tif");
         }
 
@@ -45,6 +45,7 @@ namespace Tesseract.Tests.ResultIteratorTests
                 //
                 // there is no test for underline because in 3.04 IsUnderlined is
                 // hard-coded to "false".  See: https://github.com/tesseract-ocr/tesseract/blob/3.04/ccmain/ltrresultiterator.cpp#182
+                // Note: GetWordFontAttributes returns null if font failed to be resolved (https://github.com/charlesw/tesseract/issues/607)
 
                 var fontAttrs = iter.GetWordFontAttributes();
                 Assert.That(fontAttrs.FontInfo.IsBold, Is.True);
