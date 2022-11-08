@@ -28,8 +28,8 @@
     <Compile Include="..\Tesseract.Tests\Leptonica\PixATests.cs" Link="Leptonica\PixATests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\PixTests\ImageManipulationTests.cs" Link="Leptonica\PixTests\ImageManipulationTests.cs" />
     <Compile Include="..\Tesseract.Tests\Leptonica\PixTests\PixDataAccessTests.cs" Link="Leptonica\PixTests\PixDataAccessTests.cs" />
-	  <Compile Include="..\Tesseract.Tests\ResultIteratorTests\FontAttributesTests.cs" Link="ResultIteratorTests\FontAttributesTests.cs" />
-	  <Compile Include="..\Tesseract.Tests\ResultIteratorTests\OfAnEmptyPixTests.cs" Link="ResultIteratorTests\OfAnEmptyPixTests.cs" />
+	<Compile Include="..\Tesseract.Tests\ResultIteratorTests\FontAttributesTests.cs" Link="ResultIteratorTests\FontAttributesTests.cs" />
+	<Compile Include="..\Tesseract.Tests\ResultIteratorTests\OfAnEmptyPixTests.cs" Link="ResultIteratorTests\OfAnEmptyPixTests.cs" />
     <Compile Include="..\Tesseract.Tests\PageSerializer.cs" Link="PageSerializer.cs" />
     <Compile Include="..\Tesseract.Tests\ResultRendererTests.cs" Link="ResultRendererTests.cs" />
     <Compile Include="..\Tesseract.Tests\TesseractResultSet.cs" Link="TesseractResultSet.cs" />
@@ -40,12 +40,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0">
+    <PackageReference Include="nunit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -210,12 +210,12 @@
   </ItemGroup>
 
   <Target Name="SymlinkLinuxDependencies" AfterTargets="AfterBuild" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
-    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/liblept.so $(OutDir)x64/libleptonica-1.80.0.so"/>
-    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/libtesseract.so.4 $(OutDir)x64/libtesseract41.so"/>
+    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/liblept.so $(OutDir)x64/libleptonica-1.80.0.so" />
+    <Exec Command="ln -sf /usr/lib/x86_64-linux-gnu/libtesseract.so.4 $(OutDir)x64/libtesseract41.so" />
   </Target>
 
   <Target Name="SymlinkMacOSDependencies" AfterTargets="AfterBuild" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
-    <Exec Command="ln -sf /usr/local/lib/liblept.dylib $(OutDir)x64/libleptonica-1.80.0.dylib"/>
-    <Exec Command="ln -sf /usr/local/lib/libtesseract.dylib $(OutDir)x64/libtesseract41.dylib"/>
+    <Exec Command="ln -sf /usr/local/lib/liblept.dylib $(OutDir)x64/libleptonica-1.80.0.dylib" />
+    <Exec Command="ln -sf /usr/local/lib/libtesseract.dylib $(OutDir)x64/libtesseract41.dylib" />
   </Target>
 </Project>

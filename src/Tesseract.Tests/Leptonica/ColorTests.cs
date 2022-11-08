@@ -22,7 +22,7 @@ namespace Tesseract.Tests.Leptonica
             Assert.That(castColor.A, Is.EqualTo(color.Alpha));
         }
 #endif  
-        
+
         [TestCase]
         public void Color_ConvertColorToNetColor()
         {
@@ -32,6 +32,17 @@ namespace Tesseract.Tests.Leptonica
             Assert.That(castColor.G, Is.EqualTo(color.Green));
             Assert.That(castColor.B, Is.EqualTo(color.Blue));
             Assert.That(castColor.A, Is.EqualTo(color.Alpha));
+        }
+
+        [TestCase]
+        public void Color_ConvertNetColorToColor()
+        {
+            var color = System.Drawing.Color.FromArgb(100, 150, 200);
+            var castColor = color.ToPixColor();
+            Assert.That(color.R, Is.EqualTo(castColor.Red));
+            Assert.That(color.G, Is.EqualTo(castColor.Green));
+            Assert.That(color.B, Is.EqualTo(castColor.Blue));
+            Assert.That(color.A, Is.EqualTo(castColor.Alpha));
         }
     }
 }

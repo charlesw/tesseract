@@ -1,5 +1,5 @@
 ﻿### Version 5.0
-* Upgraded to Tesseract 5.0 [Issue 579](https://github.com/charlesw/tesseract/issues/579)
+* Upgraded to Tesseract 5.2 [Issue 579](https://github.com/charlesw/tesseract/issues/579)
 * Fixed Fix dynamic linking on macos [Issue #588](https://github.com/charlesw/tesseract/issues/588)
 * Fixed null reference exception when executing assembly is not available [Issue 591](https://github.com/charlesw/tesseract/issues/591)
 
@@ -8,6 +8,7 @@
 * Setting regions of interest doesn't work [Issue 489](https://github.com/charlesw/tesseract/issues/489)
 * PageSegMode.SingleBlockVertText does not work [Issue 490](https://github.com/charlesw/tesseract/issues/490)
 * Unz files don't work [Issue 594](https://github.com/charlesw/tesseract/issues/594)
+* Removed support for dotnet 4.0 and 4.5
 
 ### Version 4.1.1
 
