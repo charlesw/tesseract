@@ -71,16 +71,71 @@ namespace InteropDotNet
 
         const int RTLD_NOW = 2;
 
-        [DllImport("libdl", EntryPoint = "dlopen")]
-        private static extern IntPtr UnixLoadLibrary(String fileName, int flags);
+        private static bool? _useSystemLibrary2;
 
-        [DllImport("libdl", EntryPoint = "dlclose", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int UnixFreeLibrary(IntPtr handle);
+        private static IntPtr UnixLoadLibrary(String fileName, int flags)
+        {
+            if (!_useSystemLibrary2.HasValue)
+            {
+                try
+                {
+                    var result = dlopen2(fileName, flags);
+                    _useSystemLibrary2 = true;
+                    return result;
+                }
+                catch (DllNotFoundException)
+                {
+                    _useSystemLibrary2 = false;
+                    return dlopen1(fileName, flags);
+                }
+            }
 
-        [DllImport("libdl", EntryPoint = "dlsym", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern IntPtr UnixGetProcAddress(IntPtr handle, String symbol);
+            return _useSystemLibrary2.Value ? dlopen2(fileName, flags) : dlopen1(fileName, flags);
+        }
 
-        [DllImport("libdl", EntryPoint = "dlerror", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern IntPtr UnixGetLastError();
+        private static int UnixFreeLibrary(IntPtr handle)
+        {
+            if (!_useSystemLibrary2.HasValue)
+                throw new Exception($"Expected ${nameof(UnixLoadLibrary)} to have been called.");
+            return _useSystemLibrary2.Value ? dlclose2(handle) : dlclose1(handle);
+        }
+
+        private static IntPtr UnixGetProcAddress(IntPtr handle, String symbol)
+        {
+            if (!_useSystemLibrary2.HasValue)
+                throw new Exception($"Expected ${nameof(UnixLoadLibrary)} to have been called.");
+            return _useSystemLibrary2.Value ? dlsym2(handle, symbol) : dlsym1(handle, symbol);
+        }
+
+        private static IntPtr UnixGetLastError()
+        {
+            if (!_useSystemLibrary2.HasValue)
+                throw new Exception($"Expected ${nameof(UnixLoadLibrary)} to have been called.");
+            return _useSystemLibrary2.Value ? dlerror2() : dlerror1();
+        }
+
+        [DllImport("libdl.so", EntryPoint = "dlopen")]
+        private static extern IntPtr dlopen1(String fileName, int flags);
+
+        [DllImport("libdl.so", EntryPoint = "dlclose", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern int dlclose1(IntPtr handle);
+
+        [DllImport("libdl.so", EntryPoint = "dlsym", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern IntPtr dlsym1(IntPtr handle, String symbol);
+
+        [DllImport("libdl.so", EntryPoint = "dlerror", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern IntPtr dlerror1();
+
+        [DllImport("libdl.so.2", EntryPoint = "dlopen")]
+        private static extern IntPtr dlopen2(String fileName, int flags);
+
+        [DllImport("libdl.so.2", EntryPoint = "dlclose", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern int dlclose2(IntPtr handle);
+
+        [DllImport("libdl.so.2", EntryPoint = "dlsym", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern IntPtr dlsym2(IntPtr handle, String symbol);
+
+        [DllImport("libdl.so.2", EntryPoint = "dlerror", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern IntPtr dlerror2();
     }
 }
