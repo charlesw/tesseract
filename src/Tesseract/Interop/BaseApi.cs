@@ -114,6 +114,9 @@ namespace Tesseract.Interop
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIMeanTextConf")]
         int BaseAPIMeanTextConf(HandleRef handle);
 
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIProcessPage")]
+        int BaseAPIProcessPage(HandleRef handle, HandleRef pix, int page_index, string filename, string retry_config, int timeout_millisec, HandleRef renderer);
+
         [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessBaseAPIRecognize")]
         int BaseApiRecognize(HandleRef handle, HandleRef monitor);
 
