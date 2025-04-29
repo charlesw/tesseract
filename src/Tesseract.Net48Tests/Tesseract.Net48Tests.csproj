@@ -194,13 +194,13 @@
 	<None Include="..\Tesseract\x64\leptonica-1.82.0.dll" Link="x64\leptonica-1.82.0.dll">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
-	<None Include="..\Tesseract\x64\tesseract50.dll" Link="x64\tesseract50.dll">
+	<None Include="..\Tesseract\x64\tesseract52.dll" Link="x64\tesseract52.dll">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Include="..\Tesseract\x86\leptonica-1.82.0.dll" Link="x86\leptonica-1.82.0.dll">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
-	<None Include="..\Tesseract\x86\tesseract50.dll" Link="x86\tesseract50.dll">
+	<None Include="..\Tesseract\x86\tesseract52.dll" Link="x86\tesseract52.dll">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
   </ItemGroup>

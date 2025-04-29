@@ -339,7 +339,7 @@ tessedit_train_from_boxes	0	Generate training data from boxed chars
 tessedit_make_boxes_from_boxes	0	Generate more boxes from boxed chars
 tessedit_train_line_recognizer	0	Break input into lines and remap boxes if present
 tessedit_dump_pageseg_images	0	Dump intermediate images made during page segmentation
-tessedit_do_invert	1	Try inverting the image in `LSTMRecognizeWord`
+tessedit_do_invert	1	Try inverted line image if necessary (deprecated, will be removed in release 6, use the 'invert_threshold' parameter instead)
 thresholding_debug	0	Debug the thresholding process
 tessedit_ambigs_training	0	Perform training for ambiguities
 tessedit_adaption_debug	0	Generate and print debug information for adaption
@@ -488,7 +488,6 @@ matcher_avg_noise_size	12	Avg. noise blob length
 matcher_clustering_max_angle_delta	0.015	Maximum angle delta for prototype clustering
 classify_misfit_junk_penalty	0	Penalty to apply when a non-alnum is vertically out of its expected textline position
 rating_scale	1.5	Rating scaling factor
-certainty_scale	20	Certainty scaling factor
 tessedit_class_miss_scale	0.00390625	Scale factor for features not used
 classify_adapted_pruning_factor	2.5	Prune poor adapted results this much worse than best result
 classify_adapted_pruning_threshold	-1	Threshold at which classify_adapted_pruning_factor starts
@@ -531,11 +530,12 @@ language_model_penalty_chartype	0.3	Penalty for inconsistent character type
 language_model_penalty_font	0	Penalty for inconsistent font
 language_model_penalty_spacing	0.05	Penalty for inconsistent spacing
 language_model_penalty_increment	0.01	Penalty increment
-thresholding_window_size	0.33	Window size for measuring local statistics (to be multiplied by image DPI). This parameter is used by the Sauvola thresolding method
-thresholding_kfactor	0.34	Factor for reducing threshold due to variance. This parameter is used by the Sauvola thresolding method. Normal range: 0.2-0.5
-thresholding_tile_size	0.33	Desired tile size (to be multiplied by image DPI). This parameter is used by the LeptonicaOtsu thresolding method
-thresholding_smooth_kernel_size	0	Size of convolution kernel applied to threshold array (to be multiplied by image DPI). Use 0 for no smoothing. This parameter is used by the LeptonicaOtsu thresolding method
-thresholding_score_fraction	0.1	Fraction of the max Otsu score. This parameter is used by the LeptonicaOtsu thresolding method. For standard Otsu use 0.0, otherwise 0.1 is recommended
+invert_threshold	0.7	For lines with a mean confidence below this value, OCR is also tried with an inverted image
+thresholding_window_size	0.33	Window size for measuring local statistics (to be multiplied by image DPI). This parameter is used by the Sauvola thresholding method
+thresholding_kfactor	0.34	Factor for reducing threshold due to variance. This parameter is used by the Sauvola thresholding method. Normal range: 0.2-0.5
+thresholding_tile_size	0.33	Desired tile size (to be multiplied by image DPI). This parameter is used by the LeptonicaOtsu thresholding method
+thresholding_smooth_kernel_size	0	Size of convolution kernel applied to threshold array (to be multiplied by image DPI). Use 0 for no smoothing. This parameter is used by the LeptonicaOtsu thresholding method
+thresholding_score_fraction	0.1	Fraction of the max Otsu score. This parameter is used by the LeptonicaOtsu thresholding method. For standard Otsu use 0.0, otherwise 0.1 is recommended
 noise_cert_basechar	-8	Hingepoint for base char certainty
 noise_cert_disjoint	-1	Hingepoint for disjoint certainty
 noise_cert_punc	-3	Threshold for new punc char certainty

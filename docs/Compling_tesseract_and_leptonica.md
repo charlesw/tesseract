@@ -2,7 +2,7 @@
 * [Index](./ReadMe.md)
 
 ## Notes
-Build instructions for Tesseract 4.1.1 and leptonica 1.80.0. Please note that build systems do change so while the following
+Build instructions for Tesseract 5.2.0 and leptonica 1.82.0. Please note that build systems do change so while the following
 has been tested with the listed versions building against any other versions including master may not work as expected and
 aren't supported.
 
@@ -22,12 +22,12 @@ linking leptonica into tesseract which increases file size (since the leptonica 
 	vcpkg install giflib:x64-windows-static libjpeg-turbo:x64-windows-static liblzma:x64-windows-static libpng:x64-windows-static tiff:x64-windows-static zlib:x64-windows-static
 	git clone https://github.com/DanBloomberg/leptonica.git & cd leptonica	
 	git checkout -b 1.82.0 1.82.0
-	mkdir vs16-x86 & cd vs16-x86
+	mkdir vs17-x86 & cd vs17-x86
 	cmake .. -G "Visual Studio 17 2022" -A Win32 -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=%VCPKG_HOME%\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static -DCMAKE_INSTALL_PREFIX=..\..\build\x86
 	cmake --build . --config Release --target install
 	cd ..
-	mkdir vs16-x64 & cd vs16-x64
-	cmake .. -G "Visual Studio 17 2022" -A x64 -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON  -DCMAKE_TOOLCHAIN_FILE=%VCPKG_HOME%\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_INSTALL_PREFIX=..\..\build\x64
+	mkdir vs17-x64 & cd vs17-x64
+	cmake .. -G "Visual Studio 17 2022" -A x64   -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=%VCPKG_HOME%\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_INSTALL_PREFIX=..\..\build\x64
 	cmake --build . --config Release --target install
 	```
 4. Build Tesseract:
@@ -38,11 +38,11 @@ linking leptonica into tesseract which increases file size (since the leptonica 
 	cd tesserct
 	git checkout -b 5.2.0 5.2.0
 	mkdir vs17-x86 & cd vs17-x86
-	cmake .. -G "Visual Studio 17 2022" -A Win32 -DAUTO_OPTIMIZE=OFF -DSW_BUILD=OFF -DBUILD_TRAINING_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=..\..\build\x86
+	cmake .. -G "Visual Studio 17 2022" -A Win32 -DAUTO_OPTIMIZE=OFF -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DBUILD_TRAINING_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=..\..\build\x86
 	cmake --build . --config Release --target install
 	cd ..
 	mkdir vs17-x64 & cd vs17-x64
-	cmake .. -G "Visual Studio 17 2022" -A x64   -DAUTO_OPTIMIZE=OFF -DSW_BUILD=OFF -DBUILD_TRAINING_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=..\..\build\x64
+	cmake .. -G "Visual Studio 17 2022" -A x64   -DAUTO_OPTIMIZE=OFF -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DBUILD_TRAINING_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=..\..\build\x64
 	cmake --build . --config Release --target install
 	```
 
@@ -53,7 +53,8 @@ linking leptonica into tesseract which increases file size (since the leptonica 
 	
 ### Tesseract Notes:
 
+* Like Leptonica, Tesseract needs to be built to use shared libraries
 * For portability architecture optimizations have been disabled using ``-DAUTO_OPTIMIZE=OFF`. 
   This however will disable platform specific optimizations (AVX, SSE4.1, etc) which would likely
   result in better performance if your guarantied they will be available.
-* Like leptonica Self Build has also been disabled using ``-DSW_BUILD=OFF``.
+* Like Leptonica, Self Build has also been disabled using ``-DSW_BUILD=OFF``.

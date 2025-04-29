@@ -1,0 +1,62 @@
+name: build-windows-libs
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+defaults:
+  run:
+    shell: cmd
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86, x64]
+    runs-on: windows-latest
+    steps:
+    - name: Install dependencies
+      run: vcpkg install giflib:${{ matrix.arch }}-windows-static libjpeg-turbo:${{ matrix.arch }}-windows-static liblzma:${{ matrix.arch }}-windows-static libpng:${{ matrix.arch }}-windows-static tiff:${{ matrix.arch }}-windows-static zlib:${{ matrix.arch }}-windows-static
+    - name: Checkout Leptonica
+      uses: actions/checkout@v4
+      with:
+        repository: DanBloomberg/leptonica
+        ref: 1.82.0
+        path: leptonica
+    - name: Build Leptonica ${{ matrix.arch }}
+      run: |
+        mkdir vs17-${{ matrix.arch }}
+        cd vs17-${{ matrix.arch }}
+        cmake .. -G "Visual Studio 17 2022" -A ${{ matrix.arch == 'x86' && 'Win32' || 'x64' }} -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{ matrix.arch }}-windows-static -DCMAKE_INSTALL_PREFIX=..\..\build\${{ matrix.arch }}
+        cmake --build . --config Release --target install
+      working-directory: leptonica
+    - name: Checkout Tesseract
+      uses: actions/checkout@v4
+      with:
+        repository: tesseract-ocr/tesseract
+        ref: 5.2.0
+        path: tesseract
+    - name: Build Tesseract ${{ matrix.arch }}
+      run: |
+        mkdir vs17-${{ matrix.arch }}
+        cd vs17-${{ matrix.arch }}
+        cmake .. -G "Visual Studio 17 2022" -A ${{ matrix.arch == 'x86' && 'Win32' || 'x64' }} -DAUTO_OPTIMIZE=OFF -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DBUILD_TRAINING_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=..\..\build\${{ matrix.arch }}
+        cmake --build . --config Release --target install
+      working-directory: tesseract
+    - name: Calculate hash of Leptonica
+      run: certutil -hashfile leptonica\vs17-${{ matrix.arch }}\bin\Release\leptonica-1.82.0.dll SHA256
+    - name: Calculate hash of Tesseract
+      run: certutil -hashfile tesseract\vs17-${{ matrix.arch }}\bin\Release\tesseract52.dll SHA256
+    - name: Archive Leptonica ${{ matrix.arch }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: leptonica-${{ matrix.arch }}
+        path: leptonica\vs17-${{ matrix.arch }}\bin\Release\leptonica-1.82.0.dll
+    - name: Archive Tesseract ${{ matrix.arch }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: tesseract-${{ matrix.arch }}
+        path: tesseract\vs17-${{ matrix.arch }}\bin\Release\tesseract52.dll
